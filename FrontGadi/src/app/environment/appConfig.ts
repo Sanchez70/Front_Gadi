@@ -1,3 +1,3 @@
 export class appConfig{
-    baseUrl:string='http://localhost:8080/'
+   static baseUrl:string='http://localhost:8080/'
 }
