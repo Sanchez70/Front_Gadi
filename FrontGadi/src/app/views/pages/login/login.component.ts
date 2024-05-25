@@ -8,13 +8,14 @@ import {LoginService} from 'src/app/Services/loginService/login.service'
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss'],
+    providers: [LoginService],
     standalone: true,
     imports: [ContainerComponent, RowComponent, ColComponent, CardGroupComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective, NgStyle]
 })
 export class LoginComponent {
 
   public searchForm: FormGroup; 
-  constructor(loginService: LoginService,  private fb: FormBuilder) { this.searchForm = this.fb.group({
+  constructor(public loginService: LoginService,  private fb: FormBuilder) { this.searchForm = this.fb.group({
     usuario: [''],
     contraneusu: ['']
   });}
