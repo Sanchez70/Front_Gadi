@@ -1,0 +1,23 @@
+<div class="login-container">
+    <div class="login-card">
+        <img src="assets/imagen/logoLOG.png" alt="Logo" class="logo">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input class="form-control" type="text" id="usuario" formControlName="usuario" />
+            </div>
+
+            <div class="form-group">
+                <label for="contraneusu">Contraseña</label>
+                <input class="form-control" type="password" id="contraneusu" formControlName="contraneusu" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded">INICIAR SESION</button>
+        </form>
+        <div class="redirection-buttons">
+            <p class="register-link" >No tienes cuenta? Registrate</p>
+        </div>
+
+
+    </div>
+</div>

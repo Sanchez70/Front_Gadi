@@ -20,14 +20,22 @@ import { TipoContratoComponent } from './views/tipo-contrato/tipo-contrato.compo
 import { DistributivoActividadComponent } from './views/distributivo-actividad/distributivo-actividad.component';
 import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura/distributivo-asignatura.component';
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
-
+import { LoginComponent } from './views/login/login.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginService } from './Services/loginService/login.service';
+const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent}
+];
 @NgModule({
   declarations: [
     AppComponent,
     PersonaComponent,
     UsuarioComponent,
     AsignaturaComponent,
-    ActividadComponent,
+   ActividadComponent, 
     CarreraComponent,
     PeriodoComponent,
     CicloComponent,
@@ -40,13 +48,18 @@ import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
     TipoContratoComponent,
     DistributivoActividadComponent,
     DistributivoAsignaturaComponent,
-    UsuarioRolComponent
+    UsuarioRolComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
