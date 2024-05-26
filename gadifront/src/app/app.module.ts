@@ -32,8 +32,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 const routes: Routes = [
-  { path: '', redirectTo: '/sidebar', pathMatch: 'full' },
-  { path: 'sidebar', component: SidebarComponent}
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'sidebar', component: SidebarComponent},
+  {path: 'login', component: LoginComponent }
+  
+
 ];
 @NgModule({
   declarations: [

@@ -1,9 +1,91 @@
-.example-container {
-    height: 100%;
-  }
+.nav {
+  padding: 0.3rem;
+  margin-left: 23cap;
+  background-color: #ffffff;
+  color: white;
+  text-align: center;
+  border-bottom: 1px solid #12111113;
+  z-index: auto;
+
+}
+.sesion{
+  cursor: pointer;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.avatar{
+ margin-left: 65rem;
+  width: 2.5%;
+  height: 2.5%;
+  border-radius: 50%;
+
+  right: 0;
+
+}
+
+.logo{
+  width: 200px;
+  height: 66px;
+}
+
+
+
+.sidebar {
+  background-color: #e7e5e5;
+  padding: 1rem;
+  width: 250px;
+  position: fixed;
+  top: 0rem;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.content {
+  margin-left: 250px;
+  margin-top: 0rem;
+  padding: 1rem;
+  flex: 1;
+  z-index: 50;
+}
+
+.sidebar h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+
+.sidebar a {
+  display: block;
+  border-radius: 0.5rem;
+  color: #080808;
+  padding: 8  px;
+  text-decoration: none;
+  text-align: left;
+  font-size: 15px;
+}
+
+.sidebar a:hover {
+  padding: 10px;
+  background-color: #634eea;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+}
+
+.separator {
+  border: 0;
+  height: 1.5rem;
+  background: #e7e5e5;
+  margin: 10px 0;
+}
+.navbar-nav .nav-item .nav-link {
+  color: rgba(5, 5, 5, 0.903); /* Ajustar el color de los enlaces del navbar */
   
-  mat-toolbar {
-    background: #3f51b5;
-    color: white;
-  }
-  
+}

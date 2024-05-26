@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { LoginService } from '../../Services/loginService/login.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Usuario } from '../../Services/loginService/usuario';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +12,7 @@ import { Usuario } from '../../Services/loginService/usuario';
 })
 export class LoginComponent {
   public searchForm: FormGroup; 
-  constructor(public loginService: LoginService,  private fb: FormBuilder) { this.searchForm = this.fb.group({
+  constructor(public loginService: LoginService,  private fb: FormBuilder, private router: Router) { this.searchForm = this.fb.group({
     usuario: [''],
     contraneusu: ['']
   });}
@@ -26,7 +28,8 @@ export class LoginComponent {
         const usuarioEncontrados = result as Usuario[];
         const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario===usuariol);
         if (usuarioEncontrado) {
-          console.log('usuario  encontrado')
+          Swal.fire(`Bienvenid@ ${usuariol}`, 'Inicio de sesion correcto', 'success');
+          this.router.navigate(['./sidebar']);
       
         } else {
           console.log('usuario no encontrado')
@@ -39,4 +42,5 @@ export class LoginComponent {
     });
 
   }
+
 }
