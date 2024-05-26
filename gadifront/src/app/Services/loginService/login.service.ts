@@ -14,9 +14,9 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   
-  buscarUsuario(usuario: string): Observable<Usuario | Usuario[]> {
-    const url = `${this.urlBase}/usuario/${usuario}`;
-    return this.http.get<Usuario | Usuario[]>(url);
-  }
-  
+
+  getUsuario(): Observable<Usuario[]>{
+
+    return this.http.get<Usuario[]>(`${this.urlBase}/usuario`);
+  }  
 }

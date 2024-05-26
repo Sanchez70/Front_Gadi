@@ -25,9 +25,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginService } from './Services/loginService/login.service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent}
+  { path: '', redirectTo: '/sidebar', pathMatch: 'full' },
+  { path: 'sidebar', component: SidebarComponent}
 ];
 @NgModule({
   declarations: [
@@ -49,7 +55,8 @@ const routes: Routes = [
     DistributivoActividadComponent,
     DistributivoAsignaturaComponent,
     UsuarioRolComponent,
-    LoginComponent
+    LoginComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -57,9 +64,13 @@ const routes: Routes = [
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatListModule
   ],
-  providers: [LoginService],
+  providers: [LoginService, provideAnimationsAsync()],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

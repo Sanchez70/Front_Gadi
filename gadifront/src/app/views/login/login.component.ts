@@ -20,11 +20,11 @@ export class LoginComponent {
     const contraneusu=this.searchForm.value.contraneusu;
     console.log(usuariol);
 
-    this.loginService.buscarUsuario(usuariol).subscribe(
+    this.loginService.getUsuario().subscribe(
       (result) => {
       if (Array.isArray(result) && result.length > 0) {
         const usuarioEncontrados = result as Usuario[];
-        const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu);
+        const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario===usuariol);
         if (usuarioEncontrado) {
           console.log('usuario  encontrado')
       
