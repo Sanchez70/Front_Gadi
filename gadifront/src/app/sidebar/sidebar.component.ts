@@ -11,11 +11,13 @@ import { AuthService } from '../auth.service';
 export class SidebarComponent {
   @ViewChild('sidenav')
   sidenav!: MatSidenav;
+  isExpanded = false;
 
   constructor(private authService: AuthService,private router: Router) { }
 
   toggleSidenav() {
     this.sidenav.toggle();
+    this.isExpanded = !this.isExpanded;
   }
   cerrar(): void {
     Swal.fire({
