@@ -1,12 +1,12 @@
 .nav {
   padding: 0.3rem;
-  /* margin-left: 22cap; */
+  margin-left: 22cap;
   background: linear-gradient(to right, rgb(244, 244, 243) 75%, rgba(80, 80, 80, 0.5) 100%);
   color: white;
   text-align: center;
   border-bottom: 1px solid #12111113;
   z-index: auto;
-  transition: all 0.4s ease;
+
 }
 .sesion{
   cursor: pointer;
@@ -26,8 +26,33 @@
 
 }
 
+.logo{
+  width: 190px;
+  height: 60px;
+
+}
+
 .unico{
   border-bottom: 4px solid #c0c0bd;
+}
+
+.sidebar {
+  background-color: #f3f3f1;
+  padding: 1rem;
+  width: 225px;
+  position: fixed;
+  top: 0rem;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+}
+
+.content {
+  margin-left: 250px;
+  margin-top: 0rem;
+  padding: 1rem;
+  flex: 1;
+  z-index: 50;
 }
 
 .sidebar h2 {
@@ -36,45 +61,21 @@
   margin-bottom: 20px;
 }
 
-.navbar-nav .nav-item .nav-link {
-  color: rgba(5, 5, 5, 0.903); 
-  
-}
-
-.sidebar {
-  background-color: #ffffff; 
-  padding: 1rem;
-  width: 250px;
-  position: fixed;
-  top: 0rem;
-  bottom: 0;
-  left: 0;
-  overflow-y: auto;
-}
-
-.logo {
-  width: 200px; 
-  height: 60px;
-  margin: 10px;
-}
 
 .sidebar a {
   display: block;
   border-radius: 0.5rem;
-  color: #000000;
-  padding: 8px;
+  color: #080808;
+  padding: 8  px;
   text-decoration: none;
   text-align: left;
   font-size: 15px;
 }
 
 .sidebar a:hover {
-  background-color: #f7f7f7; 
   padding: 10px;
-}
-
-.sidebar i {
-  margin-right: 10px;
+  background-color: #79b3f5;
+  color: #f3f3f1;
 }
 
 .content {
@@ -85,45 +86,11 @@
 .separator {
   border: 0;
   height: 1.5rem;
-  background: #ffffff;
+  background: #f3f3f1;
   margin: 10px 0;
-}
 
-.mat-primary {
-  background-color: #ffffff;
 }
-
-.mat-primary .mat-icon {
-  color: #fff; 
-}
-
-.mat-primary .title {
-  color: #000000; 
-}
-
-.mat-nav-list a.mat-list-item {
-  color: #000; 
-}
-
-.mat-nav-list a.mat-list-item:hover {
-  background-color: #000000; 
-  color: #ffffff; 
-}
-
-.mat-nav-list a.mat-list-item.active {
-  background-color: #000000; 
-  color: #ffffff; 
-}
-.sidebar-text {
-  color: #333333; 
-}
-.mat-sidenav-content {
-  margin-left: 250px;
-}
-h1{
-  background-color: #ffffff;
-  color: #000;
-}
-body{
-  background-color: #ffffff;
+.navbar-nav .nav-item .nav-link {
+  color: rgba(5, 5, 5, 0.903); /* Ajustar el color de los enlaces del navbar */
+  
 }
