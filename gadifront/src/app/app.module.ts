@@ -31,10 +31,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MainComponent } from './views/main/main.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'sidebar', component: SidebarComponent},
-  {path: 'login', component: LoginComponent }
+  {path: 'login', component: LoginComponent },
+  {path: 'main', component: MainComponent }
   
 
 ];
@@ -59,7 +61,8 @@ const routes: Routes = [
     DistributivoAsignaturaComponent,
     UsuarioRolComponent,
     LoginComponent,
-    SidebarComponent
+    SidebarComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Usuario } from '../../Services/loginService/usuario';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class LoginComponent {
   public searchForm: FormGroup; 
-  constructor(public loginService: LoginService,  private fb: FormBuilder, private router: Router) { this.searchForm = this.fb.group({
+  constructor(private authService: AuthService,public loginService: LoginService,  private fb: FormBuilder, private router: Router) { this.searchForm = this.fb.group({
     usuario: [''],
     contraneusu: ['']
   });}
@@ -29,7 +30,8 @@ export class LoginComponent {
         const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario===usuariol);
         if (usuarioEncontrado) {
           Swal.fire(`Bienvenid@ ${usuariol}`, 'Inicio de sesion correcto', 'success');
-          this.router.navigate(['./sidebar']);
+          this.authService.login();
+          this.router.navigate(['./main']);
       
         } else {
           console.log('usuario no encontrado')

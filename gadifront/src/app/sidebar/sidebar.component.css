@@ -1,7 +1,7 @@
 .nav {
   padding: 0.3rem;
-  margin-left: 23cap;
-  background-color: #ffffff;
+  margin-left: 22cap;
+  background: linear-gradient(to right, rgb(244, 244, 243) 75%, rgba(80, 80, 80, 0.5) 100%);
   color: white;
   text-align: center;
   border-bottom: 1px solid #12111113;
@@ -27,16 +27,19 @@
 }
 
 .logo{
-  width: 200px;
-  height: 66px;
+  width: 190px;
+  height: 60px;
+
 }
 
-
+.unico{
+  border-bottom: 4px solid #c0c0bd;
+}
 
 .sidebar {
-  background-color: #e7e5e5;
+  background-color: #f3f3f1;
   padding: 1rem;
-  width: 250px;
+  width: 225px;
   position: fixed;
   top: 0rem;
   bottom: 0;
@@ -71,7 +74,8 @@
 
 .sidebar a:hover {
   padding: 10px;
-  background-color: #634eea;
+  background-color: #79b3f5;
+  color: #f3f3f1;
 }
 
 .content {
@@ -82,8 +86,9 @@
 .separator {
   border: 0;
   height: 1.5rem;
-  background: #e7e5e5;
+  background: #f3f3f1;
   margin: 10px 0;
+
 }
 .navbar-nav .nav-item .nav-link {
   color: rgba(5, 5, 5, 0.903); /* Ajustar el color de los enlaces del navbar */

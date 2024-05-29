@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -11,7 +12,7 @@ export class SidebarComponent {
   @ViewChild('sidenav')
   sidenav!: MatSidenav;
 
-  constructor(private router: Router) { }
+  constructor(private authService: AuthService,private router: Router) { }
 
   toggleSidenav() {
     this.sidenav.toggle();
@@ -28,6 +29,7 @@ export class SidebarComponent {
       if (result.isConfirmed) {
         Swal.fire(`Hata pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
+        this.authService.logout();
       }
     });
 
