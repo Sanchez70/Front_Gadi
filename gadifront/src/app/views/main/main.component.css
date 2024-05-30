@@ -1,5 +1,4 @@
 .card-container {
-    margin-left: 23cap;
     display: flex;
     flex-wrap: wrap;
     gap: 50px;
@@ -41,7 +40,7 @@
     padding: 0.1rem;
     margin-left: 23cap;
     background-color: #fff;
-  
+
 }
 
 .separator-vertical {
@@ -56,4 +55,14 @@
 
 .abajo {
     margin-left: 15cap;
+}
+
+.Abrir {
+    padding: 0.3rem;
+    margin-left: 22cap;
+}
+
+.Cerrar {
+    padding: 0.3rem;
+    margin-left: 0cap;
 }

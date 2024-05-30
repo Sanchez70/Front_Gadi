@@ -1,12 +1,19 @@
 .nav {
-  padding: 0.3rem;
-  margin-left: 22cap;
   background: linear-gradient(to right, rgb(244, 244, 243) 75%, rgba(80, 80, 80, 0.5) 100%);
   color: white;
   text-align: center;
   border-bottom: 1px solid #12111113;
   z-index: auto;
+  transition: all 0.4s ease;
 
+}
+.Abrir{
+  padding: 0.3rem;
+  margin-left: 22.5cap;
+}
+.Cerrar{
+  padding: 0.3rem;
+  margin-left: 0cap;
 }
 .sesion{
   cursor: pointer;
@@ -16,7 +23,7 @@
   margin: 0 auto;
 }
 
-.avatar{
+.avatar-Abrir{
  margin-left: 65rem;
   width: 2.5%;
   height: 2.5%;
@@ -25,6 +32,15 @@
   right: 0;
 
 }
+.avatar-Cerrar{
+  margin-left: 75rem;
+   width: 2.5%;
+   height: 2.5%;
+   border-radius: 50%;
+ 
+   right: 0;
+ 
+ }
 
 .logo{
   width: 190px;

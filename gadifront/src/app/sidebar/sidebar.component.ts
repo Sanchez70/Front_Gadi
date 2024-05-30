@@ -11,11 +11,16 @@ import { AuthService } from '../auth.service';
 export class SidebarComponent {
   @ViewChild('sidenav')
   sidenav!: MatSidenav;
+  isExpanded = true;
+ explan :string ='Abrir';
 
-  constructor(private authService: AuthService,private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   toggleSidenav() {
     this.sidenav.toggle();
+   
+    this.isExpanded = !this.isExpanded;
+
   }
   cerrar(): void {
     Swal.fire({
@@ -32,6 +37,21 @@ export class SidebarComponent {
         this.authService.logout();
       }
     });
+
+  }
+
+  navbar() :void{
+
+    if(this.explan ==='Abrir'){
+      this.explan='Cerrar';
+      this.authService.navbar();
+      this.toggleSidenav();
+    }else if(this.explan ==='Cerrar'){
+      this.explan ='Abrir';
+       this.toggleSidenav();
+       this.authService.navbar();
+     
+    }
 
   }
 }

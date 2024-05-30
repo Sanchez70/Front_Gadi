@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ export class AuthService {
   isLogeado = false;
   rol: any;
   cedula: any;
-
+  private explanSubject = new BehaviorSubject<string>('Abrir');
+  explan$ = this.explanSubject.asObservable();
 
   constructor() {
 
@@ -34,16 +36,16 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.isLogeado = user.isLogeado || false;
     this.cedula = user.cedula || null;
-    this.rol = user.rol || null;
+    this.rol = user.rol || null
   }
 
   saveUserToLocalStorage() {
     // Guarda la información del usuario en localStorage
     localStorage.setItem('user', JSON.stringify({
-     isLogeado:this.isLogeado,
+      isLogeado: this.isLogeado,
       cedula: this.cedula,
       rol: this.rol
-        }));
+    }));
   }
   login() {
     this.isLogeado = true;
@@ -56,6 +58,14 @@ export class AuthService {
   }
   setCedula(cedula: any) {
     this.cedula = cedula;
+    this.saveUserToLocalStorage();
+  }
+
+
+  navbar() {
+    const currentExplan = this.explanSubject.value;
+    const newExplan = currentExplan === 'Abrir' ? 'Cerrar' : 'Abrir';
+    this.explanSubject.next(newExplan);
     this.saveUserToLocalStorage();
   }
 }

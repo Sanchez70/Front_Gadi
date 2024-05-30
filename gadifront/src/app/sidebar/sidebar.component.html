@@ -1,4 +1,8 @@
-<nav class="nav navbar-expand-lg navbar-link">
+
+<nav class="{{explan}} nav navbar-expand-lg navbar-link ">
+  <button mat-icon-button (click)="navbar()">
+    <mat-icon>menu</mat-icon>
+  </button>
   <div class="container">
     <div class="container-fluid">
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -10,7 +14,7 @@
         <ul class="navbar-nav align-items-center">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="assets/img/usu.png" alt="User Avatar" class="avatar avatar-sm rounded-circle">
+              <img src="assets/img/usu.png" alt="User Avatar" class="avatar-{{explan}} avatar-sm rounded-circle">
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li>
@@ -19,7 +23,7 @@
                   <span >Cerrar Sesion</span>
                 </a>
               </li>
-            
+              <!-- Agrega más opciones aquí -->
             </ul>
           </li>
         </ul>
@@ -27,19 +31,26 @@
     </div>
   </div>
 </nav>
+
+<mat-sidenav-container class="main"></mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
+    <mat-toolbar color="primary">
+      <img class="logo" src="assets/img/logo.png" alt="Logo">
+    </mat-toolbar>
 <div class="main">
   <div class="sidebar">
+    <mat-nav-list >
     <img class="logo" src="assets/img/logo.png">
-    <hr class="unico">
+
     <hr class="separator">
-    <a routerLinkActive="true" routerLink='/main'><i class="fas fa-home"></i> Inicio</a>
+    <a href="#home"><i class="fas fa-home"></i> Inicio</a>
     <hr class="separator">
     <a href="#services">Servicios</a>
     <hr class="separator">
-    <a  routerLinkActive="true" routerLink='/rutas'>Acerca de</a>
+    <a href="#about">Acerca de</a>
     <hr class="separator">
     <a href="#contact">Contacto</a>
     <hr class="separator">
+  </mat-nav-list>
   </div>
-</div>  
 
