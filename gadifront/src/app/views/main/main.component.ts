@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -8,7 +9,7 @@ import { AuthService } from '../../auth.service';
 })
 export class MainComponent implements OnInit{ 
   currentExplan: string='';
-constructor(private authService:AuthService){
+constructor(private authService:AuthService, private router:Router){
 
 }
   ngOnInit(): void {
@@ -16,6 +17,10 @@ constructor(private authService:AuthService){
       this.currentExplan = explan;
       // Aquí puedes manejar cualquier otra lógica cuando `explan` cambie
     });
+  }
+
+  llamarAsignaturas(): void{
+    this.router.navigate(['/asignatura']);
   }
 
 }

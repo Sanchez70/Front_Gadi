@@ -1,6 +1,6 @@
 <hr class="separator-horizontal">
-<div class="{{currentExplan}} card-container" >
-    <a href="pagina1.html" class="card">
+<div class="{{currentExplan}} card-container" routerLinkActive="active" >
+    <a  class="card">
         <span class="Arriba">Asignatura</span>
         <br>
         <br>
@@ -8,6 +8,7 @@
         <br>
         <br>
         <span class="abajo">total</span>
+        <button (click)="llamarAsignaturas()">Ver Asignaturas</button>
     </a>
     <hr class="separator-vertical">
     <a href="pagina2.html" class="card">

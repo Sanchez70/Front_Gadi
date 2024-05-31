@@ -21,10 +21,13 @@ import { DistributivoActividadComponent } from './views/distributivo-actividad/d
 import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura/distributivo-asignatura.component';
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
 import { LoginComponent } from './views/login/login.component';
+
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+
 import { LoginService } from './Services/loginService/login.service';
+import { AsignaturaService } from './Services/asignaturaService/asignatura.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -36,7 +39,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'sidebar', component: SidebarComponent},
   {path: 'login', component: LoginComponent },
-  {path: 'main', component: MainComponent }
+  {path: 'main', component: MainComponent },
+  {path: 'asignatura', component: AsignaturaComponent }
   
 
 ];
