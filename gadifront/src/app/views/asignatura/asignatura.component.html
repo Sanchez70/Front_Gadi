@@ -38,30 +38,20 @@
                 <th colspan="6" style="text-align: center;">Asignaturas</th>
             </tr>
           <tr>
-            <th scope="col">Asignatura</th>
+            <th scope="col">Nombre</th>
             <th scope="col">Horas Semanales</th>
             <th scope="col">Ciclo</th>
             <th scope="col">Seleccionar</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
+          <tr *ngFor="let asignatura of asignaturaFiltrada">
+            <td>{{asignatura.nombre_asignatura}}</td>
+            <td>{{asignatura.horas_semanales}}</td>
+            <td>{{asignatura.id_ciclo}}</td>
             <td>
                 <div class="" routerLinkActive="active">
-                    <button type="button" class="btnSeleccionar"><i class="bi bi-check-circle-fill"></i></button>
-                </div>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>
-                <div class="" routerLinkActive="active">
-                    <button type="button" class="btnSeleccionar"><i class="bi bi-check-circle-fill"></i></button>
+                    <button type="button" class="btnSeleccionar" (click)="escogerAsignatura(asignatura)"><i class="bi bi-check-circle-fill"></i></button>
                 </div>
             </td>
           </tr>
@@ -75,20 +65,20 @@
                 <th colspan="6" style="text-align: center;">Asignaturas Seleccionadas</th>
             </tr>
           <tr>
-            <th scope="col">Asignatura</th>
+            <th scope="col">Nombre</th>
             <th scope="col">Ciclo</th>
             <th scope="col">Horas Semanales</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
+          <tr *ngFor="let asignaturas of asignaturasSeleccionadas">
+            <td>{{asignaturas.nombre_asignatura}}</td>
+            <td>{{asignaturas.id_ciclo}}</td>
+            <td>{{asignaturas.horas_semanales}}</td>
           </tr>
           <tr>
             <th colspan="2" style="text-align: left;">Horas totales:</th>
-            <td>Otto</td>
+            <td>{{horasTotales}}</td>
         </tr>
         </tbody>
       </table>

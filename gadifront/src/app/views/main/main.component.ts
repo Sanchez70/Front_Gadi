@@ -19,8 +19,5 @@ constructor(private authService:AuthService, private router:Router){
     });
   }
 
-  llamarAsignaturas(): void{
-    this.router.navigate(['/asignatura']);
-  }
 
 }
