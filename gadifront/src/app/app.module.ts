@@ -35,12 +35,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MainComponent } from './views/main/main.component';
+import { TablaComponent } from './views/tabla/tabla.component';
+import {MatTableModule} from '@angular/material/table';
+import { DistributivoService } from './views/tabla/distributivo.service';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'sidebar', component: SidebarComponent},
   {path: 'login', component: LoginComponent },
   {path: 'main', component: MainComponent },
-  {path: 'asignatura', component: AsignaturaComponent }
+  {path: 'asignatura', component: AsignaturaComponent },
+  {path: 'tabla', component: TablaComponent }
   
 
 ];
@@ -66,7 +70,8 @@ const routes: Routes = [
     UsuarioRolComponent,
     LoginComponent,
     SidebarComponent,
-    MainComponent
+    MainComponent,
+    TablaComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,9 +83,10 @@ const routes: Routes = [
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    MatTableModule
   ],
-  providers: [LoginService, provideAnimationsAsync()],
+  providers: [LoginService, provideAnimationsAsync(), DistributivoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
