@@ -2,8 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Persona } from './persona'; 
-import { Periodo } from '../periodo/periodo'; 
+import { Persona } from './persona';
+import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
@@ -27,10 +27,10 @@ export class PersonaService {
   getGadosOcupacionales(): Observable<GradoOcupacional[]> {
     return this.http.get<GradoOcupacional[]>(`${this.baseUrl}/grado_ocupacional`);
   }
-    getTiposContratos(): Observable<TipoContrato[]> {
-        return this.http.get<TipoContrato[]>(`${this.baseUrl}/tipo_contrato`);
-      }
-      getTitulosProfecionales(): Observable<TituloProfecional[]> {
-        return this.http.get<TituloProfecional[]>(`${this.baseUrl}/titulo_profesional`);
-      }
+  getTiposContratos(): Observable<TipoContrato[]> {
+    return this.http.get<TipoContrato[]>(`${this.baseUrl}/tipo_contrato`);
+  }
+  getTitulosProfecionales(): Observable<TituloProfecional[]> {
+    return this.http.get<TituloProfecional[]>(`${this.baseUrl}/titulo_profesional`);
+  }
 }
