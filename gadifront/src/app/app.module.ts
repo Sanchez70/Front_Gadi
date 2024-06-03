@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { PersonaComponent } from './views/persona/persona.component';
 import { UsuarioComponent } from './views/usuario/usuario.component';
 import { AsignaturaComponent } from './views/asignatura/asignatura.component';
@@ -33,7 +32,6 @@ import { DistributivoAsignaturaService } from './Services/distributivoAsignatura
 import { JornadaService } from './Services/jornadaService/jornada.service';
 import { CicloService } from './Services/cicloService/ciclo.service';
 import { PeriodoService } from './Services/periodoService/periodo.service';
-
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -44,11 +42,12 @@ import { MainComponent } from './views/main/main.component';
 import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { RegistroComponent } from './views/registro/registro.component';
+import { FormComponent } from './views/actividad/form.component';
+import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -62,7 +61,8 @@ const routes: Routes = [
   { path: 'actividad/form', component: ActividadFormComponert },
   { path: 'actividad/form/:id', component: ActividadFormComponert },
   { path: 'registro', component: RegistroComponent },
-  { path: 'matriz-propuesta', component: MatrizPropuestaComponent }
+  { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
+  { path: 'tipo_actividad', component: TipoActividadComponent },
 
 ];
 @NgModule({
@@ -90,7 +90,8 @@ const routes: Routes = [
     MainComponent,
     TablaComponent,
     RegistroComponent,
-    MatrizPropuestaComponent
+    MatrizPropuestaComponent,
+    FormComponent
   ],
   
   imports: [
@@ -115,7 +116,9 @@ const routes: Routes = [
     DistributivoAsignaturaService,
     JornadaService,
     CicloService,
-    PeriodoService
+    PeriodoService,
+    ActividadService,
+    tipo_actividadService
   ],
   bootstrap: [AppComponent]
 })
