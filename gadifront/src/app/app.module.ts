@@ -19,11 +19,11 @@ import { TipoContratoComponent } from './views/tipo-contrato/tipo-contrato.compo
 import { DistributivoActividadComponent } from './views/distributivo-actividad/distributivo-actividad.component';
 import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura/distributivo-asignatura.component';
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
+import { MatrizPropuestaComponent } from './views/matriz-propuesta/matriz-propuesta.component';
 import { LoginComponent } from './views/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-
 import { LoginService } from './Services/loginService/login.service';
 import { AsignaturaService } from './Services/asignaturaService/asignatura.service';
 import { ActividadService } from './Services/actividadService/actividad.service';
@@ -85,7 +85,8 @@ const routes: Routes = [
     SidebarComponent,
     MainComponent,
     TablaComponent,
-    RegistroComponent
+    RegistroComponent,
+    MatrizPropuestaComponent
   ],
   
   imports: [
