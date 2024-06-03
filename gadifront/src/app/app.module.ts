@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PersonaComponent } from './views/persona/persona.component';
@@ -21,13 +20,12 @@ import { DistributivoActividadComponent } from './views/distributivo-actividad/d
 import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura/distributivo-asignatura.component';
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
 import { LoginComponent } from './views/login/login.component';
-
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-
 import { LoginService } from './Services/loginService/login.service';
 import { AsignaturaService } from './Services/asignaturaService/asignatura.service';
+import { ActividadService } from './Services/actividadService/actividad.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -36,16 +34,22 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MainComponent } from './views/main/main.component';
 import { TablaComponent } from './views/tabla/tabla.component';
-import {MatTableModule} from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { DistributivoService } from './views/tabla/distributivo.service';
+import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
+import { DocenteService } from './Services/docenteService/docente.service';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'sidebar', component: SidebarComponent},
-  {path: 'login', component: LoginComponent },
-  {path: 'main', component: MainComponent },
-  {path: 'asignatura', component: AsignaturaComponent },
-  {path: 'tabla', component: TablaComponent }
-  
+  { path: 'sidebar', component: SidebarComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'main', component: MainComponent },
+  { path: 'asignatura', component: AsignaturaComponent },
+  { path: 'actividad', component: ActividadComponent },
+  { path: 'tabla', component: TablaComponent},
+  { path: 'persona', component: PersonaComponent },
+  { path: 'actividad/form', component: ActividadFormComponert },
+  { path: 'actividad/form/:id', component: ActividadFormComponert },
+
 
 ];
 @NgModule({
@@ -54,7 +58,7 @@ const routes: Routes = [
     PersonaComponent,
     UsuarioComponent,
     AsignaturaComponent,
-   ActividadComponent, 
+    ActividadComponent,
     CarreraComponent,
     PeriodoComponent,
     CicloComponent,
@@ -71,7 +75,7 @@ const routes: Routes = [
     LoginComponent,
     SidebarComponent,
     MainComponent,
-    TablaComponent,
+    TablaComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +90,7 @@ const routes: Routes = [
     MatListModule,
     MatTableModule
   ],
-  providers: [LoginService, provideAnimationsAsync(), DistributivoService],
+  providers: [LoginService, provideAnimationsAsync(), DistributivoService, DocenteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

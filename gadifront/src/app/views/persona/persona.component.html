@@ -1,1 +1,64 @@
-<p>persona works!</p>
+<form class="formulario" ngNativeValidate  style="width: 45%;" >
+    <div class="tables-container">
+        <div class="table-container">
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+            <tr>
+                <th colspan="6" style="text-align: center;">Asignaturas</th>
+            </tr>
+          <tr>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let personas of personaSeleccionada">
+            <td>{{personas.cedula}}</td>
+            <td>{{personas.nombre1}}</td>
+            <td>{{personas.apellido1}}</td>
+            <td>{{personas.telefono}}</td>
+            
+            <td>
+                <div class="" routerLinkActive="active">
+                    <button type="button" class="btnSeleccionar" (click)="escogerPersona(personas)"><i class="bi bi-check-circle-fill"></i></button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-container">
+      <table class="table table-condensed table-bordered table-striped" style="margin-top: 5cap;">
+        <thead>
+            <tr>
+                <th colspan="6" style="text-align: center;">Docente Seleccionadas</th>
+            </tr>
+          <tr>
+            <th scope="col">Cedula</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Telefono</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let persona of personasSeleccionada">
+            <td>{{persona.cedula}}</td>
+            <td>{{persona.nombre1}}</td>
+            <td>{{persona.apellido1}}</td>
+            <td>{{persona.telefono}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    
+    <div class="d-flex justify-content-center">
+        <div class="btnAcept">
+            <button type="submit" class="btnAceptar">Aceptar</button>
+        </div>
+    </div>
+</form>
+

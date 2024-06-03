@@ -1,0 +1,20 @@
+<form ngNativeValidate (ngSubmit)="create()">
+    <div class="form-group row">
+        <label for="" class="col-form-label col-sm-3"><strong>TIPO DE Actividad</strong></label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" (ngModel)="actividad.nombre_Actividad" name="nombre_Actividad" placeholder="Ingrese el tipo de servicio" required="true">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="" class="col-form-label col-sm-3"><strong>DESCRIPCCION</strong></label>
+        <div class="col-sm-10">
+            <textarea class="form-control" (ngModel)="actividad.descripcion_actividad" name="descripcion_actividad" placeholder="Ingrese la descripción" required="true"></textarea>
+        </div>
+    </div>
+    
+</form>
+<div class="form-group row">
+    <div class="col-sm-10 offset-sm-3">
+        <button type="submit" class="btn btn-primary" >Enviar</button>
+    </div>
+</div>
