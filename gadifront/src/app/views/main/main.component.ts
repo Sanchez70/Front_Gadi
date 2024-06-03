@@ -15,7 +15,6 @@ constructor(private authService:AuthService, private router:Router){
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
-      // Aquí puedes manejar cualquier otra lógica cuando `explan` cambie
     });
   }
 

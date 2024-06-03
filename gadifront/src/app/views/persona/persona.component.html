@@ -1,7 +1,11 @@
+<div  class="{{currentExplan}}">
+<div>
+  <input type="text" placeholder="Buscar por apellido" [(ngModel)]="searchTerm">
+</div>
 <form class="formulario" ngNativeValidate  style="width: 45%;" >
-    <div class="tables-container">
+    <div class="tables-container" >
         <div class="table-container">
-    <table class="table table-condensed table-bordered table-striped">
+    <table class="table table-condensed table-bordered table-striped" >
         <thead>
             <tr>
                 <th colspan="6" style="text-align: center;">Asignaturas</th>
@@ -15,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let personas of personaSeleccionada">
+          <tr *ngFor="let personas of filteredPersonas">
             <td>{{personas.cedula}}</td>
             <td>{{personas.nombre1}}</td>
             <td>{{personas.apellido1}}</td>
@@ -61,4 +65,4 @@
         </div>
     </div>
 </form>
-
+</div>
