@@ -29,12 +29,24 @@
 
             <div class="form-group">
                 <label for="contraseña">Contraseña</label>
-                <input class="form-control" type="password" id="contraseña" formControlName="contraseña" required />
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                  </mat-form-field>
             </div>
 
             <div class="form-group">
                 <label for="repetir_contraseña">Repetir contraseña</label>
-                <input class="form-control" type="password" id="repetir_contraseña" formControlName="repetir_contraseña" required />
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                  </mat-form-field>
             </div>
 
             <button type="submit" class="btn btn-primary btn-rounded" routerLink="/registro1">CONTINUAR</button>

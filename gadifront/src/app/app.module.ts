@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { PersonaComponent } from './views/persona/persona.component';
 import { UsuarioComponent } from './views/usuario/usuario.component';
 import { AsignaturaComponent } from './views/asignatura/asignatura.component';
@@ -41,6 +43,8 @@ import { MatListModule } from '@angular/material/list';
 import { MainComponent } from './views/main/main.component';
 import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatRadioModule } from '@angular/material/radio';
+
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
@@ -92,6 +96,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -100,7 +105,8 @@ const routes: Routes = [
     MatToolbarModule,
     MatIconModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatRadioModule
   ],
   providers: [LoginService, provideAnimationsAsync(), 
     DistributivoService, 
