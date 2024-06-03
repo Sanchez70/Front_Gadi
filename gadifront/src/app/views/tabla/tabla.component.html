@@ -1,41 +1,40 @@
-<!-- distributivo.component.html -->
-<table>
-    <thead>
-      <tr>
-        <th>Cédula</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Teléfono</th>
-        <th>Dirección</th>
-        <th>Correo</th>
-        <th>Edad</th>
-        <th>Fecha de Vinculación</th>
-        <th>Contrato</th>
-        <th>Título</th>
-        <th>Grado</th>
-        <th>Nombre del Periodo</th>
-        <th>Inicio del Periodo</th>
-        <th>Fin del Periodo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let persona of personas; let i = index">
-        <td>{{ persona.cedula }}</td>
-        <td>{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
-        <td>{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
-        <td>{{ persona.telefono }}</td>
-        <td>{{ persona.direccion }}</td>
-        <td>{{ persona.correo }}</td>
-        <td>{{ persona.edad }}</td>
-        <td>{{ persona.fecha_vinculacion | date }}</td>
-        <td>{{ contratos[i]?.nombre_contrato }}</td>
-        <td>{{ titulos[i]?.nombre_titulo}}</td>
-        <td>{{ grados[i]?.nombre_grado_ocp }}</td>
-        <td>{{ periodos[i]?.nombre_periodo }}</td>
-        <td>{{ periodos[i]?.inicio_periodo | date }}</td>
-        <td>{{ periodos[i]?.fin_periodo | date }}</td>
-        
-      </tr>
-    </tbody>
-  </table>
-  
+<input type="text" placeholder="Buscar..." (input)="applyFilter($event)" />
+
+<table [class.filtering]="isFiltering">
+  <thead>
+    <tr>
+      <th>Cédula</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
+      <th>Correo</th>
+      <th>Edad</th>
+      <th>Fecha de Vinculación</th>
+      <th>Contrato</th>
+      <th>Título</th>
+      <th>Grado</th>
+      <th>Nombre del Periodo</th>
+      <th>Inicio del Periodo</th>
+      <th>Fin del Periodo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let persona of filteredPersonas; let i = index">
+      <td data-label="Cédula">{{ persona.cedula }}</td>
+      <td data-label="Nombre">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
+      <td data-label="Apellido">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
+      <td data-label="Teléfono">{{ persona.telefono }}</td>
+      <td data-label="Dirección">{{ persona.direccion }}</td>
+      <td data-label="Correo">{{ persona.correo }}</td>
+      <td data-label="Edad">{{ persona.edad }}</td>
+      <td data-label="Fecha de Vinculación">{{ persona.fecha_vinculacion | date }}</td>
+      <td data-label="Contrato">{{ contratos[i]?.nombre_contrato }}</td>
+      <td data-label="Título">{{ titulos[i]?.nombre_titulo}}</td>
+      <td data-label="Grado">{{ grados[i]?.nombre_grado_ocp }}</td>
+      <td data-label="Nombre del Periodo">{{ periodos[i]?.nombre_periodo }}</td>
+      <td data-label="Inicio del Periodo">{{ periodos[i]?.inicio_periodo | date }}</td>
+      <td data-label="Fin del Periodo">{{ periodos[i]?.fin_periodo | date }}</td>
+    </tr>
+  </tbody>
+</table>

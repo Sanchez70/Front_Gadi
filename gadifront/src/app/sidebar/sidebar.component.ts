@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../auth.service';
+import { style } from '@angular/animations';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -50,7 +51,6 @@ export class SidebarComponent {
       this.explan ='Abrir';
        this.toggleSidenav();
        this.authService.navbar();
-     
     }
 
   }

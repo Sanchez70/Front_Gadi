@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
 import { DistributivoService } from './distributivo.service';
 import { PersonaService } from '../persona/persona.service';
 import { Persona } from '../persona/persona';
@@ -11,7 +10,7 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 @Component({
   selector: 'app-tabla',
   templateUrl: './tabla.component.html',
-  styleUrl: './tabla.component.css',
+  styleUrls: ['./tabla.component.css'],
 })
 export class TablaComponent implements OnInit {
   personas: Persona[] = [];
@@ -19,12 +18,16 @@ export class TablaComponent implements OnInit {
   contratos: TipoContrato[] = [];
   grados: GradoOcupacional[] = [];
   titulos: TituloProfecional[] = [];
+  filteredPersonas: any[] = [];
+  isFiltering: boolean = false;
 
   constructor(private personaService: PersonaService) { }
 
   ngOnInit(): void {
+  
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
+      this.updateFilteredPersonas();
     });
 
     this.personaService.getPeriodos().subscribe(data => {
@@ -42,5 +45,28 @@ export class TablaComponent implements OnInit {
     this.personaService.getTitulosProfecionales().subscribe(data => {
       this.titulos = data;
     });
+  }
+
+  updateFilteredPersonas(): void {
+    this.filteredPersonas = this.personas;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    if (!filterValue) {
+      this.updateFilteredPersonas();
+      return;
+    }
+
+    this.isFiltering = true;
+
+    setTimeout(() => {
+      this.filteredPersonas = this.personas.filter(persona => {
+        return Object.values(persona).some(val =>
+          String(val).toLowerCase().includes(filterValue)
+        );
+      });
+      this.isFiltering = false;
+    }, 300);
   }
 }
