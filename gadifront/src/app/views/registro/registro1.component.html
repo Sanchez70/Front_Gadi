@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="card">
+        <img src="assets/img/logo.png" alt="GADI" class="logo">
+        <form [formGroup]="registro2" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label class="label" for="primer_nombre">Teléfono</label>
+                <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_nombre">Dirección</label>
+                <input class="form-control" type="text" id="direccion" formControlName="direccion" required />
+            </div>
+
+            <div class="form-group">
+                <label for="primer_apellido">Coreo</label>
+                <input class="form-control" type="email" id="correo" formControlName="correo" required />
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_apellido">Edad</label>
+                <input class="form-control" type="text" id="edad" formControlName="edad" required />
+            </div>
+
+            <div class="form-group">
+                <label for="usuario">Fecha de vinculación</label>
+                <input class="form-control" type="date" id="f_vinculacion" formControlName="f_vinculacion" required />
+            </div>
+
+            <div class="form-group">
+                <label for="contraseña">Título Profesional</label>
+                <input class="form-control" type="tex" id="tit_prof" formControlName="tit_prof" required />
+            </div>
+
+            <div class="form-group">
+                <label for="repetir_contraseña">Grado del Título</label>
+                <input class="form-control" type="text" id="grado" formControlName="grado" required />
+            </div>
+
+            <div class="form-group">
+                <label for="repetir_contraseña">Grado Ocupacional</label>
+                <input class="form-control" type="text" id="grado_ocup" formControlName="grado_ocup" required />
+            </div>
+
+            <div class="form-group">
+                <label for="repetir_contraseña">Contrato</label>
+                <input class="form-control" type="text" id="grado" formControlName="grado" required />
+            </div>
+
+            <div class="form-group">
+                <label for="repetir_contraseña">Jornada</label>
+                <mat-radio-group [formControl]="floatLabelControl">
+                    
+                  </mat-radio-group>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
+        </form>
+    </div>
+</div>
