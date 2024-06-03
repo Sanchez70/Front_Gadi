@@ -115,6 +115,11 @@ export class AsignaturaComponent implements OnInit {
     }
   }
 
+  eliminarAsignatura(fila:number): void{
+    this.asignaturasSeleccionadas.splice(fila,1);
+    this.calcularHorasTotales()
+  }
+
   calcularHorasTotales():void{
     this.horasTotales = this.asignaturasSeleccionadas.reduce(
       (sum,asignatura) => sum + asignatura.horas_semanales, 0

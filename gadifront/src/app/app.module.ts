@@ -23,9 +23,15 @@ import { LoginComponent } from './views/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+
 import { LoginService } from './Services/loginService/login.service';
 import { AsignaturaService } from './Services/asignaturaService/asignatura.service';
 import { ActividadService } from './Services/actividadService/actividad.service';
+import { DistributivoAsignaturaService } from './Services/distributivoAsignaturaService/distributivo-asignatura.service';
+import { JornadaService } from './Services/jornadaService/jornada.service';
+import { CicloService } from './Services/cicloService/ciclo.service';
+import { PeriodoService } from './Services/periodoService/periodo.service';
+
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -95,7 +101,15 @@ const routes: Routes = [
     MatListModule,
     MatTableModule
   ],
-  providers: [LoginService, provideAnimationsAsync(), DistributivoService, DocenteService],
+  providers: [LoginService, provideAnimationsAsync(), 
+    DistributivoService, 
+    DocenteService, 
+    AsignaturaService, 
+    DistributivoAsignaturaService,
+    JornadaService,
+    CicloService,
+    PeriodoService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
