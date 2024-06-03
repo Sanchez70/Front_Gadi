@@ -37,6 +37,7 @@ import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
+import { DocenteService } from './Services/docenteService/docente.service';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'sidebar', component: SidebarComponent },
@@ -44,7 +45,8 @@ const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: 'asignatura', component: AsignaturaComponent },
   { path: 'actividad', component: ActividadComponent },
-  { path: 'tabla', component: TablaComponent },
+  { path: 'tabla', component: TablaComponent},
+  { path: 'persona', component: PersonaComponent },
   { path: 'actividad/form', component: ActividadFormComponert },
   { path: 'actividad/form/:id', component: ActividadFormComponert },
 
@@ -73,7 +75,7 @@ const routes: Routes = [
     LoginComponent,
     SidebarComponent,
     MainComponent,
-    TablaComponent,
+    TablaComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +90,7 @@ const routes: Routes = [
     MatListModule,
     MatTableModule
   ],
-  providers: [LoginService, provideAnimationsAsync(), DistributivoService],
+  providers: [LoginService, provideAnimationsAsync(), DistributivoService, DocenteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

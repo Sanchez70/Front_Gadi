@@ -1,4 +1,5 @@
 export class Persona{
+    id_persona: number=0;
     cedula: string='';
     nombre1: string='';
     nombre2: string='';
