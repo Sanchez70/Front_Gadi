@@ -1,0 +1,47 @@
+<div class="container">
+    <div class="card">
+        <img src="assets/img/logo.png" alt="GADI" class="logo">
+        <form>
+            <div class="form-group">
+                <label class="label" for="primer_nombre">Primer nombre</label>
+                <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" />
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_nombre">Segundo nombre</label>
+                <input class="form-control" type="text" id="segundo_nombre" formControlName="segundo_nombre" />
+            </div>
+
+            <div class="form-group">
+                <label for="primer_apellido">Primer apellido</label>
+                <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" />
+            </div>
+
+            <div class="form-group">
+                <label for="segundo_apellido">Segundo apellido</label>
+                <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" />
+            </div>
+
+            <div class="form-group">
+                <label for="usuario">Usuario</label>
+                <input class="form-control" type="text" id="usuario" formControlName="usuario" />
+            </div>
+
+            <div class="form-group">
+                <label for="contraseña">Contraseña</label>
+                <input class="form-control" type="password" id="contraseña" formControlName="contraseña" />
+            </div>
+
+            <div class="form-group">
+                <label for="repetir_contraseña">Repetir contraseña</label>
+                <input class="form-control" type="password" id="repetir_contraseña" formControlName="repetir_contraseña" />
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
+        </form>
+        <div class="redirection-buttons">
+            <li class="nav-item active" routerLinkActive="active">
+            <p class="login-link" routerLink="/login" >Ya tienes cuenta? Inicia sesión</p>
+        </div>
+    </div>
+</div>
