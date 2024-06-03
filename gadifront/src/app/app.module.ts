@@ -38,6 +38,7 @@ import { MatTableModule } from '@angular/material/table';
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
+import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'sidebar', component: SidebarComponent },
@@ -75,7 +76,8 @@ const routes: Routes = [
     LoginComponent,
     SidebarComponent,
     MainComponent,
-    TablaComponent
+    TablaComponent,
+    AdminCreacionComponent
   ],
   imports: [
     BrowserModule,
