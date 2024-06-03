@@ -62,7 +62,7 @@ const routes: Routes = [
   { path: 'actividad/form', component: ActividadFormComponert },
   { path: 'actividad/form/:id', component: ActividadFormComponert },
   { path: 'registro', component: RegistroComponent },
-
+  { path: 'matriz-propuesta', component: MatrizPropuestaComponent }
 
 ];
 @NgModule({

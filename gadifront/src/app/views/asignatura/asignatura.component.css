@@ -3,16 +3,18 @@
     padding: 0;
     font-family: sans-serif;
     border-color: #F9F9F9;
-    border-radius: 30px;
+    border-radius: 10px;
 }
 
 
 table {
     width: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     
 }
-
-
 
 table,
 th,
@@ -25,10 +27,15 @@ td {
 }
 
 thead {
+    left: 0;
+    background-color: #1E90FF;
+    color: white;
+    padding: 5px;
+    text-align: center;
     position: sticky;
     top: 0;
-    left: 0;
-    background-color: #e1f017fe;
+    z-index: 1;
+    align-items: center;
 
 }
 
