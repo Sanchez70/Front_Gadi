@@ -11,6 +11,7 @@ import { AuthService } from '../../auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+
 export class LoginComponent {
   public searchForm: FormGroup; 
   constructor(private authService: AuthService,public loginService: LoginService,  private fb: FormBuilder, private router: Router) { this.searchForm = this.fb.group({

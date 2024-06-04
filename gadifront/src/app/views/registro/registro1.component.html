@@ -49,11 +49,15 @@
 
             <div class="form-group">
                 <label for="jornada">Jornada</label>
-                <mat-radio-group formControlName="jornada">
-                    <mat-radio-button value="auto">Medio tiempo</mat-radio-button>
-                    <mat-radio-button value="always">Tiempo Completo</mat-radio-button>
-                </mat-radio-group>
+                <mat-form-field>
+                    <mat-label>Seleccione una opción</mat-label>
+                    <mat-select>
+                      <mat-option value="one">Tiempo Completo</mat-option>
+                      <mat-option value="two">Medio tiempo</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
+            
 
             <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
         </form>

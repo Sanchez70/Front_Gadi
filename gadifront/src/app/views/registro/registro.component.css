@@ -1,4 +1,4 @@
-.container{
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,7 +9,7 @@
     background-attachment: fixed;
 }
 
-.card{
+.card {
     width: 300px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -21,22 +21,21 @@
 .form-group {
     text-align: left;
     margin-bottom: 15px;
-  }
-  
-  label {
+}
+
+label {
     display: block;
     margin-bottom: 5px;
     margin-top: 4px;
     text-shadow: 30cap;
-  }
-  
-  input {
+}
+
+input, mat-form-field {
     width: 100%;
-    padding: 8px;
     margin-top: 5px;
-  }
-  
-  button {
+}
+
+button {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
@@ -45,24 +44,24 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #357ae8;
-  }
+}
 
 .register-link {
-  font-size: 14px;
-  color: #4285f4;
-  text-decoration: none;
-  display: block;
-  margin-top: 20px;
+    font-size: 14px;
+    color: #4285f4;
+    text-decoration: none;
+    display: block;
+    margin-top: 20px;
 }
 
 .register-link:hover {
-  color: #357ae8;
+    color: #357ae8;
 }
 
 .redirection-buttons {
-  text-align: center;
+    text-align: center;
 }
