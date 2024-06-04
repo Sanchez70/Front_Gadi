@@ -1,4 +1,5 @@
 export interface Persona {
+  id_persona:number;
     cedula: string;
     nombre1: string;
     nombre2: string;

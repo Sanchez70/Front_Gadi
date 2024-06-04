@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ViewChild } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,17 +28,30 @@ import { AsignaturaService } from './Services/asignaturaService/asignatura.servi
 import { ActividadService } from './Services/actividadService/actividad.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
+//MATERIAL
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { MainComponent } from './views/main/main.component';
-import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+//MATERIAL//
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { RegistroComponent } from './views/registro/registro.component';
+import { MainComponent } from './views/main/main.component';
+import { TablaComponent } from './views/tabla/tabla.component';
+import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -52,6 +65,7 @@ const routes: Routes = [
   { path: 'actividad/form', component: ActividadFormComponert },
   { path: 'actividad/form/:id', component: ActividadFormComponert },
   { path: 'registro', component: RegistroComponent },
+   { path: 'Admin-Creacion', component: AdminCreacionComponent },
 
 
 ];
@@ -79,7 +93,8 @@ const routes: Routes = [
     SidebarComponent,
     MainComponent,
     TablaComponent,
-    RegistroComponent
+    RegistroComponent,
+
   ],
   
   imports: [
@@ -93,7 +108,15 @@ const routes: Routes = [
     MatToolbarModule,
     MatIconModule,
     MatListModule,
-    MatTableModule
+    MatTableModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatSelectModule,
+    MatSnackBarModule,
+
   ],
   providers: [LoginService, provideAnimationsAsync(), DistributivoService, DocenteService],
   bootstrap: [AppComponent]

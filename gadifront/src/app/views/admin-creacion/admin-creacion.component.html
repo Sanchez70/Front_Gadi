@@ -1,63 +1,79 @@
-<div class="example-action-buttons">
-    <button mat-button (click)="accordion.openAll()">Expand All</button>
-    <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+<div class="container">
+    <form [formGroup]="searchForm" class="search-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Cédula</mat-label>
+        <input matInput formControlName="cedula" placeholder="Ingrese cédula" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="buscarPersona()">
+        Buscar
+      </button>
+    </form>
+  
+    <form [formGroup]="personaForm">
+      <mat-form-field appearance="fill">
+        <mat-label>Primer Nombre</mat-label>
+        <input matInput formControlName="nombre1"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Segundo Nombre</mat-label>
+        <input matInput formControlName="nombre2"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Primer Apellido</mat-label>
+        <input matInput formControlName="apellido1"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Segundo Apellido</mat-label>
+        <input matInput formControlName="apellido2"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="direccion"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Correo</mat-label>
+        <input matInput formControlName="correo"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Edad</mat-label>
+        <input matInput formControlName="edad"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Fecha de Vinculación</mat-label>
+        <input matInput formControlName="fecha_vinculacion"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo de Contrato</mat-label>
+        <input matInput formControlName="tipo_contrato"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Título Profesional</mat-label>
+        <input matInput formControlName="titulo_profesional"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Grado Ocupacional</mat-label>
+        <input matInput formControlName="grado_ocupacional"  />
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre de Usuario</mat-label>
+        <input matInput formControlName="nombre_usuario"  />
+      </mat-form-field>
+    </form>
   </div>
-  <mat-accordion class="example-headers-align" multi>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Personal data
-        </mat-panel-title>
-        <mat-panel-description>
-          Type your name and age
-          <mat-icon>account_circle</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <mat-label>First name</mat-label>
-        <input matInput>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Age</mat-label>
-        <input matInput type="number" min="1">
-      </mat-form-field>
-  
-    </mat-expansion-panel>
-    <mat-expansion-panel disabled>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Destination
-        </mat-panel-title>
-        <mat-panel-description>
-          Type the country name
-          <mat-icon>map</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <mat-label>Country</mat-label>
-        <input matInput>
-      </mat-form-field>
-    </mat-expansion-panel>
-  
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Day of the trip
-        </mat-panel-title>
-        <mat-panel-description>
-          Inform the date you wish to travel
-          <mat-icon>date_range</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" (focus)="picker.open()" readonly>
-      </mat-form-field>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-expansion-panel>
-  </mat-accordion>
   

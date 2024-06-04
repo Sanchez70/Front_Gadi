@@ -7,6 +7,7 @@ import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
+import { Usuario } from '../../Services/loginService/usuario';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,15 @@ export class PersonaService {
   }
   getTitulosProfecionales(): Observable<TituloProfecional[]> {
     return this.http.get<TituloProfecional[]>(`${this.baseUrl}/titulo_profesional`);
+  }
+  getPersonaById(id: number): Observable<Persona> {
+    return this.http.get<Persona>(`${this.baseUrl}/persona/${id}`);
+  }
+  getPersonaByCedula(cedula: string): Observable<Persona> {
+    return this.http.get<Persona>(`${this.baseUrl}/persona/cedula/${cedula}`);
+  }
+
+  getUsuarioByPersonaId(id: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseUrl}/usuario/persona/${id}`);
   }
 }
