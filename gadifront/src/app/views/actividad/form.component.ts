@@ -13,19 +13,19 @@ import { response } from 'express';
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
 })
-export class FormComponent{
+export class FormComponent {
   public actividad: Actividad = new Actividad()
-  Tipos: tipo_actividad[] = [];
-  tipoSeleccionada: number = 0;
-  idtipo: number = 0;
+  public tipo: tipo_actividad = new tipo_actividad()
+  public Tipos: tipo_actividad[] = [];
   public titulo: String = "CREAR Actividad"
 
-  constructor(private actividadService: ActividadService,private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.cargarActividades()
-    this.cargarActividad()
-    
+    //this.cargarTipoActividad()
+    this.cargartipo()
+
   }
 
   cargarActividades(): void {
@@ -39,31 +39,24 @@ export class FormComponent{
     })
   }
 
+  cargartipo(): void {
+    this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
+      this.Tipos = Tipos;
+    });
+  }
+
   public create(): void {
-    console.log("llega aqui")
-    console.log('id tipo',this.Tipos)
+    this.actividad.id_tipo_actividad = this.tipo.id_tipo_actividad
     this.actividadService.create(this.actividad)
       .subscribe(
         (actividad) => {
           this.router.navigate(['/']);
-          Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_Actividad} Guardado con éxito`, 'success');
+          Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_actividad} Guardado con éxito`, 'success');
         },
         (error) => {
           console.error('Error al guardar la actividad:', error);
           Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
         }
       );
-  }
-
-  cargarActividad(): void {
-    this.tipo_actividadService.gettipoActividad().subscribe(data => {
-      this.Tipos = data;
-      console.log('id tipo',this.Tipos)
-    });
-  }
-
-  onCarreraChange(event:any): void{
-    this.tipoSeleccionada = +event.target.value;
-    this.idtipo = this.tipoSeleccionada;
   }
 }

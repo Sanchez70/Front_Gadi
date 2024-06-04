@@ -1,52 +1,70 @@
-/* Estilos generales */
+/* Estilo general del formulario */
 form {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f2f2f2;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Estilo de las etiquetas */
+.label {
+  color: #606770;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Estilo de los campos de entrada */
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ccd0d5;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
+
+/* Estilo del botón de envío */
+.btn-primary {
+  background-color: #1877f2;
+  border-color: #1877f2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #165c9b;
+}
+
+/* Estilo de los grupos de formularios */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Estilo de las filas del formulario */
+.row {
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo de las columnas del formulario */
+.col-sm-10 {
+  flex: 1;
+}
+
+/* Ajustes para el responsive design */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
   }
-  
-  /* Estilos para los grupos de campos */
-  .form-group {
-    margin-bottom: 20px;
+
+  .col-sm-10 {
+    width: 100%;
   }
-  
-  /* Estilos para las etiquetas */
-  label {
-    font-weight: bold;
-    color: #333;
+
+  .input-group {
+    margin-bottom: 15px;
   }
-  
-  /* Estilos para los campos de entrada */
-  .form-control {
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Estilos para el área de texto */
-  textarea.form-control {
-    resize: vertical;
-    min-height: 100px;
-  }
-  
-  /* Estilos para el botón de envío */
-  .btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
-    color: #fff;
-    font-size: 16px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
-  }
-  
+}

@@ -23,10 +23,10 @@
   <tbody>
     <tr *ngFor="let actividad of Actividades; let i = index">
       <td>{{ actividad.id_actividad }}</td>
-      <td>{{ actividad.nombre_Actividad }}</td>
+      <td>{{ actividad.nombre_actividad }}</td>
       <td>{{ actividad.descripcion_actividad }}</td>
       <td>{{ actividad.horas_no_docentes }}</td>
-      <td>{{ Tipos[i]?.nom_tip_actividad }}</td>
+      <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
     </tr>
   </tbody>  
 </table>

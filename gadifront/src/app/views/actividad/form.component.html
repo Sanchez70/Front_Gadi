@@ -1,33 +1,50 @@
-<form ngNativeValidate (submit)="create()">
-    <div class="form-group row">
-        <label for="tipoActividad" class="col-form-label col-sm-3"><strong>TIPO DE ACTIVIDAD</strong></label>
-        <div class="col-sm-10">
-            <select class="form-control" placeholder="Seleccione la Carrera" (ngModel)="tipoSeleccionada"
-                name="tipoSeleccionada" aria-label="Carrera" aria-describedby="basic-addon1" (change)="onCarreraChange($event)"
-                formControlName="carreraSelec">
-                <option value=0 disabled selected>Seleccione una opción</option>
-                <option *ngFor="let tipo of Tipos " [value]="tipo.id_tipo_actividad">{{tipo.nom_tip_actividad}}
-                </option>
-            </select>
-        </div>
+<form ngNativeValidate>
+  <div class="form-group row">
+    <label for="nombre_actividad" class="col-form-label col-form-label-sm label">
+      <strong>Nombre Actividad</strong>
+    </label>
+    <div class="col-sm-10 input-group">
+      <input type="text" class="form-control" [(ngModel)]="actividad.nombre_actividad" name="nombre_actividad"
+             placeholder="Ingrese nombre_actividad" required>
     </div>
-    <div class="form-group row">
-        <label for="nombreActividad" class="col-form-label col-sm-3"><strong>Nombre de Actividad</strong></label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" (ngModel)="actividad.nombre_Actividad" name="nombre_Actividad"
-                placeholder="Ingrese el nombre de la actividad" required="true">
-        </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="descripcion_actividad" class="col-form-label col-form-label-sm label">
+      <strong>Descripción de la Actividad</strong>
+    </label>
+    <div class="col-sm-10 input-group">
+      <input type="text" class="form-control" [(ngModel)]="actividad.descripcion_actividad" name="descripcion_actividad"
+             placeholder="Ingrese descripcion_actividad" required>
     </div>
-    <div class="form-group row">
-        <label for="descripcion" class="col-form-label col-sm-3"><strong>DESCRIPCION</strong></label>
-        <div class="col-sm-10">
-            <textarea class="form-control" (ngModel)="actividad.descripcion_actividad" name="descripcion_actividad"
-                placeholder="Ingrese la descripción" required="true"></textarea>
-        </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="horas_no_docentes" class="col-form-label col-form-label-sm label">
+      <strong>Horas Docente</strong>
+    </label>
+    <div class="col-sm-10 input-group">
+      <input type="number" class="form-control" [(ngModel)]="actividad.horas_no_docentes" name="horas_no_docentes"
+             placeholder="Ingrese las horas no docentes" required>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-10 offset-sm-3">
-            <button type="submit" class="btn btn-primary" >Enviar</button>
-        </div>
+  </div>
+  
+  <div class="form-group row">
+    <label for="id_tipo_actividad" class="col-form-label col-form-label-sm label">
+      <strong>Tipo</strong>
+    </label>
+    <div class="col-sm-9 input-group">
+      <select id="form4Example2" class="form-control" [(ngModel)]="tipo.id_tipo_actividad" name="id_tipo_actividad" required>
+        <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">
+          {{ tipo.nom_tip_actividad }}
+        </option>
+      </select>
     </div>
+  </div>
+  
+  <div class="form-group row">
+    <div class="col-sm-10 offset-sm-3">
+      <button type="submit" class="btn btn-primary">Enviar</button>
+    </div>
+  </div>
 </form>
