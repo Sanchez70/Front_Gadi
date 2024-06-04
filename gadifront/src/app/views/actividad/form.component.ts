@@ -2,7 +2,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Actividad } from '../../Services/actividadService/actividad';
+import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { ActividadService } from '../../Services/actividadService/actividad.service';
+import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import Swal from 'sweetalert2';
 import { response } from 'express';
 
@@ -11,14 +13,19 @@ import { response } from 'express';
   templateUrl: './form.component.html',
   styleUrl: './form.component.css'
 })
-export class FormComponent{
+export class FormComponent {
   public actividad: Actividad = new Actividad()
+  public tipo: tipo_actividad = new tipo_actividad()
+  public Tipos: tipo_actividad[] = [];
   public titulo: String = "CREAR Actividad"
 
-  constructor(private actividadService: ActividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.cargarActividades()
+    //this.cargarTipoActividad()
+    this.cargartipo()
+
   }
 
   cargarActividades(): void {
@@ -32,13 +39,19 @@ export class FormComponent{
     })
   }
 
+  cargartipo(): void {
+    this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
+      this.Tipos = Tipos;
+    });
+  }
+
   public create(): void {
-    console.log("llega aqui")
+    this.actividad.id_tipo_actividad = this.tipo.id_tipo_actividad
     this.actividadService.create(this.actividad)
       .subscribe(
         (actividad) => {
           this.router.navigate(['/']);
-          Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_Actividad} Guardado con éxito`, 'success');
+          Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_actividad} Guardado con éxito`, 'success');
         },
         (error) => {
           console.error('Error al guardar la actividad:', error);

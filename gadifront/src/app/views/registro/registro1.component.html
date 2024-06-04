@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="card">
+        <img src="assets/img/logo.png" alt="GADI" class="logo">
+        <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label class="label" for="telefono">Teléfono</label>
+                <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
+            </div>
+
+            <div class="form-group">
+                <label for="direccion">Dirección</label>
+                <input class="form-control" type="text" id="direccion" formControlName="direccion" required />
+            </div>
+
+            <div class="form-group">
+                <label for="correo">Correo</label>
+                <input class="form-control" type="email" id="correo" formControlName="correo" required />
+            </div>
+
+            <div class="form-group">
+                <label for="edad">Edad</label>
+                <input class="form-control" type="text" id="edad" formControlName="edad" required />
+            </div>
+
+            <div class="form-group">
+                <label for="f_vinculacion">Fecha de vinculación</label>
+                <input class="form-control" type="date" id="f_vinculacion" formControlName="f_vinculacion" required />
+            </div>
+
+            <div class="form-group">
+                <label for="tit_prof">Título Profesional</label>
+                <input class="form-control" type="text" id="tit_prof" formControlName="tit_prof" required />
+            </div>
+
+            <div class="form-group">
+                <label for="grado">Grado del Título</label>
+                <input class="form-control" type="text" id="grado" formControlName="grado" required />
+            </div>
+
+            <div class="form-group">
+                <label for="grado_ocup">Grado Ocupacional</label>
+                <input class="form-control" type="text" id="grado_ocup" formControlName="grado_ocup" required />
+            </div>
+
+            <div class="form-group">
+                <label for="contrato">Contrato</label>
+                <input class="form-control" type="text" id="contrato" formControlName="contrato" required />
+            </div>
+
+            <div class="form-group">
+                <label for="jornada">Jornada</label>
+                <mat-radio-group formControlName="jornada">
+                    <mat-radio-button value="auto">Medio tiempo</mat-radio-button>
+                    <mat-radio-button value="always">Tiempo Completo</mat-radio-button>
+                </mat-radio-group>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
+        </form>
+    </div>
+</div>

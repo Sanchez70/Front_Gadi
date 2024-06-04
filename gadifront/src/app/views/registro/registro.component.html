@@ -1,46 +1,58 @@
 <div class="container">
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
-        <form>
+        <form [formGroup]="registro1" (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label class="label" for="primer_nombre">Primer nombre</label>
-                <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" />
+                <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" required />
             </div>
 
             <div class="form-group">
                 <label for="segundo_nombre">Segundo nombre</label>
-                <input class="form-control" type="text" id="segundo_nombre" formControlName="segundo_nombre" />
+                <input class="form-control" type="text" id="segundo_nombre" formControlName="segundo_nombre" required />
             </div>
 
             <div class="form-group">
                 <label for="primer_apellido">Primer apellido</label>
-                <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" />
+                <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" required />
             </div>
 
             <div class="form-group">
                 <label for="segundo_apellido">Segundo apellido</label>
-                <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" />
+                <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" required />
             </div>
 
             <div class="form-group">
-                <label for="usuario">Usuario</label>
-                <input class="form-control" type="text" id="usuario" formControlName="usuario" />
+                <label for="usuario">Cédula</label>
+                <input class="form-control" type="text" id="usuario" formControlName="usuario" placeholder="Este será su usuario de ingreso" required />
             </div>
 
             <div class="form-group">
                 <label for="contraseña">Contraseña</label>
-                <input class="form-control" type="password" id="contraseña" formControlName="contraseña" />
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                  </mat-form-field>
             </div>
 
             <div class="form-group">
                 <label for="repetir_contraseña">Repetir contraseña</label>
-                <input class="form-control" type="password" id="repetir_contraseña" formControlName="repetir_contraseña" />
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                  </mat-form-field>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
+            <button type="submit" class="btn btn-primary btn-rounded" routerLink="/registro1">CONTINUAR</button>
         </form>
         <div class="redirection-buttons">
-            <li class="nav-item active" routerLinkActive="active">
+            <p></p>
             <p class="login-link" routerLink="/login" >Ya tienes cuenta? Inicia sesión</p>
         </div>
     </div>

@@ -1,0 +1,142 @@
+.container{
+    display: flex;
+	align-items: center;
+	justify-content: center;
+    margin-left: 100px;
+    margin-top: 2cap;
+}
+
+.btn {
+	display: inline-block;
+	background-color: #4285f4;
+    color: #fff;
+    align-items: center;
+    text-align: center;
+    border: none;
+    margin-left: -2px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 100px;
+    text-transform: uppercase;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: box-shadow, transform;
+    transition-property: box-shadow, transform;
+}
+
+  .btn:hover,
+  .btn:focus,
+  .btn:active {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+
+.input {
+    width: 250px;
+    margin: 20px 2px;
+    box-sizing: border-box;
+    margin-left: 3cap;
+    font-size: 14px;
+    border-radius: 6px;
+    line-height: 1.5;
+    padding: 5px 10px;
+    transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+    border: 2px solid #dee1e2;
+
+    background: #dee1e2;
+    display: block;
+    height: 36px;
+    :hover {
+        border-color: #70d1d8;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    :focus{
+        border-color: #47b5ff;
+        background: #fff;
+    }
+    
+  }
+  
+  table {
+    width: 1300px;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    align-items: center;
+    margin-left: 3cap;
+    margin-right: 1cap;
+    margin-top: 4cap;
+
+  }
+  
+  thead th {
+    background-color: #1E90FF;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    align-items: center;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:hover {
+    background-color: #ddd;
+  }
+  
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+  
+  table.filtering {
+    opacity: 0.5;
+  }
+  
+  @media screen and (max-width: 600px) {
+    table {
+      width: 100%;
+    }
+  
+    thead {
+      display: none;
+    }
+  
+    tr {
+      display: block;
+      margin-bottom: 20px;
+    }
+  
+    td {
+      display: block;
+      text-align: right;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+      padding-left: 50%;
+    }
+  
+    td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: bold;
+      text-align: center;
+    }
+  }

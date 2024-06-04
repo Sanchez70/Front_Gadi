@@ -1,7 +1,8 @@
-import { NgModule, ViewChild } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PersonaComponent } from './views/persona/persona.component';
 import { UsuarioComponent } from './views/usuario/usuario.component';
 import { AsignaturaComponent } from './views/asignatura/asignatura.component';
@@ -19,6 +20,7 @@ import { TipoContratoComponent } from './views/tipo-contrato/tipo-contrato.compo
 import { DistributivoActividadComponent } from './views/distributivo-actividad/distributivo-actividad.component';
 import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura/distributivo-asignatura.component';
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
+import { MatrizPropuestaComponent } from './views/matriz-propuesta/matriz-propuesta.component';
 import { LoginComponent } from './views/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,32 +28,26 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginService } from './Services/loginService/login.service';
 import { AsignaturaService } from './Services/asignaturaService/asignatura.service';
 import { ActividadService } from './Services/actividadService/actividad.service';
+import { DistributivoAsignaturaService } from './Services/distributivoAsignaturaService/distributivo-asignatura.service';
+import { JornadaService } from './Services/jornadaService/jornada.service';
+import { CicloService } from './Services/cicloService/ciclo.service';
+import { PeriodoService } from './Services/periodoService/periodo.service';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { SidebarComponent } from './sidebar/sidebar.component';
-//MATERIAL
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MainComponent } from './views/main/main.component';
+import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
-import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-
-//MATERIAL//
+import { MatRadioModule } from '@angular/material/radio';
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { RegistroComponent } from './views/registro/registro.component';
-import { MainComponent } from './views/main/main.component';
-import { TablaComponent } from './views/tabla/tabla.component';
-import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
-
+import { FormComponent } from './views/actividad/form.component';
+import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -65,8 +61,8 @@ const routes: Routes = [
   { path: 'actividad/form', component: ActividadFormComponert },
   { path: 'actividad/form/:id', component: ActividadFormComponert },
   { path: 'registro', component: RegistroComponent },
-   { path: 'Admin-Creacion', component: AdminCreacionComponent },
-
+  { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
+  { path: 'tipo_actividad', component: TipoActividadComponent },
 
 ];
 @NgModule({
@@ -94,12 +90,14 @@ const routes: Routes = [
     MainComponent,
     TablaComponent,
     RegistroComponent,
-
+    MatrizPropuestaComponent,
+    FormComponent
   ],
   
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
@@ -109,16 +107,19 @@ const routes: Routes = [
     MatIconModule,
     MatListModule,
     MatTableModule,
-    MatButtonModule,
-    MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatSelectModule,
-    MatSnackBarModule,
-
+    MatRadioModule
   ],
-  providers: [LoginService, provideAnimationsAsync(), DistributivoService, DocenteService],
+  providers: [LoginService, provideAnimationsAsync(), 
+    DistributivoService, 
+    DocenteService, 
+    AsignaturaService, 
+    DistributivoAsignaturaService,
+    JornadaService,
+    CicloService,
+    PeriodoService,
+    ActividadService,
+    tipo_actividadService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

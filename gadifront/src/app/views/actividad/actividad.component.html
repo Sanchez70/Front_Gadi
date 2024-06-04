@@ -1,6 +1,6 @@
-<div class="table-header">
+<div class="table-header" routerLinkActive="active">
   <div class="buttons">
-    <button class="btn-create">Crear</button>
+    <button class="btn-create"routerLink="/actividad/form">Crear</button>
     <button class="btn-edit">Modificar</button>
     <button class="btn-delete">Eliminar</button>
   </div>
@@ -17,16 +17,16 @@
       <th>Nombre Actividad</th>
       <th>Descripcion</th>
       <th>Horas no Docentes</th>
-      <th>Id Tipo Actividad</th>
+      <th>Tipo Actividad</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let actividad of Actividades; let i = index">
       <td>{{ actividad.id_actividad }}</td>
-      <td>{{ actividad.nombre_Actividad }}</td>
+      <td>{{ actividad.nombre_actividad }}</td>
       <td>{{ actividad.descripcion_actividad }}</td>
       <td>{{ actividad.horas_no_docentes }}</td>
-      <td>{{ actividad.id_tipo_actividad }}</td>
+      <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
     </tr>
-  </tbody>
+  </tbody>  
 </table>
