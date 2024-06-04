@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
+import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaService/distributivo-asignatura';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
 import { Ciclo } from '../../Services/cicloService/ciclo';
 import { CicloService } from '../../Services/cicloService/ciclo.service';
 import { Carrera } from '../../Services/carreraService/carrera';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
+import { JornadaService } from '../../Services/jornadaService/jornada.service';
+import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,6 +21,11 @@ export class AsignaturaComponent implements OnInit {
   carreraSeleccionada: number = 0;
   asignaturas: any[] = [];
   asignaturaFiltrada: any[] = [];
+  paralelos: string[] = ['A','B'];
+  paraleloSeleccionado: string = '';
+  jornadas: any[] = [];
+  jornadaSeleccionada: number = 0;
+  idJornada: number = 0;
   asignaturasSeleccionadas: Asignatura[] = [];
   nombreCiclo : string = '';
   horasTotales: number = 0;
@@ -25,8 +33,9 @@ export class AsignaturaComponent implements OnInit {
   idCiclo : number = 0;
   ciclos: any[] = [];
   cicloSeleccionado:  number = 0;
-  public asignatura:Asignatura = new Asignatura();
-  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private router: Router,
+  id_distributivo= 1;
+  public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
+  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, private router: Router,
     private activatedRoute: ActivatedRoute){
 
   }
@@ -34,7 +43,7 @@ export class AsignaturaComponent implements OnInit {
   ngOnInit(): void{
     this.cargarComboCarreras();
     this.cargarComboCiclos();
-
+    this.cargarComboJornada();
   }
 
   cargarComboCarreras(): void {
@@ -50,11 +59,18 @@ export class AsignaturaComponent implements OnInit {
     });
   }
 
+  cargarComboJornada(): void{
+    this.jornadaService.getJornada().subscribe(data =>{
+      this.jornadas = data;
+    });
+  }
+
   cargarAsignaturas(): void{
     this.asignaturaService.getAsignatura().subscribe(data =>{
       this.asignaturas = data;
     });
   }
+
 
   onCarreraChange(event:any): void{
     this.carreraSeleccionada = +event.target.value;
@@ -68,6 +84,36 @@ export class AsignaturaComponent implements OnInit {
     this.idCiclo = this.cicloSeleccionado;
     console.log('id ciclo',this.idCiclo)
     this.filtrarAsignaturaCarrerabyCiclo();
+  }
+
+  onJornadaChange(event:any): void{
+    this.jornadaSeleccionada = +event.target.value;
+    this.idJornada = this.jornadaSeleccionada;
+    console.log('id_jornada',this.idJornada);
+  }
+
+  onParaleloChange(event:any): void{
+    this.paraleloSeleccionado = event.target.value;
+    console.log('paralelo',this.paraleloSeleccionado);
+  }
+
+  createAsignaturaDistributivo(): void {
+    this.asignaturasSeleccionadas.forEach(asignatura => {
+      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+        id_jornada: this.idJornada,
+        paralelo: this.paraleloSeleccionado,
+        id_distributivo: this.id_distributivo,
+        id_asignatura: asignatura.id_asignatura
+      };
+  
+      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+        Swal.fire('Asignatura guardada', `guardado con éxito`, 'success')
+        console.log('Asignatura Distributivo generado');
+      }, error => {
+        Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning')
+        console.log('Error al crear', error);
+      });
+    });
   }
 
   
@@ -125,6 +171,5 @@ export class AsignaturaComponent implements OnInit {
       (sum,asignatura) => sum + asignatura.horas_semanales, 0
     );
   }
-
 
 }

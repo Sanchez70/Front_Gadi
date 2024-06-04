@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrl: './distributivo.component.css'
 })
 export class DistributivoComponent {
-
+  
 }

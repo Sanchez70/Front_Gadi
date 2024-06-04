@@ -66,7 +66,8 @@ const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
-  {path: 'admin_Creacion', component: AdminCreacionComponent},
+  { path: 'admin_Creacion', component: AdminCreacionComponent},
+  { path: 'distributivo', component: DistributivoComponent}
 
 ];
 @NgModule({

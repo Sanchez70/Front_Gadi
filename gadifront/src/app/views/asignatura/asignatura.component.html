@@ -1,5 +1,33 @@
 <form class="formulario" ngNativeValidate  style="width: 45%;" >
-    
+
+  <div class="combos-container">
+  <div class="input-group mb-3">
+    <div class="combo-container">
+        <label for="jornada" class="label_form font-weight-bold">Jornada</label>
+        <div class="custom-select">
+    <select class="form-control" placeholder="Seleccione la Jornada" [(ngModel)]="carreraSeleccionada"
+        name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event)"
+        formControlName="carreraSelec">
+        <option value=0 disabled selected>Seleccione una opción</option>
+        <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
+    </select>
+</div>
+</div>
+</div>
+<div class="input-group mb-3">
+  <div class="combo-container">
+      <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
+      <div class="custom-select">
+        <select class="form-control" placeholder="Número de personas" (ngModel)="paraleloSeleccionado"
+        name="nPersona" aria-label="Número de personas" aria-describedby="basic-addon1" (change)="onParaleloChange($event)"
+        formControlName="numeroPer">
+        <option value=0 disabled selected>Seleccione una opción</option>
+        <option *ngFor="let paralelo of paralelos" [value]="paralelo">{{paralelo}}</option>
+    </select>
+</div>
+</div>
+</div>
+</div>
     <div class="combos-container">
     <div class="input-group mb-3">
         <div class="combo-container">
@@ -92,7 +120,7 @@
     
     <div class="d-flex justify-content-center">
         <div class="btnAcept">
-            <button type="submit" class="btnAceptar">Aceptar</button>
+            <button type="submit" class="btnAceptar" (click)="createAsignaturaDistributivo()">Aceptar</button>
         </div>
     </div>
 </form>
