@@ -9,6 +9,7 @@ export class AuthService {
   isLogeado = false;
   rol: any;
   cedula: any;
+  id_persona: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
@@ -37,6 +38,11 @@ export class AuthService {
     this.isLogeado = user.isLogeado || false;
     this.cedula = user.cedula || null;
     this.rol = user.rol || null
+    this.id_persona = user.id_persona || null;
+  }
+  clearLocalStorage() {
+    localStorage.removeItem('user');
+    this.id_persona='';
   }
 
   saveUserToLocalStorage() {
@@ -44,7 +50,8 @@ export class AuthService {
     localStorage.setItem('user', JSON.stringify({
       isLogeado: this.isLogeado,
       cedula: this.cedula,
-      rol: this.rol
+      rol: this.rol,
+      id_persona:this.id_persona
     }));
   }
   login() {

@@ -57,7 +57,8 @@ export class PersonaComponent implements OnInit {
     );
     if(!personaExistente){
      this.personasSeleccionada.push(persona);
-     DistributivoComponent.idpersona= persona.id_persona;
+    this.authService.id_persona = persona.id_persona;
+    this.authService.saveUserToLocalStorage();
      this.router.navigate(['./distributivo']);
     }else{
       Swal.fire({

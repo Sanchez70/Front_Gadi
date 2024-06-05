@@ -22,9 +22,9 @@
       <td colspan="1" data-label="Nombre">{{persona.nombre1}}</td>
       <td colspan="1" data-label="Apellido">{{persona.apellido1}}</td>
       <td colspan="1" data-label="TC">{{contrato.nombre_contrato}}</td>
-      <td colspan="1" data-label="TITULO"></td>
-      <td colspan="1" data-label="GRADO"></td>
-      <td colspan="1" data-label="Fecha de Vinculación">{{persona.fecha_vinculacion}}</td>
+      <td colspan="1" data-label="TITULO">{{titulo.nombre_titulo}}</td>
+      <td colspan="1" data-label="GRADO">{{grado.nombre_grado_ocp}}</td>
+      <td colspan="1" data-label="Fecha de Vinculación">{{persona.fecha_vinculacion | date:'dd/MM/yyyy'}}</td>
     </tr>
   </tbody>
 </table>
