@@ -24,18 +24,18 @@ export class FormComponent {
   public Distributivos: DistributivoActividad[] = [];
   public titulo: String = "CREAR Actividad"
 
-  constructor(private distributivoService: DistributivoActividadService,private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private distributivoService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.cargartipo()
     this.cargarACti()
 
   }
-  
+
   cargarACti(): void {
     this.actividadService.getActividad().subscribe((Actividades) => {
       this.Actividades = Actividades;
-      console.log("valor",Actividades)
+      console.log("valor", Actividades)
     });
   }
 
@@ -50,10 +50,10 @@ export class FormComponent {
     this.actividadService.create(this.actividad)
       .subscribe(
         (actividad) => {
-          this.actividad.id_actividad = actividad.id_actividad; 
+          this.actividad.id_actividad = actividad.id_actividad;
           Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_actividad} Guardado con éxito`, 'success');
-          this.createdistributivo();
-          this.router.navigate(['/']);
+          //this.createdistributivo();
+          this.router.navigate(['/distributivo'])
         },
         (error) => {
           console.error('Error al guardar la actividad:', error);
@@ -62,6 +62,7 @@ export class FormComponent {
       );
   }
 
+  //Metodo la guardar en el distributivo aun no usado///
   public createdistributivo(): void {
     this.distributivo.id_actividad = this.actividad.id_actividad
     this.distributivo.hora_no_docente = this.actividad.horas_no_docentes
@@ -69,7 +70,7 @@ export class FormComponent {
       .subscribe(
         (distributivo) => {
           this.router.navigate(['/']);
-          console.log("valor",distributivo)
+          console.log("valor", distributivo)
           //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
         },
         (error) => {
@@ -78,4 +79,5 @@ export class FormComponent {
         }
       );
   }
+
 }

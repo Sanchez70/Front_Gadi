@@ -1,7 +1,7 @@
 <div class="container">
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
-        <form [formGroup]="registro1" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit()">
             <div class="form-group">
                 <label class="label" for="primer_nombre">Primer nombre</label>
                 <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" required />

@@ -44,6 +44,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+
+
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
@@ -118,7 +122,9 @@ const routes: Routes = [
     MatTableModule,
     MatRadioModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonModule,
+    MatInputModule
   ],
   providers: [LoginService, provideAnimationsAsync(), 
     DistributivoService, 

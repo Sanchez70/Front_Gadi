@@ -54,23 +54,27 @@
 
   <table>
     <thead>
-        <button class="btn btn--primary btn--inside">Ingresar</button>
+        <button class="btn btn--primary btn--inside" routerLink="/actividad/form">Ingresar</button>
       <tr>
           <th colspan="7" style="text-align: center; background-color: rgb(33, 59, 173);">ACTIVIDADES NO DOCENTES</th>
       </tr>
       <tr>
-        <th colspan="2.3">NO.HORAS GESTIÓN</th>
-        <th colspan="2.3">TOTAL HORAS SEMANALES</th>
-        <th colspan="3">ACTIVIDADES DESCRIPCIÓN</th>
+        <th>Id Actividad</th>
+        <th>Nombre Actividad</th>
+        <th>Descripcion</th>
+        <th>Horas no Docentes</th>
+        <th>Tipo Actividad</th>
       </tr>
     </thead>
     <tbody>
-      <tr >
-        <td data-label="Cédula"></td>
-        <td data-label="Nombre"></td>
-        <td data-label="Apellido"></td>
+      <tr *ngFor="let actividad of Actividades; let i = index">
+        <td>{{ actividad.id_actividad }}</td>
+        <td>{{ actividad.nombre_actividad }}</td>
+        <td>{{ actividad.descripcion_actividad }}</td>
+        <td>{{ actividad.horas_no_docentes }}</td>
+        <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
       </tr>
-    </tbody>
+    </tbody> 
   </table>
   <button class="btn btn--primary btn--inside" style="margin-left: 60cap; margin-bottom: 5cap;">Crear</button>
 </div>

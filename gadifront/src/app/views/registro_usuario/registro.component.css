@@ -31,7 +31,7 @@ label {
 
 input, select, mat-form-field {
     width: 100%;
-    margin-top: 5px;
+    margin-top: 4px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
