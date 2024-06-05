@@ -2,6 +2,7 @@
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
         <form (ngSubmit)="onSubmit()">
+            <div><p></p></div>
             <div class="form-group">
                 <label class="label" for="telefono">Teléfono</label>
                 <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
@@ -48,15 +49,17 @@
             </div>
 
             <div class="form-group">
-                <label for="jornada">Jornada</label>
-                <mat-form-field>
-                    <mat-label>Seleccione una opción</mat-label>
-                    <mat-select>
-                      <mat-option value="one">Tiempo Completo</mat-option>
-                      <mat-option value="two">Medio tiempo</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <label>Jornada</label>
+                <select name="jornada" id="jornada" aria-placeholder="Seleccione una opcion">
+                    <option value="0" disabled selected>Seleccione una opción</option>
+                    <option value="1">Tiempo Completo</option>
+                    <option value="2">Medio Tiempo</option>
+                    <option value="3">Tiempo Parcial</option>
+                </select>
+                <label>Número de horas</label>
+                <input class="form-control" type="number" id="horas" formControlName="horas_contrato" required>
             </div>
+
             
 
             <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
