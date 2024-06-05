@@ -51,6 +51,7 @@ import { RegistroComponent } from './views/registro/registro.component';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
+import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -126,6 +127,7 @@ const routes: Routes = [
     PeriodoService,
     ActividadService,
     tipo_actividadService
+    DistributivoActividadService
   ],
   bootstrap: [AppComponent]
 })
