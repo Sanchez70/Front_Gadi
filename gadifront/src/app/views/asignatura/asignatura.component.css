@@ -78,7 +78,7 @@ tbody tr:hover {
 
 .table-container {
     flex: 1;
-    margin-right: 150px;
+    margin-right: 40px;
     margin-top: 20px;
     min-width: 500px;
     min-height: 120px;
@@ -88,6 +88,7 @@ tbody tr:hover {
     display: flex;
     align-items: center;
     margin-top: 30px;
+    margin-left: 10cap;
 }
 
 .combo-container{
@@ -164,7 +165,28 @@ tbody tr:hover {
     transform: scale(1.1);
   }
 
-  mat-form-field {
-    width: 25%;
-    margin: 1%;
+  hr.dashed {
+    border-top: 0.5px dashed;
+    border-bottom: none;
+    margin-top: 4px;
+    size: 90cap;
+    width: 1320px;
+    margin-left: 30px;
+    margin-right: 50px;
   }
+
+  .h1{
+    align-items: center;
+    margin-left: 33cap;
+    margin-top: 2cap;
+}
+
+  .Abrir {
+    padding: 0.3rem;
+    margin-left: 22cap;
+}
+
+.Cerrar {
+    padding: 0.3rem;
+    margin-left: 0cap;
+}

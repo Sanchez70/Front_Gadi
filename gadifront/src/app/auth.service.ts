@@ -10,6 +10,7 @@ export class AuthService {
   rol: any;
   cedula: any;
   id_persona: any;
+  id_asignaturas: any[] = [];
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
@@ -39,10 +40,15 @@ export class AuthService {
     this.cedula = user.cedula || null;
     this.rol = user.rol || null
     this.id_persona = user.id_persona || null;
+    this.id_asignaturas = user.id_asignaturas || null;
   }
   clearLocalStorage() {
     localStorage.removeItem('user');
     this.id_persona='';
+  }
+
+  clearLocalStorageAsignatura() {
+    this.id_asignaturas=[];
   }
 
   saveUserToLocalStorage() {
@@ -51,7 +57,8 @@ export class AuthService {
       isLogeado: this.isLogeado,
       cedula: this.cedula,
       rol: this.rol,
-      id_persona:this.id_persona
+      id_persona:this.id_persona,
+      id_asignaturas:this.id_asignaturas
     }));
   }
   login() {

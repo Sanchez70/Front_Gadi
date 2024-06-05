@@ -10,6 +10,7 @@ import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { JornadaService } from '../../Services/jornadaService/jornada.service';
 import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-asignatura',
@@ -34,13 +35,17 @@ export class AsignaturaComponent implements OnInit {
   ciclos: any[] = [];
   cicloSeleccionado:  number = 0;
   id_distributivo= 1;
+  currentExplan: string='';
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
-  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, private router: Router,
+  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, private authService: AuthService, private router: Router,
     private activatedRoute: ActivatedRoute){
 
   }
 
   ngOnInit(): void{
+    this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+    });
     this.cargarComboCarreras();
     this.cargarComboCiclos();
     this.cargarComboJornada();
@@ -97,24 +102,24 @@ export class AsignaturaComponent implements OnInit {
     console.log('paralelo',this.paraleloSeleccionado);
   }
 
-  createAsignaturaDistributivo(): void {
-    this.asignaturasSeleccionadas.forEach(asignatura => {
-      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-        id_jornada: this.idJornada,
-        paralelo: this.paraleloSeleccionado,
-        id_distributivo: this.id_distributivo,
-        id_asignatura: asignatura.id_asignatura
-      };
+  // createAsignaturaDistributivo(): void {
+  //   this.asignaturasSeleccionadas.forEach(asignatura => {
+  //     const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+  //       id_jornada: this.idJornada,
+  //       paralelo: this.paraleloSeleccionado,
+  //       id_distributivo: this.id_distributivo,
+  //       id_asignatura: asignatura.id_asignatura
+  //     };
   
-      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-        Swal.fire('Asignatura guardada', `guardado con éxito`, 'success')
-        console.log('Asignatura Distributivo generado');
-      }, error => {
-        Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning')
-        console.log('Error al crear', error);
-      });
-    });
-  }
+  //     this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+  //       Swal.fire('Asignatura guardada', `guardado con éxito`, 'success')
+  //       console.log('Asignatura Distributivo generado');
+  //     }, error => {
+  //       Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning')
+  //       console.log('Error al crear', error);
+  //     });
+  //   });
+  // }
 
   
   filtrarAsignaturaCarrerabyCiclo(): void{
@@ -170,6 +175,17 @@ export class AsignaturaComponent implements OnInit {
     this.horasTotales = this.asignaturasSeleccionadas.reduce(
       (sum,asignatura) => sum + asignatura.horas_semanales, 0
     );
+  }
+
+  obtenerNombreCiclo(id_ciclo:number):void{
+    const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
+    return ciclo ? ciclo.nombre_ciclo : '';
+  }
+
+  enviarAsignaturas():void{
+    this.authService.clearLocalStorageAsignatura();
+    this.authService.id_asignaturas = this.asignaturasSeleccionadas;
+    this.router.navigate(['./distributivo']);
   }
 
 }

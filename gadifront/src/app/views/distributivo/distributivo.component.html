@@ -36,18 +36,18 @@
           <th colspan="5" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
       </tr>
       <tr>
-        <th >ASIGNATURA</th>
+        <th >NOMBRE</th>
         <th colspan="1">NRO.HORAS SEMANALES</th>
         <th colspan="2">CARRERA</th>
         <th >CICLO</th>
       </tr>
     </thead>
     <tbody>
-      <tr >
-        <td data-label="Cédula"></td>
-        <td data-label="Nombre"></td>
-        <td data-label="Apellido"></td>
-        <td data-label="Teléfono"></td>
+      <tr *ngFor="let asignatura of asignaturas">
+        <td colspan="1">{{asignatura.nombre_asignatura}}</td>
+        <td colspan="2">{{asignatura.horas_semanales}}</td>
+        <td></td>
+        <td colspan="2">{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
       </tr>
     </tbody>
   </table>
