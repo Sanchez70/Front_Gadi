@@ -16,6 +16,7 @@ import { AsignaturaService } from '../../Services/asignaturaService/asignatura.s
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
 import { Ciclo } from '../../Services/cicloService/ciclo';
 import { CicloService } from '../../Services/cicloService/ciclo.service';
+import { CarreraService } from '../../Services/carreraService/carrera.service';
 
 
 
@@ -36,12 +37,13 @@ export class DistributivoComponent implements OnInit {
   public tipo: tipo_actividad = new tipo_actividad()
   public Tipos: tipo_actividad[] = [];
   public ciclos: any[] = [];
+  public carreras: any[] = [];
   public asignaturas: any[] = [];
-
+  horasTotales: number = 0;
   personas: Persona[] = [];
   currentExplan: string = '';
   id_contrato: any;
-  constructor(private tipo_actividadService: tipo_actividadService,private actividadService: ActividadService,private docenteService: DocenteService, private authService: AuthService, private tipo_contrato: TipoContratoService, private titulo_profesional: TituloProfesionalService, private grado_ocupacional: GradoOcupacionalService, private asignaturaSeleccionada: AsignaturaService, private cicloService: CicloService) {
+  constructor(private tipo_actividadService: tipo_actividadService,private actividadService: ActividadService,private docenteService: DocenteService, private authService: AuthService, private tipo_contrato: TipoContratoService, private titulo_profesional: TituloProfesionalService, private grado_ocupacional: GradoOcupacionalService, private asignaturaSeleccionada: AsignaturaService, private cicloService: CicloService, private carreraService: CarreraService) {
   }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -50,7 +52,11 @@ export class DistributivoComponent implements OnInit {
     this.buscarprsona();
     this.cargarACti();
     this.cargarTipoActividad();
+    this.cargarCarreras();
+    this.cargarCiclos();
     this.buscarAsignaturas();
+    console.log('jornada',this.authService.id_jornada)
+    console.log('paralelo',this.authService.paralelo)
   }
 
   buscarprsona(): void {
@@ -89,6 +95,12 @@ export class DistributivoComponent implements OnInit {
       this.ciclos = data;
     });
   }
+
+  cargarCarreras(): void{
+    this.carreraService.getCarrera().subscribe(data => {
+      this.carreras = data;
+    });
+  }
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe(
       (Tipos) => {
@@ -112,18 +124,29 @@ export class DistributivoComponent implements OnInit {
       this.asignaturaSeleccionada.getAsignaturabyId(idAsignaturas).subscribe(response => {
         this.asignatura = response;
         this.asignaturas.push(this.asignatura);
-        console.log('Asignatura cargadas',this.asignaturas);
+        this.calcularHorasTotales();
       }, error => {
         
         console.log('Error al crear', error);
       });
     });
+    console.log('Asignatura cargadas',this.asignaturas);
   }
 
   obtenerNombreCiclo(id_ciclo:number):void{
-    this.cargarCiclos();
     const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
     return ciclo ? ciclo.nombre_ciclo : '';
+  }
+
+  obtenerNombreCarrera(id_carrera:number):void{
+    const carrera = this.carreras.find(carrera => carrera.id_carrera === id_carrera);
+    return carrera ? carrera.nombre_carrera : '';
+  }
+
+  calcularHorasTotales():void{
+    this.horasTotales = this.asignaturas.reduce(
+      (sum,asignatura) => sum + asignatura.horas_semanales, 0
+    );
   }
 
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NonNullableFormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -11,6 +12,8 @@ export class AuthService {
   cedula: any;
   id_persona: any;
   id_asignaturas: any[] = [];
+  id_jornada: any;
+  paralelo: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
@@ -41,6 +44,8 @@ export class AuthService {
     this.rol = user.rol || null
     this.id_persona = user.id_persona || null;
     this.id_asignaturas = user.id_asignaturas || null;
+    this.id_jornada = user.id_jornada || null;
+    this.paralelo = user.paralelo || null;
   }
   clearLocalStorage() {
     localStorage.removeItem('user');
@@ -58,7 +63,9 @@ export class AuthService {
       cedula: this.cedula,
       rol: this.rol,
       id_persona:this.id_persona,
-      id_asignaturas:this.id_asignaturas
+      id_asignaturas:this.id_asignaturas,
+      id_jornada: this.id_jornada,
+      paralelo: this.paralelo
     }));
   }
   login() {

@@ -185,6 +185,9 @@ export class AsignaturaComponent implements OnInit {
   enviarAsignaturas():void{
     this.authService.clearLocalStorageAsignatura();
     this.authService.id_asignaturas = this.asignaturasSeleccionadas;
+    this.authService.id_jornada = this.jornadaSeleccionada;
+    this.authService.paralelo = this.paraleloSeleccionado;
+    this.authService.saveUserToLocalStorage();
     this.router.navigate(['./distributivo']);
   }
 

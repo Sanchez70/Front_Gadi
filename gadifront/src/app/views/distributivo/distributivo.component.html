@@ -33,22 +33,26 @@
     <thead>
         <button class="btn btn--primary btn--inside" routerLink="/asignatura">Ingresar</button>
       <tr>
-          <th colspan="5" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
+          <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
       </tr>
       <tr>
         <th >NOMBRE</th>
         <th colspan="1">NRO.HORAS SEMANALES</th>
         <th colspan="2">CARRERA</th>
-        <th >CICLO</th>
+        <th colspan="2">CICLO</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let asignatura of asignaturas">
         <td colspan="1">{{asignatura.nombre_asignatura}}</td>
-        <td colspan="2">{{asignatura.horas_semanales}}</td>
-        <td></td>
+        <td colspan="0.5">{{asignatura.horas_semanales}}</td>
+        <td colspan="2">{{obtenerNombreCarrera(asignatura.id_carrera)}}</td>
         <td colspan="2">{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
       </tr>
+      <tr>
+        <th colspan="1" style="text-align: left;">Horas totales:</th>
+        <td><b>{{horasTotales}}</b></td>
+    </tr>
     </tbody>
   </table>
 
