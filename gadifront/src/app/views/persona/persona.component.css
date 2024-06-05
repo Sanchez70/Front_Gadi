@@ -9,6 +9,8 @@
 
 table {
     width: 100%;
+    margin-top: center;
+    margin-left: 16rem;
     
 }
 
@@ -159,9 +161,34 @@ tbody tr:hover {
   .Abrir {
     padding: 0.3rem;
     margin-left: 22cap;
+
 }
 
 .Cerrar {
     padding: 0.3rem;
     margin-left: 0cap;
 }
+input {
+    width: 300px;
+    margin: 20px 2px;
+    box-sizing: border-box;
+    margin-left: 40cap;
+    font-size: 16px;
+    border-radius: 6px;
+    line-height: 1.5;
+    padding: 5px 10px;
+    transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+    border: 2px solid #dee1e2;
+    background: #dee1e2;
+    display: block;
+    height: 36px;
+    :hover {
+        border-color: #70d1d8;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    :focus{
+        border-color: #47b5ff;
+        background: #fff;
+    }
+    
+  }

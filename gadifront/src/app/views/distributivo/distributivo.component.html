@@ -1,7 +1,8 @@
+<div class="{{currentExplan}}">
 <h1 class="h1">GENERACIÓN DE DISTRIBUTIVOS</h1>
 <table>
   <thead>
-    <button class="btn btn--primary btn--inside">Ingresar</button>
+    <button class="btn btn--primary btn--inside" routerLinkActive="true" routerLink="/persona">Ingresar</button>
     <tr>
         <th colspan="8" style="text-align: center; background-color: rgb(33, 59, 173);">DATOS DOCENTE</th> 
     </tr>
@@ -17,14 +18,13 @@
   </thead>
   <tbody>
     <tr >
-      <td data-label="Cédula"></td>
-      <td data-label="Nombre"></td>
-      <td data-label="Apellido"></td>
-      <td data-label="Teléfono"></td>
-      <td data-label="Dirección"></td>
-      <td data-label="Correo"></td>
-      <td data-label="Edad"></td>
-      <td data-label="Fecha de Vinculación"></td>
+      <td  colspan="2" data-label="Cédula">{{persona.cedula}}</td>
+      <td colspan="1" data-label="Nombre">{{persona.nombre1}}</td>
+      <td colspan="1" data-label="Apellido">{{persona.apellido1}}</td>
+      <td colspan="1" data-label="TC">{{contrato.nombre_contrato}}</td>
+      <td colspan="1" data-label="TITULO"></td>
+      <td colspan="1" data-label="GRADO"></td>
+      <td colspan="1" data-label="Fecha de Vinculación">{{persona.fecha_vinculacion}}</td>
     </tr>
   </tbody>
 </table>
@@ -73,4 +73,5 @@
     </tbody>
   </table>
   <button class="btn btn--primary btn--inside" style="margin-left: 60cap; margin-bottom: 5cap;">Crear</button>
+</div>
 
