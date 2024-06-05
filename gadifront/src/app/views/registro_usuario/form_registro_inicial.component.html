@@ -1,52 +1,41 @@
 <div class="container">
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
-        <form (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <label class="label" for="primer_nombre">Primer nombre</label>
-                <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" required />
+        <form (ngSubmit)="onSubmit1()">
+            <div class="row">
+                <div class="form-group">
+                    <label class="label" for="primer_nombre">Primer nombre</label>
+                    <input class="form-control" type="text" id="primer_nombre" formControlName="primer_nombre" required />
+                </div>
+    
+                <div class="form-group">
+                    <label for="segundo_nombre">Segundo nombre</label>
+                    <input class="form-control" type="text" id="segundo_nombre" formControlName="segundo_nombre" required />
+                </div>
+    
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="primer_apellido">Primer apellido</label>
+                    <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" required />
+                </div>
+    
+                <div class="form-group">
+                    <label for="segundo_apellido">Segundo apellido</label>
+                    <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" required />
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="segundo_nombre">Segundo nombre</label>
-                <input class="form-control" type="text" id="segundo_nombre" formControlName="segundo_nombre" required />
-            </div>
-
-            <div class="form-group">
-                <label for="primer_apellido">Primer apellido</label>
-                <input class="form-control" type="text" id="primer_apellido" formControlName="primer_apellido" required />
-            </div>
-
-            <div class="form-group">
-                <label for="segundo_apellido">Segundo apellido</label>
-                <input class="form-control" type="text" id="segundo_apellido" formControlName="segundo_apellido" required />
-            </div>
-
-            <div class="form-group">
-                <label for="usuario">Cédula</label>
-                <input class="form-control" type="text" id="usuario" formControlName="usuario" placeholder="Este será su usuario de ingreso" required />
-            </div>
-
-            <div class="form-group">
-                <label for="contraseña">Contraseña</label>
-                <mat-form-field>
-                    <mat-label>Enter your password</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'">
-                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                  </mat-form-field>
-            </div>
-
-            <div class="form-group">
-                <label for="repetir_contraseña">Repetir contraseña</label>
-                <mat-form-field>
-                    <mat-label>Enter your password</mat-label>
-                    <input matInput [type]="hide ? 'password' : 'text'">
-                    <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                  </mat-form-field>
+            <div class="row">
+                <div class="form-group">
+                    <label for="usuario">Cédula</label>
+                    <input class="form-control" type="text" id="usuario" formControlName="usuario" placeholder="Este será su usuario de ingreso" required />
+                </div>
+    
+                <div class="form-group">
+                    <label for="contra">Contraseña</label>
+                    <input class="form-control" type="password" id="password" formControlName="contra" required>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-rounded" routerLink="/registro1">CONTINUAR</button>

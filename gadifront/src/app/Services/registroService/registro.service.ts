@@ -25,20 +25,20 @@ export class RegistroService{
         return this.http.post<Persona>(this.apiUrlPer, persona, {headers: this.httpHeaders})
     }
 
-    createUser(persona:Persona):Observable<Persona>{
-        return this.http.post<Persona>(this.apiUrlPer, persona, {headers: this.httpHeaders})
+    createUser(user:Usuario):Observable<Usuario>{
+        return this.http.post<Usuario>(this.apiUrlUser, user, {headers: this.httpHeaders})
     }
 
-    createContrato(persona:Persona):Observable<Persona>{
-        return this.http.post<Persona>(this.apiUrlPer, persona, {headers: this.httpHeaders})
+    createContrato(contrato:Tipo_contrato):Observable<Tipo_contrato>{
+        return this.http.post<Tipo_contrato>(this.apiUrlContr, contrato, {headers: this.httpHeaders})
     }
 
-    createTitulo(persona:Persona):Observable<Persona>{
-        return this.http.post<Persona>(this.apiUrlPer, persona, {headers: this.httpHeaders})
+    createTitulo(titulo:Titulo_profesional):Observable<Titulo_profesional>{
+        return this.http.post<Titulo_profesional>(this.apiUrlTitulo, titulo, {headers: this.httpHeaders})
     }
 
-    createGrado(persona:Persona):Observable<Persona>{
-        return this.http.post<Persona>(this.apiUrlPer, persona, {headers: this.httpHeaders})
+    createGrado(grado:Grado_ocupacional):Observable<Grado_ocupacional>{
+        return this.http.post<Grado_ocupacional>(this.apiUrlGrado, grado, {headers: this.httpHeaders})
     }
 
 }

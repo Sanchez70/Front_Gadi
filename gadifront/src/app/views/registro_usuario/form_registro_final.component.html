@@ -1,7 +1,7 @@
-<div class="container">
+<div class="container" *ngIf="showFinalForm">
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit2()">
             <div><p></p></div>
             <div class="form-group">
                 <label class="label" for="telefono">Teléfono</label>
