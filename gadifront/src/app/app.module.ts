@@ -47,11 +47,11 @@ import {MatSelectModule} from '@angular/material/select';
 import { DistributivoService } from './views/tabla/distributivo.service';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
-import { RegistroComponent } from './views/registro/registro.component';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
+import { RegistroComponent } from './views/registro_usuario/registro.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -126,7 +126,7 @@ const routes: Routes = [
     CicloService,
     PeriodoService,
     ActividadService,
-    tipo_actividadService
+    tipo_actividadService,
     DistributivoActividadService
   ],
   bootstrap: [AppComponent]
