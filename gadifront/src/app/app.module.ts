@@ -52,6 +52,7 @@ import { tipo_actividadService } from './Services/tipo_actividadService/tipo_act
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 import { RegistroComponent } from './views/registro_usuario/registro.component';
+import { ReportesComponent } from './views/reportes/reportes/reportes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -68,7 +69,8 @@ const routes: Routes = [
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
   { path: 'admin_Creacion', component: AdminCreacionComponent},
-  { path: 'distributivo', component: DistributivoComponent}
+  { path: 'distributivo', component: DistributivoComponent},
+  { path: 'reportes', component: ReportesComponent}
 
 ];
 @NgModule({
@@ -97,7 +99,8 @@ const routes: Routes = [
     TablaComponent,
     RegistroComponent,
     MatrizPropuestaComponent,
-    FormComponent
+    FormComponent,
+    ReportesComponent
   ],
   
   imports: [
