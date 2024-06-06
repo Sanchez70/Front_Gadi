@@ -9,6 +9,30 @@ table {
   display: block;
 }
 
+
+.container{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+th{
+ color: #fff;
+}
+
+h1 {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2%;
+}
+
+/* .example-container {
+  overflow: auto;
+} */
+
+
 /* .mat-elevation-z8 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 } */
@@ -53,18 +77,4 @@ table {
     font-weight: bold;
     text-align: center;
   }
-} */
-
-.container{
-  display: flex;
-  flex-direction: column;
-  
-}
-
-th{
- color: rgb(255, 255, 255);
-}
-
-/* .example-container {
-  overflow: auto;
 } */

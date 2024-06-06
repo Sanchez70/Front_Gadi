@@ -1,11 +1,16 @@
 <div class="container">
+  <h1> TITULO PROVICIONAL</h1>
+  <div class="contenedorBoton">
   <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
     <mat-form-field appearance="outline">
       <mat-label>Cédula</mat-label>
       <input matInput formControlName="cedula" />
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit">Buscar</button>
+    <button mat-raised-button color="primary" type="submit" >Buscar
+      <mat-icon>search</mat-icon>
+    </button>
   </form>
+</div>
   <mat-divider></mat-divider>
   <form [formGroup]="personaForm">
     <mat-form-field appearance="outline">

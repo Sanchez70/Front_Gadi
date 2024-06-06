@@ -14,4 +14,17 @@
     width: 25%;
     margin: 1%;
   }
+
+  .contenedorBoton{
+    margin-top: 5%;
+  }
+
+  h1 {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2%;
+  }
+  
   
