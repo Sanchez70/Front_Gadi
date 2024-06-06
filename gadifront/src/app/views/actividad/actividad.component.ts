@@ -32,6 +32,7 @@ export class ActividadComponent implements OnInit {
       }
     );
   }
+  
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe(
       (Tipos) => {

@@ -1,1 +1,85 @@
-<p>distributivo works!</p>
+<div class="{{currentExplan}}">
+<h1 class="h1">GENERACIÓN DE DISTRIBUTIVOS</h1>
+<table>
+  <thead>
+    <button class="btn btn--primary btn--inside" routerLinkActive="true" routerLink="/persona">Ingresar</button>
+    <tr>
+        <th colspan="8" style="text-align: center; background-color: rgb(33, 59, 173);">DATOS DOCENTE</th> 
+    </tr>
+    <tr>
+      <th colspan="2">CÉDULA</th>
+      <th colspan="1">NOMBRE</th>
+      <th colspan="1">APELLIDO</th>
+      <th colspan="1">TC</th>
+      <th colspan="1">TÍTULO PROFESIONAL</th>
+      <th colspan="1">GRADO OCUPACIONAL</th>
+      <th colspan="1">FECHA DE VINCULACIÓN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr >
+      <td  colspan="2" data-label="Cédula">{{persona.cedula}}</td>
+      <td colspan="1" data-label="Nombre">{{persona.nombre1}}</td>
+      <td colspan="1" data-label="Apellido">{{persona.apellido1}}</td>
+      <td colspan="1" data-label="TC">{{contrato.nombre_contrato}}</td>
+      <td colspan="1" data-label="TITULO">{{titulo.nombre_titulo}}</td>
+      <td colspan="1" data-label="GRADO">{{grado.nombre_grado_ocp}}</td>
+      <td colspan="1" data-label="Fecha de Vinculación">{{persona.fecha_vinculacion | date:'dd/MM/yyyy'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+    <thead>
+        <button class="btn btn--primary btn--inside" routerLink="/asignatura">Ingresar</button>
+      <tr>
+          <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
+      </tr>
+      <tr>
+        <th >NOMBRE</th>
+        <th colspan="1">NRO.HORAS SEMANALES</th>
+        <th colspan="2">CARRERA</th>
+        <th colspan="2">CICLO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let asignatura of asignaturas">
+        <td colspan="1">{{asignatura.nombre_asignatura}}</td>
+        <td colspan="0.5">{{asignatura.horas_semanales}}</td>
+        <td colspan="2">{{obtenerNombreCarrera(asignatura.id_carrera)}}</td>
+        <td colspan="2">{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
+      </tr>
+      <tr>
+        <th colspan="1" style="text-align: left;">Horas totales:</th>
+        <td><b>{{horasTotales}}</b></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table>
+    <thead>
+        <button class="btn btn--primary btn--inside" routerLink="/actividad/form">Ingresar</button>
+      <tr>
+          <th colspan="7" style="text-align: center; background-color: rgb(33, 59, 173);">ACTIVIDADES NO DOCENTES</th>
+      </tr>
+      <tr>
+        <th>Id Actividad</th>
+        <th>Nombre Actividad</th>
+        <th>Descripcion</th>
+        <th>Horas no Docentes</th>
+        <th>Tipo Actividad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let actividad of Actividades; let i = index">
+        <td>{{ actividad.id_actividad }}</td>
+        <td>{{ actividad.nombre_actividad }}</td>
+        <td>{{ actividad.descripcion_actividad }}</td>
+        <td>{{ actividad.horas_no_docentes }}</td>
+        <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
+      </tr>
+    </tbody> 
+  </table>
+  <button class="btn btn--primary btn--inside" style="margin-left: 60cap; margin-bottom: 5cap;">Crear</button>
+</div>
+

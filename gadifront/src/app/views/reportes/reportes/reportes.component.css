@@ -1,0 +1,31 @@
+.img{
+    justify-content: center;
+    align-items: center;
+    margin-left: 30cap;
+    width: 250px;
+    height: 60px;
+}
+.container {
+    display: flex;
+    margin-bottom: -1rem;
+}
+
+.h-fecha{
+    margin-left: 50rem;
+    font-size: 16px;
+}
+
+.h{  
+     margin-bottom: -0.5rem;
+    font-size: 16px;
+}
+.h-Final{
+    width: 100%;
+    font-size: 16px;
+    margin-left: 35cap;
+}
+.h-Final1{
+    width: 100%;
+    font-size: 16px;
+    margin-left: 43cap;
+}

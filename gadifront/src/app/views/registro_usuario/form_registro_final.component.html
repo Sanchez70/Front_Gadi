@@ -1,7 +1,8 @@
-<div class="container">
+<div class="container" *ngIf="showFinalForm">
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
-        <form (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit2()">
+            <div><p></p></div>
             <div class="form-group">
                 <label class="label" for="telefono">Teléfono</label>
                 <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
@@ -44,16 +45,19 @@
 
             <div class="form-group">
                 <label for="contrato">Contrato</label>
-                <input class="form-control" type="text" id="contrato" formControlName="contrato" required />
+                <select name="jornada" id="jornada" aria-placeholder="Seleccione una opcion">
+                    <option value="0" disabled selected>Seleccione una opción</option>
+                    <option value="1">Tiempo Completo</option>
+                    <option value="2">Medio Tiempo</option>
+                    <option value="3">Tiempo Parcial</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Número de horas</label>
+                <input class="form-control" type="number" id="horas" formControlName="horas_contrato" required>
             </div>
 
-            <div class="form-group">
-                <label for="jornada">Jornada</label>
-                <mat-radio-group formControlName="jornada">
-                    <mat-radio-button value="auto">Medio tiempo</mat-radio-button>
-                    <mat-radio-button value="always">Tiempo Completo</mat-radio-button>
-                </mat-radio-group>
-            </div>
+            
 
             <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
         </form>

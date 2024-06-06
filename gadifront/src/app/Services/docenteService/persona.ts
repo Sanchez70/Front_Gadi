@@ -10,7 +10,7 @@ export class Persona{
     correo: string='';
     edad: number=0;
     fecha_vinculacion: Date | undefined;
-    id_contrato: number=0;
-    id_titulo: number=0;
-    id_grado: number=0;
+    id_tipo_contrato: number=0;
+    id_titulo_profesional: number=0;
+    id_grado_ocp: number=0;
 }

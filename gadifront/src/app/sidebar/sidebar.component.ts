@@ -29,13 +29,14 @@ export class SidebarComponent {
       text: `¿Quieres Cerrar Sesión?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, actualizar',
+      confirmButtonText: 'Sí, salir',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(`Hata pronto`, 'Sesion cerrada correctamente', 'success');
+        Swal.fire(`Hasta pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
         this.authService.logout();
+        this.authService.clearLocalStorage();
       }
     });
 

@@ -5,14 +5,17 @@ form {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px; /* Para limitar el ancho del formulario */
+  margin: 0 auto; /* Centrar el formulario */
 }
-
 
 /* Estilo de las etiquetas */
 .label {
   color: #606770;
   font-size: 14px;
   font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
 }
 
 /* Estilo de los campos de entrada */
@@ -20,8 +23,8 @@ form {
   border-radius: 5px;
   border: 1px solid #ccd0d5;
   padding: 10px;
-  margin-top: 5px;
   margin-bottom: 15px;
+  width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
 }
 
 /* Estilo del botón de envío */
@@ -32,10 +35,16 @@ form {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
+  width: 20%; /* Asegura que el botón ocupe todo el ancho de su contenedor */
+  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+  margin: 0 auto; /* Centra el botón horizontalmente */
+  display: block; /* Asegura que el botón sea un bloque para el centrado */
+
 }
 
 .btn-primary:hover {
-  background-color: #165c9b;
+  color: rgb(17, 16, 16);
+  background-color: #1877f2;
 }
 
 /* Estilo de los grupos de formularios */
@@ -46,12 +55,28 @@ form {
 /* Estilo de las filas del formulario */
 .row {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 /* Estilo de las columnas del formulario */
-.col-sm-10 {
-  flex: 1;
+.col-sm-6 {
+  flex: 0 0 48%;
+  max-width: 48%;
+  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+  margin-bottom: 15px; /* Espacio entre las filas en pantallas pequeñas */
+}
+
+.col-sm-6 .form-control,
+.col-sm-6 .btn-primary {
+  width: 100%; /* Asegura que el contenido de la columna ocupe todo el ancho */
+}
+
+.row .col-sm-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
 }
 
 /* Ajustes para el responsive design */
@@ -60,11 +85,8 @@ form {
     flex-direction: column;
   }
 
-  .col-sm-10 {
-    width: 100%;
-  }
-
-  .input-group {
-    margin-bottom: 15px;
+  .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }

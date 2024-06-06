@@ -5,6 +5,8 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { NgIfContext } from '@angular/common';
 import { AuthService } from '../../auth.service';
+import { Distributivo } from '../../Services/distributivoService/distributivo';
+import { DistributivoComponent } from '../distributivo/distributivo.component';
 
 
 @Component({
@@ -18,6 +20,7 @@ export class PersonaComponent implements OnInit {
   personasSeleccionada: Persona[] = [];
   public persona:Persona = new Persona();
   currentExplan: string='';
+  
 
   constructor(private docenteService:DocenteService, private router: Router,private authService:AuthService){}
   ngOnInit(): void {
@@ -33,6 +36,8 @@ export class PersonaComponent implements OnInit {
   
     });  
   }
+
+
 
   searchTerm: string = '';
 
@@ -52,6 +57,9 @@ export class PersonaComponent implements OnInit {
     );
     if(!personaExistente){
      this.personasSeleccionada.push(persona);
+    this.authService.id_persona = persona.id_persona;
+    this.authService.saveUserToLocalStorage();
+     this.router.navigate(['./distributivo']);
     }else{
       Swal.fire({
         title: "La asignatura se encuentra seleccionada",
@@ -78,4 +86,6 @@ export class PersonaComponent implements OnInit {
       });
     }
   }
+
+ 
 }

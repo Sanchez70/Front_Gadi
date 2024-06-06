@@ -5,4 +5,5 @@ export class Distributivo {
     id_distributivo!: number;
     id_persona !: number;
     id_periodo !: number;
+   idpersona: number=0;
 }

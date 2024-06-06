@@ -42,15 +42,23 @@ import { MainComponent } from './views/main/main.component';
 import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-import { MatList, MatListItem } from '@angular/material/list';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+
+
+import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
-import { RegistroComponent } from './views/registro/registro.component';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
 import { AngularToastifyModule, ToastService } from 'angular-toastify';
 import { ChangeDetectorRef } from '@angular/core';
+import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
+import { RegistroComponent } from './views/registro_usuario/registro.component';
+import { ReportesComponent } from './views/reportes/reportes/reportes.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -66,7 +74,9 @@ const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
-  {path: 'admin_Creacion', component: AdminCreacionComponent},
+  { path: 'admin_Creacion', component: AdminCreacionComponent},
+  { path: 'distributivo', component: DistributivoComponent},
+  { path: 'reportes', component: ReportesComponent}
 
 ];
 @NgModule({
@@ -96,6 +106,7 @@ const routes: Routes = [
     RegistroComponent,
     MatrizPropuestaComponent,
     FormComponent,
+    ReportesComponent
   ],
   
   imports: [
@@ -112,6 +123,10 @@ const routes: Routes = [
     MatListModule,
     MatTableModule,
     MatRadioModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatInputModule
   ],
   providers: [LoginService, provideAnimationsAsync(), 
     DocenteService, 
@@ -122,6 +137,7 @@ const routes: Routes = [
     PeriodoService,
     ActividadService,
     tipo_actividadService,
+    DistributivoActividadService
   ],
   bootstrap: [AppComponent]
 })
