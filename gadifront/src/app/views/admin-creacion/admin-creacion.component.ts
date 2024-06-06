@@ -24,6 +24,8 @@ import { Periodo } from '../periodo/periodo';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { CommonModule } from '@angular/common';
+import { forkJoin, tap } from 'rxjs';
+import { Persona } from '../../Services/docenteService/persona';
 
 @Component({
   selector: 'app-admin-creacion',
@@ -54,10 +56,6 @@ export class AdminCreacionComponent implements OnInit {
   roles: Rol[] = [];
   carreras: Carrera[] = [];
   panelOpenState = false;
-  periodos: Periodo[] = [];
-  contratos: TipoContrato[] = [];
-  grados: GradoOcupacional[] = [];
-  titulos: TituloProfecional[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -110,6 +108,26 @@ export class AdminCreacionComponent implements OnInit {
               // Cargar roles y carreras después de encontrar el usuario
               this.cargarRolesYCarreras();
             });
+
+            // Obtener grado, título y contrato por ID
+            forkJoin([
+              this.personaService.getGradoById(persona.id_grado_ocp).pipe(
+                tap(grado => {
+                  this.personaForm.patchValue({ grado_ocupacional: grado.nombre_grado_ocp });
+                })
+              ),
+              this.personaService.getTituloById(persona.id_titulo_profesional).pipe(
+                tap(titulo => {
+                  this.personaForm.patchValue({ titulo_profesional: titulo.nombre_titulo });
+                })
+              ),
+              this.personaService.getContratoById(persona.id_tipo_contrato).pipe(
+                tap(contrato => {
+                  this.personaForm.patchValue({ tipo_contrato: contrato.nombre_contrato });
+                })
+              )
+            ]).subscribe();
+
           } else {
             this.snackBar.open('Persona no encontrada', 'X', {
               duration: 3000,

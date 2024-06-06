@@ -37,7 +37,7 @@ export class TablaComponent implements OnInit {
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
   contratos: { [key: number]: TipoContrato } = {};
-
+  color = '#1E90FF';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 

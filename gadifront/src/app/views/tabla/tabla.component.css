@@ -9,16 +9,16 @@ table {
   display: block;
 }
 
-.mat-elevation-z8 {
+/* .mat-elevation-z8 {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
+} */
 
-mat-paginator {
+/* mat-paginator {
   margin-top: 2%;
   margin-right: 60%;
-}
+} */
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
   mat-form-field {
     width: 100%;
   }
@@ -29,7 +29,7 @@ mat-paginator {
 
   .mat-header-row, .mat-row {
     display: block;
-    margin-bottom: 20px;
+    margin-bottom: 2%;
   }
 
   .mat-cell, .mat-header-cell {
@@ -53,7 +53,7 @@ mat-paginator {
     font-weight: bold;
     text-align: center;
   }
-}
+} */
 
 .container{
   display: flex;
@@ -61,6 +61,10 @@ mat-paginator {
   
 }
 
-.example-container {
-  overflow: auto;
+th{
+ color: rgb(255, 255, 255);
 }
+
+/* .example-container {
+  overflow: auto;
+} */
