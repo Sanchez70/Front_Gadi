@@ -1,80 +1,78 @@
 <div class="container">
-    <form [formGroup]="searchForm" class="search-form">
-      <mat-form-field appearance="fill">
-        <mat-label>Cédula</mat-label>
-        <input matInput formControlName="cedula" placeholder="Ingrese cédula" />
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="buscarPersona()">
-        Buscar
-      </button>
-    </form>
-  
-    <form [formGroup]="personaForm">
-      
-      <mat-form-field appearance="fill">
-        <mat-label>Primer Nombre</mat-label>
-        <input matInput formControlName="nombre1"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Segundo Nombre</mat-label>
-        <input matInput formControlName="nombre2"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Primer Apellido</mat-label>
-        <input matInput formControlName="apellido1"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Segundo Apellido</mat-label>
-        <input matInput formControlName="apellido2"  />
-      </mat-form-field>
-    
-      <mat-form-field appearance="fill">
-        <mat-label>Teléfono</mat-label>
-        <input matInput formControlName="telefono"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Dirección</mat-label>
-        <input matInput formControlName="direccion"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Correo</mat-label>
-        <input matInput formControlName="correo"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Edad</mat-label>
-        <input matInput formControlName="edad"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Fecha de Vinculación</mat-label>
-        <input matInput formControlName="fecha_vinculacion"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Tipo de Contrato</mat-label>
-        <input matInput formControlName="tipo_contrato"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Título Profesional</mat-label>
-        <input matInput formControlName="titulo_profesional"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Grado Ocupacional</mat-label>
-        <input matInput formControlName="grado_ocupacional"  />
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre de Usuario</mat-label>
-        <input matInput formControlName="nombre_usuario"  />
-      </mat-form-field>
-    </form>
-  </div>
-  
+  <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
+    <mat-form-field appearance="outline">
+      <mat-label>Cédula</mat-label>
+      <input matInput formControlName="cedula" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Buscar</button>
+  </form>
+  <mat-divider></mat-divider>
+  <form [formGroup]="personaForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput placeholder="Nombre 1" formControlName="nombre1" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Segundo Nombre</mat-label>
+      <input matInput placeholder="Nombre 2" formControlName="nombre2" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido</mat-label>
+      <input matInput placeholder="Apellido 1" formControlName="apellido1" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Segundo Apellido</mat-label>
+      <input matInput placeholder="Apellido 2" formControlName="apellido2" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput placeholder="Teléfono" formControlName="telefono" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Dirección</mat-label>
+      <input matInput placeholder="Dirección" formControlName="direccion" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Correo</mat-label>
+      <input matInput placeholder="Correo" formControlName="correo" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Edad</mat-label>
+      <input matInput placeholder="Edad" formControlName="edad" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha de Vinculación</mat-label>
+      <input matInput placeholder="Fecha de Vinculación" formControlName="fecha_vinculacion" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de Contrato</mat-label>
+      <input matInput placeholder="Tipo de Contrato" formControlName="tipo_contrato" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Título Profesional</mat-label>
+      <input matInput placeholder="Título Profesional" formControlName="titulo_profesional" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Grado Ocupacional</mat-label>
+      <input matInput placeholder="Grado Ocupacional" formControlName="grado_ocupacional" />
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-form-field appearance="outline">
+      <mat-label>Usuario</mat-label>
+      <input matInput placeholder="Nombre de Usuario" formControlName="nombre_usuario" />
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <div>
+    <mat-form-field appearance="outline">
+      <mat-select placeholder="Rol" formControlName="rol">
+        <mat-option *ngFor="let rol of roles" [value]="rol.id_rol">{{rol.nombre_rol}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-select placeholder="Carrera" formControlName="carrera">
+        <mat-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{ carrera.nombre_carrera }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+  </form>
+</div>

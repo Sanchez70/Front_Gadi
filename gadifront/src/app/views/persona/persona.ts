@@ -10,7 +10,7 @@ export interface Persona {
     correo: string;
     edad: number;
     fecha_vinculacion: Date;
-    id_contrato: number;
-    id_titulo: number;
-    id_grado: number;
+    id_tipo_contrato: number;
+    id_titulo_profesional: number;
+    id_grado_ocp: number;
   }

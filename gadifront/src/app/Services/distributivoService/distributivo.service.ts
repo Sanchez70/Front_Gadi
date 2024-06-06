@@ -8,6 +8,7 @@ import { Distributivo } from './distributivo';
   providedIn: 'root'
 })
 export class DistributivoService {
+  private baseUrl = 'http://localhost:8081/api';
   private urlEndPoint: string = appConfig.baseUrl;
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }
@@ -29,4 +30,7 @@ export class DistributivoService {
     return this.http.put<Distributivo>(url, distributivo, { headers: this.httpHeaders })
   }
  
+  getDistributivoByPersonaId(id_persona: number): Observable<Distributivo> {
+    return this.http.get<Distributivo>(`${this.baseUrl}/distributivo/persona/${id_persona}`);
+  }
 }

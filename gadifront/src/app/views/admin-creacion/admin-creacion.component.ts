@@ -11,7 +11,19 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatOption } from '@angular/material/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelect } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Rol } from '../rol/rol'; 
+import { RolService } from '../rol/rol.service';
+import { Carrera } from '../../Services/carreraService/carrera'; 
+import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
+import { Periodo } from '../periodo/periodo';
+import { TipoContrato } from '../tipo-contrato/tipo-contrato';
+import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-admin-creacion',
@@ -29,16 +41,29 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatButtonModule,
     MatSnackBarModule,
     ReactiveFormsModule,
+    MatOption,
+    MatDividerModule,
+    MatSelect,
+    MatOptionModule,
+    CommonModule
   ],
 })
 export class AdminCreacionComponent implements OnInit {
   searchForm: FormGroup;
   personaForm: FormGroup;
+  roles: Rol[] = [];
+  carreras: Carrera[] = [];
+  panelOpenState = false;
+  periodos: Periodo[] = [];
+  contratos: TipoContrato[] = [];
+  grados: GradoOcupacional[] = [];
+  titulos: TituloProfecional[] = [];
 
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private RolService: RolService,
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -58,6 +83,8 @@ export class AdminCreacionComponent implements OnInit {
       titulo_profesional: [{ value: '', disabled: true }],
       grado_ocupacional: [{ value: '', disabled: true }],
       nombre_usuario: [{ value: '', disabled: true }],
+      rol: ['', Validators.required],
+      carrera: ['', Validators.required],
     });
   }
 
@@ -70,21 +97,45 @@ export class AdminCreacionComponent implements OnInit {
         (persona) => {
           if (persona) {
             this.personaForm.patchValue(persona);
-            this.snackBar.open('Persona Encontrada', 'Cerrar', {
+            this.snackBar.open('Persona encontrada', 'X', {
               duration: 3000,
             });
+
+            // Obtener el usuario por el id de persona
+            this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
+              if (usuario) {
+                this.personaForm.patchValue({ nombre_usuario: usuario.usuario });
+              }
+
+              // Cargar roles y carreras después de encontrar el usuario
+              this.cargarRolesYCarreras();
+            });
           } else {
-            this.snackBar.open('No se encontró la persona', 'Cerrar', {
+            this.snackBar.open('Persona no encontrada', 'X', {
               duration: 3000,
             });
           }
         },
         (error) => {
-          this.snackBar.open('No se encontró la persona', 'Cerrar', {
+          this.snackBar.open('Error al buscar persona', 'X', {
             duration: 3000,
           });
         }
       );
     }
+  }
+
+  cargarRolesYCarreras() {
+    // Cargar roles
+    this.RolService.getRoles().subscribe((rol) => {
+      this.roles = rol;
+
+    });
+
+    // Cargar carreras
+    this.personaService.getCarreras().subscribe((carrera) => {
+      this.carreras = carrera;
+
+    });
   }
 }

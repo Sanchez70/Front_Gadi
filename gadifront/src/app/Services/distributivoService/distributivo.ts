@@ -1,5 +1,8 @@
 export class Distributivo {
-    id_distributivo: number = 0;
-    id_persona : number = 0;
-    id_periodo : number = 0;
+    map(arg0: (distributivo: any) => any) {
+      throw new Error('Method not implemented.');
+    }
+    id_distributivo!: number;
+    id_persona !: number;
+    id_periodo !: number;
 }

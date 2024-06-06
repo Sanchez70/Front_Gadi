@@ -1,4 +1,3 @@
-// persona.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,6 +7,8 @@ import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { Usuario } from '../../Services/loginService/usuario';
+import { Carrera } from '../../Services/carreraService/carrera';
+import { Rol } from '../rol/rol';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,8 @@ export class PersonaService {
   getGadosOcupacionales(): Observable<GradoOcupacional[]> {
     return this.http.get<GradoOcupacional[]>(`${this.baseUrl}/grado_ocupacional`);
   }
+
+  
   getTiposContratos(): Observable<TipoContrato[]> {
     return this.http.get<TipoContrato[]>(`${this.baseUrl}/tipo_contrato`);
   }
@@ -41,7 +44,26 @@ export class PersonaService {
     return this.http.get<Persona>(`${this.baseUrl}/persona/cedula/${cedula}`);
   }
 
-  getUsuarioByPersonaId(id: number): Observable<Usuario> {
-    return this.http.get<Usuario>(`${this.baseUrl}/usuario/persona/${id}`);
+  getUsuarioByPersonaId(id_persona: number): Observable<Usuario> {
+    return this.http.get<Usuario>(`${this.baseUrl}/usuario/persona/${id_persona}`);
+  }
+
+  getCarreras(): Observable<Carrera[]> {
+    return this.http.get<Carrera[]>(`${this.baseUrl}/carrera`);
+  }
+  
+  getPeriodoById(id: number): Observable<Periodo> {
+    return this.http.get<Periodo>(`${this.baseUrl}/periodo/${id}`);
+  }
+
+  getGradoById(id: number): Observable<GradoOcupacional> {
+    return this.http.get<GradoOcupacional>(`${this.baseUrl}/grado_ocupacional/${id}`);
+  }
+
+  getContratoById(id: number): Observable<TipoContrato> {
+    return this.http.get<TipoContrato>(`${this.baseUrl}/tipo_contrato/${id}`);
+  }
+  getTituloById(id: number): Observable<TituloProfecional> {
+    return this.http.get<TituloProfecional>(`${this.baseUrl}/titulo_profesional/${id}`);
   }
 }

@@ -42,13 +42,15 @@ import { MainComponent } from './views/main/main.component';
 import { TablaComponent } from './views/tabla/tabla.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
-import { DistributivoService } from './views/tabla/distributivo.service';
+import { MatList, MatListItem } from '@angular/material/list';
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { RegistroComponent } from './views/registro/registro.component';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
+import { AngularToastifyModule, ToastService } from 'angular-toastify';
+import { ChangeDetectorRef } from '@angular/core';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -90,7 +92,7 @@ const routes: Routes = [
     LoginComponent,
     SidebarComponent,
     MainComponent,
-    TablaComponent,
+    //TablaComponent,
     RegistroComponent,
     MatrizPropuestaComponent,
     FormComponent,
@@ -109,10 +111,9 @@ const routes: Routes = [
     MatIconModule,
     MatListModule,
     MatTableModule,
-    MatRadioModule
+    MatRadioModule,
   ],
   providers: [LoginService, provideAnimationsAsync(), 
-    DistributivoService, 
     DocenteService, 
     AsignaturaService, 
     DistributivoAsignaturaService,
@@ -120,7 +121,7 @@ const routes: Routes = [
     CicloService,
     PeriodoService,
     ActividadService,
-    tipo_actividadService
+    tipo_actividadService,
   ],
   bootstrap: [AppComponent]
 })

@@ -12,7 +12,7 @@ import { style } from '@angular/animations';
 export class SidebarComponent {
   @ViewChild('sidenav')
   sidenav!: MatSidenav;
-  isExpanded = true;
+  isExpanded = false;
  explan :string ='Abrir';
 
   constructor(private authService: AuthService, private router: Router) { }
