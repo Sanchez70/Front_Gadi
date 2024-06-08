@@ -93,7 +93,7 @@ const routes: Routes = [
     RolComponent,
     GradoOcupacionalComponent,
     TipoActividadComponent,
-    DistributivoComponent,
+    //DistributivoComponent,
     TituloProfesionalComponent,
     TipoContratoComponent,
     DistributivoActividadComponent,

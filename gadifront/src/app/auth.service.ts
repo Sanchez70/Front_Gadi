@@ -18,56 +18,50 @@ export class AuthService {
   explan$ = this.explanSubject.asObservable();
 
   constructor() {
-
     try {
-
       if (typeof localStorage !== 'undefined') {
         this.loadUserFromLocalStorage();
       } else {
         console.error('localStorage no está disponible en este entorno.');
       }
-
     } catch (error) {
-      // Manejo de la excepción
       console.error('Ocurrió un error:', error);
-      // Puedes realizar otras acciones de manejo de errores aquí
-      // Por ejemplo, puedes lanzar una nueva excepción personalizada
       throw new Error('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
     }
-
-
   }
+
   loadUserFromLocalStorage() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.isLogeado = user.isLogeado || false;
     this.cedula = user.cedula || null;
-    this.rol = user.rol || null
+    this.rol = user.rol || null;
     this.id_persona = user.id_persona || null;
     this.id_asignaturas = user.id_asignaturas || null;
     this.id_jornada = user.id_jornada || null;
     this.paralelo = user.paralelo || null;
   }
+
   clearLocalStorage() {
     localStorage.removeItem('user');
-    this.id_persona='';
+    this.id_persona = '';
   }
 
   clearLocalStorageAsignatura() {
-    this.id_asignaturas=[];
+    this.id_asignaturas = [];
   }
 
   saveUserToLocalStorage() {
-    // Guarda la información del usuario en localStorage
     localStorage.setItem('user', JSON.stringify({
       isLogeado: this.isLogeado,
       cedula: this.cedula,
       rol: this.rol,
-      id_persona:this.id_persona,
-      id_asignaturas:this.id_asignaturas,
+      id_persona: this.id_persona,
+      id_asignaturas: this.id_asignaturas,
       id_jornada: this.id_jornada,
       paralelo: this.paralelo
     }));
   }
+
   login() {
     this.isLogeado = true;
     this.saveUserToLocalStorage();
@@ -77,11 +71,11 @@ export class AuthService {
     this.isLogeado = false;
     this.saveUserToLocalStorage();
   }
+
   setCedula(cedula: any) {
     this.cedula = cedula;
     this.saveUserToLocalStorage();
   }
-
 
   navbar() {
     const currentExplan = this.explanSubject.value;
