@@ -62,7 +62,6 @@ export class DistributivoComponent implements OnInit {
   public grado: Grado_ocupacional = new Grado_ocupacional();
   public actividad: Actividad = new Actividad();
   public Actividades: Actividad[] = [];
-  public tipo: tipo_actividad = new tipo_actividad();
   public Tipos: tipo_actividad[] = [];
   public ciclos: any[] = [];
   public carreras: any[] = [];

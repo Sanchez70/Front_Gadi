@@ -1,6 +1,6 @@
 <div class="container">
-    <input type="text" class="input" placeholder="Buscar docente por cédula..." />
-    <button class="btn btn--primary btn--inside">Buscar</button>
+    <input type="text" class="input" [(ngModel)]="cedula" (input)="onChangeBuscar($event)" placeholder="Buscar docente por cédula..." />
+    <button class="btn btn--primary btn--inside" (click)="buscarPersona()">Buscar</button>
 </div>
 <table>
   <thead>
@@ -19,14 +19,13 @@
   </thead>
   <tbody>
     <tr >
-      <td data-label="Cédula"></td>
-      <td data-label="Nombre"></td>
-      <td data-label="Apellido"></td>
-      <td data-label="Teléfono"></td>
-      <td data-label="Dirección"></td>
-      <td data-label="Correo"></td>
-      <td data-label="Edad"></td>
-      <td data-label="Fecha de Vinculación"></td>
+      <td>{{personaExtendida.cedula}}</td>
+      <td>{{personaExtendida.nombre1}}</td>
+      <td>{{personaExtendida.apellido1}}</td>
+      <td>{{personaExtendida.nombre_contrato}}</td>
+      <td>{{personaExtendida.nombre_titulo}}</td>
+      <td>{{personaExtendida.nombre_grado_ocp}}</td>
+      <td>{{ personaExtendida.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
     </tr>
   </tbody>
 </table>
@@ -45,12 +44,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr >
-        <td data-label="Cédula"></td>
-        <td data-label="Nombre"></td>
-        <td data-label="Apellido"></td>
-        <td data-label="Teléfono"></td>
-        <td data-label="Dirección"></td>
+      <tr  *ngFor="let asignaturas of asignaturasFiltradas">
+        <td>{{asignaturas.nombre_asignatura}}</td>
+        <td>{{asignaturas.horas_semanales}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -67,10 +66,10 @@
       </tr>
     </thead>
     <tbody>
-      <tr >
-        <td data-label="Cédula"></td>
-        <td data-label="Nombre"></td>
-        <td data-label="Apellido"></td>
+      <tr *ngFor="let actividades of actividadesFiltradas">
+        <td>{{actividades.horas_no_docentes}}</td>
+        <td></td>
+        <td>{{actividades.descripcion_actividad}}</td>
       </tr>
     </tbody>
   </table>
