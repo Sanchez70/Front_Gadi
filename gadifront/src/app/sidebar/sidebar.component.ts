@@ -11,7 +11,7 @@ import { AuthService } from '../auth.service';
 })
 export class SidebarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  isExpanded = false;
+  isExpanded = true;
   explan: string = 'Abrir';
 
   constructor(private authService: AuthService, private router: Router) { }

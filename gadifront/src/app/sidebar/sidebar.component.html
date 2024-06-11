@@ -1,70 +1,61 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
-    <!-- <mat-toolbar color="primary">
-      <img class="logo" src="assets/img/logo.png" alt="Logo">
-    </mat-toolbar> -->
-    <mat-nav-list>
-      <img class="logo" src="assets/img/logo.png">
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-        <a routerLink="/main"><i class="fas fa-home"></i> Inicio</a>
-      </li>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-        <a routerLink="/distributivo"><i class="fas fa-book"></i>Distributivo</a>
-      </li>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-        <a routerLink="/matriz-propuesta"><i class="fas fa-book"></i>Resumen Propuesta</a>
-      </li>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-        <a routerLink="/reportes"><i class="fas fa-book"></i>Distributivo</a>
-      </li>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-        <a routerLink="/admin_Creacion"><i class="fas fa-phone"></i>Contacto</a>
-      </li>
-      <hr class="separator">
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <nav class="{{explan}} nav navbar-expand-lg navbar-light">
-      <button mat-icon-button (click)="toggleSidenav()">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <div class="container">
-        <div class="container-fluid">
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-              <li class="nav-item" routerLinkActive="active">
-                <a class="nav-link">GADI</a>
-              </li>
-            </ul>
-            <ul class="navbar-nav ms-auto align-items-center">
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="assets/img/usu.png" alt="User Avatar" class="avatar-{{explan}} avatar-sm rounded-circle">
+<nav class="{{explan}} nav navbar-expand-lg navbar-link ">
+  <button mat-icon-button (click)="navbar()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="container">
+    <div class="container-fluid">
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item" routerLinkActive="active">
+            <a class="nav-link">GADI</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav align-items-center">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="assets/img/usu.png" alt="User Avatar" class="avatar-{{explan}} avatar-sm rounded-circle">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="sesion dropdown-item" (click)="cerrar()" >
+                  <i class="ni ni-single-02"></i>
+                  <span >Cerrar Sesion</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a class="sesion dropdown-item" (click)="cerrar()">
-                      <i class="ni ni-single-02"></i>
-                      <span>Cerrar Sesion</span>
-                    </a>
-                  </li>
-                </ul>
               </li>
+              <!-- Agrega más opciones aquí -->
             </ul>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
-    </nav>
-<!-- bien -->
-    <div class="content">
-      <!-- Aquí va el contenido de los otros componentes -->
-      <router-outlet></router-outlet>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  </div>
+</nav>
+<mat-sidenav-container class="main"></mat-sidenav-container>
+  <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
+    <mat-toolbar color="primary">
+      <img class="logo" src="assets/img/logo.png" alt="Logo">
+    </mat-toolbar>
+<div class="main">
+  <div class="sidebar">
+    <mat-nav-list >
+    <img class="logo" src="assets/img/logo.png">
+
+    <hr class="separator">
+    <li class="nav-item active" routerLinkActive="active">
+    <a routerLink="/main"><i class="fas fa-home"></i> Inicio</a>
+
+  </li>
+    <hr class="separator">
+    <li class="nav-item active" routerLinkActive="active">
+    <a routerLink="/asignatura">Asignatura</a>
+    <hr class="separator">
+    <li class="nav-item active" routerLinkActive="active">
+    <a routerLink="/actividad">Actividad</a>
+  </li>
+    <hr class="separator">
+    <a routerLink="/persona">Docente</a>
+    <hr class="separator">
+    <a href="#contact">Contacto</a>
+    <hr class="separator"> 
+  </mat-nav-list>
+  </div>

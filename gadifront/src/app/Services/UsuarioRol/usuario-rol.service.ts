@@ -12,7 +12,7 @@ export class UsuarioRolService {
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }
 
-  getRol():Observable<UsuarioRol[]>{
+  getusuarioRol():Observable<UsuarioRol[]>{
     return this.http.get<UsuarioRol[]>(`${this.urlEndPoint}/usuarioRol`)
   }
 
@@ -20,7 +20,7 @@ export class UsuarioRolService {
     return this.http.post<UsuarioRol>(`${this.urlEndPoint}/usuarioRol`, usuarioRol, { headers: this.httpHeaders })
   }
 
-  getRolbyId(id: any): Observable<UsuarioRol> {
+  getusuarioRolbyId(id: any): Observable<UsuarioRol> {
     return this.http.get<UsuarioRol>(`${this.urlEndPoint}/usuarioRol/${id}`);
   }
 
