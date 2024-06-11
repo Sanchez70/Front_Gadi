@@ -19,6 +19,7 @@ import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
 import { GradoOcupacionalService } from '../../Services/grado/grado-ocupacional.service';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -32,6 +33,8 @@ interface PersonaExtendida extends Persona {
 export class MatrizPropuestaComponent implements OnInit{
 asignaturas: any[] = [];
 actividades: any[] = [];
+jornadas: any[] = [];
+periodos: any[] = [];
 ciclos: any[] = [];
 carreras: any[] = [];
 distributivos: any[] = [];
@@ -44,6 +47,8 @@ asignaturasFiltradas: any[] = [];
 actividadesFiltradas: any[] = [];
 public Tipos: tipo_actividad[] = [];
 cedula: string = '';
+periodo: number = 0;
+periodoNombre: string = '';
 personaEncontrada : Persona = new Persona();
 personaExtendida : PersonaExtendida = new Persona();
 gradoOcupacional : Grado_ocupacional = new Grado_ocupacional();
@@ -63,24 +68,29 @@ titulo: Titulo_profesional = new Titulo_profesional();
     private tituloService: TituloProfesionalService, 
     private gradoService: GradoOcupacionalService,
     private tipo_actividadService: tipo_actividadService,
+    private periodoService: PeriodoService,
     private authService: AuthService, 
     private router: Router,
     private activatedRoute: ActivatedRoute){
 
   }
   ngOnInit(): void{
-    this.cargarAsignaturas();
     this.cargarCarreras();
     this.cargarCiclos();
+    this.cargarAsignaturas();
+    this.cargarActividades();
+    this.cargarJornadas();
+    this.cargarPeriodos();
   }
 
   buscarPersona(): void{
     this.personaService.getPersonaByCedula(this.cedula).subscribe(data =>{
       this.personaEncontrada = data;
+      console.log('id_persona',this.personaEncontrada.id_persona)
+      this.loadPersonaData(this.personaEncontrada.id_persona);
+      this.buscarDistributivo(this.personaEncontrada.id_persona);
     });
-    this.loadPersonaData(this.personaEncontrada.id_persona);
-    this.buscarDistributivo(this.personaEncontrada.id_persona);
-
+    
   }
 
   loadPersonaData(personaId: number): void {
@@ -105,35 +115,17 @@ titulo: Titulo_profesional = new Titulo_profesional();
   }
 
   
-  cargarDistributivos(): void{
-    this.distributivoService.getDistributivo().subscribe(data =>{
-      this.distributivos = data;
-    });
-  }
-
-  cargarAsignaturasDistributivo(): void{
-    this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(data =>{
-      this.distributivoAsignaturas = data;
-    });
-  }
-
-  cargarActividadDistributivo(): void{
-    this.distributivoActividadService.getDistributivoActividad().subscribe(data =>{
-      this.distributivoActividades = data;
-    });
-  }
-
-  cargarAsignaturas(): void{
-    this.asignaturaService.getAsignatura().subscribe(data =>{
-      this.asignaturas = data;
-    });
-  }
+ cargarAsignaturas(): void{
+  this.asignaturaService.getAsignatura().subscribe(data =>{
+    this.asignaturas = data;
+   });
+ }
 
   cargarActividades(): void{
     this.actividadService.getActividad().subscribe(data =>{
       this.actividades = data;
-    });
-  }
+      });
+    }
 
   cargarCiclos(): void{
     this.cicloService.getCiclo().subscribe(data => {
@@ -141,9 +133,21 @@ titulo: Titulo_profesional = new Titulo_profesional();
     });
   }
 
+  cargarJornadas(): void{
+    this.jornadaService.getJornada().subscribe(data => {
+      this.jornadas = data;
+    });
+  }
+
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
       this.Tipos = Tipos;
+    });
+  }
+
+  cargarPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodos = data;
     });
   }
 
@@ -154,55 +158,75 @@ titulo: Titulo_profesional = new Titulo_profesional();
   }
 
   buscarDistributivo(idPersona:number): void{
-    this.cargarDistributivos();
-    this.distributivoFiltrado = this.distributivos.filter(
-      (distributivo) => 
-        (distributivo.id_persona === idPersona) 
-    );
-    console.log('distributivo encontrado',this.distributivoFiltrado)
-    this.buscarAsignatura(this.distributivoFiltrado[0].id_distributivo);
-    this.buscarActividad(this.distributivoFiltrado[0].id_distributivo);
+    this.distributivoService.getDistributivo().subscribe(data =>{
+      this.distributivos = data;
+      this.distributivoFiltrado = this.distributivos.filter(
+        distributivo => distributivo.id_persona === idPersona);
+        console.log('distributivo encontrado',this.distributivoFiltrado);
+        this.periodo = this.distributivoFiltrado[0].id_periodo;
+        console.log('periodo', this.periodo);
+        
+        this.obtenerNombrePeriodo(this.periodo);
+        this.buscarAsignatura(this.distributivoFiltrado[0].id_distributivo);
+        this.buscarActividad(this.distributivoFiltrado[0].id_distributivo)
+    });
+    
+    ;
   }
 
   buscarAsignatura(idDistributivo: number): void{
-    this.cargarAsignaturasDistributivo();
-    this.distributivoAsignaturasFiltrado = this.distributivoAsignaturas.filter(
-      (distributivoAsignatura) => 
-        (distributivoAsignatura.id_distributivo === idDistributivo)
-    );
-    console.log('distributivo asignatura',this.distributivoAsignaturasFiltrado)
+    this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(data =>{
+      this.distributivoAsignaturas = data;
+      this.distributivoAsignaturasFiltrado = this.distributivoAsignaturas.filter(
+        distributivoAsignatura => distributivoAsignatura.id_distributivo === idDistributivo);
+        console.log('distributivo asignatura',this.distributivoAsignaturasFiltrado);
+        
+        //asignar paralelos a cada materia
+        const asignaturasParalelosMap = this.distributivoAsignaturasFiltrado.reduce((map, item) => {
+          map[item.id_asignatura] = item.paralelo;
+          return map;
+      }, {});
 
-    const idAsignaturas = this.distributivoAsignaturasFiltrado.map(distributivoAsignaturaEncontrados => distributivoAsignaturaEncontrados.id_asignatura);
-    console.log('id_asignaturas', idAsignaturas);
-    this.cargarDetalleAsignaturas(idAsignaturas);
+      const asignaturasJornadaMap = this.distributivoAsignaturasFiltrado.reduce((map, item) => {
+        map[item.id_asignatura] = item.id_jornada;
+        return map;
+    }, {});
+
+        const idAsignaturas = this.distributivoAsignaturasFiltrado.map(distributivoAsignaturaEncontrados => distributivoAsignaturaEncontrados.id_asignatura);
+        console.log('id_asignaturas', idAsignaturas);
+
+        this.asignaturasFiltradas = this.asignaturas.filter(asignatura =>
+          idAsignaturas.includes(asignatura.id_asignatura)
+        ).map(asignatura => ({
+            ...asignatura,
+            paralelo: asignaturasParalelosMap[asignatura.id_asignatura],
+            jornada: asignaturasJornadaMap[asignatura.id_asignatura]
+        }));
+
+        console.log('detalle asignaturas cargadas', this.asignaturasFiltradas);
+    });  
   }
 
-  cargarDetalleAsignaturas(idAsignaturas : number[]): void{
-    this.asignaturasFiltradas = this.asignaturas.filter(asignatura =>{
-      idAsignaturas.includes(asignatura.id_asignatura);
-    });
-    console.log('asignaturas cargadas',this.asignaturasFiltradas);
-  }
-
+  
   buscarActividad(idDistributivo: number): void{
-    this.cargarActividadDistributivo();
-    this.distributivoActividadesFiltrado = this.distributivoActividades.filter(
-      (distributivoActividad) => 
-        (distributivoActividad.id_distributivo === this.distributivoFiltrado[0].id_distributivo)
-    );
-    console.log('distributivo actividad',this.distributivoActividadesFiltrado)
+    this.distributivoActividadService.getDistributivoActividad().subscribe(data =>{
+      this.distributivoActividades = data;
+      this.distributivoActividadesFiltrado = this.distributivoActividades.filter(
+        distributivoActividad => 
+          distributivoActividad.id_distributivo === idDistributivo);
+        console.log('distributivo actividad',this.distributivoActividadesFiltrado)
 
-    const idActividades = this.distributivoActividadesFiltrado.map(distributivoActividadEncontrados => distributivoActividadEncontrados.id_actividad);
-    console.log('id_actividad', idActividades);
-    this.cargarDetalleActividades(idActividades);
-  }
+        const idActividades = this.distributivoActividadesFiltrado.map(distributivoActividadEncontrados => distributivoActividadEncontrados.id_actividad);
+        console.log('id_actividad', idActividades);
 
-  cargarDetalleActividades(idActividades : number[]): void{
-    this.actividadesFiltradas = this.actividades.filter(actividad =>{
-      idActividades.includes(actividad.id_actividad);
+        this.actividadesFiltradas = this.actividades.filter(actividad =>
+          idActividades.includes(actividad.id_actividad));
+          console.log('detalle cargadas',this.actividadesFiltradas);
     });
-    console.log('detalle cargadas',this.actividadesFiltradas);
+   
   }
+
+ 
 
   obtenerNombreCiclo(id_ciclo:number):void{
     const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
@@ -212,6 +236,17 @@ titulo: Titulo_profesional = new Titulo_profesional();
   obtenerNombreCarrera(id_carrera: number): string {
     const carrera = this.carreras.find(carrera => carrera.id_carrera === id_carrera);
     return carrera ? carrera.nombre_carrera : '';
+  }
+
+  obtenerNombreJornada(id_jornada: number): string {
+    const jornada = this.jornadas.find(jornada => jornada.id_jornada === id_jornada);
+    return jornada ? jornada.descrip_jornada : '';
+  }
+
+  obtenerNombrePeriodo(idPeriodo: number) {
+    const periodo = this.periodos.find(periodo => periodo.id_periodo === idPeriodo);
+    this.periodoNombre = periodo ? periodo.nombre_periodo : '';
+    console.log('nombre periodo', this.periodoNombre);
   }
 
   obtenerTipoActividad(id_tipo_actividad: number): string {
