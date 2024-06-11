@@ -54,7 +54,6 @@ import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
-import { AngularToastifyModule, ToastService } from 'angular-toastify';
 import { ChangeDetectorRef } from '@angular/core';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 import { RegistroComponent } from './views/registro_usuario/registro.component';
