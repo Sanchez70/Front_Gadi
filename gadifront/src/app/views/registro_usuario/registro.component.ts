@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
-  templateUrl: './form_registro_inicial.component.html', // Actualizamos esto para usar una plantilla única
+  templateUrl: './form_registro.component.html', 
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
@@ -93,7 +93,5 @@ export class RegistroComponent {
     this.router.navigate(['./login']);
     }
 
-
-    
   }
 }
