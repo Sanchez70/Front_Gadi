@@ -8,11 +8,12 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
 
   isLogeado = false;
-  rol: any;
+  tiporol: any;
   cedula: any;
   id_persona: any;
   id_asignaturas: any[] = [];
   id_jornada: any;
+  id_carrera:any;
   paralelo: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
@@ -34,11 +35,12 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.isLogeado = user.isLogeado || false;
     this.cedula = user.cedula || null;
-    this.rol = user.rol || null;
+    this.tiporol = user.tiporol || null;
     this.id_persona = user.id_persona || null;
     this.id_asignaturas = user.id_asignaturas || null;
     this.id_jornada = user.id_jornada || null;
     this.paralelo = user.paralelo || null;
+    this.id_carrera = user.id_carrera || null;
   }
 
   clearLocalStorage() {
@@ -54,11 +56,12 @@ export class AuthService {
     localStorage.setItem('user', JSON.stringify({
       isLogeado: this.isLogeado,
       cedula: this.cedula,
-      rol: this.rol,
+      tiporol: this.tiporol,
       id_persona: this.id_persona,
       id_asignaturas: this.id_asignaturas,
       id_jornada: this.id_jornada,
-      paralelo: this.paralelo
+      paralelo: this.paralelo,
+      id_carrera: this.id_carrera
     }));
   }
 

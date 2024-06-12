@@ -24,4 +24,7 @@ export class AppComponent {
   footer() {
     return this.authService.isLogeado
   }
+  rol() {
+    return this.authService.tiporol
+  }
 }

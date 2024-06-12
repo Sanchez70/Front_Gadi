@@ -41,8 +41,8 @@ export class LoginComponent {
           console.log('ID de carrera del usuario encontrado:', usuarioEncontrado?.carrera?.id_carrera);
           if (usuarioEncontrado) {
             this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
-            this.authService.rol = usuarioEncontrado.carrera?.id_carrera;
-            console.log(this.authService.rol)
+            this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
+            console.log(this.authService.id_carrera)
 
           } else {
             Swal.fire('Usuario o contraseña errornea', 'Intente nuevamente', 'error');
@@ -72,7 +72,7 @@ export class LoginComponent {
               }
             });
 
-          } 
+          }
         }
       });
   }
@@ -106,15 +106,18 @@ export class LoginComponent {
 
   tipoRol(rolNombre: any): void {
     if (rolNombre == 'Director') {
-      this.router.navigate(['./main']);
+      this.authService.tiporol = rolNombre;
+      this.router.navigate(['/main']);
       this.authService.login();
     } else {
       if (rolNombre == 'Coordinador') {
-        this.router.navigate(['./distributivo']);
+        this.authService.tiporol = rolNombre;
+        this.router.navigate(['/mainCoordinador']);
         this.authService.login();
       } else {
         if (rolNombre == 'Docente') {
-          this.router.navigate(['./docente']);
+          this.authService.tiporol = rolNombre;
+          this.router.navigate(['/mainDocente']);
           this.authService.login();
         }
       }

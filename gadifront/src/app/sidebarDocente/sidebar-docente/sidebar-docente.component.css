@@ -1,0 +1,112 @@
+.nav {
+    background: linear-gradient(to right, rgb(244, 244, 243) 75%, rgba(80, 80, 80, 0.5) 100%);
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid #12111113;
+    z-index: auto;
+    transition: all 0.4s ease;
+  
+  }
+  .Abrir{
+    padding: 0.3rem;
+    margin-left: 22.5cap;
+  }
+  .Cerrar{
+    padding: 0.3rem;
+    margin-left: 0cap;
+  }
+  .sesion{
+    cursor: pointer;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .avatar-Abrir{
+    margin-left: 65rem;
+     width: 2.5%;
+     height: 2.5%;
+     border-radius: 50%;
+   
+     right: 0;
+   
+   }
+   .avatar-Cerrar{
+     margin-left: 75rem;
+      width: 2.5%;
+      height: 2.5%;
+      border-radius: 50%;
+    
+      right: 0;
+    
+    }
+    .logo{
+      width: 190px;
+      height: 60px;
+    
+    }
+    
+    .unico{
+      border-bottom: 4px solid #c0c0bd;
+    }
+    
+    .sidebar {
+      background-color: #f3f3f1;
+      padding: 1rem;
+      width: 225px;
+      position: fixed;
+      top: 0rem;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      
+    }
+    
+    .content {
+      margin-left: 250px;
+      margin-top: 0rem;
+      padding: 1rem;
+      flex: 1;
+      z-index: 50;
+    }
+    
+    .sidebar h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    
+    
+    .sidebar a {
+      display: block;
+      border-radius: 0.5rem;
+      color: #080808;
+      padding: 8  px;
+      text-decoration: none;
+      text-align: left;
+      font-size: 15px;
+      
+    }
+    
+    .sidebar a:hover {
+      padding: 10px;
+      background-color: #79b3f5;
+      color: #f3f3f1;
+    }
+    
+    .content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    
+    .separator {
+      border: 0;
+      height: 1.5rem;
+      background: #f3f3f1;
+      margin: 10px 0;
+    
+    }
+    .navbar-nav .nav-item .nav-link {
+      color: rgba(5, 5, 5, 0.903); /* Ajustar el color de los enlaces del navbar */
+      
+    }

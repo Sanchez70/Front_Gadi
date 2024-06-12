@@ -35,6 +35,7 @@ export class SidebarComponent {
         Swal.fire(`Hasta pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
         this.authService.logout();
+        this.authService.tiporol='';
         this.authService.clearLocalStorage();
       }
     });

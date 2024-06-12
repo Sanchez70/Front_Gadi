@@ -1,2 +1,4 @@
-<app-sidebar *ngIf="footer()"></app-sidebar>
+<app-sidebar *ngIf="rol() ==='Director'" ></app-sidebar>
+<app-sidebar-coordinador  *ngIf="rol() ==='Coordinador'"></app-sidebar-coordinador>
+<app-sidebar-docente  *ngIf="rol() ==='Docente'"></app-sidebar-docente>
 <router-outlet></router-outlet>

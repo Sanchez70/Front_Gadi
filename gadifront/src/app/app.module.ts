@@ -60,10 +60,16 @@ import { RegistroComponent } from './views/registro_usuario/registro.component';
 import { ReportesComponent } from './views/reportes/reportes/reportes.component';
 import { SidebarDocenteComponent } from './sidebarDocente/sidebar-docente/sidebar-docente.component';
 import { SidebarCoordinadorComponent } from './sidebarCoordinador/sidebar-coordinador/sidebar-coordinador.component';
+import { authGuard } from './guards/auth.guard';
+import { MainDocenteComponent } from './views/mainDocente/main-docente/main-docente.component';
+import { MainCoordiandorComponent } from './views/mainCoordinador/main-coordiandor/main-coordiandor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, canActivate: [authGuard] },
   { path: 'sidebar', component: SidebarComponent },
+  { path: 'mainDocente', component: MainDocenteComponent },
+  { path: 'mainCoordinador', component: MainCoordiandorComponent },
   { path: 'login', component: LoginComponent },
   { path: 'main', component: MainComponent },
   { path: 'asignatura', component: AsignaturaComponent },
@@ -109,7 +115,9 @@ const routes: Routes = [
     FormComponent,
     ReportesComponent,
     SidebarDocenteComponent,
-    SidebarCoordinadorComponent
+    SidebarCoordinadorComponent,
+    MainDocenteComponent,
+    MainCoordiandorComponent
   ],
   
   imports: [
