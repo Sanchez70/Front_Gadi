@@ -58,6 +58,8 @@ import { ChangeDetectorRef } from '@angular/core';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 import { RegistroComponent } from './views/registro_usuario/registro.component';
 import { ReportesComponent } from './views/reportes/reportes/reportes.component';
+import { SidebarDocenteComponent } from './sidebarDocente/sidebar-docente/sidebar-docente.component';
+import { SidebarCoordinadorComponent } from './sidebarCoordinador/sidebar-coordinador/sidebar-coordinador.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -105,7 +107,9 @@ const routes: Routes = [
     RegistroComponent,
     MatrizPropuestaComponent,
     FormComponent,
-    ReportesComponent
+    ReportesComponent,
+    SidebarDocenteComponent,
+    SidebarCoordinadorComponent
   ],
   
   imports: [
