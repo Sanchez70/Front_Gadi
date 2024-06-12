@@ -13,8 +13,6 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  
-
   getUsuario(): Observable<Usuario[]>{
 
     return this.http.get<Usuario[]>(`${this.urlBase}/usuario`);

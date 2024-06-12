@@ -37,18 +37,21 @@ export class LoginComponent {
         if (Array.isArray(result) && result.length > 0) {
           const usuarioEncontrados = result as Usuario[];
           const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario === usuariol);
+          console.log('Usuario encontrado:', usuarioEncontrado);
+          console.log('ID de carrera del usuario encontrado:', usuarioEncontrado?.carrera?.id_carrera);
           if (usuarioEncontrado) {
             this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
-            
-              
+            this.authService.rol = usuarioEncontrado.carrera?.id_carrera;
+            console.log(this.authService.rol)
+
           } else {
-            console.log('usuario no encontrado')
+            Swal.fire('Usuario o contraseña errornea', 'Intente nuevamente', 'error');
 
           }
         }
 
       }, (error) => {
-        console.log(usuariol)
+        Swal.fire('Usuario o contraseña errornea', 'Intente nuevamente', 'error');
       });
 
   }
@@ -69,17 +72,13 @@ export class LoginComponent {
               }
             });
 
-          } else {
-            Swal.fire(`Bienvenid@ ${usuario}`, 'Inicio de sesion correcto', 'success');
-            this.router.navigate(['./main']);
-            this.authService.login();
-          }
+          } 
         }
       });
   }
 
 
-  showDialog(usuario:any) {
+  showDialog(usuario: any) {
     Swal.fire({
       title: 'Selecciona un rol',
       html: `<select id="roleSelect" class="swal2-input">
@@ -89,8 +88,8 @@ export class LoginComponent {
       preConfirm: () => {
         const roleSelect = (Swal.getPopup()!.querySelector('#roleSelect') as HTMLSelectElement).value;
         Swal.fire(`Bienvenid@ ${usuario}`, 'Inicio de sesion correcto', 'success');
-        this.router.navigate(['./main']);
-        this.authService.login();
+        this.tipoRol(roleSelect);
+
         console.log(roleSelect);
         if (!roleSelect) {
           Swal.showValidationMessage('Por favor selecciona un rol');
@@ -103,6 +102,23 @@ export class LoginComponent {
         console.log('Rol seleccionado:', this.selectedRole);
       }
     });
+  }
+
+  tipoRol(rolNombre: any): void {
+    if (rolNombre == 'Director') {
+      this.router.navigate(['./main']);
+      this.authService.login();
+    } else {
+      if (rolNombre == 'Coordinador') {
+        this.router.navigate(['./distributivo']);
+        this.authService.login();
+      } else {
+        if (rolNombre == 'Docente') {
+          this.router.navigate(['./docente']);
+          this.authService.login();
+        }
+      }
+    }
   }
 
 }

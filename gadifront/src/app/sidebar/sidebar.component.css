@@ -59,6 +59,7 @@
     bottom: 0;
     left: 0;
     overflow-y: auto;
+    
   }
   
   .content {
@@ -84,6 +85,7 @@
     text-decoration: none;
     text-align: left;
     font-size: 15px;
+    
   }
   
   .sidebar a:hover {

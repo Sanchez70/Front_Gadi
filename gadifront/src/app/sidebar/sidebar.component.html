@@ -53,7 +53,7 @@
     <a routerLink="/actividad">Actividad</a>
   </li>
     <hr class="separator">
-    <a routerLink="/persona">Docente</a>
+    <a routerLink="/persona" *ngIf="mostrarDocente">Docente</a>
     <hr class="separator">
     <a href="#contact">Contacto</a>
     <hr class="separator"> 

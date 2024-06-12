@@ -11,6 +11,7 @@ import { AuthService } from '../auth.service';
 })
 export class SidebarComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  mostrarDocente: boolean = false;
   isExpanded = true;
   explan: string = 'Abrir';
 
