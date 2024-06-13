@@ -1,167 +1,172 @@
 <div class="container">
-    <div class="card" *ngIf="!showFinalForm">
-      <img src="assets/img/logo.png" alt="GADI" class="logo">
-      <form [formGroup]="registroForm1" (ngSubmit)="onSubmit1()">
-        <div class="row">
-          <div class="form-group">
-            <label class="label" for="primer_nombre">Primer nombre</label>
-            <input class="form-control" type="text" id="primer_nombre" formControlName="name1" required />
-            <div *ngIf="registroForm1.get('name1')?.touched && registroForm1.get('name1')?.invalid" class="text-danger">
-              El primer nombre es obligatorio.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="segundo_nombre">Segundo nombre</label>
-            <input class="form-control" type="text" id="segundo_nombre" formControlName="name2" required />
-            <div *ngIf="registroForm1.get('name2')?.touched && registroForm1.get('name2')?.invalid" class="text-danger">
-              El segundo nombre es obligatorio.
-            </div>
+  <div class="card" *ngIf="!showFinalForm">
+    <img src="assets/img/logo.png" alt="GADI" class="logo">
+    <form [formGroup]="registroForm1" (ngSubmit)="onSubmit1()">
+      <div class="row">
+        <div class="form-group">
+          <label class="label" for="primer_nombre">Primer nombre</label>
+          <input class="form-control" type="text" id="primer_nombre" formControlName="name1" required />
+          <div *ngIf="registroForm1.get('name1')?.touched && registroForm1.get('name1')?.invalid" class="text-danger">
+            El primer nombre es obligatorio.
           </div>
         </div>
-        <div class="row">
-          <div class="form-group">
-            <label for="primer_apellido">Primer apellido</label>
-            <input class="form-control" type="text" id="primer_apellido" formControlName="lastname1" required />
-            <div *ngIf="registroForm1.get('lastname1')?.touched && registroForm1.get('lastname1')?.invalid" class="text-danger">
-              El primer apellido es obligatorio.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="segundo_apellido">Segundo apellido</label>
-            <input class="form-control" type="text" id="segundo_apellido" formControlName="lastname2" required />
-            <div *ngIf="registroForm1.get('lastname2')?.touched && registroForm1.get('lastname2')?.invalid" class="text-danger">
-              El segundo apellido es obligatorio.
-            </div>
+
+        <div class="form-group">
+          <label for="segundo_nombre">Segundo nombre</label>
+          <input class="form-control" type="text" id="segundo_nombre" formControlName="name2" required />
+          <div *ngIf="registroForm1.get('name2')?.touched && registroForm1.get('name2')?.invalid" class="text-danger">
+            El segundo nombre es obligatorio.
           </div>
         </div>
-  
-        <div class="row">
-          <div class="form-group">
-            <label for="usuario">Cédula</label>
-            <input class="form-control" type="text" id="usuario" formControlName="user" placeholder="Este será su usuario de ingreso" required />
-            <div *ngIf="registroForm1.get('user')?.touched && registroForm1.get('user')?.invalid" class="text-danger">
-              La cédula es obligatoria.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="contra">Contraseña</label>
-            <input class="form-control" type="password" id="password" formControlName="password" required>
-            <div *ngIf="registroForm1.get('password')?.touched && registroForm1.get('password')?.invalid" class="text-danger">
-              La contraseña es obligatoria.
-            </div>
-          </div>
-        </div>
-  
-        <button type="submit" class="btn btn-primary btn-rounded">CONTINUAR</button>
-      </form>
-      <div class="redirection-buttons">
-        <p></p>
-        <p class="login-link" routerLink="/login">Ya tienes cuenta? Inicia sesión</p>
       </div>
-    </div>
-  
-    <div class="card" *ngIf="showFinalForm">
-      <img src="assets/img/logo.png" alt="GADI" class="logo">
-      <form [formGroup]="registroForm2" (ngSubmit)="onSubmit2()">
-        <div class="row">
-          <div class="form-group">
-            <label class="label" for="telefono">Teléfono</label>
-            <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
-            <div *ngIf="registroForm2.get('telefono')?.touched && registroForm2.get('telefono')?.invalid" class="text-danger">
-              El teléfono es obligatorio.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="direccion">Dirección</label>
-            <input class="form-control" type="text" id="direccion" formControlName="direccion" required />
-            <div *ngIf="registroForm2.get('direccion')?.touched && registroForm2.get('direccion')?.invalid" class="text-danger">
-              La dirección es obligatoria.
-            </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="primer_apellido">Primer apellido</label>
+          <input class="form-control" type="text" id="primer_apellido" formControlName="lastname1" required />
+          <div *ngIf="registroForm1.get('lastname1')?.touched && registroForm1.get('lastname1')?.invalid"
+            class="text-danger">
+            El primer apellido es obligatorio.
           </div>
         </div>
-        <div class="row">
-          <div class="form-group">
-            <label for="correo">Correo</label>
-            <input class="form-control" type="email" id="correo" formControlName="correo" required />
-            <div *ngIf="registroForm2.get('correo')?.touched && registroForm2.get('correo')?.invalid" class="text-danger">
-              El correo es obligatorio y debe ser válido.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="edad">Edad</label>
-            <input class="form-control" type="text" id="edad" formControlName="edad" required />
-            <div *ngIf="registroForm2.get('edad')?.touched && registroForm2.get('edad')?.invalid" class="text-danger">
-              La edad es obligatoria.
-            </div>
+
+        <div class="form-group">
+          <label for="segundo_apellido">Segundo apellido</label>
+          <input class="form-control" type="text" id="segundo_apellido" formControlName="lastname2" required />
+          <div *ngIf="registroForm1.get('lastname2')?.touched && registroForm1.get('lastname2')?.invalid"
+            class="text-danger">
+            El segundo apellido es obligatorio.
           </div>
         </div>
-        <div class="row">
-          <div class="form-group">
-            <label for="f_vinculacion">Fecha de vinculación</label>
-            <input class="form-control" type="date" id="f_vinculacion" formControlName="fecha_vinculacion" required />
-            <div *ngIf="registroForm2.get('fecha_vinculacion')?.touched && registroForm2.get('fecha_vinculacion')?.invalid" class="text-danger">
-              La fecha de vinculación es obligatoria.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="tit_prof">Título Profesional</label>
-            <input class="form-control" type="text" id="tit_prof" formControlName="nombre_titulo" required />
-            <div *ngIf="registroForm2.get('nombre_titulo')?.touched && registroForm2.get('nombre_titulo')?.invalid" class="text-danger">
-              El título profesional es obligatorio.
-            </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="usuario">Cédula</label>
+          <input class="form-control" type="text" id="usuario" formControlName="user"
+            placeholder="Este será su usuario de ingreso" required />
+          <div *ngIf="registroForm1.get('user')?.touched && registroForm1.get('user')?.invalid" class="text-danger">
+            La cédula es obligatoria.
           </div>
         </div>
-  
-        <div class="row">
-          <div class="form-group">
-            <label for="grado">Grado del Título</label>
-            <input class="form-control" type="text" id="grado" formControlName="grado" required />
-            <div *ngIf="registroForm2.get('grado')?.touched && registroForm2.get('grado')?.invalid" class="text-danger">
-              El grado del título es obligatorio.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="grado_ocup">Grado Ocupacional</label>
-            <input class="form-control" type="text" id="grado_ocup" formControlName="nombre_grado_ocp" required />
-            <div *ngIf="registroForm2.get('nombre_grado_ocp')?.touched && registroForm2.get('nombre_grado_ocp')?.invalid" class="text-danger">
-              El grado ocupacional es obligatorio.
-            </div>
+
+        <div class="form-group">
+          <label for="contra">Contraseña</label>
+          <input class="form-control" type="password" id="password" formControlName="password" required>
+          <div *ngIf="registroForm1.get('password')?.touched && registroForm1.get('password')?.invalid"
+            class="text-danger">
+            La contraseña es obligatoria.
           </div>
         </div>
-  
-        <div class="row">
-          <div class="form-group">
-            <label for="contrato">Contrato</label>
-            <select id="contrato" formControlName="nombre_contrato" required>
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="Tiempo Completo">Tiempo Completo</option>
-              <option value="Medio Tiempo">Medio Tiempo</option>
-              <option value="Tiempo Parcial">Tiempo Parcial</option>
-            </select>
-            <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid" class="text-danger">
-              El contrato es obligatorio.
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label>Número de horas</label>
-            <input class="form-control" type="number" id="horas" formControlName="hora_contrato" required>
-            <div *ngIf="registroForm2.get('hora_contrato')?.touched && registroForm2.get('hora_contrato')?.invalid" class="text-danger">
-              El número de horas es obligatorio.
-            </div>
-          </div>
-        </div>
-        <div><p></p></div>
-  
-        <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
-      </form>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-rounded">CONTINUAR</button>
+    </form>
+    <div class="redirection-buttons">
+      <p></p>
+      <p class="login-link" routerLink="/login">Ya tienes cuenta? Inicia sesión</p>
     </div>
   </div>
-  
+
+  <div class="card" *ngIf="showFinalForm">
+    <img src="assets/img/logo.png" alt="GADI" class="logo">
+    <form [formGroup]="registroForm2" (ngSubmit)="onSubmit2()">
+      <div class="row">
+        <div class="form-group">
+          <label class="label" for="telefono">Teléfono</label>
+          <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
+          <div *ngIf="registroForm2.get('telefono')?.touched && registroForm2.get('telefono')?.invalid"
+            class="text-danger">
+            El teléfono es obligatorio.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input class="form-control" type="text" id="direccion" formControlName="direccion" required />
+          <div *ngIf="registroForm2.get('direccion')?.touched && registroForm2.get('direccion')?.invalid"
+            class="text-danger">
+            La dirección es obligatoria.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="correo">Correo</label>
+          <input class="form-control" type="email" id="correo" formControlName="correo" required />
+          <div *ngIf="registroForm2.get('correo')?.touched && registroForm2.get('correo')?.invalid" class="text-danger">
+            El correo es obligatorio y debe ser válido.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edad">Edad</label>
+          <input class="form-control" type="text" id="edad" formControlName="edad" required />
+          <div *ngIf="registroForm2.get('edad')?.touched && registroForm2.get('edad')?.invalid" class="text-danger">
+            La edad es obligatoria.
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="f_vinculacion">Fecha de vinculación</label>
+          <input class="form-control" type="date" id="f_vinculacion" formControlName="fecha_vinculacion" required />
+          <div
+            *ngIf="registroForm2.get('fecha_vinculacion')?.touched && registroForm2.get('fecha_vinculacion')?.invalid"
+            class="text-danger">
+            La fecha de vinculación es obligatoria.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="grado_ocup">Grado Ocupacional</label>
+          <input class="form-control" type="text" id="grado_ocup" formControlName="nombre_grado_ocp" required />
+          <div *ngIf="registroForm2.get('nombre_grado_ocp')?.touched && registroForm2.get('nombre_grado_ocp')?.invalid"
+            class="text-danger">
+            El grado ocupacional es obligatorio.
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div formArrayName="titulos">
+          <div *ngFor="let titulo of titulos.controls; let i = index" [formGroupName]="i" class="titulo-form">
+            <label for="nombre_titulo_{{i}}">Título Profesional</label>
+            <input type="text" id="nombre_titulo_{{i}}" formControlName="nombre_titulo" required />
+            
+            <label for="grado_{{i}}">Grado</label>
+            <input type="text" id="grado_{{i}}" formControlName="grado" required />
+      
+            <button type="button" (click)="removeTitulo(i)">Eliminar Título</button>
+          </div>
+        </div>
+        <button type="button" (click)="addTitulo()">Añadir Título</button>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="contrato">Contrato</label>
+          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let contrato of contratos" [value]="contrato.nombre_contrato">{{ contrato.nombre_contrato }}</option>
+          </select>
+          <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid" class="text-danger">
+            El contrato es obligatorio.
+          </div>
+        </div>
+        
+        <div class="form-group" *ngIf="isTiempoParcial">
+          <label>Número de horas</label>
+          <input class="form-control" type="number" id="horas" formControlName="hora_contrato" required>
+          <div *ngIf="registroForm2.get('hora_contrato')?.touched && registroForm2.get('hora_contrato')?.invalid" class="text-danger">
+            El número de horas es obligatorio.
+          </div>
+        </div>        
+      </div>
+      <div>
+        <p></p>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-rounded">REGISTRARSE</button>
+    </form>
+  </div>
+</div>
