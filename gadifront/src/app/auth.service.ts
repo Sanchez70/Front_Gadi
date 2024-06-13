@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
 
-  isLogeado = false;
+  isLogeado = true;
   tiporol: any;
   cedula: any;
   id_persona: any;
