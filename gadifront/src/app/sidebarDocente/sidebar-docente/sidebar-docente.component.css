@@ -23,7 +23,7 @@
     margin: 0 auto;
   }
   .avatar-Abrir{
-    margin-left: 65rem;
+    margin-left: 70rem;
      width: 2.5%;
      height: 2.5%;
      border-radius: 50%;
@@ -32,14 +32,14 @@
    
    }
    .avatar-Cerrar{
-     margin-left: 75rem;
-      width: 2.5%;
-      height: 2.5%;
-      border-radius: 50%;
-    
-      right: 0;
-    
-    }
+    margin-left: 72rem;
+     width: 2.5%;
+     height: 2.5%;
+     border-radius: 50%;
+   
+     right: 0;
+   
+   }
     .logo{
       width: 190px;
       height: 60px;

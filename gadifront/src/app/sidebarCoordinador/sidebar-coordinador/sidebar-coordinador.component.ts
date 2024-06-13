@@ -43,10 +43,14 @@ export class SidebarCoordinadorComponent {
 
   navbar(): void {
     if (this.explan === 'Abrir') {
-      this.explan = 'Cerrar';
+      this.explan = 'Cerrar'
+      this.authService.navbar();
+      this.toggleSidenav();
     } else if (this.explan === 'Cerrar') {
       this.explan = 'Abrir';
+      this.authService.navbar();
+      this.toggleSidenav();
     }
-    this.toggleSidenav();
+  
   }
 }
