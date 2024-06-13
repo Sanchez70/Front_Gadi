@@ -26,6 +26,9 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { CommonModule } from '@angular/common';
 import { forkJoin, tap } from 'rxjs';
 import { Persona } from '../../Services/docenteService/persona';
+import { CarreraService } from '../../Services/carreraService/carrera.service';
+import { AuthService } from '../../auth.service';
+import { UsuarioRol } from '../usuario-rol/UsuarioRol';
 
 @Component({
   selector: 'app-admin-creacion',
@@ -56,12 +59,16 @@ export class AdminCreacionComponent implements OnInit {
   roles: Rol[] = [];
   carreras: Carrera[] = [];
   panelOpenState = false;
+  persona: any;
+  usuario: any;
 
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
     private snackBar: MatSnackBar,
-    private RolService: RolService,
+    private rolService: RolService,
+    private carreraService: CarreraService,
+    private authService: AuthService
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -81,8 +88,8 @@ export class AdminCreacionComponent implements OnInit {
       titulo_profesional: [{ value: '', disabled: true }],
       grado_ocupacional: [{ value: '', disabled: true }],
       nombre_usuario: [{ value: '', disabled: true }],
-      rol: ['', Validators.required],
-      carrera: ['', Validators.required],
+      rol: [{ value: '', disabled: true }, Validators.required],
+      carrera: [{ value: '', disabled: true }, Validators.required],
     });
   }
 
@@ -94,22 +101,21 @@ export class AdminCreacionComponent implements OnInit {
       this.personaService.getPersonaByCedula(cedula).subscribe(
         (persona) => {
           if (persona) {
+            this.persona = persona;
             this.personaForm.patchValue(persona);
             this.snackBar.open('Persona encontrada', 'X', {
               duration: 3000,
             });
 
-            // Obtener el usuario por el id de persona
             this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
               if (usuario) {
+                this.usuario = usuario;
                 this.personaForm.patchValue({ nombre_usuario: usuario.usuario });
               }
 
-              // Cargar roles y carreras después de encontrar el usuario
               this.cargarRolesYCarreras();
             });
 
-            // Obtener grado, título y contrato por ID
             forkJoin([
               this.personaService.getGradoById(persona.id_grado_ocp).pipe(
                 tap(grado => {
@@ -144,16 +150,47 @@ export class AdminCreacionComponent implements OnInit {
   }
 
   cargarRolesYCarreras() {
-    // Cargar roles
-    this.RolService.getRoles().subscribe((rol) => {
+    this.rolService.getRoles().subscribe((rol) => {
       this.roles = rol;
-
+      this.personaForm.controls['rol'].enable();
     });
 
-    // Cargar carreras
-    this.personaService.getCarreras().subscribe((carrera) => {
+    this.carreraService.getCarrera().subscribe((carrera) => {
       this.carreras = carrera;
+    });
+  }
 
+  onRoleChange(roleId: number) {
+    const selectedRole = this.roles.find(role => role.id_rol === roleId);
+    if (selectedRole && selectedRole.nombre_rol === 'Director') {
+      this.personaForm.controls['carrera'].enable();
+    } else {
+      this.personaForm.controls['carrera'].disable();
+    }
+  }
+
+  guardar() {
+    const rolId = this.personaForm.get('rol')?.value;
+    const carreraId = this.personaForm.get('carrera')?.value;
+
+    const usuarioRol: UsuarioRol = {
+      id_usuario: this.usuario.id_usuario,
+      id_rol: rolId
+    };
+
+    this.personaService.createUsuarioRol(usuarioRol).subscribe(() => {
+      if (rolId && carreraId) {
+        this.usuario.id_carrera = carreraId;
+        this.personaService.updateUsuario(this.usuario.id_usuario, this.usuario).subscribe(() => {
+          this.snackBar.open('Usuario actualizado con carrera', 'X', {
+            duration: 3000,
+          });
+        });
+      } else {
+        this.snackBar.open('Usuario actualizado', 'X', {
+          duration: 3000,
+        });
+      }
     });
   }
 }

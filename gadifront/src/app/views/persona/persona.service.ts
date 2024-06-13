@@ -9,6 +9,7 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { Usuario } from '../../Services/loginService/usuario';
 import { Carrera } from '../../Services/carreraService/carrera';
 import { Rol } from '../rol/rol';
+import { UsuarioRol } from '../usuario-rol/UsuarioRol';
 
 @Injectable({
   providedIn: 'root'
@@ -66,4 +67,19 @@ export class PersonaService {
   getTituloById(id: number): Observable<TituloProfecional> {
     return this.http.get<TituloProfecional>(`${this.baseUrl}/titulo_profesional/${id}`);
   }
+
+  createUsuarioRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
+    return this.http.post<UsuarioRol>(`${this.baseUrl}/usuarioRol`, usuarioRol);
+  }
+
+  updateUsuario(id: number, usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.baseUrl}/usuario/${id}`, usuario);
+  }
+  saveUsuarioRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
+    return this.http.post<UsuarioRol>(`${this.baseUrl}/usuarioRol`, usuarioRol);
+  }
+
+  // updateUsuario(usuario: Usuario): Observable<Usuario> {
+  //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
+  // }
 }

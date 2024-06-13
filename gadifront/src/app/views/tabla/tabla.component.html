@@ -49,32 +49,32 @@
 
       <ng-container matColumnDef="contrato">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato</th>
-        <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona]?.nombre_contrato }}</td>
+        <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona].nombre_contrato }}</td>
       </ng-container>
 
       <ng-container matColumnDef="titulo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
-        <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona]?.nombre_titulo }}</td>
+        <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo }}</td>
       </ng-container>
 
       <ng-container matColumnDef="grado">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado</th>
-        <td mat-cell *matCellDef="let persona">{{ grados[persona.id_persona]?.nombre_grado_ocp }}</td>
+        <td mat-cell *matCellDef="let persona">{{ grados[persona.id_persona].nombre_grado_ocp }}</td>
       </ng-container>
 
       <ng-container matColumnDef="nombre_periodo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre del Periodo</th>
-        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona]?.nombre_periodo }}</td>
+        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona].nombre_periodo }}</td>
       </ng-container>
 
       <ng-container matColumnDef="inicio_periodo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Inicio del Periodo</th>
-        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona]?.inicio_periodo | date }}</td>
+        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona].inicio_periodo | date }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fin_periodo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fin del Periodo</th>
-        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona]?.fin_periodo | date }}</td>
+        <td mat-cell *matCellDef="let persona">{{ periodos[persona.id_persona].fin_periodo | date }}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
