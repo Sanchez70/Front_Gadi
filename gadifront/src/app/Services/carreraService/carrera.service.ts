@@ -17,12 +17,20 @@ export class CarreraService {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`)
   }
 
-  create(carrera: Carrera): Observable<Carrera> {
-    return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
+  // create(carrera: Carrera): Observable<Carrera> {
+  //   return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
+  // }
+
+  // getCarrerabyId(id: any): Observable<Carrera> {
+  //   return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
+  // }
+
+  getCarreraById(id: number): Observable<Carrera> {
+    return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
   }
 
-  getCarrerabyId(id: any): Observable<Carrera> {
-    return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
+  create(carrera: Carrera): Observable<Carrera> {
+    return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
   }
 
   

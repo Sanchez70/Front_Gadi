@@ -5,6 +5,8 @@
       <mat-form-field appearance="outline">
         <mat-label>Cédula</mat-label>
         <input matInput formControlName="cedula" />
+        <mat-error *ngIf="searchForm.get('cedula')?.hasError('required')">Ingrese una cédula</mat-error>
+        <mat-error *ngIf="searchForm.get('cedula')?.hasError('minlength')">Ingrese una cédula válida de 10 dígitos</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" type="submit">
         Buscar <mat-icon>search</mat-icon>
@@ -70,17 +72,18 @@
     <div>
       <mat-form-field appearance="outline">
         <mat-select placeholder="Rol" formControlName="rol" (selectionChange)="onRolChange($event)">
-          <mat-option *ngFor="let rol of roles" [value]="rol.id_rol">{{rol.nombre_rol}}</mat-option>
+          <mat-option *ngFor="let rol of roles" [value]="rol.id_rol">{{ rol.nombre_rol }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-select placeholder="Carrera" formControlName="carrera">
           <mat-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{ carrera.nombre_carrera }}</mat-option>
         </mat-select>
+        <mat-error *ngIf="personaForm.get('carrera')?.hasError('required') && personaForm.get('rol')?.value === 'Director'">Seleccione una carrera para el Director</mat-error>
       </mat-form-field>
     </div>
-    <button mat-raised-button color="primary" (click)="guardarUsuario()">Guardar
-      <mat-icon>save</mat-icon>
+    <button mat-raised-button color="primary" (click)="guardarUsuario()">
+      Guardar <mat-icon>save</mat-icon>
     </button>
   </form>
 </div>

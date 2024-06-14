@@ -29,8 +29,20 @@ import { Persona } from '../../Services/docenteService/persona';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { AuthService } from '../../auth.service';
 import { UsuarioRol } from '../usuario-rol/UsuarioRol';
-import { Usuario } from '../usuario/usuario'; 
+import { Usuario } from '../../Services/loginService/usuario';
+import Swal from 'sweetalert2';
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-admin-creacion',
   templateUrl: './admin-creacion.component.html',
@@ -61,7 +73,7 @@ export class AdminCreacionComponent implements OnInit {
   carreras: Carrera[] = [];
   usuario: Usuario | null = null;
   panelOpenState = false;
-
+  
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
@@ -95,28 +107,34 @@ export class AdminCreacionComponent implements OnInit {
   ngOnInit(): void {}
 
   buscarPersona() {
+    if (this.searchForm.invalid) {
+      Toast.fire({
+        icon: "warning",
+        title: "Ingrese una cedula válida",
+        footer: "La cédula debe tener al menos 10 dígitos"
+      });
+      return;
+    }
     const cedula = this.searchForm.get('cedula')?.value;
     if (cedula) {
       this.personaService.getPersonaByCedula(cedula).subscribe(
         (persona) => {
           if (persona) {
             this.personaForm.patchValue(persona);
-            this.snackBar.open('Persona encontrada', 'X', {
-              duration: 3000,
+            Toast.fire({
+              icon: "success",
+              title: "Datos cargados correctamente"
             });
 
-            // Obtener el usuario por el id de persona
             this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
               if (usuario) {
                 this.usuario = usuario;
                 this.personaForm.patchValue({ nombre_usuario: usuario.usuario });
               }
 
-              // Cargar roles y carreras después de encontrar el usuario
               this.cargarRolesYCarreras();
             });
 
-            // Obtener grado, título y contrato por ID
             forkJoin([
               this.personaService.getGradoById(persona.id_grado_ocp).pipe(
                 tap(grado => {
@@ -136,14 +154,17 @@ export class AdminCreacionComponent implements OnInit {
             ]).subscribe();
 
           } else {
-            this.snackBar.open('Persona no encontrada', 'X', {
-              duration: 3000,
+            Toast.fire({
+              icon: "error",
+              title: "No se pudo encontrar a la persona con esa cedula",
             });
           }
         },
         (error) => {
-          this.snackBar.open('Error al buscar persona', 'X', {
-            duration: 3000,
+          Toast.fire({
+            icon: "error",
+            title: "Hubo un error al buscar a la persona",
+            footer: "Por favor, verifique si la cedula es la correcta"
           });
         }
       );
@@ -151,13 +172,11 @@ export class AdminCreacionComponent implements OnInit {
   }
 
   cargarRolesYCarreras() {
-    // Cargar roles
     this.rolService.getRoles().subscribe((roles) => {
       this.roles = roles;
       this.personaForm.get('rol')?.enable();
     });
 
-    // Cargar carreras
     this.carreraService.getCarrera().subscribe((carreras) => {
       this.carreras = carreras;
     });
@@ -173,35 +192,74 @@ export class AdminCreacionComponent implements OnInit {
   }
 
   guardarUsuario() {
-    if (this.personaForm.valid) {
-      const rolId = this.personaForm.get('rol')?.value;
-      const carreraId = this.personaForm.get('carrera')?.value;
-      const usuarioId = this.usuario?.id_usuario;
+    if (this.personaForm.invalid) {
+      Toast.fire({
+        icon: "warning",
+        title: "Por favor, complete todos los campos",
+      });
+      return;
+    }
 
-      if (usuarioId) {
-        // Crear objeto UsuarioRol para asignar rol al usuario
-        const usuarioRol: UsuarioRol = {
-          id_usuario_rol: 0, // El backend asignará el ID automáticamente
-          id_usuario: usuarioId,
-          id_rol: rolId
-        };
+    const rolId = this.personaForm.get('rol')?.value;
+    const carreraId = this.personaForm.get('carrera')?.value;
+    const usuarioId = this.usuario?.id_usuario;
 
-        this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
-          this.snackBar.open('Rol asignado correctamente', 'X', {
-            duration: 3000,
-          });
+    if (!rolId) {
+      Toast.fire({
+        icon: "warning",
+        title: "No hay ningún rol seleccionado",
+      });
+      return;
+    }
+
+    if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && !carreraId) {
+      Toast.fire({
+        icon: "warning",
+        title: "No se ha seleccionado ninguna carrera",
+        footer: "Seleccione una carrera para continuar"
+      });
+      return;
+    }
+
+    if (usuarioId) {
+      const usuarioRol: UsuarioRol = {
+        id_usuario_rol: 0, 
+        id_usuario: usuarioId,
+        id_rol: rolId
+      };
+
+      this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
+        Toast.fire({
+          icon: "success",
+          title: "Rol asignado correctamente",
         });
 
-        // Si el rol es Director, asignar también la carrera al usuario
         if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && carreraId) {
-          this.usuario!.carrera = { id_carrera: carreraId } as Carrera;
-          this.personaService.updateUsuario(this.usuario!).subscribe(() => {
-            this.snackBar.open('Carrera asignada correctamente', 'X', {
-              duration: 3000,
-            });
+          this.carreraService.getCarreraById(carreraId).subscribe(carrera => {
+            if (this.usuario) {
+              this.usuario.carrera = carrera;
+              this.personaService.updateUsuario(this.usuario).subscribe(() => {
+                Toast.fire({
+                  icon: "success",
+                  title: "Carrera asignada correctamente",
+                });
+                this.limpiarCampos();
+              });
+            }
           });
+        } else {
+          this.limpiarCampos();
         }
-      }
+      });
     }
+  }
+
+  limpiarCampos() {
+    this.searchForm.reset();
+    this.personaForm.reset();
+    this.personaForm.disable();
+    this.roles = [];
+    this.carreras = [];
+    this.usuario = null;
   }
 }
