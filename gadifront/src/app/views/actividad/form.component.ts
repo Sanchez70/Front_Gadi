@@ -22,7 +22,7 @@ export class FormComponent {
   public Tipos: tipo_actividad[] = [];
   public distributivo: DistributivoActividad = new DistributivoActividad()
   public Distributivos: DistributivoActividad[] = [];
-  public titulo: String = "CREAR Actividad"
+  public titulo: String = "CREAR ACTIVIDAD"
 
   constructor(private distributivoService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
@@ -52,7 +52,7 @@ export class FormComponent {
         (actividad) => {
           this.actividad.id_actividad = actividad.id_actividad;
           Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_actividad} Guardado con éxito`, 'success');
-          this.createdistributivo();
+          //this.createdistributivo();
           this.router.navigate(['/distributivo'])
         },
         (error) => {
@@ -63,22 +63,21 @@ export class FormComponent {
   }
 
   //Metodo la guardar en el distributivo aun no usado///
-
-  public createdistributivo(): void {
-    this.distributivo.id_actividad = this.actividad.id_actividad
-    this.distributivo.hora_no_docente = this.actividad.horas_no_docentes
-    this.distributivoService.create(this.distributivo)
-      .subscribe(
-        (distributivo) => {
-          this.router.navigate(['/']);
-          console.log("valor", distributivo)
-          //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
-        },
-        (error) => {
-          console.error('Error al guardar la actividad:', error);
-          Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
-        }
-      );
-  }
+  // public createdistributivo(): void {
+  //   this.distributivo.id_actividad = this.actividad.id_actividad
+  //   this.distributivo.hora_no_docente = this.actividad.horas_no_docentes
+  //   this.distributivoService.create(this.distributivo)
+  //     .subscribe(
+  //       (distributivo) => {
+  //         this.router.navigate(['/']);
+  //         console.log("valor", distributivo)
+  //         //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
+  //       },
+  //       (error) => {
+  //         console.error('Error al guardar la actividad:', error);
+  //         Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
+  //       }
+  //     );
+  // }
 
 }

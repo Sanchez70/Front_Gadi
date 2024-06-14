@@ -33,6 +33,8 @@ import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaService/distributivo-asignatura';
 import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
+import { DistributivoActividad } from '../../Services/distributivoActividadService/distributivo_actividad';
+import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -75,6 +77,7 @@ export class DistributivoComponent implements OnInit {
   public carreras: any[] = [];
   public asignaturas: any[] = [];
   public distributivo: Distributivo = new Distributivo();
+  public distributivoacti: DistributivoActividad = new DistributivoActividad()
   public Distributivos: Distributivo[] = [];
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   periodos: any[] = [];
@@ -107,7 +110,8 @@ export class DistributivoComponent implements OnInit {
     private carreraService: CarreraService,
     private periodoService: PeriodoService,
     private jornadaService: JornadaService,
-    private distributivoAsignaturaService: DistributivoAsignaturaService
+    private distributivoAsignaturaService: DistributivoAsignaturaService,
+    private distributivoActividadService: DistributivoActividadService,
   ) { }
 
   ngOnInit(): void {
@@ -154,8 +158,8 @@ export class DistributivoComponent implements OnInit {
   }
 
   cargarActividades(): void {
-    this.actividadService.getActividad().subscribe((Actividades) => {
-      this.Actividades = Actividades;
+    this.actividadService.getActividad().subscribe((actividades) => {
+      this.Actividades = actividades;
       this.dataSource3 = new MatTableDataSource(this.Actividades);
       this.dataSource3.paginator = this.paginator;
       this.dataSource3.sort = this.sort;
@@ -240,17 +244,8 @@ export class DistributivoComponent implements OnInit {
   calcularHorasTotales(): void {
     this.horasTotales = this.asignaturas.reduce((sum, asignatura) => sum + asignatura.horas_semanales, 0);
   }
-  cargarActividad(): void {
-    this.actividadService.getActividad().subscribe(
-      (Actividades) => {
-        this.Actividades = Actividades;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
-  
+
+
   public createdistributivo(): void {
     this.distributivo.id_persona = this.persona.id_persona;
     this.distributivo.id_periodo = this.idPeriodo;
@@ -259,7 +254,8 @@ export class DistributivoComponent implements OnInit {
         (distributivo) => {
           console.log("valor", distributivo);
           Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo} Guardado con éxito`, 'success');
-          this.createAsignaturaDistributivo(distributivo.id_distributivo);
+          this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+          this.createdistributivoacti(distributivo.id_distributivo);
         },
         (error) => {
           console.error('Error al guardar:', error);
@@ -268,7 +264,7 @@ export class DistributivoComponent implements OnInit {
       );
   }
 
-  createAsignaturaDistributivo(id_distributivo: number): void {
+  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
     this.authService.id_asignaturas.forEach(asignatura => {
       const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
         id_jornada: this.idJornada,
@@ -278,11 +274,34 @@ export class DistributivoComponent implements OnInit {
       };
       this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
         Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-        console.log('Asignatura Distributivo generado');
+        console.log('Asignatura Distributivo generado');       
       }, error => {
         Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
         console.log('Error al crear', error);
       });
+    });
+  }
+
+
+  createdistributivoacti(id_distributivo: number): void {
+    this.Actividades.forEach(actividad => {
+      const distributivoacti2: DistributivoActividad = {
+        id_actividad: actividad.id_actividad,
+        hora_no_docente: actividad.horas_no_docentes,
+        id_distributivo: id_distributivo,
+        id_distributivo_actividad: 0
+      };
+      this.distributivoActividadService.create(distributivoacti2)
+        .subscribe(
+          (distributivo) => {
+            console.log("valorREVISAR", distributivo);
+            //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
+          },
+          (error) => {
+            console.error('Error al guardar la actividad:', error);
+            Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
+          }
+        );
     });
   }
 
