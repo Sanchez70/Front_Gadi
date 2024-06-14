@@ -6,7 +6,7 @@ import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
-import { Usuario } from '../../Services/loginService/usuario';
+import { Usuario } from '../usuario/usuario';
 import { Carrera } from '../../Services/carreraService/carrera';
 import { Rol } from '../rol/rol';
 import { UsuarioRol } from '../usuario-rol/UsuarioRol';
@@ -72,12 +72,14 @@ export class PersonaService {
     return this.http.post<UsuarioRol>(`${this.baseUrl}/usuarioRol`, usuarioRol);
   }
 
-  updateUsuario(id: number, usuario: Usuario): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.baseUrl}/usuario/${id}`, usuario);
-  }
   saveUsuarioRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
     return this.http.post<UsuarioRol>(`${this.baseUrl}/usuarioRol`, usuarioRol);
   }
+
+  updateUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
+  }
+
 
   // updateUsuario(usuario: Usuario): Observable<Usuario> {
   //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);

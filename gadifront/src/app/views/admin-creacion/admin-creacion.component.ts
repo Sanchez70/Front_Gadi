@@ -29,6 +29,7 @@ import { Persona } from '../../Services/docenteService/persona';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { AuthService } from '../../auth.service';
 import { UsuarioRol } from '../usuario-rol/UsuarioRol';
+import { Usuario } from '../usuario/usuario'; 
 
 @Component({
   selector: 'app-admin-creacion',
@@ -58,17 +59,15 @@ export class AdminCreacionComponent implements OnInit {
   personaForm: FormGroup;
   roles: Rol[] = [];
   carreras: Carrera[] = [];
+  usuario: Usuario | null = null;
   panelOpenState = false;
-  persona: any;
-  usuario: any;
 
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
     private snackBar: MatSnackBar,
     private rolService: RolService,
-    private carreraService: CarreraService,
-    private authService: AuthService
+    private carreraService: CarreraService
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -88,8 +87,8 @@ export class AdminCreacionComponent implements OnInit {
       titulo_profesional: [{ value: '', disabled: true }],
       grado_ocupacional: [{ value: '', disabled: true }],
       nombre_usuario: [{ value: '', disabled: true }],
-      rol: [{ value: '', disabled: true }, Validators.required],
-      carrera: [{ value: '', disabled: true }, Validators.required],
+      rol: ['', Validators.required],
+      carrera: [{ value: '', disabled: true }],
     });
   }
 
@@ -101,21 +100,23 @@ export class AdminCreacionComponent implements OnInit {
       this.personaService.getPersonaByCedula(cedula).subscribe(
         (persona) => {
           if (persona) {
-            this.persona = persona;
             this.personaForm.patchValue(persona);
             this.snackBar.open('Persona encontrada', 'X', {
               duration: 3000,
             });
 
+            // Obtener el usuario por el id de persona
             this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
               if (usuario) {
                 this.usuario = usuario;
                 this.personaForm.patchValue({ nombre_usuario: usuario.usuario });
               }
 
+              // Cargar roles y carreras después de encontrar el usuario
               this.cargarRolesYCarreras();
             });
 
+            // Obtener grado, título y contrato por ID
             forkJoin([
               this.personaService.getGradoById(persona.id_grado_ocp).pipe(
                 tap(grado => {
@@ -150,47 +151,57 @@ export class AdminCreacionComponent implements OnInit {
   }
 
   cargarRolesYCarreras() {
-    this.rolService.getRoles().subscribe((rol) => {
-      this.roles = rol;
-      this.personaForm.controls['rol'].enable();
+    // Cargar roles
+    this.rolService.getRoles().subscribe((roles) => {
+      this.roles = roles;
+      this.personaForm.get('rol')?.enable();
     });
 
-    this.carreraService.getCarrera().subscribe((carrera) => {
-      this.carreras = carrera;
+    // Cargar carreras
+    this.carreraService.getCarrera().subscribe((carreras) => {
+      this.carreras = carreras;
     });
   }
 
-  onRoleChange(roleId: number) {
-    const selectedRole = this.roles.find(role => role.id_rol === roleId);
-    if (selectedRole && selectedRole.nombre_rol === 'Director') {
-      this.personaForm.controls['carrera'].enable();
+  onRolChange(event: any) {
+    const selectedRol = this.roles.find(rol => rol.id_rol === event.value);
+    if (selectedRol && selectedRol.nombre_rol === 'Director') {
+      this.personaForm.get('carrera')?.enable();
     } else {
-      this.personaForm.controls['carrera'].disable();
+      this.personaForm.get('carrera')?.disable();
     }
   }
 
-  guardar() {
-    const rolId = this.personaForm.get('rol')?.value;
-    const carreraId = this.personaForm.get('carrera')?.value;
+  guardarUsuario() {
+    if (this.personaForm.valid) {
+      const rolId = this.personaForm.get('rol')?.value;
+      const carreraId = this.personaForm.get('carrera')?.value;
+      const usuarioId = this.usuario?.id_usuario;
 
-    const usuarioRol: UsuarioRol = {
-      id_usuario: this.usuario.id_usuario,
-      id_rol: rolId
-    };
+      if (usuarioId) {
+        // Crear objeto UsuarioRol para asignar rol al usuario
+        const usuarioRol: UsuarioRol = {
+          id_usuario_rol: 0, // El backend asignará el ID automáticamente
+          id_usuario: usuarioId,
+          id_rol: rolId
+        };
 
-    this.personaService.createUsuarioRol(usuarioRol).subscribe(() => {
-      if (rolId && carreraId) {
-        this.usuario.id_carrera = carreraId;
-        this.personaService.updateUsuario(this.usuario.id_usuario, this.usuario).subscribe(() => {
-          this.snackBar.open('Usuario actualizado con carrera', 'X', {
+        this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
+          this.snackBar.open('Rol asignado correctamente', 'X', {
             duration: 3000,
           });
         });
-      } else {
-        this.snackBar.open('Usuario actualizado', 'X', {
-          duration: 3000,
-        });
+
+        // Si el rol es Director, asignar también la carrera al usuario
+        if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && carreraId) {
+          this.usuario!.carrera = { id_carrera: carreraId } as Carrera;
+          this.personaService.updateUsuario(this.usuario!).subscribe(() => {
+            this.snackBar.open('Carrera asignada correctamente', 'X', {
+              duration: 3000,
+            });
+          });
+        }
       }
-    });
+    }
   }
 }
