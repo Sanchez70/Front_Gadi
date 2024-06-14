@@ -63,6 +63,8 @@ import { SidebarCoordinadorComponent } from './sidebarCoordinador/sidebar-coordi
 import { authGuard } from './guards/auth.guard';
 import { MainDocenteComponent } from './views/mainDocente/main-docente/main-docente.component';
 import { MainCoordiandorComponent } from './views/mainCoordinador/main-coordiandor/main-coordiandor.component';
+import { SidebarAdminComponent } from './sidebar-admin/sidebar-admin.component';
+import { MainAdminComponent } from './views/main-admin/main-admin.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -83,6 +85,7 @@ const routes: Routes = [
   { path: 'tipo_actividad', component: TipoActividadComponent },
   { path: 'admin_Creacion', component: AdminCreacionComponent},
   { path: 'distributivo', component: DistributivoComponent},
+  { path: 'main-admin', component: MainAdminComponent},
   { path: 'reportes', component: ReportesComponent}
 
 ];
@@ -117,7 +120,9 @@ const routes: Routes = [
     SidebarDocenteComponent,
     SidebarCoordinadorComponent,
     MainDocenteComponent,
-    MainCoordiandorComponent
+    MainCoordiandorComponent,
+    SidebarAdminComponent,
+    MainAdminComponent
   ],
   
   imports: [

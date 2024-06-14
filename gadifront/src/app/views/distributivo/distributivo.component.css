@@ -6,6 +6,7 @@ mat-form-field {
 .container {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
 th {
@@ -14,7 +15,6 @@ th {
 
 h1 {
   position: relative;
-  left: 38%;
 }
 
 .example-container {

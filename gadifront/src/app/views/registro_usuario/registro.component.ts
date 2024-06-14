@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Persona } from '../../Services/docenteService/persona';
 import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
 import { Tipo_contrato } from '../../Services/tipo_contrato/tipo_contrato';
+import { TipoContratoService } from '../../Services/tipo_contrato/tipo-contrato.service';
 import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RegistroService } from '../../Services/registroService/registro.service';
 import Swal from 'sweetalert2';
 
@@ -14,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './form_registro.component.html', 
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent {
+export class RegistroComponent implements OnInit{
   public registroForm1: FormGroup;
   public registroForm2: FormGroup;
   name1: string = "";
@@ -26,12 +27,13 @@ export class RegistroComponent {
 
   public persona:Persona = new Persona()
   public titulo:Titulo_profesional = new Titulo_profesional()
-  public contrato:Tipo_contrato = new Tipo_contrato()
+  public contratos: any[] = [];
   public grado:Grado_ocupacional = new Grado_ocupacional()
 
   showFinalForm: boolean = false;
+  public isTiempoParcial: boolean = false;
 
-  constructor( private router: Router, private fb: FormBuilder, private service:RegistroService) {
+  constructor( private router: Router, private fb: FormBuilder, private service:RegistroService, private tipoContratoService:TipoContratoService) {
 
     this.registroForm1 = this.fb.group({
       name1: ['', Validators.required],
@@ -48,12 +50,38 @@ export class RegistroComponent {
       correo: ['', [Validators.required, Validators.email]],
       edad: ['', Validators.required],
       fecha_vinculacion: ['', Validators.required],
-      nombre_titulo: ['', Validators.required],
+      titulos: this.fb.array([]),
       grado: ['', Validators.required],
       nombre_grado_ocp: ['', Validators.required],
       nombre_contrato: ['', Validators.required],
       hora_contrato: ['', [Validators.required, Validators.min(1)]]
     });
+  }
+
+  ngOnInit() {
+    this.loadContratos();
+  }
+
+  loadContratos() {
+    this.tipoContratoService.getContrato().subscribe(data => {
+      this.contratos = data;
+    });
+  }
+
+  get titulos() {
+    return this.registroForm2.get('titulos') as FormArray;
+  }
+
+  addTitulo() {
+    const tituloForm = this.fb.group({
+      nombre_titulo: ['', Validators.required],
+      grado: ['', Validators.required]
+    });
+    this.titulos.push(tituloForm);
+  }
+
+  removeTitulo(index: number) {
+    this.titulos.removeAt(index);
   }
 
   onSubmit1(): void {
@@ -93,5 +121,13 @@ export class RegistroComponent {
     this.router.navigate(['./login']);
     }
 
+  }
+
+  onContratoChange(event: any) {
+    const selectedContrato = event.target.value;
+    this.isTiempoParcial = selectedContrato === 'Tiempo Parcial';
+    if (!this.isTiempoParcial) {
+      this.registroForm2.get('hora_contrato')?.reset();
+    }
   }
 }

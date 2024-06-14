@@ -1,16 +1,16 @@
 <div class="container">
-  <h1> TITULO PROVICIONAL</h1>
+  <h1>ADMINISTRACIÓN DE CREACIÓN</h1>
   <div class="contenedorBoton">
-  <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
-    <mat-form-field appearance="outline">
-      <mat-label>Cédula</mat-label>
-      <input matInput formControlName="cedula" />
-    </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" >Buscar
-      <mat-icon>search</mat-icon>
-    </button>
-  </form>
-</div>
+    <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
+      <mat-form-field appearance="outline">
+        <mat-label>Cédula</mat-label>
+        <input matInput formControlName="cedula" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit">
+        Buscar <mat-icon>search</mat-icon>
+      </button>
+    </form>
+  </div>
   <mat-divider></mat-divider>
   <form [formGroup]="personaForm">
     <mat-form-field appearance="outline">
@@ -68,16 +68,19 @@
     </mat-form-field>
     <mat-divider></mat-divider>
     <div>
-    <mat-form-field appearance="outline">
-      <mat-select placeholder="Rol" formControlName="rol">
-        <mat-option *ngFor="let rol of roles" [value]="rol.id_rol">{{rol.nombre_rol}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-select placeholder="Carrera" formControlName="carrera">
-        <mat-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{ carrera.nombre_carrera }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Rol" formControlName="rol" (selectionChange)="onRolChange($event)">
+          <mat-option *ngFor="let rol of roles" [value]="rol.id_rol">{{rol.nombre_rol}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Carrera" formControlName="carrera">
+          <mat-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{ carrera.nombre_carrera }}</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
+    <button mat-raised-button color="primary" (click)="guardarUsuario()">Guardar
+      <mat-icon>save</mat-icon>
+    </button>
   </form>
 </div>

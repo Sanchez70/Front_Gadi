@@ -35,7 +35,7 @@ export class SidebarDocenteComponent {
         Swal.fire(`Hasta pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
         this.authService.logout();
-        this.authService.tiporol='';
+        this.authService.tiporol = '';
         this.authService.clearLocalStorage();
       }
     });
@@ -43,10 +43,14 @@ export class SidebarDocenteComponent {
 
   navbar(): void {
     if (this.explan === 'Abrir') {
-      this.explan = 'Cerrar';
+      this.explan = 'Cerrar'
+      this.authService.navbar();
+      this.toggleSidenav();
     } else if (this.explan === 'Cerrar') {
       this.explan = 'Abrir';
+      this.authService.navbar();
+      this.toggleSidenav();
     }
-    this.toggleSidenav();
+  
   }
 }

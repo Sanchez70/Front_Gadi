@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../auth.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrl: './main.component.css'
+  selector: 'app-main-admin',
+  templateUrl: './main-admin.component.html',
+  styleUrl: './main-admin.component.css'
 })
-export class MainComponent implements OnInit{ 
+export class MainAdminComponent {
   currentExplan: string='';
 constructor(private authService:AuthService){
 
@@ -18,5 +17,4 @@ constructor(private authService:AuthService){
      
     });
   }
-
 }

@@ -45,13 +45,13 @@ export class LoginComponent {
             console.log(this.authService.id_carrera)
 
           } else {
-            Swal.fire('Usuario o contraseña errornea', 'Intente nuevamente', 'error');
+            Swal.fire('Usuario o contraseña erronea', 'Intente nuevamente', 'error');
 
           }
         }
 
       }, (error) => {
-        Swal.fire('Usuario o contraseña errornea', 'Intente nuevamente', 'error');
+        Swal.fire('Campos Vacios', 'Intente nuevamente', 'error');
       });
 
   }
@@ -119,9 +119,14 @@ export class LoginComponent {
           this.authService.tiporol = rolNombre;
           this.router.navigate(['/mainDocente']);
           this.authService.login();
+        } else {
+          if (rolNombre == 'admin') {
+            this.authService.tiporol = rolNombre;
+            this.router.navigate(['/main-admin']);
+            this.authService.login();
+          }
         }
       }
     }
   }
-
 }

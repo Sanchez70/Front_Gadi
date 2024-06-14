@@ -1,15 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { AuthService } from '../auth.service';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  selector: 'app-sidebar-admin',
+  templateUrl: './sidebar-admin.component.html',
+  styleUrl: './sidebar-admin.component.css'
 })
-export class SidebarComponent {
+export class SidebarAdminComponent {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   mostrarDocente: boolean = false;
   isExpanded = true;
@@ -35,7 +35,7 @@ export class SidebarComponent {
         Swal.fire(`Hasta pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
         this.authService.logout();
-        this.authService.tiporol='';
+        this.authService.tiporol = '';
         this.authService.clearLocalStorage();
       }
     });
@@ -51,6 +51,6 @@ export class SidebarComponent {
       this.authService.navbar();
       this.toggleSidenav();
     }
-  
+
   }
 }

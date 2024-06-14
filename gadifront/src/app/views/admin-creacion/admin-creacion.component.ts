@@ -26,6 +26,10 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { CommonModule } from '@angular/common';
 import { forkJoin, tap } from 'rxjs';
 import { Persona } from '../../Services/docenteService/persona';
+import { CarreraService } from '../../Services/carreraService/carrera.service';
+import { AuthService } from '../../auth.service';
+import { UsuarioRol } from '../usuario-rol/UsuarioRol';
+import { Usuario } from '../usuario/usuario'; 
 
 @Component({
   selector: 'app-admin-creacion',
@@ -55,13 +59,15 @@ export class AdminCreacionComponent implements OnInit {
   personaForm: FormGroup;
   roles: Rol[] = [];
   carreras: Carrera[] = [];
+  usuario: Usuario | null = null;
   panelOpenState = false;
 
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
     private snackBar: MatSnackBar,
-    private RolService: RolService,
+    private rolService: RolService,
+    private carreraService: CarreraService
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -82,7 +88,7 @@ export class AdminCreacionComponent implements OnInit {
       grado_ocupacional: [{ value: '', disabled: true }],
       nombre_usuario: [{ value: '', disabled: true }],
       rol: ['', Validators.required],
-      carrera: ['', Validators.required],
+      carrera: [{ value: '', disabled: true }],
     });
   }
 
@@ -102,6 +108,7 @@ export class AdminCreacionComponent implements OnInit {
             // Obtener el usuario por el id de persona
             this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
               if (usuario) {
+                this.usuario = usuario;
                 this.personaForm.patchValue({ nombre_usuario: usuario.usuario });
               }
 
@@ -145,15 +152,56 @@ export class AdminCreacionComponent implements OnInit {
 
   cargarRolesYCarreras() {
     // Cargar roles
-    this.RolService.getRoles().subscribe((rol) => {
-      this.roles = rol;
-
+    this.rolService.getRoles().subscribe((roles) => {
+      this.roles = roles;
+      this.personaForm.get('rol')?.enable();
     });
 
     // Cargar carreras
-    this.personaService.getCarreras().subscribe((carrera) => {
-      this.carreras = carrera;
-
+    this.carreraService.getCarrera().subscribe((carreras) => {
+      this.carreras = carreras;
     });
+  }
+
+  onRolChange(event: any) {
+    const selectedRol = this.roles.find(rol => rol.id_rol === event.value);
+    if (selectedRol && selectedRol.nombre_rol === 'Director') {
+      this.personaForm.get('carrera')?.enable();
+    } else {
+      this.personaForm.get('carrera')?.disable();
+    }
+  }
+
+  guardarUsuario() {
+    if (this.personaForm.valid) {
+      const rolId = this.personaForm.get('rol')?.value;
+      const carreraId = this.personaForm.get('carrera')?.value;
+      const usuarioId = this.usuario?.id_usuario;
+
+      if (usuarioId) {
+        // Crear objeto UsuarioRol para asignar rol al usuario
+        const usuarioRol: UsuarioRol = {
+          id_usuario_rol: 0, // El backend asignará el ID automáticamente
+          id_usuario: usuarioId,
+          id_rol: rolId
+        };
+
+        this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
+          this.snackBar.open('Rol asignado correctamente', 'X', {
+            duration: 3000,
+          });
+        });
+
+        // Si el rol es Director, asignar también la carrera al usuario
+        if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && carreraId) {
+          this.usuario!.carrera = { id_carrera: carreraId } as Carrera;
+          this.personaService.updateUsuario(this.usuario!).subscribe(() => {
+            this.snackBar.open('Carrera asignada correctamente', 'X', {
+              duration: 3000,
+            });
+          });
+        }
+      }
+    }
   }
 }
