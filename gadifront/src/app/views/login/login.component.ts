@@ -119,9 +119,14 @@ export class LoginComponent {
           this.authService.tiporol = rolNombre;
           this.router.navigate(['/mainDocente']);
           this.authService.login();
+        } else {
+          if (rolNombre == 'admin') {
+            this.authService.tiporol = rolNombre;
+            this.router.navigate(['/main-admin']);
+            this.authService.login();
+          }
         }
       }
     }
   }
-
 }
