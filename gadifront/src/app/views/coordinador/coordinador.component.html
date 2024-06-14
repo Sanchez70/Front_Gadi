@@ -1,0 +1,25 @@
+<div class="container">
+  <input type="text" class="input" [(ngModel)]="cedula" (input)="onChangeBuscar($event)" placeholder="Buscar docente por cédula..." />
+  <button class="btn btn--primary btn--inside" (click)="buscarPersona()">Buscar</button>
+</div>
+<table>
+  <thead>
+    <tr>
+        <th colspan="8" style="text-align: center; background-color: rgb(33, 59, 173);">DATOS DOCENTE</th>
+    </tr>
+    <tr>
+      <th colspan="2">CÉDULA</th>
+      <th colspan="1">NOMBRE</th>
+      <th colspan="1">APELLIDO</th>
+      <th colspan="1">FECHA DE VINCULACIÓN</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr >
+      <td colspan="2">{{personaExtendida.cedula}}</td>
+      <td colspan="1">{{personaExtendida.nombre1}}</td>
+      <td colspan="1">{{personaExtendida.apellido1}}</td>
+      <td colspan="1">{{ personaExtendida.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
+    </tr>
+  </tbody>
+</table>

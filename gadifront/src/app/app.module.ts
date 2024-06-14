@@ -65,6 +65,7 @@ import { MainDocenteComponent } from './views/mainDocente/main-docente/main-doce
 import { MainCoordiandorComponent } from './views/mainCoordinador/main-coordiandor/main-coordiandor.component';
 import { SidebarAdminComponent } from './sidebar-admin/sidebar-admin.component';
 import { MainAdminComponent } from './views/main-admin/main-admin.component';
+import { CoordinadorComponent } from './views/coordinador/coordinador.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -86,7 +87,8 @@ const routes: Routes = [
   { path: 'admin_Creacion', component: AdminCreacionComponent},
   { path: 'distributivo', component: DistributivoComponent},
   { path: 'main-admin', component: MainAdminComponent},
-  { path: 'reportes', component: ReportesComponent}
+  { path: 'reportes', component: ReportesComponent},
+  { path: 'coordinador', component: CoordinadorComponent}
 
 ];
 @NgModule({
@@ -122,7 +124,8 @@ const routes: Routes = [
     MainDocenteComponent,
     MainCoordiandorComponent,
     SidebarAdminComponent,
-    MainAdminComponent
+    MainAdminComponent,
+    CoordinadorComponent
   ],
   
   imports: [
