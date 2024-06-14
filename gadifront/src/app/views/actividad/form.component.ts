@@ -52,7 +52,7 @@ export class FormComponent {
         (actividad) => {
           this.actividad.id_actividad = actividad.id_actividad;
           Swal.fire('Actividad guardada', `Actividad ${actividad.nombre_actividad} Guardado con éxito`, 'success');
-          //this.createdistributivo();
+          this.createdistributivo();
           this.router.navigate(['/distributivo'])
         },
         (error) => {
@@ -63,6 +63,7 @@ export class FormComponent {
   }
 
   //Metodo la guardar en el distributivo aun no usado///
+
   public createdistributivo(): void {
     this.distributivo.id_actividad = this.actividad.id_actividad
     this.distributivo.hora_no_docente = this.actividad.horas_no_docentes

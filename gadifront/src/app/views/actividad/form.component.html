@@ -1,30 +1,37 @@
-<form ngNativeValidate (ngSubmit)="create()">
+<br>
+<br>
+<br>
+<form ngNativeValidate (ngSubmit)="create()" aria-label="Formulario de Actividades">
   <div class="row">
     <div class="col-sm-6 form-group">
       <label for="nombre_actividad" class="label"><strong>Nombre Actividad</strong></label>
-      <input type="text" class="form-control" [(ngModel)]="actividad.nombre_actividad" name="nombre_actividad"
-             placeholder="Ingrese nombre de la actividad" required>
+      <input type="text" id="nombre_actividad" class="form-control" [(ngModel)]="actividad.nombre_actividad" name="nombre_actividad"
+             placeholder="Ingrese nombre de la actividad" required aria-required="true" aria-describedby="nombreHelp">
+      <small id="nombreHelp" class="form-text text-muted">Por favor, ingrese el nombre de la actividad.</small>
     </div>
 
     <div class="col-sm-6 form-group">
       <label for="descripcion_actividad" class="label"><strong>Descripción de la Actividad</strong></label>
-      <input type="text" class="form-control" [(ngModel)]="actividad.descripcion_actividad" name="descripcion_actividad"
-             placeholder="Ingrese descripción de la actividad" required>
+      <input type="text" id="descripcion_actividad" class="form-control" [(ngModel)]="actividad.descripcion_actividad" name="descripcion_actividad"
+             placeholder="Ingrese descripción de la actividad" required aria-required="true" aria-describedby="descripcionHelp">
+      <small id="descripcionHelp" class="form-text text-muted">Por favor, ingrese una descripción detallada de la actividad.</small>
     </div>
 
     <div class="col-sm-6 form-group">
       <label for="horas_no_docentes" class="label"><strong>Horas Docente</strong></label>
-      <input type="number" class="form-control" [(ngModel)]="actividad.horas_no_docentes" name="horas_no_docentes"
-             placeholder="Ingrese las horas no docentes" required>
+      <input type="number" id="horas_no_docentes" class="form-control" [(ngModel)]="actividad.horas_no_docentes" name="horas_no_docentes"
+             placeholder="Ingrese las horas no docentes" required aria-required="true" aria-describedby="horasHelp">
+      <small id="horasHelp" class="form-text text-muted">Por favor, ingrese las horas no docentes correspondientes.</small>
     </div>
 
     <div class="col-sm-6 form-group">
       <label for="id_tipo_actividad" class="label"><strong>Tipo</strong></label>
-      <select id="form4Example2" class="form-control" [(ngModel)]="tipo.id_tipo_actividad" name="id_tipo_actividad" required>
+      <select id="id_tipo_actividad" class="form-control" [(ngModel)]="tipo.id_tipo_actividad" name="id_tipo_actividad" required aria-required="true" aria-describedby="tipoHelp">
         <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">
           {{ tipo.nom_tip_actividad }}
         </option>
       </select>
+      <small id="tipoHelp" class="form-text text-muted">Por favor, seleccione el tipo de actividad.</small>
     </div>
 
     <div class="col-sm-12 form-group">

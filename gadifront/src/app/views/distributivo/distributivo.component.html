@@ -1,10 +1,38 @@
 <div class="container">
   <h1 class="h1">GENERACIÓN DE DISTRIBUTIVOS</h1>
+  <div class="combos-container">
+    <div class="input-group mb-3">
+      <div class="combo-container">
+        <label for="periodo" class="label_form font-weight-bold">Periodo</label>
+        <div class="custom-select">
+          <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
+            name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
+            formControlName="periodoSelec">
+            <option value=0 disabled selected>Seleccione una opción</option>
+            <option *ngFor="let periodo of periodos" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="input-group mb-3">
+      <div class="combo-container">
+        <label for="jornada" class="label_form font-weight-bold">Jornada</label>
+        <div class="custom-select">
+          <select class="form-control" placeholder="Seleccione la Jornada" (ngModel)="jornadaSeleccionada"
+            name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event)"
+            formControlName="carreraSelec">
+            <option value=0 disabled selected>Seleccione una opción</option>
+            <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
   <section class="example-container mat-elevation-z8" tabindex="0">
     <div class="contenedorTitulo">
-    <button mat-raised-button color="primary" routerLink="/persona">Ingresar</button>
-    <h2>Datos Docente</h2>
-  </div>
+      <button mat-raised-button color="primary" routerLink="/persona">Ingresar</button>
+      <h2>Datos Docente</h2>
+    </div>
     <table mat-table [dataSource]="dataSource" matSort>
       <ng-container matColumnDef="cedula">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
@@ -41,8 +69,8 @@
 
   <section class="example-container mat-elevation-z8" tabindex="0">
     <div class="contenedorTitulo">
-    <button mat-raised-button color="primary" routerLink="/asignatura">Ingresar</button>
-    <h2>Asignatura</h2>
+      <button mat-raised-button color="primary" routerLink="/asignatura">Ingresar</button>
+      <h2>Asignatura</h2>
     </div>
     <table mat-table [dataSource]="dataSource2" matSort>
       <ng-container matColumnDef="nombre_asignatura">
@@ -68,9 +96,9 @@
 
   <section class="example-container mat-elevation-z8" tabindex="0">
     <div class="contenedorTitulo">
-    <button mat-raised-button color="primary" routerLink="/actividad/form">Ingresar</button>
-    <h2>Horas no docente</h2>
-  </div>
+      <button mat-raised-button color="primary" routerLink="/actividad/form">Ingresar</button>
+      <h2>Horas no docente</h2>
+    </div>
     <table mat-table [dataSource]="dataSource3" matSort>
       <ng-container matColumnDef="id_actividad">
         <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Id Actividad</th>
@@ -96,6 +124,5 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
     </table>
   </section>
-
-  <button mat-raised-button color="primary" style="margin-left: 60px; margin-bottom: 5px;">Crear</button>
+  <button mat-raised-button color="primary" (click)="createdistributivo()">Crear</button>
 </div>

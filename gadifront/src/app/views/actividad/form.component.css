@@ -23,8 +23,15 @@ form {
   border-radius: 5px;
   border: 1px solid #ccd0d5;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
+  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+}
+
+/* Estilo del texto de ayuda */
+.form-text {
+  font-size: 12px;
+  color: #606770;
 }
 
 /* Estilo del botón de envío */
@@ -35,16 +42,15 @@ form {
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  width: 20%; /* Asegura que el botón ocupe todo el ancho de su contenedor */
+  width: 100%; /* Asegura que el botón ocupe todo el ancho de su contenedor */
   box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
-  margin: 0 auto; /* Centra el botón horizontalmente */
+  text-align: center; /* Centra el texto dentro del botón */
   display: block; /* Asegura que el botón sea un bloque para el centrado */
-
 }
 
 .btn-primary:hover {
   color: rgb(17, 16, 16);
-  background-color: #1877f2;
+  background-color: #145dbf;
 }
 
 /* Estilo de los grupos de formularios */
