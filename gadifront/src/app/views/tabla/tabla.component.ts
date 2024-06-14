@@ -11,7 +11,7 @@ import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional'; 
-import { forkJoin, switchMap, tap } from 'rxjs';
+import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 
 @Component({
@@ -57,21 +57,37 @@ export class TablaComponent implements OnInit {
           this.personaService.getPeriodoById(distributivo.id_periodo).pipe(
             tap(periodo => {
               this.periodos[persona.id_persona] = periodo;
+            }),
+            catchError(() => {
+              this.periodos[persona.id_persona] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
+              return of(null);
             })
           ),
           this.personaService.getGradoById(persona.id_grado_ocp).pipe(
             tap(grado => {
               this.grados[persona.id_persona] = grado;
+            }),
+            catchError(() => {
+              this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
+              return of(null);
             })
           ),
           this.personaService.getTituloById(persona.id_titulo_profesional).pipe(
             tap(titulo => {
               this.titulos[persona.id_persona] = titulo;
+            }),
+            catchError(() => {
+              this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
+              return of(null);
             })
           ),
           this.personaService.getContratoById(persona.id_tipo_contrato).pipe(
             tap(contrato => {
               this.contratos[persona.id_persona] = contrato;
+            }),
+            catchError(() => {
+              this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
+              return of(null);
             })
           )
         ]))

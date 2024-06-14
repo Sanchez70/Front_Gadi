@@ -31,6 +31,8 @@ import { AuthService } from '../../auth.service';
 import { UsuarioRol } from '../usuario-rol/UsuarioRol';
 import { Usuario } from '../../Services/loginService/usuario';
 import Swal from 'sweetalert2';
+import { PersonaListModalComponent } from '../persona/persona-list-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -63,7 +65,8 @@ const Toast = Swal.mixin({
     MatDividerModule,
     MatSelect,
     MatOptionModule,
-    CommonModule
+    CommonModule,
+    MatDividerModule
   ],
 })
 export class AdminCreacionComponent implements OnInit {
@@ -73,13 +76,15 @@ export class AdminCreacionComponent implements OnInit {
   carreras: Carrera[] = [];
   usuario: Usuario | null = null;
   panelOpenState = false;
+ 
   
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
     private snackBar: MatSnackBar,
     private rolService: RolService,
-    private carreraService: CarreraService
+    private carreraService: CarreraService,
+    private dialog: MatDialog
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -261,5 +266,12 @@ export class AdminCreacionComponent implements OnInit {
     this.roles = [];
     this.carreras = [];
     this.usuario = null;
+  }
+
+  openModal() {
+    this.dialog.open(PersonaListModalComponent, {
+      width: '80%',
+      height: '80%',
+    });
   }
 }

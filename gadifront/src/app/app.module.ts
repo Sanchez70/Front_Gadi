@@ -66,6 +66,7 @@ import { MainCoordiandorComponent } from './views/mainCoordinador/main-coordiand
 import { SidebarAdminComponent } from './sidebar-admin/sidebar-admin.component';
 import { MainAdminComponent } from './views/main-admin/main-admin.component';
 import { CoordinadorComponent } from './views/coordinador/coordinador.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -145,7 +146,8 @@ const routes: Routes = [
     MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatDialogModule,
   ],
   providers: [LoginService, provideAnimationsAsync(), 
     DocenteService, 
