@@ -9,13 +9,18 @@ import { GradoOcupacionalService } from '../../Services/grado/grado-ocupacional.
 import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
 import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
 import { Actividad } from '../../Services/actividadService/actividad';
+import { Distributivo } from '../../Services/distributivoService/distributivo';
+import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 import { ActividadService } from '../../Services/actividadService/actividad.service';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
+import { Periodo } from '../../Services/periodoService/periodo';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { Ciclo } from '../../Services/cicloService/ciclo';
 import { CicloService } from '../../Services/cicloService/ciclo.service';
+import { JornadaService } from '../../Services/jornadaService/jornada.service';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,6 +30,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButton } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import Swal from 'sweetalert2';
+import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaService/distributivo-asignatura';
+import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
+import { DistributivoActividad } from '../../Services/distributivoActividadService/distributivo_actividad';
+import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -66,6 +76,17 @@ export class DistributivoComponent implements OnInit {
   public ciclos: any[] = [];
   public carreras: any[] = [];
   public asignaturas: any[] = [];
+  public distributivo: Distributivo = new Distributivo();
+  public distributivoacti: DistributivoActividad = new DistributivoActividad()
+  public Distributivos: Distributivo[] = [];
+  public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
+  periodos: any[] = [];
+  periodoSeleccionado: number = 0;
+  paraleloSeleccionado: string = '';
+  jornadas: any[] = [];
+  jornadaSeleccionada: number = 0;
+  idPeriodo: number = 0;
+  idJornada: number = 0;
   horasTotales: number = 0;
   personas: PersonaExtendida[] = [];
   currentExplan: string = '';
@@ -76,6 +97,7 @@ export class DistributivoComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
+    private distributivoService: DistributivoService,
     private tipo_actividadService: tipo_actividadService,
     private actividadService: ActividadService,
     private docenteService: DocenteService,
@@ -85,8 +107,12 @@ export class DistributivoComponent implements OnInit {
     private grado_ocupacional: GradoOcupacionalService,
     private asignaturaSeleccionada: AsignaturaService,
     private cicloService: CicloService,
-    private carreraService: CarreraService
-  ) {}
+    private carreraService: CarreraService,
+    private periodoService: PeriodoService,
+    private jornadaService: JornadaService,
+    private distributivoAsignaturaService: DistributivoAsignaturaService,
+    private distributivoActividadService: DistributivoActividadService,
+  ) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -100,6 +126,8 @@ export class DistributivoComponent implements OnInit {
     this.cargarCarreras();
     this.cargarCiclos();
     this.buscarAsignaturas();
+    this.cargarComboPeriodos();
+    this.cargarComboJornada();
   }
 
   loadPersonaData(personaId: number): void {
@@ -130,8 +158,8 @@ export class DistributivoComponent implements OnInit {
   }
 
   cargarActividades(): void {
-    this.actividadService.getActividad().subscribe((Actividades) => {
-      this.Actividades = Actividades;
+    this.actividadService.getActividad().subscribe((actividades) => {
+      this.Actividades = actividades;
       this.dataSource3 = new MatTableDataSource(this.Actividades);
       this.dataSource3.paginator = this.paginator;
       this.dataSource3.sort = this.sort;
@@ -154,6 +182,30 @@ export class DistributivoComponent implements OnInit {
     this.carreraService.getCarrera().subscribe(data => {
       this.carreras = data;
     });
+  }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodos = data;
+    });
+  }
+
+  onPeriodoChange(event: any): void {
+    this.periodoSeleccionado = +event.target.value;
+    this.idPeriodo = this.periodoSeleccionado;
+    console.log('idPeriodo', this.idPeriodo)
+  }
+
+  cargarComboJornada(): void {
+    this.jornadaService.getJornada().subscribe(data => {
+      this.jornadas = data;
+    });
+  }
+
+  onJornadaChange(event: any): void {
+    this.jornadaSeleccionada = +event.target.value;
+    this.idJornada = this.jornadaSeleccionada;
+    console.log('id_jornada', this.idJornada);
   }
 
   obtenerTipoActividad(id_tipo_actividad: number): string {
@@ -192,4 +244,65 @@ export class DistributivoComponent implements OnInit {
   calcularHorasTotales(): void {
     this.horasTotales = this.asignaturas.reduce((sum, asignatura) => sum + asignatura.horas_semanales, 0);
   }
+
+
+  public createdistributivo(): void {
+    this.distributivo.id_persona = this.persona.id_persona;
+    this.distributivo.id_periodo = this.idPeriodo;
+    this.distributivoService.create(this.distributivo)
+      .subscribe(
+        (distributivo) => {
+          console.log("valor", distributivo);
+          Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo} Guardado con éxito`, 'success');
+          this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+          this.createdistributivoacti(distributivo.id_distributivo);
+        },
+        (error) => {
+          console.error('Error al guardar:', error);
+          Swal.fire('Error', 'Hubo un error al guardar', 'error');
+        }
+      );
+  }
+
+  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
+    this.authService.id_asignaturas.forEach(asignatura => {
+      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+        id_jornada: this.idJornada,
+        paralelo: this.paraleloSeleccionado,
+        id_distributivo: id_distributivo,
+        id_asignatura: asignatura.id_asignatura
+      };
+      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+        Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+        console.log('Asignatura Distributivo generado');       
+      }, error => {
+        Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+        console.log('Error al crear', error);
+      });
+    });
+  }
+
+
+  createdistributivoacti(id_distributivo: number): void {
+    this.Actividades.forEach(actividad => {
+      const distributivoacti2: DistributivoActividad = {
+        id_actividad: actividad.id_actividad,
+        hora_no_docente: actividad.horas_no_docentes,
+        id_distributivo: id_distributivo,
+        id_distributivo_actividad: 0
+      };
+      this.distributivoActividadService.create(distributivoacti2)
+        .subscribe(
+          (distributivo) => {
+            console.log("valorREVISAR", distributivo);
+            //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
+          },
+          (error) => {
+            console.error('Error al guardar la actividad:', error);
+            Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
+          }
+        );
+    });
+  }
+
 }
