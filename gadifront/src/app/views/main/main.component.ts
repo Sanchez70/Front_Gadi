@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
 })
 export class MainComponent implements OnInit{ 
   currentExplan: string='';
-constructor(private authService:AuthService, private router:Router){
+constructor(private authService:AuthService){
 
 }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
+     
     });
   }
-
 
 }
