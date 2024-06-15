@@ -1,45 +1,17 @@
-<h1 class="h1">ASIGNATURAS</h1>
 <div class="{{currentExplan}}">
-  <form class="formulario" ngNativeValidate style="width: 45%;">
+  <h1 class="h1">ASIGNATURAS</h1>
+  <form class="formulario" ngNativeValidate style="width: 45%;" [formGroup]="myForm">
 
     <div class="combos-container">
       <div class="input-group mb-3">
         <div class="combo-container">
-          <label for="jornada" class="label_form font-weight-bold">Jornada</label>
-          <div class="custom-select">
-            <select class="form-control" placeholder="Seleccione la Jornada" [(ngModel)]="carreraSeleccionada"
-              name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event)"
-              formControlName="carreraSelec">
-              <option value=0 disabled selected>Seleccione una opción</option>
-              <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="input-group mb-3">
-        <div class="combo-container">
           <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
           <div class="custom-select">
-            <select class="form-control" placeholder="Número de personas" (ngModel)="paraleloSeleccionado"
-              name="nPersona" aria-label="Número de personas" aria-describedby="basic-addon1"
+            <select class="form-control" placeholder="Paralelo" (ngModel)="paraleloSeleccionado"
+              name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
               (change)="onParaleloChange($event)" formControlName="numeroPer">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let paralelo of paralelos" [value]="paralelo">{{paralelo}}</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="combos-container">
-      <div class="input-group mb-3">
-        <div class="combo-container">
-          <label for="carreras" class="label_form font-weight-bold">Carreras</label>
-          <div class="custom-select">
-            <select class="form-control" placeholder="Seleccione la Carrera" [(ngModel)]="carreraSeleccionada"
-              name="carrera" aria-label="Carrera" aria-describedby="basic-addon1" (change)="onCarreraChange($event)"
-              formControlName="carreraSelec">
-              <option value=0 disabled selected>Seleccione una opción</option>
-              <option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{carrera.nombre_carrera}}</option>
             </select>
           </div>
         </div>
@@ -65,7 +37,7 @@
         <table class="table table-condensed table-bordered table-striped">
           <thead>
             <tr>
-              <th colspan="6" style="text-align: center;">Asignaturas</th>
+              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173); margin-top: 1cap;">Asignaturas</th>
             </tr>
             <tr>
               <th scope="col">Nombre</th>
@@ -80,7 +52,7 @@
               <td>{{asignatura.horas_semanales}}</td>
               <td>{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
               <td>
-                <div class="" routerLinkActive="active">
+                <div class="btnContenedor" routerLinkActive="active">
                   <button type="button" class="btnSeleccionar" (click)="escogerAsignatura(asignatura)"><i
                       class="bi bi-check-circle-fill"></i></button>
                 </div>
@@ -90,10 +62,10 @@
         </table>
       </div>
       <div class="table-container">
-        <table class="table table-condensed table-bordered table-striped" style="margin-top: 5cap;">
+        <table class="table table-condensed table-bordered table-striped" style="margin-top: 3cap;">
           <thead>
             <tr>
-              <th colspan="6" style="text-align: center;">Asignaturas Seleccionadas</th>
+              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">Asignaturas Seleccionadas</th>
             </tr>
             <tr>
               <th scope="col">Nombre</th>
@@ -108,8 +80,7 @@
               <td>{{asignaturas.horas_semanales}}</td>
               <td>
                 <div class="" routerLinkActive="active">
-                  <button type="button" class="btnEliminar" (click)="eliminarAsignatura(i)"><i
-                      class="bi bi-x-circle"></i></button>
+                  <button type="button" class="btnEliminar" (click)="eliminarAsignatura(i)"><i class="bi bi-trash3-fill"></i></button>
                 </div>
               </td>
             </tr>

@@ -37,20 +37,23 @@ table {
 }
 h2{
   position: relative;
-  margin-left: 38%;
+  align-items: center;
+  margin-left: 25cap;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
 }
 .combos-container{
   display: flex;
   align-items: center;
   margin-top: 30px;
-  margin-left: 10cap;
+  margin-left: 1cap;
 }
 
 .combo-container{
   flex: 1;
   margin-right: 180px;
   min-width: 400px;
-  margin-left: 10cap;
+  margin-left: 5cap;
 }
 
 .custom-select {
@@ -89,4 +92,19 @@ width: 12px;
 height: 12px;
 background-color: #000000;
 clip-path: polygon(8% 17%, 0% 25%, 50% 84%, 100% 25%, 92% 17%, 50% 65%);
+}
+
+.label_form{
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+.h1{
+  align-items: center;
+  margin-left: 15cap;
+  margin-top: 2cap;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
 }

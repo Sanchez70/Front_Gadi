@@ -40,7 +40,17 @@ interface PersonaExtendida extends Persona {
   nombre_titulo?: string;
   nombre_grado_ocp?: string;
 }
-
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-distributivo',
   templateUrl: './distributivo.component.html',
@@ -253,13 +263,26 @@ export class DistributivoComponent implements OnInit {
       .subscribe(
         (distributivo) => {
           console.log("valor", distributivo);
-          Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo} Guardado con éxito`, 'success');
           this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
           this.createdistributivoacti(distributivo.id_distributivo);
+          
+          this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
+          this.dataSource2 = new MatTableDataSource<Asignatura>([]);
+          this.dataSource3 = new MatTableDataSource<Actividad>([]);
+          Toast.fire({
+            icon: "success",
+            title: "Distributivo Generado con éxito",
+          });
+
+          
         },
         (error) => {
           console.error('Error al guardar:', error);
-          Swal.fire('Error', 'Hubo un error al guardar', 'error');
+          Toast.fire({
+            icon: "error",
+            title: "Hubo un error al guardar",
+            footer: "Por favor, verifique si ha completado todo lo necesario"
+          });
         }
       );
   }
@@ -273,10 +296,10 @@ export class DistributivoComponent implements OnInit {
         id_asignatura: asignatura.id_asignatura
       };
       this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-        Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+        //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
         console.log('Asignatura Distributivo generado');       
       }, error => {
-        Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+        //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
         console.log('Error al crear', error);
       });
     });
@@ -299,7 +322,11 @@ export class DistributivoComponent implements OnInit {
           },
           (error) => {
             console.error('Error al guardar la actividad:', error);
-            Swal.fire('Error', 'Hubo un error al guardar la actividad', 'error');
+            // Toast.fire({
+            //   icon: "error",
+            //   title: "Hubo un error al guardar la actividad",
+            //   footer: "Por favor, verifique"
+            // });
           }
         );
     });

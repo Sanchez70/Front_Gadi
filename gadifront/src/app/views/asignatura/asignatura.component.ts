@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
 import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaService/distributivo-asignatura';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
@@ -11,7 +12,18 @@ import { JornadaService } from '../../Services/jornadaService/jornada.service';
 import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth.service';
-
+import { Observable } from 'rxjs';
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-asignatura',
   templateUrl: './asignatura.component.html',
@@ -36,9 +48,11 @@ export class AsignaturaComponent implements OnInit {
   cicloSeleccionado:  number = 0;
   id_distributivo= 1;
   currentExplan: string='';
+  myForm: FormGroup = this.fb.group({});
+  
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, private authService: AuthService, private router: Router,
-    private activatedRoute: ActivatedRoute){
+    private activatedRoute: ActivatedRoute, private fb: FormBuilder){
 
   }
 
@@ -49,6 +63,12 @@ export class AsignaturaComponent implements OnInit {
     this.cargarComboCarreras();
     this.cargarComboCiclos();
     this.cargarComboJornada();
+    this.idCarrera = this.authService.id_carrera;
+    
+    this.myForm = this.fb.group({
+      paraleloSeleccionado: [null, Validators.required],
+      cicloSeleccionado: [null, Validators.required]
+    })
   }
 
   cargarComboCarreras(): void {
@@ -70,25 +90,30 @@ export class AsignaturaComponent implements OnInit {
     });
   }
 
-  cargarAsignaturas(): void{
-    this.asignaturaService.getAsignatura().subscribe(data =>{
-      this.asignaturas = data;
+  cargarAsignaturas(): Observable<void> {
+    return new Observable(observer => {
+        this.asignaturaService.getAsignatura().subscribe(data => {
+            this.asignaturas = data;
+            observer.next();
+            observer.complete();
+        });
     });
-  }
+}
 
 
-  onCarreraChange(event:any): void{
-    this.carreraSeleccionada = +event.target.value;
-    this.idCarrera = this.carreraSeleccionada;
-    console.log('id carrera',this.idCarrera)
-    this.filtrarAsignaturaCarrerabyCiclo();
-  }
+  // onCarreraChange(event:any): void{
+  //   this.carreraSeleccionada = +event.target.value;
+  //   this.idCarrera = this.carreraSeleccionada;
+  //   console.log('id carrera',this.idCarrera)
+  //   this.filtrarAsignaturaCarrerabyCiclo();
+  // }
 
   onCicloChange(event:any): void{
     this.cicloSeleccionado = +event.target.value;
     this.idCiclo = this.cicloSeleccionado;
     console.log('id ciclo',this.idCiclo)
     this.filtrarAsignaturaCarrerabyCiclo();
+    this.myForm.get('cicloSeleccionado')?.setValue(event.target.value);
   }
 
   onJornadaChange(event:any): void{
@@ -100,6 +125,7 @@ export class AsignaturaComponent implements OnInit {
   onParaleloChange(event:any): void{
     this.paraleloSeleccionado = event.target.value;
     console.log('paralelo',this.paraleloSeleccionado);
+    this.myForm.get('paraleloSeleccionado')?.setValue(event.target.value);
   }
 
   // createAsignaturaDistributivo(): void {
@@ -120,16 +146,16 @@ export class AsignaturaComponent implements OnInit {
   //     });
   //   });
   // }
-
   
   filtrarAsignaturaCarrerabyCiclo(): void{
-    this.cargarAsignaturas();
-    this.asignaturaFiltrada = this.asignaturas.filter(
-      (asignatura) => 
-        (this.carreraSeleccionada===null || asignatura.id_carrera === this.idCarrera) && 
-        (this.cicloSeleccionado===null || asignatura.id_ciclo === this.idCiclo)
-    );
-    console.log('asignatura filtrada por ciclo',this.asignaturaFiltrada)
+    this.cargarAsignaturas().subscribe(()=>{
+      this.asignaturaFiltrada = this.asignaturas.filter(
+        (asignatura) => 
+          (asignatura.id_carrera === this.idCarrera) && 
+          (this.cicloSeleccionado===null || asignatura.id_ciclo === this.idCiclo)
+      );
+      console.log('asignatura filtrada por ciclo',this.asignaturaFiltrada)
+    }); 
   }
 
   escogerAsignatura(asignatura:Asignatura): void{
@@ -140,28 +166,9 @@ export class AsignaturaComponent implements OnInit {
       this.asignaturasSeleccionadas.push(asignatura);
       this.calcularHorasTotales();
     }else{
-      Swal.fire({
-        title: "La asignatura se encuentra seleccionada",
-        position: "top-end",
-        showConfirmButton: false,
-        width: "500px",
+      Toast.fire({
         icon: "warning",
-        heightAuto: true,
-        timer: 1500,
-        showClass: {
-          popup: `
-            animate__animated
-            animate__fadeInUp
-            animate__faster
-          `
-        },
-        hideClass: {
-          popup: `
-            animate__animated
-            animate__fadeOutDown
-            animate__faster
-          `
-        }
+        title: "La asignatura se encuentra seleccionada",
       });
     }
   }
@@ -183,12 +190,20 @@ export class AsignaturaComponent implements OnInit {
   }
 
   enviarAsignaturas():void{
-    this.authService.clearLocalStorageAsignatura();
-    this.authService.id_asignaturas = this.asignaturasSeleccionadas;
-    this.authService.id_jornada = this.jornadaSeleccionada;
-    this.authService.paralelo = this.paraleloSeleccionado;
-    this.authService.saveUserToLocalStorage();
-    this.router.navigate(['./distributivo']);
+    if (this.myForm.valid){
+      this.authService.clearLocalStorageAsignatura();
+      this.authService.id_asignaturas = this.asignaturasSeleccionadas;
+      this.authService.id_jornada = this.jornadaSeleccionada;
+      this.authService.paralelo = this.paraleloSeleccionado;
+      this.authService.saveUserToLocalStorage();
+      this.router.navigate(['./distributivo']);
+    }else{
+      Toast.fire({
+        icon: "warning",
+        title: "Por favor, seleccione una opción",
+      });
+    }
+    
   }
 
 }
