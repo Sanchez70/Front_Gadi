@@ -9,35 +9,28 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { RegistroService } from '../../Services/registroService/registro.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-registro',
-  templateUrl: './form_registro.component.html', 
+  templateUrl: './form_registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent implements OnInit{
+export class RegistroComponent implements OnInit {
   public registroForm1: FormGroup;
   public registroForm2: FormGroup;
-  name1: string = "";
-  name2: string = "";
-  lastname1: string = "";
-  lastname2: string = "";
-  user: string = "";
-  password: string = "";
+  public edad: number = 0;
 
-  public persona:Persona = new Persona()
-  public titulo:Titulo_profesional = new Titulo_profesional()
+  public persona: Persona = new Persona();
+  public titulo: Titulo_profesional = new Titulo_profesional();
   public contratos: any[] = [];
-  public grado:Grado_ocupacional = new Grado_ocupacional()
+  public grado: Grado_ocupacional = new Grado_ocupacional();
 
   showFinalForm: boolean = false;
   public isTiempoParcial: boolean = false;
 
-  constructor( private router: Router, private fb: FormBuilder, private service:RegistroService, private tipoContratoService:TipoContratoService) {
-
+  constructor(private router: Router, private fb: FormBuilder, private service: RegistroService, private tipoContratoService: TipoContratoService) {
     this.registroForm1 = this.fb.group({
       name1: ['', Validators.required],
-      name2: ['', Validators.required],     
+      name2: ['', Validators.required],
       lastname1: ['', Validators.required],
       lastname2: ['', Validators.required],
       user: ['', Validators.required],
@@ -48,6 +41,7 @@ export class RegistroComponent implements OnInit{
       telefono: ['', Validators.required],
       direccion: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
+      fecha_nacimiento: ['', Validators.required],
       edad: ['', Validators.required],
       fecha_vinculacion: ['', Validators.required],
       titulos: this.fb.array([]),
@@ -85,7 +79,6 @@ export class RegistroComponent implements OnInit{
   }
 
   onSubmit1(): void {
-
     if (this.registroForm1.invalid) {
       this.registroForm1.markAllAsTouched();
       return;
@@ -106,21 +99,32 @@ export class RegistroComponent implements OnInit{
   }
 
   onSubmit2(): void {
-
-    if (this.registroForm2.invalid) {
+    if (this.registroForm2.invalid || this.edad < 18) {
       this.registroForm2.markAllAsTouched();
       return;
-    }else{
+    } else {
       this.service.createPer(this.persona)
-    .subscribe(persona => {
-        this.router.navigate(['/persona'])
-        Swal.fire(`Registro exitoso`, '', 'success')
-      }
-    )
-      
-    this.router.navigate(['./login']);
+        .subscribe(persona => {
+          this.router.navigate(['/persona']);
+          Swal.fire(`Registro exitoso`, '', 'success');
+        });
+
+      this.router.navigate(['./login']);
+    }
+  }
+
+  calcularEdad(event: any): void {
+    const fechaNacimiento = new Date(event.target.value);
+    const fechaActual = new Date();
+    let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+    const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
+
+    if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
+      edad--;
     }
 
+    this.edad = edad;
+    this.registroForm2.get('edad')?.setValue(edad);
   }
 
   onContratoChange(event: any) {

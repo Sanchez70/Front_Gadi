@@ -99,10 +99,13 @@
         </div>
 
         <div class="form-group">
-          <label for="edad">Edad</label>
-          <input class="form-control" type="text" id="edad" formControlName="edad" required />
-          <div *ngIf="registroForm2.get('edad')?.touched && registroForm2.get('edad')?.invalid" class="text-danger">
-            La edad es obligatoria.
+          <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+          <input class="form-control" type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento" (change)="calcularEdad($event)" required />
+          <div *ngIf="registroForm2.get('fecha_nacimiento')?.touched && registroForm2.get('fecha_nacimiento')?.invalid" class="text-danger">
+            La fecha de nacimiento es obligatoria.
+          </div>
+          <div *ngIf="edad < 18 && registroForm2.get('fecha_nacimiento')?.touched" class="text-danger">
+            Debes ser mayor de 18 años.
           </div>
         </div>
       </div>
