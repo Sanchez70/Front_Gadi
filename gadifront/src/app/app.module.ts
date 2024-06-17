@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ChangeDetectionStrategy } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -46,14 +46,22 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatOption } from '@angular/material/core';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelect } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
 
 import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
-import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component';
+import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component'; 
 import { ChangeDetectorRef } from '@angular/core';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 import { RegistroComponent } from './views/registro_usuario/registro.component';
@@ -67,6 +75,9 @@ import { SidebarAdminComponent } from './sidebar-admin/sidebar-admin.component';
 import { MainAdminComponent } from './views/main-admin/main-admin.component';
 import { CoordinadorComponent } from './views/coordinador/coordinador.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
+import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
+import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component'; 
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -89,7 +100,9 @@ const routes: Routes = [
   { path: 'distributivo', component: DistributivoComponent},
   { path: 'main-admin', component: MainAdminComponent},
   { path: 'reportes', component: ReportesComponent},
-  { path: 'coordinador', component: CoordinadorComponent}
+  { path: 'coordinador', component: CoordinadorComponent},
+ { path: 'carrera', component: CarreraComponent},
+
 
 ];
 @NgModule({
@@ -126,7 +139,12 @@ const routes: Routes = [
     MainCoordiandorComponent,
     SidebarAdminComponent,
     MainAdminComponent,
-    CoordinadorComponent
+    CoordinadorComponent,
+    CarreraModalComponent,
+    AdminCreacionComponent,
+    TablaComponent,
+    PersonaListModalComponent,
+    PersonaModalComponent
   ],
   
   imports: [
@@ -148,7 +166,15 @@ const routes: Routes = [
     MatButtonModule,
     MatInputModule,
     MatDialogModule,
+    MatOption,
+    MatOptionModule,
+    MatSelect,
+    MatDividerModule,
+    MatOption,
+    MatSnackBarModule,
+    MatDatepickerModule,
   ],
+  
   providers: [LoginService, provideAnimationsAsync(), 
     DocenteService, 
     AsignaturaService, 
@@ -158,7 +184,8 @@ const routes: Routes = [
     PeriodoService,
     ActividadService,
     tipo_actividadService,
-    DistributivoActividadService
+    DistributivoActividadService,
+    provideNativeDateAdapter(),
   ],
   bootstrap: [AppComponent]
 })

@@ -13,10 +13,6 @@ export class CarreraService {
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }
 
-  getCarrera():Observable<Carrera[]>{
-    return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`)
-  }
-
   // create(carrera: Carrera): Observable<Carrera> {
   //   return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
   // }
@@ -25,13 +21,23 @@ export class CarreraService {
   //   return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
   // }
 
+  getCarrera(): Observable<Carrera[]> {
+    return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
+  }
+
+  create(carrera: Carrera): Observable<Carrera> {
+    return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders });
+  }
+
   getCarreraById(id: number): Observable<Carrera> {
     return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
   }
 
-  create(carrera: Carrera): Observable<Carrera> {
-    return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
+  update(carrera: Carrera): Observable<Carrera> {
+    return this.http.put<Carrera>(`${this.urlEndPoint}/carrera/${carrera.id_carrera}`, carrera, { headers: this.httpHeaders });
   }
 
-  
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlEndPoint}/carrera/${id}`, { headers: this.httpHeaders });
+  }  
 }

@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+
+  th {
+    color: #fff;
+  }
+  .mat-icon-button {
+    margin: 0 5px;
+  }

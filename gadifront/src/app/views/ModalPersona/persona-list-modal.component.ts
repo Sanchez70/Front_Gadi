@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { TablaComponent } from '../tabla/tabla.component';
+import { PersonaModalComponent } from './persona-modal.component';
 
 @Component({
   selector: 'app-persona-list-modal',
   template: `
-    <h1 mat-dialog-title>Lista de Personas</h1>
+    <h1 mat-dialog-title></h1>
     <div mat-dialog-actions class="actions-container">
       <button mat-button (click)="close()" class="close-button">Cerrar</button>
     </div>
     <div mat-dialog-content>
-      <app-tabla></app-tabla>
+      <app-Modal-persona></app-Modal-persona>
     </div>
     
   `,
@@ -25,8 +25,6 @@ import { TablaComponent } from '../tabla/tabla.component';
       right: 0;
     }
   `],
-  standalone: true,
-  imports: [TablaComponent]
 })
 export class PersonaListModalComponent {
   constructor(public dialogRef: MatDialogRef<PersonaListModalComponent>) {}

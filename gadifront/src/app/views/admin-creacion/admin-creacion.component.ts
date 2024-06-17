@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonaService } from '../persona/persona.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatTableModule } from '@angular/material/table';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatOption } from '@angular/material/core';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSelect } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-import { ReactiveFormsModule } from '@angular/forms';
+// import { MatSnackBar } from '@angular/material/snack-bar';
+// import { MatSidenavModule } from '@angular/material/sidenav';
+// import { MatToolbarModule } from '@angular/material/toolbar';
+// import { MatIconModule } from '@angular/material/icon';
+// import { MatListModule } from '@angular/material/list';
+// import { MatTableModule } from '@angular/material/table';
+// import { MatInputModule } from '@angular/material/input';
+// import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatButtonModule } from '@angular/material/button';
+// import { MatSnackBarModule } from '@angular/material/snack-bar';
+// import { MatOption } from '@angular/material/core';
+// import { MatDividerModule } from '@angular/material/divider';
+// import { MatSelect } from '@angular/material/select';
+// import { MatOptionModule } from '@angular/material/core';
+// import { ReactiveFormsModule } from '@angular/forms';
 import { Rol } from '../rol/rol'; 
 import { RolService } from '../rol/rol.service';
 import { Carrera } from '../../Services/carreraService/carrera'; 
@@ -31,8 +31,10 @@ import { AuthService } from '../../auth.service';
 import { UsuarioRol } from '../usuario-rol/UsuarioRol';
 import { Usuario } from '../../Services/loginService/usuario';
 import Swal from 'sweetalert2';
-import { PersonaListModalComponent } from '../persona/persona-list-modal.component';
+import { PersonaListModalComponent } from '../ModalPersona/persona-list-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+// import { MatDialog } from '@angular/material/dialog';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -49,25 +51,25 @@ const Toast = Swal.mixin({
   selector: 'app-admin-creacion',
   templateUrl: './admin-creacion.component.html',
   styleUrls: ['./admin-creacion.component.css'],
-  standalone: true,
-  imports: [
-    MatSidenavModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatListModule,
-    MatTableModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    ReactiveFormsModule,
-    MatOption,
-    MatDividerModule,
-    MatSelect,
-    MatOptionModule,
-    CommonModule,
-    MatDividerModule
-  ],
+  // standalone: true,
+  // imports: [
+  //   MatSidenavModule,
+  //   MatToolbarModule,
+  //   MatIconModule,
+  //   MatListModule,
+  //   MatTableModule,
+  //   MatInputModule,
+  //   MatFormFieldModule,
+  //   MatButtonModule,
+  //   MatSnackBarModule,
+  //   ReactiveFormsModule,
+  //   MatOption,
+  //   MatDividerModule,
+  //   MatSelect,
+  //   MatOptionModule,
+  //   CommonModule,
+  //   MatDividerModule
+  // ],
 })
 export class AdminCreacionComponent implements OnInit {
   searchForm: FormGroup;

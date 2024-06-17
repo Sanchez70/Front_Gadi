@@ -10,14 +10,14 @@ table {
 }
 
 
-.container{
+.container {
   display: flex;
   flex-direction: column;
-  
+
 }
 
-th{
- color: #fff;
+th {
+  color: #fff;
 }
 
 h1 {

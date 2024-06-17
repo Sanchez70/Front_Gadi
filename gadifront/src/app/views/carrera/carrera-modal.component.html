@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{ data.id_carrera ? 'Editar' : 'Crear' }} Carrera</h1>
+<div mat-dialog-content>
+  <form [formGroup]="carreraForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre_carrera" />
+      <mat-error *ngIf="carreraForm.get('nombre_carrera')?.hasError('required')">Nombre es requerido</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Fecha de Inicio</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="fecha_inicio" />
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="carreraForm.get('fecha_inicio')?.hasError('required')">Fecha de inicio es requerida</mat-error>
+      </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Horas Semanales</mat-label>
+      <input matInput formControlName="horas_semanales" type="number" />
+      <mat-error *ngIf="carreraForm.get('horas_semanales')?.hasError('required')">Horas semanales son requeridas</mat-error>
+      <mat-error *ngIf="carreraForm.get('horas_semanales')?.hasError('min')">Horas semanales deben ser mayores a 0</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Código</mat-label>
+      <input matInput formControlName="codigo" />
+      <mat-error *ngIf="carreraForm.get('codigo')?.hasError('required')">Código es requerido</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-button (click)="onSave()">Guardar</button>
+</div>
