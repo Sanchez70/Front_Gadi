@@ -6,6 +6,7 @@ import { ActividadService } from '../../Services/actividadService/actividad.serv
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
+import { AuthService } from '../../auth.service';
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -14,6 +15,7 @@ import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_activi
 export class ActividadComponent implements OnInit {
   Actividades: Actividad[] = [];
   public Tipos: tipo_actividad[] = [];
+  currentExplan: string='';
 
   constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService) { }
 

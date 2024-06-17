@@ -9,24 +9,25 @@
     <button class="btn-search">Buscar</button>
   </div>
 </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Id Actividad</th>
-      <th>Nombre Actividad</th>
-      <th>Descripcion</th>
-      <th>Horas no Docentes</th>
-      <th>Tipo Actividad</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let actividad of Actividades; let i = index">
-      <td>{{ actividad.id_actividad }}</td>
-      <td>{{ actividad.nombre_actividad }}</td>
-      <td>{{ actividad.descripcion_actividad }}</td>
-      <td>{{ actividad.horas_no_docentes }}</td>
-      <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
-    </tr>
-  </tbody>  
-</table>
+<section class="example-container mat-elevation-z8" tabindex="0">
+  <table>
+    <thead>
+      <tr>
+        <th>Id Actividad</th>
+        <th>Nombre Actividad</th>
+        <th>Descripcion</th>
+        <th>Horas no Docentes</th>
+        <th>Tipo Actividad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let actividad of Actividades; let i = index">
+        <td>{{ actividad.id_actividad }}</td>
+        <td>{{ actividad.nombre_actividad }}</td>
+        <td>{{ actividad.descripcion_actividad }}</td>
+        <td>{{ actividad.horas_no_docentes }}</td>
+        <td>{{ obtenerTipoActividad(actividad.id_tipo_actividad) }} </td>
+      </tr>
+    </tbody>  
+  </table>
+</section>

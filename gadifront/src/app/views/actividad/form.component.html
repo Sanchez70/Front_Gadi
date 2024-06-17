@@ -1,41 +1,92 @@
-<br>
-<br>
-<br>
-<form ngNativeValidate (ngSubmit)="create()" aria-label="Formulario de Actividades">
-  <div class="row">
-    <div class="col-sm-6 form-group">
-      <label for="nombre_actividad" class="label"><strong>Nombre Actividad</strong></label>
-      <input type="text" id="nombre_actividad" class="form-control" [(ngModel)]="actividad.nombre_actividad" name="nombre_actividad"
-             placeholder="Ingrese nombre de la actividad" required aria-required="true" aria-describedby="nombreHelp">
-      <small id="nombreHelp" class="form-text text-muted">Por favor, ingrese el nombre de la actividad.</small>
-    </div>
 
-    <div class="col-sm-6 form-group">
-      <label for="descripcion_actividad" class="label"><strong>Descripción de la Actividad</strong></label>
-      <input type="text" id="descripcion_actividad" class="form-control" [(ngModel)]="actividad.descripcion_actividad" name="descripcion_actividad"
-             placeholder="Ingrese descripción de la actividad" required aria-required="true" aria-describedby="descripcionHelp">
-      <small id="descripcionHelp" class="form-text text-muted">Por favor, ingrese una descripción detallada de la actividad.</small>
-    </div>
+  <div class="{{currentExplan}}">
+    <form ngNativeValidate aria-label="Formulario de Actividades" style="width: 45%;" [formGroup]="myForm">
+    <h1 class="h1">ACTIVIDADES</h1>
+      <div class="combos-container">
+        <div class="input-group mb-3">
+          <div class="combo-container">
+            <label for="paralelo" class="label_form font-weight-bold">Tipo de Actividad</label>
+            <div class="custom-select">
+              <select class="form-control" placeholder="Actividad" (ngModel)="tipoActividadSeleccionado"
+                name="actividad" aria-label="Actividad" aria-describedby="basic-addon1"
+                (change)="onTipoChange($event)" formControlName="numeroPer">
+                <option value=0 disabled selected>Seleccione una opción</option>
+                <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">{{tipo.nom_tip_actividad}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="dashed">
+      
+      <div class="tables-container">
+        <div class="table-container">
+          <table class="table table-condensed table-bordered table-striped">
+            <thead>
+              <tr>
+                <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173); margin-top: 1cap;">Actividades</th>
+              </tr>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Horas</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Seleccionar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let actividad of actividadesFiltrada">
+                <td>{{actividad.nombre_actividad}}</td>
+                <td>{{obtenerNombreTipo(actividad.id_tipo_actividad)}}</td>
+                <td>{{actividad.horas_no_docentes}}</td>
+                <td>{{actividad.descripcion_actividad}}</td>
+                <td>
+                  <div class="btnContenedor" routerLinkActive="active">
+                    <button type="button" class="btnSeleccionar" (click)="escogerActividad(actividad)"><i
+                        class="bi bi-check-circle-fill"></i></button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-    <div class="col-sm-6 form-group">
-      <label for="horas_no_docentes" class="label"><strong>Horas Docente</strong></label>
-      <input type="number" id="horas_no_docentes" class="form-control" [(ngModel)]="actividad.horas_no_docentes" name="horas_no_docentes"
-             placeholder="Ingrese las horas no docentes" required aria-required="true" aria-describedby="horasHelp">
-      <small id="horasHelp" class="form-text text-muted">Por favor, ingrese las horas no docentes correspondientes.</small>
-    </div>
-
-    <div class="col-sm-6 form-group">
-      <label for="id_tipo_actividad" class="label"><strong>Tipo</strong></label>
-      <select id="id_tipo_actividad" class="form-control" [(ngModel)]="tipo.id_tipo_actividad" name="id_tipo_actividad" required aria-required="true" aria-describedby="tipoHelp">
-        <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">
-          {{ tipo.nom_tip_actividad }}
-        </option>
-      </select>
-      <small id="tipoHelp" class="form-text text-muted">Por favor, seleccione el tipo de actividad.</small>
-    </div>
-
-    <div class="col-sm-12 form-group">
-      <button type="submit" class="btn-primary">Enviar</button>
-    </div>
+        </div>
+        <div class="table-container">
+          <table class="table table-condensed table-bordered table-striped" style="margin-top: 3cap;">
+            <thead>
+              <tr>
+                <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">Actividades Seleccionadas</th>
+              </tr>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th colspan="3">Horas No Docentes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let actividades of actividadesSeleccionadas; let i=index">
+                <td>{{actividades.nombre_actividad}}</td>
+                <td>{{obtenerNombreTipo(actividades.id_tipo_actividad)}}</td>
+                <td>{{actividades.horas_no_docentes}}</td>
+                <td>
+                  <div class="" routerLinkActive="active">
+                    <button type="button" class="btnEliminar" (click)="eliminarActividad(i)"><i class="bi bi-trash3-fill"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th colspan="3" style="text-align: left;">Horas totales:</th>
+                <td>{{horasTotales}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <div class="btnAcept">
+          <button type="submit" class="btnAceptar" (click)="enviarActividades()">Aceptar</button>
+        </div>
+      </div>
+    </form>
   </div>
-</form>
+
