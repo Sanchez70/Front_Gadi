@@ -291,7 +291,7 @@ export class DistributivoComponent implements OnInit {
     this.authService.id_asignaturas.forEach(asignatura => {
       const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
         id_jornada: this.idJornada,
-        paralelo: this.paraleloSeleccionado,
+        paralelo: this.authService.paralelo,
         id_distributivo: id_distributivo,
         id_asignatura: asignatura.id_asignatura
       };
