@@ -48,9 +48,10 @@
     padding: 1rem;
     background-color: #fff;
 }
+
 .main {
     position: relative;
- 
+
     align-items: center;
     justify-content: center;
     height: 80%;
@@ -65,13 +66,17 @@
     height: 100%;
     background: url('/assets/img/escudo.png') no-repeat center center;
     background-size: 750px 500px;
-    opacity: 0.3; 
-    z-index: -1; 
+    opacity: 0.3;
+    z-index: -1;
 }
 
-  .Abrir {
+.Abrir {
     padding: 0.3rem;
     margin-left: 22cap;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .Cerrar {

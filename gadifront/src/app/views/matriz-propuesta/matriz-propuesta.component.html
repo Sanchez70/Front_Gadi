@@ -1,75 +1,120 @@
-<div class="container">
-    <input type="text" class="input" [(ngModel)]="cedula" (input)="onChangeBuscar($event)" placeholder="Buscar docente por cédula..." />
-    <button class="btn btn--primary btn--inside" (click)="buscarPersona()">Buscar</button>
-</div>
-<table>
-  <thead>
-    <tr>
-        <th colspan="8" style="text-align: center; background-color: rgb(33, 59, 173);">DATOS DOCENTE</th>
-    </tr>
-    <tr>
-      <th colspan="2">CÉDULA</th>
-      <th colspan="1">NOMBRE</th>
-      <th colspan="1">APELLIDO</th>
-      <th colspan="1">TC</th>
-      <th colspan="1">TÍTULO PROFESIONAL</th>
-      <th colspan="1">GRADO OCUPACIONAL</th>
-      <th colspan="1">FECHA DE VINCULACIÓN</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr >
-      <td colspan="2">{{personaExtendida.cedula}}</td>
-      <td colspan="1">{{personaExtendida.nombre1}}</td>
-      <td colspan="1">{{personaExtendida.apellido1}}</td>
-      <td colspan="1">{{personaExtendida.nombre_contrato}}</td>
-      <td colspan="1">{{personaExtendida.nombre_titulo}}</td>
-      <td colspan="1">{{personaExtendida.nombre_grado_ocp}}</td>
-      <td colspan="1">{{ personaExtendida.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
-    </tr>
-  </tbody>
-</table>
-
-<table>
-    <thead>
-      <tr>
+<div class="{{currentExplan}}">
+  <div class="container-{{currentExplan}}"> 
+    <div class="container">
+      <h1>Lista</h1>
+      <mat-form-field appearance="outline">
+          <mat-label>Buscar...</mat-label>
+          <input matInput (input)="applyFilter($event)" />
+      </mat-form-field>
+      <section class="example-container mat-elevation-z8" tabindex="0">
+          <table mat-table [dataSource]="dataSource" matSort>
+  
+              <ng-container matColumnDef="cedula" sticky>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="nombre" sticky>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="apellido">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="telefono">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Teléfono</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.telefono }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="direccion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Dirección</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.direccion }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="correo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Correo</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.correo }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="edad">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Edad</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.edad }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="fecha_vinculacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de
+                      Vinculación</th>
+                  <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="contrato">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato</th>
+                  <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona].nombre_contrato || 'No asignado'
+                      }}</td>
+              </ng-container>
+  
+              <ng-container matColumnDef="titulo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
+                  <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}
+                  </td>
+              </ng-container>
+  
+              <ng-container matColumnDef="grado">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado</th>
+                  <td mat-cell *matCellDef="let persona">{{ grados[persona.id_persona].nombre_grado_ocp || 'No asignado'
+                      }}</td>
+              </ng-container>
+  
+  
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+      </section>
+  </div>
+    <table>
+      <thead>
+        <tr>
           <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
-      </tr>
-      <tr>
-        <th colspan="1" >ASIGNATURA</th>
-        <th colspan="2">NRO.HORAS SEMANALES</th>
-        <th colspan="1">PARALELO</th>
-        <th colspan="1">PERÍODO ACADÉMICO</th>
-        <th colspan="1">JORNADA</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr  *ngFor="let asignaturas of asignaturasFiltradas">
-        <td colspan="1">{{asignaturas.nombre_asignatura}}</td>
-        <td colspan="2.5">{{asignaturas.horas_semanales}}</td>
-        <td colspan="1">{{asignaturas.paralelo}}</td>
-        <td>{{periodoNombre}}</td>
-        <td colspan="1">{{obtenerNombreJornada(asignaturas.jornada)}}</td>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+        <tr>
+          <th colspan="1">ASIGNATURA</th>
+          <th colspan="1">NRO.HORAS SEMANALES</th>
+          <th colspan="1">PARALELO</th>
+          <th colspan="1">PERÍODO ACADÉMICO</th>
+          <th colspan="1">JORNADA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let asignaturas of asignaturasFiltradas">
+          <td colspan="1">{{asignaturas.nombre_asignatura}}</td>
+          <td colspan="1">{{asignaturas.horas_semanales}}</td>
+          <td colspan="1">{{asignaturas.paralelo}}</td>
+          <td colspan="1">{{periodoNombre}}</td>
+          <td colspan="1">{{obtenerNombreJornada(asignaturas.jornada)}}</td>
+        </tr>
+      </tbody>
+    </table>
 
-  <table>
-    <thead>
-      <tr>
+    <table>
+      <thead>
+        <tr>
           <th colspan="7" style="text-align: center; background-color: rgb(33, 59, 173);">ACTIVIDADES NO DOCENTES</th>
-      </tr>
-      <tr>
-        <th colspan="2">NO.HORAS GESTIÓN</th>
-        <th colspan="2">TOTAL HORAS SEMANALES</th>
-        <th colspan="3">ACTIVIDADES DESCRIPCIÓN</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let actividades of actividadesFiltradas">
-        <td colspan="3.5">{{actividades.horas_no_docentes}}</td>
-        <td></td>
-        <td colspan="3">{{actividades.descripcion_actividad}}</td>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+        <tr>
+          <th colspan="2">NO.HORAS GESTIÓN</th>
+          <th colspan="2">TOTAL HORAS SEMANALES</th>
+          <th colspan="3">ACTIVIDADES DESCRIPCIÓN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let actividades of actividadesFiltradas">
+          <td colspan="3.5">{{actividades.horas_no_docentes}}</td>
+          <td></td>
+          <td colspan="3">{{actividades.descripcion_actividad}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
