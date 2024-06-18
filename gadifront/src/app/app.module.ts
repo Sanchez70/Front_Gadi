@@ -79,6 +79,7 @@ import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
 import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
 import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
 import { DirectorReporteComponent } from './views/director-reporte/director-reporte.component'; 
+import { MatrizDistributivoComponent } from './views/matriz-distributivo/matriz-distributivo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -103,7 +104,8 @@ const routes: Routes = [
   { path: 'reportes', component: ReportesComponent},
   { path: 'coordinador', component: CoordinadorComponent},
   { path: 'director-reporte', component: DirectorReporteComponent},
- { path: 'carrera', component: CarreraComponent}
+  { path: 'carrera', component: CarreraComponent},
+  { path: 'matriz-distributivo', component: MatrizDistributivoComponent}
 ];
 @NgModule({
   declarations: [
@@ -145,7 +147,8 @@ const routes: Routes = [
     TablaComponent,
     PersonaListModalComponent,
     PersonaModalComponent,
-    DirectorReporteComponent
+    DirectorReporteComponent,
+    MatrizDistributivoComponent
   ],
   
   imports: [
