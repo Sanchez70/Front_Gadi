@@ -21,12 +21,18 @@ import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_activi
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
+import { catchError, forkJoin, of, switchMap, tap, throwIfEmpty } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
+import { Asignatura } from '../../Services/asignaturaService/asignatura';
+import { Actividad } from '../../Services/actividadService/actividad';
+import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaService/distributivo-asignatura';
+import { Periodo } from '../../Services/periodoService/periodo';
+import { Jornada } from '../../Services/jornadaService/jornada';
+import { Distributivo } from '../../Services/distributivoService/distributivo';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -39,20 +45,27 @@ interface PersonaExtendida extends Persona {
 })
 export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
+  displayedColumnsAsig: string[] = ['asignatura', 'nro_horas', 'periodo'];
+  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion'];
+  dataSourceAsig!: MatTableDataSource<Asignatura>;
+  dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-    @ViewChild(MatSort) sort!: MatSort;
-    grados: { [key: number]: GradoOcupacional } = {};
-    titulos: { [key: number]: TituloProfecional } = {};
-    contratos: { [key: number]: TipoContrato } = {};
+  @ViewChild(MatSort) sort!: MatSort;
+  grados: { [key: number]: GradoOcupacional } = {};
+  titulos: { [key: number]: TituloProfecional } = {};
+  contratos: { [key: number]: TipoContrato } = {};
+  periodosDis: { [key: number]: Periodo } = {};
+  jornada: { [key: number]: Jornada } = {};
+
   personas: Persona[] = [];
-  asignaturas: any[] = [];
-  actividades: any[] = [];
+  asignaturas: Asignatura[] = [];
+  actividades: Actividad[] = [];
   jornadas: any[] = [];
   periodos: any[] = [];
   ciclos: any[] = [];
   carreras: any[] = [];
-  distributivos: any[] = [];
+  distributivos: Distributivo[] = [];
   distributivoFiltrado: any[] = [];
   distributivoAsignaturas: any[] = [];
   distributivoAsignaturasFiltrado: any[] = [];
@@ -97,51 +110,32 @@ export class MatrizPropuestaComponent implements OnInit {
     });
     this.cargarCarreras();
     this.cargarCiclos();
-    this.cargarAsignaturas();
+    this.buscarDistributivo(this.authService.id_persona);
+
     this.cargarActividades();
     this.cargarJornadas();
-    this.cargarPeriodos();
+
     this.personaService.getPersonas().subscribe(data => {
-      this.personas = data;
-      this.loadAdditionalDataForPersonas();
-  });
-  }
+      const personaEncontrados = data as Persona[];
+      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
+      if (usuarioEncontrado) {
+        this.personaEncontrada = usuarioEncontrado;
+        this.personas.push(this.personaEncontrada);
 
-  buscarPersona(): void {
-    this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
-      this.personaEncontrada = data;
-      console.log('id_persona', this.personaEncontrada.id_persona)
-      this.loadPersonaData(this.personaEncontrada.id_persona);
-      this.buscarDistributivo(this.personaEncontrada.id_persona);
+      }
     });
 
   }
 
-  loadPersonaData(personaId: number): void {
-    this.personaService.getPersonaById(personaId).subscribe(data => {
-      this.personaExtendida = { ...data };
-      this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contratos => {
-        this.tipo_contrato = contratos;
-        this.personaExtendida.nombre_contrato = this.tipo_contrato.nombre_contrato;
 
-      });
-      this.tituloService.getTitulobyId(data.id_titulo_profesional).subscribe(titulos => {
-        this.titulo = titulos;
-        this.personaExtendida.nombre_titulo = this.titulo.nombre_titulo;
 
-      });
-      this.gradoService.getGradobyId(data.id_grado_ocp).subscribe(grados => {
-        this.gradoOcupacional = grados;
-        this.personaExtendida.nombre_grado_ocp = this.gradoOcupacional.nombre_grado_ocp;
 
-      });
-    });
-  }
 
 
   cargarAsignaturas(): void {
     this.asignaturaService.getAsignatura().subscribe(data => {
       this.asignaturas = data;
+
     });
   }
 
@@ -166,6 +160,7 @@ export class MatrizPropuestaComponent implements OnInit {
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
       this.Tipos = Tipos;
+
     });
   }
 
@@ -182,17 +177,16 @@ export class MatrizPropuestaComponent implements OnInit {
   }
 
   buscarDistributivo(idPersona: number): void {
+    idPersona = this.authService.id_persona;
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
         distributivo => distributivo.id_persona === idPersona);
       console.log('distributivo encontrado', this.distributivoFiltrado);
-      this.periodo = this.distributivoFiltrado[0].id_periodo;
-      console.log('periodo', this.periodo);
-
-      this.obtenerNombrePeriodo(this.periodo);
-      this.buscarAsignatura(this.distributivoFiltrado[0].id_distributivo);
-      this.buscarActividad(this.distributivoFiltrado[0].id_distributivo)
+      this.distributivoFiltrado.forEach(distributivo => {
+        this.buscarAsignatura(distributivo.id_distributivo);
+        this.buscarActividad(distributivo.id_distributivo);
+      });
     });
 
     ;
@@ -201,33 +195,21 @@ export class MatrizPropuestaComponent implements OnInit {
   buscarAsignatura(idDistributivo: number): void {
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(data => {
       this.distributivoAsignaturas = data;
-      this.distributivoAsignaturasFiltrado = this.distributivoAsignaturas.filter(
-        distributivoAsignatura => distributivoAsignatura.id_distributivo === idDistributivo);
-      console.log('distributivo asignatura', this.distributivoAsignaturasFiltrado);
-
-      //asignar paralelos a cada materia
-      const asignaturasParalelosMap = this.distributivoAsignaturasFiltrado.reduce((map, item) => {
-        map[item.id_asignatura] = item.paralelo;
-        return map;
-      }, {});
-
-      const asignaturasJornadaMap = this.distributivoAsignaturasFiltrado.reduce((map, item) => {
-        map[item.id_asignatura] = item.id_jornada;
-        return map;
-      }, {});
-
-      const idAsignaturas = this.distributivoAsignaturasFiltrado.map(distributivoAsignaturaEncontrados => distributivoAsignaturaEncontrados.id_asignatura);
-      console.log('id_asignaturas', idAsignaturas);
-
-      this.asignaturasFiltradas = this.asignaturas.filter(asignatura =>
-        idAsignaturas.includes(asignatura.id_asignatura)
-      ).map(asignatura => ({
-        ...asignatura,
-        paralelo: asignaturasParalelosMap[asignatura.id_asignatura],
-        jornada: asignaturasJornadaMap[asignatura.id_asignatura]
-      }));
-
-      console.log('detalle asignaturas cargadas', this.asignaturasFiltradas);
+      const asignaturasFiltradas = this.distributivoAsignaturas.filter(
+        materiaAs => materiaAs.id_distributivo === idDistributivo
+      );
+      const idAsignaturas = asignaturasFiltradas.map(asig => asig.id_asignatura);
+      this.asignaturaService.getAsignatura().subscribe(asig => {
+        const asigEncontrados = asig as Asignatura[];
+        const asignaturasCargadas = asigEncontrados.filter(materia =>
+          idAsignaturas.includes(materia.id_asignatura)
+        );
+        this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
+        
+        this.loadAdditionalDataForPersonas();
+      
+        console.log('Asignaturas cargadas:', this.asignaturas);
+      });
     });
   }
 
@@ -235,6 +217,7 @@ export class MatrizPropuestaComponent implements OnInit {
   buscarActividad(idDistributivo: number): void {
     this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
       this.distributivoActividades = data;
+
       this.distributivoActividadesFiltrado = this.distributivoActividades.filter(
         distributivoActividad =>
           distributivoActividad.id_distributivo === idDistributivo);
@@ -282,55 +265,74 @@ export class MatrizPropuestaComponent implements OnInit {
     this.cedula = event.target.value;
     console.log('cedula ingresada', this.cedula)
   }
+
+  cargarAdicional(): void {
+    const requests = this.personas.map(persona =>
+      this.personaService.getPeriodoById(persona.id_persona).pipe(
+        switchMap(() =>
+          forkJoin([
+            this.periodoService.getPeriodobyId(persona.id_persona ?? 0).pipe(
+              tap(periodo => {
+                this.periodosDis[persona.id_persona] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+                console.log('periodoPersona' + periodo.nombre_periodo);
+              }),
+              catchError(() => {
+                this.periodosDis[persona.id_persona] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
+                return of(null);
+              })
+            )
+          ]))
+      )
+    );
+    forkJoin(requests).subscribe(() => {
+      this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
+      this.dataSourceAsig.paginator = this.paginator;
+      this.dataSourceAsig.sort = this.sort;
+    });
+  }
+
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
-        this.personaService.getPeriodoById(persona.id_persona).pipe(
-            switchMap(() => forkJoin([
-                this.personaService.getGradoById(persona.id_grado_ocp ?? 0).pipe(
-                    tap(grado => {
-                        this.grados[persona.id_persona] = grado ?? { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
-                    }),
-                    catchError(() => {
-                        this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
-                        return of(null);
-                    })
-                ),
-                this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
-                    tap(titulo => {
-                        this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
-                    }),
-                    catchError(() => {
-                        this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
-                        return of(null);
-                    })
-                ),
-                this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
-                    tap(contrato => {
-                        this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
-                    }),
-                    catchError(() => {
-                        this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
-                        return of(null);
-                    })
-                )
-            ]))
+      forkJoin([
+        this.personaService.getGradoById(persona.id_grado_ocp ?? 0).pipe(
+          tap(grado => {
+            this.grados[persona.id_persona] = grado ?? { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
+          }),
+          catchError(() => {
+            this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
+            return of(null);
+          })
+        ),
+        this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
+          tap(titulo => {
+            this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
+          }),
+          catchError(() => {
+            this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
+            return of(null);
+          })
+        ),
+        this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
+          tap(contrato => {
+            this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
+          }),
+          catchError(() => {
+            this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
+            return of(null);
+          })
         )
+      ])
+
     );
 
     forkJoin(requests).subscribe(() => {
-        this.dataSource = new MatTableDataSource(this.personas);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+
+      this.dataSource = new MatTableDataSource(this.personas);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
-}
+  }
 
-applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
 
-    if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-    }
-}
 
 }

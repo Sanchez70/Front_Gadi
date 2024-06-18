@@ -11,6 +11,7 @@ table {
 
 
 .container {
+  margin-top: 5cap;
   display: flex;
   flex-direction: column;
 
@@ -26,4 +27,18 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 2%;
+}
+.Abrir {
+  padding: 0.3rem;
+  margin-left: 24cap;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+
+}
+
+.Cerrar {   
+  padding: 0.3rem;
+  margin-left: 0cap;
 }

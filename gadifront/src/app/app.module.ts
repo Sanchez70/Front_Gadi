@@ -77,7 +77,8 @@ import { CoordinadorComponent } from './views/coordinador/coordinador.component'
 import { MatDialogModule } from '@angular/material/dialog';
 import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
 import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
-import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component'; 
+import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
+import { DirectorReporteComponent } from './views/director-reporte/director-reporte.component'; 
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -101,9 +102,8 @@ const routes: Routes = [
   { path: 'main-admin', component: MainAdminComponent},
   { path: 'reportes', component: ReportesComponent},
   { path: 'coordinador', component: CoordinadorComponent},
- { path: 'carrera', component: CarreraComponent},
-
-
+  { path: 'director-reporte', component: DirectorReporteComponent},
+ { path: 'carrera', component: CarreraComponent}
 ];
 @NgModule({
   declarations: [
@@ -144,7 +144,8 @@ const routes: Routes = [
     AdminCreacionComponent,
     TablaComponent,
     PersonaListModalComponent,
-    PersonaModalComponent
+    PersonaModalComponent,
+    DirectorReporteComponent
   ],
   
   imports: [
