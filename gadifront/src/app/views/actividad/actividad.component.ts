@@ -7,6 +7,17 @@ import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { AuthService } from '../../auth.service';
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-actividad',
   templateUrl: './actividad.component.html',
@@ -14,26 +25,16 @@ import { AuthService } from '../../auth.service';
 })
 export class ActividadComponent implements OnInit {
   Actividades: Actividad[] = [];
+  public actividad: Actividad = new Actividad();
+  public tipo: tipo_actividad = new tipo_actividad();
   public Tipos: tipo_actividad[] = [];
   currentExplan: string='';
-
-  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService) { }
+  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.cargarActividad();
     this.cargarTipoActividad();
   }
 
-  cargarActividad(): void {
-    this.actividadService.getActividad().subscribe(
-      (Actividades) => {
-        this.Actividades = Actividades;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
   
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe(
@@ -45,32 +46,32 @@ export class ActividadComponent implements OnInit {
       }
     );
   }
+
+  public create(form:any): void {
+    this.actividad.id_tipo_actividad = this.tipo.id_tipo_actividad
+    this.actividadService.create(this.actividad)
+      .subscribe(
+        (actividad) => {
+          this.actividad.id_actividad = actividad.id_actividad;
+          Toast.fire({
+            icon: "success",
+            title: "Actividad Guardada Correctamente",
+          });
+          form.resetForm();
+        },
+        (error) => {
+          console.error('Error al guardar la actividad:', error);
+          Toast.fire({
+            icon: "warning",
+            title: "Error al guardar la actividad",
+          });
+        }
+      );
+  }
   obtenerTipoActividad(id_tipo_actividad: number): string {
     const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
     return tipoActividad ? tipoActividad.nom_tip_actividad : '';
   }
-  ///metodo para borra si se desea
-  // delete(actividad: Actividad): void {
-  //   Swal.fire({
-  //     title: '¿Estás seguro?',
-  //     text: `¿Quieres eliminar el Servicio ${actividad.nombre_actividad}?`,
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Sí, Eliminar',
-  //     cancelButtonText: 'Cancelar'
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       this.actividadService.deleteid(actividad.id_tipo_actividad).subscribe(
-  //         () => {
-  //           this.actividadService.getActividad().subscribe(
-  //             (actividades) => {
-  //               this.Actividades = actividades;
-  //               Swal.fire('Actividad eliminada', `Actividad ${actividad.nombre_actividad} eliminado con éxito`, 'success');
-  //             },
-  //           );
-  //         },
-  //       );
-  //     }
-  //   });
-  // }
+
+ 
 }

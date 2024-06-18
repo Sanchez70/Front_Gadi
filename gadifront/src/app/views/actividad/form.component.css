@@ -296,3 +296,36 @@ btnContenedor{
   flex-direction: column;
   width: fit-content;
 }
+
+.btnCrear {
+  background-color: #3383df; 
+  color: white; 
+  border: none; 
+  padding: 8px 12px; 
+  border-radius: 4px; 
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+
+  
+  display: flex;
+  align-items: center;
+}
+
+.btnCrear:hover {
+  background-color: #5cafc4; 
+}
+
+.btnCrear i {
+  margin-right: 4px; 
+  align-items: center;
+}
+
+.btnCrear:focus {
+  outline: none; 
+}
+
+.btnAceptCrear{
+  margin-left: 14cap;
+  margin-top: 40px;
+  margin-bottom: -30px;
+}

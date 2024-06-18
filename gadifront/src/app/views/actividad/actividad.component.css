@@ -1,83 +1,162 @@
-/* Estilos generales */
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Estilo general del formulario */
+form {
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 800px; /* Para limitar el ancho del formulario */
+  margin: 0 auto; /* Centrar el formulario */
 }
 
-/* Estilos para la cabecera */
-.table-header {
+/* Estilo de las etiquetas */
+.label {
+  color: #606770;
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  border-radius: 5px;
+  border: 1px solid #ccd0d5;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
+  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+}
+
+.form-text {
+  font-size: 12px;
+  color: #606770;
+}
+
+.btn-primary {
+  background-color: #1877f2;
+  border-color: #1877f2;
+  color: white;
+}
+
+.btn-primary:hover {
+  color: rgb(17, 16, 16);
+  background-color: #145dbf;
+}
+
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Estilo de las filas del formulario */
+.row {
   display: flex;
   justify-content: space-between;
+}
+
+/* Estilo de las columnas del formulario */
+.col-sm-6 {
+  flex: 0 0 48%;
+  max-width: 48%;
+  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+  margin-bottom: 15px; /* Espacio entre las filas en pantallas pequeñas */
+}
+
+.col-sm-6 .form-control,
+.col-sm-6 .btn-primary {
+  width: 100%; /* Asegura que el contenido de la columna ocupe todo el ancho */
+}
+
+.row .col-sm-12 {
+  flex: 0 0 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+/* Ajustes para el responsive design */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+.btnCrear {
+  background-color: #4285f4;
+  color: #fff;
+  padding: 1rem 2rem;
   align-items: center;
-  background-color: #ffffff;
-  padding: 10px;
-  margin-bottom: 20px;
-}
-
-.buttons button {
-  background-color: #007bff;
-  color: #fff;
+  text-align: center;
   border: none;
-  padding: 8px 12px;
   border-radius: 4px;
-  margin-right: 10px;
+  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  width: 150px;
+  margin-right: 70px;
+  margin-left: -60px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow, transform;
+  transition-property: box-shadow, transform;
 }
 
-.buttons button:hover {
-  background-color: #81abb1;
+.btnCrear:hover {
+  background-color: #5cafc4; 
 }
 
-.search input {
-  padding: 8px 12px;
-  border-radius: 4px;
-  border: 2px solid #111111;
-  margin-right: 10px;
+.btnCrear i {
+  margin-right: 4px; 
+ 
 }
 
-.search button {
-  background-color: #007bff;
+.btnCrear:focus {
+  outline: none; 
+}
+
+.btnRegresar {
+  background-color: #d81e1e;
   color: #fff;
+  padding: 1rem 2rem;
+  align-items: center;
+  text-align: center;
   border: none;
-  padding: 8px 12px;
   border-radius: 4px;
+  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  width: 150px;
+  margin-right: 70px;
+  margin-left: -60px;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow, transform;
+  transition-property: box-shadow, transform;
 }
 
-.search button:hover {
-  background-color: #0056b3;
+.btnRegresar:hover {
+  background-color: #ca5151; 
 }
 
-/* Estilos para el cuerpo de la tabla */
-thead th {
-  background-color: #333;
-  color: #fff;
-  padding: 12px;
-  text-align: left;
+.btnRegresar i {
+  margin-right: 4px; 
+ 
 }
 
-tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
+.btnRegresar:focus {
+  outline: none; 
 }
 
-tbody tr:hover {
-  background-color: #e6e6e6;
-}
-
-tbody td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-tbody td a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-tbody td a:hover {
-  text-decoration: underline;
+.btnContenedor{
+  display: flex;
+  align-items: center;
+  margin-left: 28cap;
+  margin-top: 20px;
 }

@@ -9,7 +9,7 @@
             <div class="custom-select">
               <select class="form-control" placeholder="Actividad" (ngModel)="tipoActividadSeleccionado"
                 name="actividad" aria-label="Actividad" aria-describedby="basic-addon1"
-                (change)="onTipoChange($event)" formControlName="numeroPer">
+                (change)="onTipoChange($event)" formControlName="actividad">
                 <option value=0 disabled selected>Seleccione una opción</option>
                 <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">{{tipo.nom_tip_actividad}}</option>
               </select>
@@ -18,7 +18,9 @@
         </div>
       </div>
       <hr class="dashed">
-      
+      <div class="btnAceptCrear">
+        <button routerLinkActive="active" routerLink="/actividad" class="btnCrear" >Crear Actividad</button>
+      </div>
       <div class="tables-container">
         <div class="table-container">
           <table class="table table-condensed table-bordered table-striped">
