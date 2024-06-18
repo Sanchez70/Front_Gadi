@@ -33,6 +33,7 @@ import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaSer
 import { Periodo } from '../../Services/periodoService/periodo';
 import { Jornada } from '../../Services/jornadaService/jornada';
 import { Distributivo } from '../../Services/distributivoService/distributivo';
+import { Carrera } from '../../Services/carreraService/carrera';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -45,8 +46,8 @@ interface PersonaExtendida extends Persona {
 })
 export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
-  displayedColumnsAsig: string[] = ['asignatura', 'nro_horas', 'periodo'];
-  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion'];
+  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
+  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion','tipo_actividad'];
   dataSourceAsig!: MatTableDataSource<Asignatura>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
@@ -57,14 +58,16 @@ export class MatrizPropuestaComponent implements OnInit {
   contratos: { [key: number]: TipoContrato } = {};
   periodosDis: { [key: number]: Periodo } = {};
   jornada: { [key: number]: Jornada } = {};
-
+  distributivoAsignatura: { [key: number]: DistributivoAsignatura } = {};
+  carreras: { [key: number]: Carrera } = {};
+  tipo_actividad: { [key: number]: tipo_actividad } = {};
   personas: Persona[] = [];
   asignaturas: Asignatura[] = [];
   actividades: Actividad[] = [];
   jornadas: any[] = [];
   periodos: any[] = [];
   ciclos: any[] = [];
-  carreras: any[] = [];
+
   distributivos: Distributivo[] = [];
   distributivoFiltrado: any[] = [];
   distributivoAsignaturas: any[] = [];
@@ -108,12 +111,6 @@ export class MatrizPropuestaComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-    this.cargarCarreras();
-    this.cargarCiclos();
-    this.buscarDistributivo(this.authService.id_persona);
-
-    this.cargarActividades();
-    this.cargarJornadas();
 
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
@@ -121,59 +118,10 @@ export class MatrizPropuestaComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
-
+        this.buscarDistributivo(this.authService.id_persona);
       }
     });
 
-  }
-
-
-
-
-
-
-  cargarAsignaturas(): void {
-    this.asignaturaService.getAsignatura().subscribe(data => {
-      this.asignaturas = data;
-
-    });
-  }
-
-  cargarActividades(): void {
-    this.actividadService.getActividad().subscribe(data => {
-      this.actividades = data;
-    });
-  }
-
-  cargarCiclos(): void {
-    this.cicloService.getCiclo().subscribe(data => {
-      this.ciclos = data;
-    });
-  }
-
-  cargarJornadas(): void {
-    this.jornadaService.getJornada().subscribe(data => {
-      this.jornadas = data;
-    });
-  }
-
-  cargarTipoActividad(): void {
-    this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
-      this.Tipos = Tipos;
-
-    });
-  }
-
-  cargarPeriodos(): void {
-    this.periodoService.getPeriodo().subscribe(data => {
-      this.periodos = data;
-    });
-  }
-
-  cargarCarreras(): void {
-    this.carreraService.getCarrera().subscribe(data => {
-      this.carreras = data;
-    });
   }
 
   buscarDistributivo(idPersona: number): void {
@@ -205,10 +153,9 @@ export class MatrizPropuestaComponent implements OnInit {
           idAsignaturas.includes(materia.id_asignatura)
         );
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        
+        this.cargarAdicional();
         this.loadAdditionalDataForPersonas();
-      
-        console.log('Asignaturas cargadas:', this.asignaturas);
+
       });
     });
   }
@@ -218,76 +165,96 @@ export class MatrizPropuestaComponent implements OnInit {
     this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
       this.distributivoActividades = data;
 
-      this.distributivoActividadesFiltrado = this.distributivoActividades.filter(
+      const actividadesFiltradas = this.distributivoActividades.filter(
         distributivoActividad =>
           distributivoActividad.id_distributivo === idDistributivo);
-      console.log('distributivo actividad', this.distributivoActividadesFiltrado)
 
-      const idActividades = this.distributivoActividadesFiltrado.map(distributivoActividadEncontrados => distributivoActividadEncontrados.id_actividad);
+      const idActividades = actividadesFiltradas.map(distributivoActividadEncontrados => distributivoActividadEncontrados.id_actividad);
       console.log('id_actividad', idActividades);
 
-      this.actividadesFiltradas = this.actividades.filter(actividad =>
-        idActividades.includes(actividad.id_actividad));
-      console.log('detalle cargadas', this.actividadesFiltradas);
+      this.actividadService.getActividad().subscribe(activ => {
+        const activEncontrados = activ as Actividad[];
+        const actividadCargadas = activEncontrados.filter(actividad =>
+          idActividades.includes(actividad.id_actividad)
+        );
+        this.actividades = this.actividades.concat(actividadCargadas);
+      this.cargarTipo();
+        console.log('Actividades cargadas:', this.actividades);
+      });
     });
 
   }
 
-
-
-  obtenerNombreCiclo(id_ciclo: number): void {
-    const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
-    return ciclo ? ciclo.nombre_ciclo : '';
-  }
-
-  obtenerNombreCarrera(id_carrera: number): string {
-    const carrera = this.carreras.find(carrera => carrera.id_carrera === id_carrera);
-    return carrera ? carrera.nombre_carrera : '';
-  }
-
-  obtenerNombreJornada(id_jornada: number): string {
-    const jornada = this.jornadas.find(jornada => jornada.id_jornada === id_jornada);
-    return jornada ? jornada.descrip_jornada : '';
-  }
-
-  obtenerNombrePeriodo(idPeriodo: number) {
-    const periodo = this.periodos.find(periodo => periodo.id_periodo === idPeriodo);
-    this.periodoNombre = periodo ? periodo.nombre_periodo : '';
-    console.log('nombre periodo', this.periodoNombre);
-  }
-
-  obtenerTipoActividad(id_tipo_actividad: number): string {
-    const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
-    return tipoActividad ? tipoActividad.nom_tip_actividad : '';
-  }
-
-  onChangeBuscar(event: any): void {
-    this.cedula = event.target.value;
-    console.log('cedula ingresada', this.cedula)
-  }
-
   cargarAdicional(): void {
-    const requests = this.personas.map(persona =>
-      this.personaService.getPeriodoById(persona.id_persona).pipe(
-        switchMap(() =>
-          forkJoin([
-            this.periodoService.getPeriodobyId(persona.id_persona ?? 0).pipe(
-              tap(periodo => {
-                this.periodosDis[persona.id_persona] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-                console.log('periodoPersona' + periodo.nombre_periodo);
-              }),
-              catchError(() => {
-                this.periodosDis[persona.id_persona] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-                return of(null);
-              })
-            )
-          ]))
-      )
+    const requests = this.asignaturas.map(asignatura =>
+
+      forkJoin([
+        this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
+          tap(periodo => {
+            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+            console.log('periodoPersona' + periodo.nombre_periodo);
+          }),
+          catchError(() => {
+            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
+            return of(null);
+          })
+        ),
+        this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
+          tap(jornada => {
+            this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
+          }),
+          catchError(() => {
+            this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
+            return of(null);
+          })
+        ),
+        this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
+          tap(distributivosAsig => {
+            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
+          }),
+          catchError(() => {
+            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
+            return of(null);
+          })
+        ),
+        this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
+          tap(carrera => {
+            this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
+          }),
+          catchError(() => {
+            this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
+            return of(null);
+          })
+        ),
+      ])
+
     );
     forkJoin(requests).subscribe(() => {
       this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
       this.dataSourceAsig.paginator = this.paginator;
       this.dataSourceAsig.sort = this.sort;
+    });
+  }
+
+  cargarTipo(): void {
+    const requests = this.actividades.map(actividad =>
+      forkJoin([
+        this.tipo_actividadService.gettipoActividadbyId(actividad.id_actividad ?? 0).pipe(
+          tap(tipo_actividades => {
+            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado'};
+          }),
+          catchError(() => {
+            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad:  'No asignado' } as unknown as tipo_actividad;
+            return of(null);
+          })
+        ),
+      ])
+
+    );
+    forkJoin(requests).subscribe(() => {
+      this.dataSourceAct = new MatTableDataSource(this.actividades);
+      this.dataSourceAct.paginator = this.paginator;
+      this.dataSourceAct.sort = this.sort;
     });
   }
 
@@ -332,7 +299,4 @@ export class MatrizPropuestaComponent implements OnInit {
       this.dataSource.sort = this.sort;
     });
   }
-
-
-
 }
