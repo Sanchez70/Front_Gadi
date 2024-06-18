@@ -25,3 +25,8 @@
   .mat-icon-button {
     margin: 0 5px;
   }
+
+  .table-container {
+    overflow: auto;
+    max-height: 70vh; /* Ajusta la altura máxima de la tabla según sea necesario */
+  }

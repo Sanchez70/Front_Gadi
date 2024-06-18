@@ -27,54 +27,7 @@ h1 {
   transform: translate(-50%, -50%);
   padding: 2%;
 }
-
-/* .example-container {
+.table-container {
   overflow: auto;
-} */
-
-
-/* .mat-elevation-z8 {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-} */
-
-/* mat-paginator {
-  margin-top: 2%;
-  margin-right: 60%;
-} */
-
-/* @media screen and (max-width: 600px) {
-  mat-form-field {
-    width: 100%;
-  }
-
-  table {
-    width: 100%;
-  }
-
-  .mat-header-row, .mat-row {
-    display: block;
-    margin-bottom: 2%;
-  }
-
-  .mat-cell, .mat-header-cell {
-    display: block;
-    position: sticky;
-    text-align: right;
-    font-size: 14px;
-    border-bottom: 1px solid #eee;
-    position: relative;
-    padding-left: 50%;
-    z-index: 1;
-  }
-
-  .mat-cell::before, .mat-header-cell::before {
-    content: attr(mat-header-cell) attr(mat-cell);
-    position: absolute;
-    left: 10px;
-    width: 45%;
-    padding-right: 10px;
-    white-space: nowrap;
-    font-weight: bold;
-    text-align: center;
-  }
-} */
+  max-height: 70vh;
+}
