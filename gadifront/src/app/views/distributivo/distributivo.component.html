@@ -1,128 +1,133 @@
-<div class="container">
-  <h1 class="h1">GENERACIÓN DE DISTRIBUTIVOS</h1>
-  <div class="combos-container">
-    <div class="input-group mb-3">
-      <div class="combo-container">
-        <label for="periodo" class="label_form font-weight-bold">Periodo</label>
-        <div class="custom-select">
-          <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
-            name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
-            formControlName="periodoSelec">
-            <option value=0 disabled selected>Seleccione una opción</option>
-            <option *ngFor="let periodo of periodos" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}</option>
-          </select>
+<div class="{{currentExplan}}">
+  <div class="container">
+    <h1 class="h1">GENERACIÓN DE DISTRIBUTIVOS</h1>
+    <div class="combos-container">
+      <div class="input-group mb-3">
+        <div class="combo-container">
+          <label for="periodo" class="label_form font-weight-bold">Periodo</label>
+          <div class="custom-select">
+            <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
+              name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
+              formControlName="periodoSelec">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let periodo of periodos" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3">
+        <div class="combo-container">
+          <label for="jornada" class="label_form font-weight-bold">Jornada</label>
+          <div class="custom-select">
+            <select class="form-control" placeholder="Seleccione la Jornada" (ngModel)="jornadaSeleccionada"
+              name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event)"
+              formControlName="carreraSelec">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
-    <div class="input-group mb-3">
-      <div class="combo-container">
-        <label for="jornada" class="label_form font-weight-bold">Jornada</label>
-        <div class="custom-select">
-          <select class="form-control" placeholder="Seleccione la Jornada" (ngModel)="jornadaSeleccionada"
-            name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event)"
-            formControlName="carreraSelec">
-            <option value=0 disabled selected>Seleccione una opción</option>
-            <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
-          </select>
-        </div>
+    <section class="example-container mat-elevation-z8" tabindex="0">
+      <div class="contenedorTitulo">
+        <button mat-raised-button color="primary" routerLink="/persona">Ingresar</button>
+        <h2 style="margin-left: 29cap;">Datos Docente</h2>
       </div>
-    </div>
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="cedula">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="apellido">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre_contrato">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Contrato</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre_contrato }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre_titulo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre_titulo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre_grado_ocp">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado Ocupacional</th>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre_grado_ocp }}</td>
+        </ng-container>
+        <ng-container matColumnDef="fecha_vinculacion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de Vinculación
+          </th>
+          <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </section>
+
+    <section class="example-container mat-elevation-z8" tabindex="0">
+      <div class="contenedorTitulo">
+        <button mat-raised-button color="primary" routerLink="/asignatura">Ingresar</button>
+        <h2 style="margin-left: 30cap;">Asignatura</h2>
+      </div>
+      <table mat-table [dataSource]="dataSource2" matSort>
+        <ng-container matColumnDef="nombre_asignatura">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Asignatura</th>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.nombre_asignatura }}</td>
+        </ng-container>
+        <ng-container matColumnDef="horas_semanales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas Semanales</th>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.horas_semanales }}</td>
+        </ng-container>
+        <ng-container matColumnDef="id_carrera">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCarrera(asignatura.id_carrera) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="id_ciclo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Ciclo</th>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCiclo(asignatura.id_ciclo) }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+      </table>
+    </section>
+
+    <section class="example-container mat-elevation-z8" tabindex="0">
+      <div class="contenedorTitulo">
+        <button mat-raised-button color="primary" routerLink="/actividad/form">Ingresar</button>
+        <h2 style="margin-left: 28cap;">Horas no docente</h2>
+      </div>
+      <table mat-table [dataSource]="dataSource3" matSort>
+        <ng-container matColumnDef="id_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Id Actividad</th>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.id_actividad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nombre_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Actividad</th>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.nombre_actividad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="descripcion_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Descripción</th>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.descripcion_actividad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="horas_no_docentes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas no Docentes</th>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.horas_no_docentes }}</td>
+        </ng-container>
+        <ng-container matColumnDef="id_tipo_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Actividad</th>
+          <td mat-cell *matCellDef="let actividad">{{ obtenerTipoActividad(actividad.id_tipo_actividad) }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
+      </table>
+    </section>
+    <button mat-raised-button color="primary" (click)="createdistributivo()">Crear</button>
   </div>
-  <section class="example-container mat-elevation-z8" tabindex="0">
-    <div class="contenedorTitulo">
-      <button mat-raised-button color="primary" routerLink="/persona">Ingresar</button>
-      <h2>Datos Docente</h2>
-    </div>
-    <table mat-table [dataSource]="dataSource" matSort>
-      <ng-container matColumnDef="cedula">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
-      </ng-container>
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }}</td>
-      </ng-container>
-      <ng-container matColumnDef="apellido">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }}</td>
-      </ng-container>
-      <ng-container matColumnDef="nombre_contrato">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Contrato</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.nombre_contrato }}</td>
-      </ng-container>
-      <ng-container matColumnDef="nombre_titulo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.nombre_titulo }}</td>
-      </ng-container>
-      <ng-container matColumnDef="nombre_grado_ocp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado Ocupacional</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.nombre_grado_ocp }}</td>
-      </ng-container>
-      <ng-container matColumnDef="fecha_vinculacion">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de Vinculación</th>
-        <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </section>
-
-  <section class="example-container mat-elevation-z8" tabindex="0">
-    <div class="contenedorTitulo">
-      <button mat-raised-button color="primary" routerLink="/asignatura">Ingresar</button>
-      <h2 style="margin-left: 26cap;">Asignatura</h2>
-    </div>
-    <table mat-table [dataSource]="dataSource2" matSort>
-      <ng-container matColumnDef="nombre_asignatura">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Asignatura</th>
-        <td mat-cell *matCellDef="let asignatura">{{ asignatura.nombre_asignatura }}</td>
-      </ng-container>
-      <ng-container matColumnDef="horas_semanales">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas Semanales</th>
-        <td mat-cell *matCellDef="let asignatura">{{ asignatura.horas_semanales }}</td>
-      </ng-container>
-      <ng-container matColumnDef="id_carrera">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
-        <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCarrera(asignatura.id_carrera) }}</td>
-      </ng-container>
-      <ng-container matColumnDef="id_ciclo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Ciclo</th>
-        <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCiclo(asignatura.id_ciclo) }}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
-    </table>
-  </section>
-
-  <section class="example-container mat-elevation-z8" tabindex="0">
-    <div class="contenedorTitulo">
-      <button mat-raised-button color="primary" routerLink="/actividad/form">Ingresar</button>
-      <h2>Horas no docente</h2>
-    </div>
-    <table mat-table [dataSource]="dataSource3" matSort>
-      <ng-container matColumnDef="id_actividad">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Id Actividad</th>
-        <td mat-cell *matCellDef="let actividad">{{ actividad.id_actividad }}</td>
-      </ng-container>
-      <ng-container matColumnDef="nombre_actividad">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Actividad</th>
-        <td mat-cell *matCellDef="let actividad">{{ actividad.nombre_actividad }}</td>
-      </ng-container>
-      <ng-container matColumnDef="descripcion_actividad">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Descripción</th>
-        <td mat-cell *matCellDef="let actividad">{{ actividad.descripcion_actividad }}</td>
-      </ng-container>
-      <ng-container matColumnDef="horas_no_docentes">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas no Docentes</th>
-        <td mat-cell *matCellDef="let actividad">{{ actividad.horas_no_docentes }}</td>
-      </ng-container>
-      <ng-container matColumnDef="id_tipo_actividad">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Actividad</th>
-        <td mat-cell *matCellDef="let actividad">{{ obtenerTipoActividad(actividad.id_tipo_actividad) }}</td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
-    </table>
-  </section>
-  <button mat-raised-button color="primary" (click)="createdistributivo()">Crear</button>
+  <br>
+  <br><br>
 </div>

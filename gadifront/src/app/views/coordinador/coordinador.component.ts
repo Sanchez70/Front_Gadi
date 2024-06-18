@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PersonaService } from '../persona/persona.service';
 import { TituloProfesionalService } from '../../Services/titulo/titulo-profesional.service';
@@ -8,6 +8,10 @@ import { Persona } from '../../Services/docenteService/persona';
 import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
 import { Tipo_contrato } from '../../Services/tipo_contrato/tipo_contrato';
 import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { AuthService } from '../../auth.service';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -19,22 +23,41 @@ interface PersonaExtendida extends Persona {
   styleUrl: './coordinador.component.css'
 })
 export class CoordinadorComponent implements OnInit {
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido','fecha_vinculacion','detalles'];
+  dataSource = new MatTableDataSource<Persona>();
+
+  personas : Persona[] = [];
   personaEncontrada : Persona = new Persona();
-  personaExtendida : PersonaExtendida = new Persona();
   gradoOcupacional : Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
   titulo: Titulo_profesional = new Titulo_profesional();
   cedula: string = '';
+  color = '#1E90FF';
+  currentExplan: string = '';
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private personaService: PersonaService,
     private tipo_contratoService: TipoContratoService, 
     private tituloService: TituloProfesionalService, 
     private gradoService: GradoOcupacionalService,
+    private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute){
   }
   ngOnInit(): void{
-    
+    this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+    });
+
+    this.personaService.getPersonas().subscribe(data =>{
+      this.personas = data;
+      this.dataSource.data = this.personas;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      console.log(this.dataSource);
+    })
   }
 
   buscarPersona(): void{
@@ -48,28 +71,25 @@ export class CoordinadorComponent implements OnInit {
 
   loadPersonaData(personaId: number): void {
     this.personaService.getPersonaById(personaId).subscribe(data => {
-      this.personaExtendida = { ...data };
-      this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contratos => {
-        this.tipo_contrato = contratos;
-        this.personaExtendida.nombre_contrato = this.tipo_contrato.nombre_contrato;
-        
-      });
-      this.tituloService.getTitulobyId(data.id_titulo_profesional).subscribe(titulos => {
-        this.titulo = titulos;
-        this.personaExtendida.nombre_titulo = this.titulo.nombre_titulo;
-       
-      });
-      this.gradoService.getGradobyId(data.id_grado_ocp).subscribe(grados => {
-        this.gradoOcupacional = grados;
-        this.personaExtendida.nombre_grado_ocp = this.gradoOcupacional.nombre_grado_ocp;
-        
-      });
+      this.personaEncontrada = data;
+      this.dataSource.data = [this.personaEncontrada];
     });
   }
+
+ 
 
   onChangeBuscar(event: any): void{
     this.cedula = event.target.value;
     console.log('cedula ingresada',this.cedula)
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+
+    if (this.dataSource.paginator) {
+        this.dataSource.paginator.firstPage();
+    }
+}
 }
 

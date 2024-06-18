@@ -12,6 +12,7 @@ export class AuthService {
   cedula: any;
   id_persona: any;
   id_asignaturas: any[] = [];
+  id_actividades: any[] = [];
   id_jornada: any;
   id_carrera:any;
   paralelo: any;
@@ -41,6 +42,7 @@ export class AuthService {
     this.id_jornada = user.id_jornada || null;
     this.paralelo = user.paralelo || null;
     this.id_carrera = user.id_carrera || null;
+    this.id_actividades = user.id_actividades || null;
   }
 
   clearLocalStorage() {
@@ -52,6 +54,14 @@ export class AuthService {
     this.id_asignaturas = [];
   }
 
+  clearLocalStorageActividad() {
+    this.id_actividades = [];
+  }
+
+  clearLocalStoragePersona() {
+    this.id_persona = '';
+  }
+
   saveUserToLocalStorage() {
     localStorage.setItem('user', JSON.stringify({
       isLogeado: this.isLogeado,
@@ -61,7 +71,8 @@ export class AuthService {
       id_asignaturas: this.id_asignaturas,
       id_jornada: this.id_jornada,
       paralelo: this.paralelo,
-      id_carrera: this.id_carrera
+      id_carrera: this.id_carrera,
+      id_actividades: this.id_actividades
     }));
   }
 

@@ -131,13 +131,13 @@ export class DistributivoComponent implements OnInit {
     if (this.authService.id_persona) {
       this.loadPersonaData(this.authService.id_persona);
     }
-    this.cargarActividades();
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarCiclos();
-    this.buscarAsignaturas();
     this.cargarComboPeriodos();
     this.cargarComboJornada();
+    this.buscarAsignaturas();
+    this.buscarActividades();
   }
 
   loadPersonaData(personaId: number): void {
@@ -167,14 +167,14 @@ export class DistributivoComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  cargarActividades(): void {
-    this.actividadService.getActividad().subscribe((actividades) => {
-      this.Actividades = actividades;
-      this.dataSource3 = new MatTableDataSource(this.Actividades);
-      this.dataSource3.paginator = this.paginator;
-      this.dataSource3.sort = this.sort;
-    });
-  }
+  // cargarActividades(): void {
+  //   this.actividadService.getActividad().subscribe((actividades) => {
+  //     this.Actividades = actividades;
+  //     this.dataSource3 = new MatTableDataSource(this.Actividades);
+  //     this.dataSource3.paginator = this.paginator;
+  //     this.dataSource3.sort = this.sort;
+  //   });
+  // }
 
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
@@ -241,6 +241,21 @@ export class DistributivoComponent implements OnInit {
     }
   }
 
+  buscarActividades(): void{
+    if(this.authService.id_actividades){
+      this.authService.id_actividades.forEach(actividad =>{
+        const idActividades: any = actividad.id_actividad;
+        this.actividadService.getActividadbyId(idActividades).subscribe(response =>{
+          this.actividad = response;
+          this.Actividades.push(this.actividad);
+          this.dataSource3 = new MatTableDataSource(this.Actividades);
+          this.dataSource3.paginator = this.paginator;
+          this.dataSource3.sort = this.sort;
+        })
+      })
+    }
+  }
+
   obtenerNombreCiclo(id_ciclo: number): string {
     const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
     return ciclo ? ciclo.nombre_ciclo : '';
@@ -269,6 +284,10 @@ export class DistributivoComponent implements OnInit {
           this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
           this.dataSource2 = new MatTableDataSource<Asignatura>([]);
           this.dataSource3 = new MatTableDataSource<Actividad>([]);
+          this.authService.clearLocalStorageAsignatura();
+          this.authService.clearLocalStorageActividad();
+          this.authService.clearLocalStoragePersona();
+          this.authService.saveUserToLocalStorage();
           Toast.fire({
             icon: "success",
             title: "Distributivo Generado con éxito",
@@ -291,7 +310,7 @@ export class DistributivoComponent implements OnInit {
     this.authService.id_asignaturas.forEach(asignatura => {
       const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
         id_jornada: this.idJornada,
-        paralelo: this.paraleloSeleccionado,
+        paralelo: this.authService.paralelo,
         id_distributivo: id_distributivo,
         id_asignatura: asignatura.id_asignatura
       };

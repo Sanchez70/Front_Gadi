@@ -1,25 +1,35 @@
-<div class="container">
-  <input type="text" class="input" [(ngModel)]="cedula" (input)="onChangeBuscar($event)" placeholder="Buscar docente por cédula..." />
-  <button class="btn btn--primary btn--inside" (click)="buscarPersona()">Buscar</button>
+<div class="{{currentExplan}}">
+  <div class="container">
+    <div class="container-input">
+      <input type="text" class="input" [(ngModel)]="cedula" (input)="onChangeBuscar($event)" placeholder="Buscar docente por cédula..." />
+      <button class="btn btn--primary btn--inside" (click)="buscarPersona()">Buscar</button>
+    </div>
+    <section class="example-container mat-elevation-z8" tabindex="0">
+      <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="cedula" sticky>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
+              <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nombre" sticky>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombres</th>
+              <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="apellido">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellidos</th>
+              <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="fecha_vinculacion">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de
+                  Vinculación</th>
+              <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date }}</td>
+          </ng-container>
+          <ng-container matColumnDef="detalles">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Detalles</th>
+            <td mat-cell *matCellDef="let persona"><button class="mat-button"><mat-icon>search</mat-icon></button></td>
+        </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  </section>
+  </div>
 </div>
-<table>
-  <thead>
-    <tr>
-        <th colspan="8" style="text-align: center; background-color: rgb(33, 59, 173);">DATOS DOCENTE</th>
-    </tr>
-    <tr>
-      <th colspan="2">CÉDULA</th>
-      <th colspan="1">NOMBRE</th>
-      <th colspan="1">APELLIDO</th>
-      <th colspan="1">FECHA DE VINCULACIÓN</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr >
-      <td colspan="2">{{personaExtendida.cedula}}</td>
-      <td colspan="1">{{personaExtendida.nombre1}}</td>
-      <td colspan="1">{{personaExtendida.apellido1}}</td>
-      <td colspan="1">{{ personaExtendida.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
-    </tr>
-  </tbody>
-</table>

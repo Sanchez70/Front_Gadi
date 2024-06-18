@@ -1,9 +1,9 @@
-.container{
-    display: flex;
+.container-input{
+  display: flex;
 	align-items: center;
 	justify-content: center;
-    margin-left: 100px;
-    margin-top: 2cap;
+  
+  margin-top: 2cap;
 }
 
 .btn {
@@ -61,82 +61,51 @@
     
   }
   
-  table {
-    width: 1300px;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    margin: 20px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    align-items: center;
-    margin-left: 3cap;
-    margin-right: 1cap;
-    margin-top: 4cap;
+table {
+    width: 100%;
+    overflow: auto;
+    display: block;
+}
 
-  }
-  
-  thead th {
-    background-color: #1E90FF;
-    color: white;
-    padding: 5px;
-    text-align: center;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    align-items: center;
-  }
-  
-  tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  tbody tr:hover {
-    background-color: #ddd;
-  }
-  
-  th, td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  
-  table.filtering {
-    opacity: 0.5;
-  }
-  
-  @media screen and (max-width: 600px) {
-    table {
-      width: 100%;
-    }
-  
-    thead {
-      display: none;
-    }
-  
-    tr {
-      display: block;
-      margin-bottom: 20px;
-    }
-  
-    td {
-      display: block;
-      text-align: right;
-      font-size: 14px;
-      border-bottom: 1px solid #eee;
-      position: relative;
-      padding-left: 50%;
-    }
-  
-    td::before {
-      content: attr(data-label);
-      position: absolute;
-      left: 10px;
-      width: 45%;
-      padding-right: 10px;
-      white-space: nowrap;
-      font-weight: bold;
-      text-align: center;
-    }
-  }
+.container {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+th {
+    color: #fff;
+    max-width: 100%;
+}
+
+h1 {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2%;
+}
+
+.mat-button{
+  border-radius: 0.5rem;
+  width: 70px;
+  height: 2.5rem;
+  background-color: #1E90FF;
+  border: none;
+  color: #fff;
+ text-align: center;
+}
+
+.Abrir {
+  padding: 0.3rem;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+
+}
+
+.Cerrar {   
+  padding: 0.3rem;
+  margin-left: 0cap;
+}
