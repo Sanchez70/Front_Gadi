@@ -48,6 +48,7 @@ export class AuthService {
   clearLocalStorage() {
     localStorage.removeItem('user');
     this.id_persona = '';
+    this.id_asignaturas=[];
   }
 
   clearLocalStorageAsignatura() {

@@ -131,6 +131,7 @@ export class DistributivoComponent implements OnInit {
     if (this.authService.id_persona) {
       this.loadPersonaData(this.authService.id_persona);
     }
+    
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarCiclos();

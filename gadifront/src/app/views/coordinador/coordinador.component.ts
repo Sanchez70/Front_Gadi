@@ -23,12 +23,12 @@ interface PersonaExtendida extends Persona {
   styleUrl: './coordinador.component.css'
 })
 export class CoordinadorComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido','fecha_vinculacion','detalles'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'fecha_vinculacion', 'detalles'];
   dataSource = new MatTableDataSource<Persona>();
 
-  personas : Persona[] = [];
-  personaEncontrada : Persona = new Persona();
-  gradoOcupacional : Grado_ocupacional = new Grado_ocupacional();
+  personas: Persona[] = [];
+  personaEncontrada: Persona = new Persona();
+  gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
   titulo: Titulo_profesional = new Titulo_profesional();
   cedula: string = '';
@@ -39,19 +39,19 @@ export class CoordinadorComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private personaService: PersonaService,
-    private tipo_contratoService: TipoContratoService, 
-    private tituloService: TituloProfesionalService, 
+    private tipo_contratoService: TipoContratoService,
+    private tituloService: TituloProfesionalService,
     private gradoService: GradoOcupacionalService,
     private authService: AuthService,
     private router: Router,
-    private activatedRoute: ActivatedRoute){
+    private activatedRoute: ActivatedRoute) {
   }
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
 
-    this.personaService.getPersonas().subscribe(data =>{
+    this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
       this.dataSource.data = this.personas;
       this.dataSource.paginator = this.paginator;
@@ -60,13 +60,13 @@ export class CoordinadorComponent implements OnInit {
     })
   }
 
-  buscarPersona(): void{
-    this.personaService.getPersonaByCedula(this.cedula).subscribe(data =>{
+  buscarPersona(): void {
+    this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
       this.personaEncontrada = data;
-      console.log('id_persona',this.personaEncontrada.id_persona);
+      console.log('id_persona', this.personaEncontrada.id_persona);
       this.loadPersonaData(this.personaEncontrada.id_persona);
     });
-    
+
   }
 
   loadPersonaData(personaId: number): void {
@@ -76,20 +76,22 @@ export class CoordinadorComponent implements OnInit {
     });
   }
 
- 
-
-  onChangeBuscar(event: any): void{
+  onChangeBuscar(event: any): void {
     this.cedula = event.target.value;
-    console.log('cedula ingresada',this.cedula)
+    console.log('cedula ingresada', this.cedula)
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+  verDetalle(valor: any): void {
+    console.log(valor)
+    this.personaService.getPersonas().subscribe(data => {
+      const personaEncontrados = data as Persona[];
+      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
+      if (usuarioEncontrado) {
+        this.authService.id_persona = usuarioEncontrado.id_persona;
+        this.router.navigate(['/matriz-distributivo']);
+      }
+    });
 
-    if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-    }
-}
+  }
 }
 

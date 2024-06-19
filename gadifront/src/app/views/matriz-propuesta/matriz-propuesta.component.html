@@ -1,120 +1,132 @@
 <div class="{{currentExplan}}">
-  <div class="container-{{currentExplan}}"> 
+  <div class="container-{{currentExplan}}">
     <div class="container">
-      <h1>Lista</h1>
-      <mat-form-field appearance="outline">
-          <mat-label>Buscar...</mat-label>
-          <input matInput (input)="applyFilter($event)" />
-      </mat-form-field>
       <section class="example-container mat-elevation-z8" tabindex="0">
-          <table mat-table [dataSource]="dataSource" matSort>
-  
-              <ng-container matColumnDef="cedula" sticky>
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="nombre" sticky>
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="apellido">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="telefono">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Teléfono</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.telefono }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="direccion">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Dirección</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.direccion }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="correo">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Correo</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.correo }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="edad">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Edad</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.edad }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="fecha_vinculacion">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de
-                      Vinculación</th>
-                  <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="contrato">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato</th>
-                  <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona].nombre_contrato || 'No asignado'
-                      }}</td>
-              </ng-container>
-  
-              <ng-container matColumnDef="titulo">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
-                  <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}
-                  </td>
-              </ng-container>
-  
-              <ng-container matColumnDef="grado">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado</th>
-                  <td mat-cell *matCellDef="let persona">{{ grados[persona.id_persona].nombre_grado_ocp || 'No asignado'
-                      }}</td>
-              </ng-container>
-  
-  
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-      </section>
-  </div>
-    <table>
-      <thead>
-        <tr>
-          <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">ASIGNATURAS</th>
-        </tr>
-        <tr>
-          <th colspan="1">ASIGNATURA</th>
-          <th colspan="1">NRO.HORAS SEMANALES</th>
-          <th colspan="1">PARALELO</th>
-          <th colspan="1">PERÍODO ACADÉMICO</th>
-          <th colspan="1">JORNADA</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let asignaturas of asignaturasFiltradas">
-          <td colspan="1">{{asignaturas.nombre_asignatura}}</td>
-          <td colspan="1">{{asignaturas.horas_semanales}}</td>
-          <td colspan="1">{{asignaturas.paralelo}}</td>
-          <td colspan="1">{{periodoNombre}}</td>
-          <td colspan="1">{{obtenerNombreJornada(asignaturas.jornada)}}</td>
-        </tr>
-      </tbody>
-    </table>
+        <table mat-table [dataSource]="dataSource" matSort>
 
-    <table>
-      <thead>
-        <tr>
-          <th colspan="7" style="text-align: center; background-color: rgb(33, 59, 173);">ACTIVIDADES NO DOCENTES</th>
-        </tr>
-        <tr>
-          <th colspan="2">NO.HORAS GESTIÓN</th>
-          <th colspan="2">TOTAL HORAS SEMANALES</th>
-          <th colspan="3">ACTIVIDADES DESCRIPCIÓN</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let actividades of actividadesFiltradas">
-          <td colspan="3.5">{{actividades.horas_no_docentes}}</td>
-          <td></td>
-          <td colspan="3">{{actividades.descripcion_actividad}}</td>
-        </tr>
-      </tbody>
-    </table>
+          <ng-container matColumnDef="cedula" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="nombre" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="apellido">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Teléfono</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.telefono }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="direccion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Dirección</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.direccion }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="correo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Correo</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.correo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="edad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Edad</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.edad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha_vinculacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de
+              Vinculación</th>
+            <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="contrato">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato</th>
+            <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona].nombre_contrato || 'No asignado'
+              }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="titulo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
+            <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="grado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado</th>
+            <td mat-cell *matCellDef="let persona">{{ grados[persona.id_persona].nombre_grado_ocp || 'No asignado'
+              }}</td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
+    </div>
+    <div class="container">
+      <section class="example-container mat-elevation-z8" tabindex="0">
+        <table mat-table [dataSource]="dataSourceAsig" matSort>
+
+          <ng-container  matColumnDef="carrera" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
+            <td mat-cell *matCellDef="let asignatura" class="carrera-{{currentExplan}}">{{carreras[asignatura.id_asignatura].nombre_carrera || 'No asignado'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="asignatura" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Asignatura</th>
+            <td mat-cell *matCellDef="let asigantura" class="asignatura">{{asigantura.nombre_asignatura}}</td>
+          </ng-container>
+          <ng-container matColumnDef="paralelo" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Paralelo</th>
+            <td mat-cell *matCellDef="let asignatura">{{distributivoAsignatura[asignatura.id_asignatura].paralelo || 'No asignado'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="nro_horas" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas</th>
+            <td mat-cell *matCellDef="let asigantura">{{asigantura.horas_semanales}}</td>
+          </ng-container>
+          <ng-container matColumnDef="jornada" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Jornada</th>
+            <td mat-cell *matCellDef="let asignatura" class="jornada">{{jornada[asignatura.id_asignatura].descrip_jornada || 'No asignado'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="periodo" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Periodo</th>
+            <td mat-cell *matCellDef="let asignatura" class="periodo">{{periodosDis[asignatura.id_asignatura].nombre_periodo || 'No asignado'}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsAsig"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsAsig;"></tr>
+        </table>
+      </section>
+    </div>
+    <div class="container">
+      <section class="c mat-elevation-z8" tabindex="0">
+        <table class="actividad" mat-table [dataSource]="dataSourceAct" matSort>
+
+          <ng-container matColumnDef="nro_horas" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nro. Horas Gestion</th>
+            <td mat-cell *matCellDef="let actividad"ngClass="horas">{{actividad.horas_no_docentes}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_horas" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas</th>
+            <td mat-cell *matCellDef="let actividad"></td>
+          </ng-container>
+          <ng-container matColumnDef="descripcion" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Periodo</th>
+            <td mat-cell *matCellDef="let actividad" class="descripcion-{{currentExplan}}">{{actividad.descripcion_actividad}}</td>
+          </ng-container>
+          <ng-container matColumnDef="tipo_actividad" sticky>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo de Actividad</th>
+            <td mat-cell *matCellDef="let actividad" class="tipo">{{tipo_actividad[actividad.id_actividad].nom_tip_actividad || 'No asignado'}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsAct"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsAct;"></tr>
+        </table>
+      </section>
+    </div>
   </div>
+</div>
