@@ -53,4 +53,9 @@ export class SidebarComponent {
     }
   
   }
+
+  limpiar():void{
+    this.authService.id_persona='';
+    this.authService.id_asignaturas=[];
+  }
 }

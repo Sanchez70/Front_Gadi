@@ -8,7 +8,35 @@ table {
   overflow: auto;
   display: block;
 }
+mat-header-cell{
+width: 100%;
 
+}
+.carrera-Abrir{
+ width: 55cap;
+ text-align: left;
+
+}
+.carrera-Cerrar{
+  width: 65cap;
+  text-align: left;
+ 
+ }
+.asignatura{
+  width: 16cap;
+ 
+ }
+ .periodo{
+  width: 15cap;
+ 
+ }
+.jornada{
+  width: 20cap;
+ 
+ }
+.grande{
+  width: 1000px;
+}
 
 .container {
   margin-top: 5cap;
@@ -19,6 +47,10 @@ table {
 
 th {
   color: #fff;
+text-align: center;
+}
+td{
+  text-align: center;
 }
 
 h1 {
@@ -41,4 +73,16 @@ h1 {
 .Cerrar {   
   padding: 0.3rem;
   margin-left: 0cap;
+}
+.descripcion-Abrir{
+  width: 65cap;
+}
+.descripcion-Cerrar{
+  width: 65cap;
+}
+.horas{
+  width: 20cap;
+}
+.tipo{
+  width: 40cap;
 }
