@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from '../../Services/loginService/login.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Usuario } from '../../Services/loginService/usuario';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -9,6 +9,17 @@ import { SrolService } from '../../Services/rol/srol.service';
 import { UsuarioRolService } from '../../Services/UsuarioRol/usuario-rol.service';
 import { Rol } from '../../Services/rol/rol';
 import { UsuarioRol } from '../../Services/UsuarioRol/usuarioRol';
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,39 +32,56 @@ export class LoginComponent {
   public searchForm: FormGroup;
   constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService) {
     this.searchForm = this.fb.group({
-      usuario: [''],
-      contraneusu: ['']
+      usuario: ['', Validators.required],
+      contraneusu: ['', Validators.required]
     });
   }
 
   onSubmit() {
+    this.validar();
+  }
 
+  validar(): void {
     const usuariol = this.searchForm.value.usuario;
     const contraneusu = this.searchForm.value.contraneusu;
-    console.log(usuariol);
-
-    this.loginService.getUsuario().subscribe(
-      (result) => {
-        if (Array.isArray(result) && result.length > 0) {
-          const usuarioEncontrados = result as Usuario[];
-          const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario === usuariol);
-          console.log('Usuario encontrado:', usuarioEncontrado);
-          console.log('ID de carrera del usuario encontrado:', usuarioEncontrado?.carrera?.id_carrera);
-          if (usuarioEncontrado) {
-            this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
-            this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
-            console.log(this.authService.id_carrera)
-
-          } else {
-            Swal.fire('Usuario o contraseña erronea', 'Intente nuevamente', 'error');
-
-          }
-        }
-
-      }, (error) => {
-        Swal.fire('Campos Vacios', 'Intente nuevamente', 'error');
+  
+    if (usuariol === '') {
+      Toast.fire({
+        icon: "error",
+        title: "Campo Usuario Vacio",
+        footer: "Por favor, verifique si ha completado todo lo necesario"
       });
 
+    } else if (contraneusu === '') {
+      Toast.fire({
+        icon: "error",
+        title: "Campo Contraseña Vacio",
+        footer: "Por favor, verifique si ha completado todo lo necesario"
+      });
+
+    } else {
+      this.loginService.getUsuario().subscribe(
+        (result) => {
+          if (Array.isArray(result) && result.length > 0) {
+            const usuarioEncontrados = result as Usuario[];
+            const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario === usuariol);
+            console.log('Usuario encontrado:', usuarioEncontrado);
+            console.log('ID de carrera del usuario encontrado:', usuarioEncontrado?.carrera?.id_carrera);
+            if (usuarioEncontrado) {
+              this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
+              this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
+              console.log(this.authService.id_carrera)
+
+            } else {
+              Swal.fire('Usuario o contraseña erronea', 'Intente nuevamente', 'error');
+
+            }
+          }
+
+        }, (error) => {
+          Swal.fire('Campos Vacios', 'Intente nuevamente', 'error');
+        });
+    }
   }
 
   selectedRole: string | undefined;
