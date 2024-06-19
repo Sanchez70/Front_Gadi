@@ -30,7 +30,7 @@
         <td mat-cell *matCellDef="let carrera">{{ carrera.codigo }}</td>
       </ng-container>
   
-      <ng-container matColumnDef="borrar" sticky>
+      <ng-container matColumnDef="borrar" >
         <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Eliminar</th>
         <td mat-cell *matCellDef="let carrera">
           <button mat-icon-button color="warn" (click)="deleteCarrera(carrera.id_carrera)">
