@@ -6,19 +6,15 @@ import { PersonaModalComponent } from './persona-modal.component';
   selector: 'app-persona-list-modal',
   template: `
     <h1 mat-dialog-title></h1>
-    <div mat-dialog-actions class="actions-container">
-      <button mat-button (click)="close()" class="close-button">Cerrar</button>
-    </div>
+
+      <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="close()" class="close-button">X</button>
+
     <div mat-dialog-content>
       <app-Modal-persona></app-Modal-persona>
     </div>
     
   `,
   styles: [`
-    .actions-container {
-      position: relative;
-      top: -9%
-    }
     .close-button {
       position: absolute;
       top: 0;

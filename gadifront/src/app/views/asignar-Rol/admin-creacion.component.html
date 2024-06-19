@@ -8,10 +8,10 @@
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('required')">Ingrese una cédula</mat-error>
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('minlength')">Ingrese una cédula válida de 10 dígitos</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit">
+      <button mat-button style="color: #fff; background-color: #1E90FF;"type="submit">
         Buscar <mat-icon>search</mat-icon>
       </button>
-      <button mat-raised-button color="accent" type="button" (click)="openModal()">
+      <button mat-button style="color: #fff; background-color: #727272;" type="button" (click)="openModal()">
         Lista de personas <mat-icon>list</mat-icon>
       </button>
     </form>
@@ -85,7 +85,7 @@
         <mat-error *ngIf="personaForm.get('carrera')?.hasError('required') && personaForm.get('rol')?.value === 'Director'">Seleccione una carrera para el Director</mat-error>
       </mat-form-field>
     </div>
-    <button mat-raised-button color="primary" (click)="guardarUsuario()">
+    <button mat-button style="color: #fff; background-color: #1E90FF;"  (click)="guardarUsuario()">
       Guardar <mat-icon>save</mat-icon>
     </button>
   </form>
