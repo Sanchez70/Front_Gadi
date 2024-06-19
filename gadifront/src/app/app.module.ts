@@ -39,7 +39,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MainComponent } from './views/main/main.component';
-import { TablaComponent } from './views/tabla/tabla.component';
+import { TablaComponent } from './views/vista-Distributivos/tabla.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -61,7 +61,7 @@ import { FormComponent as ActividadFormComponert } from './views/actividad/form.
 import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
-import { AdminCreacionComponent } from './views/admin-creacion/admin-creacion.component'; 
+import { AdminCreacionComponent } from './views/asignar-Rol/admin-creacion.component'; 
 import { ChangeDetectorRef } from '@angular/core';
 import { DistributivoActividadService } from './Services/distributivoActividadService/distributivo_actividad.service';
 import { RegistroComponent } from './views/registro_usuario/registro.component';
