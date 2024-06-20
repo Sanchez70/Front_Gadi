@@ -45,7 +45,19 @@
           <input class="form-control" type="text" id="usuario" formControlName="user"
             placeholder="Este será su usuario de ingreso" required />
           <div *ngIf="registroForm1.get('user')?.touched && registroForm1.get('user')?.invalid" class="text-danger">
-            La cédula es obligatoria.
+            La cédula es obligatoria y debe ser válida.
+          </div>
+          <div *ngIf="registroForm1.get('user')?.hasError('invalidLength') && registroForm1.get('user')?.touched"
+            class="text-danger">
+            La cédula debe tener 10 dígitos.
+          </div>
+          <div *ngIf="registroForm1.get('user')?.hasError('invalidProvince') && registroForm1.get('user')?.touched"
+            class="text-danger">
+            La cédula tiene un código de provincia inválido.
+          </div>
+          <div *ngIf="registroForm1.get('user')?.hasError('invalidCedula') && registroForm1.get('user')?.touched"
+            class="text-danger">
+            La cédula no es válida.
           </div>
         </div>
 
@@ -66,7 +78,9 @@
       <p class="login-link" routerLink="/login">Ya tienes cuenta? Inicia sesión</p>
     </div>
   </div>
+</div>
 
+<div class="container">
   <div class="card" *ngIf="showFinalForm">
     <img src="assets/img/logo.png" alt="GADI" class="logo">
     <form [formGroup]="registroForm2" (ngSubmit)="onSubmit2()">
@@ -100,8 +114,10 @@
 
         <div class="form-group">
           <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-          <input class="form-control" type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento" (change)="calcularEdad($event)" required />
-          <div *ngIf="registroForm2.get('fecha_nacimiento')?.touched && registroForm2.get('fecha_nacimiento')?.invalid" class="text-danger">
+          <input class="form-control" type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento"
+            (change)="calcularEdad($event)" required />
+          <div *ngIf="registroForm2.get('fecha_nacimiento')?.touched && registroForm2.get('fecha_nacimiento')?.invalid"
+            class="text-danger">
             La fecha de nacimiento es obligatoria.
           </div>
           <div *ngIf="edad < 18 && registroForm2.get('fecha_nacimiento')?.touched" class="text-danger">
@@ -121,8 +137,14 @@
         </div>
 
         <div class="form-group">
-          <label for="grado_ocup">Grado Ocupacional</label>
-          <input class="form-control" type="text" id="grado_ocup" formControlName="nombre_grado_ocp" required />
+          <label for="grado">Grado Ocupacional</label>
+          <select id="grado" formControlName="nombre_grado_ocp" required class="form-control"
+            (ngModel)="gradoSeleccionado" name="jornada" aria-label="Jornada" aria-describedby="basic-addon1"
+            (change)="onGradoChange($event)">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option *ngFor="let grado of grados" [value]="grado.id_grado_ocp">{{ grado.nombre_grado_ocp }}</option>
+          </select>
+
           <div *ngIf="registroForm2.get('nombre_grado_ocp')?.touched && registroForm2.get('nombre_grado_ocp')?.invalid"
             class="text-danger">
             El grado ocupacional es obligatorio.
@@ -135,10 +157,14 @@
           <div *ngFor="let titulo of titulos.controls; let i = index" [formGroupName]="i" class="titulo-form">
             <label for="nombre_titulo_{{i}}">Título Profesional</label>
             <input type="text" id="nombre_titulo_{{i}}" formControlName="nombre_titulo" required />
-            
+
             <label for="grado_{{i}}">Grado</label>
-            <input type="text" id="grado_{{i}}" formControlName="grado" required />
-      
+            <select id="grado_{{i}}" formControlName="grado" required>
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="3er nivel">3er nivel</option>
+              <option value="4to nivel">4to nivel</option>
+            </select>
+
             <button type="button" (click)="removeTitulo(i)">Eliminar Título</button>
           </div>
         </div>
@@ -148,22 +174,26 @@
       <div class="row">
         <div class="form-group">
           <label for="contrato">Contrato</label>
-          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)">
+          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)" 
+          (ngModel)="contratoSelec">
             <option value="" disabled selected>Seleccione una opción</option>
-            <option *ngFor="let contrato of contratos" [value]="contrato.nombre_contrato">{{ contrato.nombre_contrato }}</option>
+            <option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{ contrato.nombre_contrato }}
+            </option>
           </select>
-          <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid" class="text-danger">
+          <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid"
+            class="text-danger">
             El contrato es obligatorio.
           </div>
         </div>
-        
+
         <div class="form-group" *ngIf="isTiempoParcial">
           <label>Número de horas</label>
           <input class="form-control" type="number" id="horas" formControlName="hora_contrato" required>
-          <div *ngIf="registroForm2.get('hora_contrato')?.touched && registroForm2.get('hora_contrato')?.invalid" class="text-danger">
+          <div *ngIf="registroForm2.get('hora_contrato')?.touched && registroForm2.get('hora_contrato')?.invalid"
+            class="text-danger">
             El número de horas es obligatorio.
           </div>
-        </div>        
+        </div>
       </div>
       <div>
         <p></p>
