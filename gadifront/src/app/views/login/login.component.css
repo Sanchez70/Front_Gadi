@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 99.2vh;
 
     
     background-size: 100% 100%;
@@ -40,6 +40,26 @@
     padding: 8px;
     margin-top: 5px;
   }
+
+  .input-container {
+    position: relative;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .input-container input {
+    padding-left: 2rem; 
+    padding-right: 1rem; 
+  }
+  
+  .input-container .icon {
+    position: absolute;
+    left: 0.6rem;
+    bottom: 15px;
+    pointer-events: none; 
+  }
   
   button {
     width: 100%;
@@ -53,7 +73,7 @@
   }
   
   button:hover {
-    background-color: #357ae8;
+    background-color: #255199;
   }
 
  
@@ -73,5 +93,13 @@
   h1:hover {
     font-variation-settings: "wght" 582; 
     letter-spacing: 1px;
+  }
+
+  .register-link {
+    cursor: pointer;
+  }
+
+  .register-link:hover{
+    color: #357ae8;
   }
  
