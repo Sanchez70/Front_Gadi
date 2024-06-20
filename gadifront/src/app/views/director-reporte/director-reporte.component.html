@@ -52,10 +52,9 @@
 
                 <ng-container matColumnDef="contrato">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato</th>
-                    <td mat-cell *matCellDef="let persona">{{ contratos[persona.id_persona].nombre_contrato || 'No
-                        asignado'
-                        }}</td>
-                </ng-container>
+                    <td mat-cell *matCellDef="let persona" class="contrato-{{currentExplan}}">{{ contratos[persona.id_persona].nombre_contrato || 'No asignado'}}
+                    </td>
+                  </ng-container>
 
                 <ng-container matColumnDef="titulo">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>

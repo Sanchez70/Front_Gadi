@@ -12,6 +12,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../auth.service';
+import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
+import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
+import { TipoContrato } from '../tipo-contrato/tipo-contrato';
+import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -23,9 +27,11 @@ interface PersonaExtendida extends Persona {
   styleUrl: './coordinador.component.css'
 })
 export class CoordinadorComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'fecha_vinculacion', 'detalles'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'detalle'];
   dataSource = new MatTableDataSource<Persona>();
-
+  grados: { [key: number]: GradoOcupacional } = {};
+  titulos: { [key: number]: TituloProfecional } = {};
+  contratos: { [key: number]: TipoContrato } = {};
   personas: Persona[] = [];
   personaEncontrada: Persona = new Persona();
   gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
@@ -53,9 +59,7 @@ export class CoordinadorComponent implements OnInit {
 
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
-      this.dataSource.data = this.personas;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.loadAdditionalDataForPersonas();
       console.log(this.dataSource);
     })
   }
@@ -64,17 +68,52 @@ export class CoordinadorComponent implements OnInit {
     this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
       this.personaEncontrada = data;
       console.log('id_persona', this.personaEncontrada.id_persona);
-      this.loadPersonaData(this.personaEncontrada.id_persona);
+      this.loadAdditionalDataForPersonas();
     });
 
   }
+  loadAdditionalDataForPersonas(): void {
+    const requests = this.personas.map(persona =>
+      this.personaService.getPeriodoById(persona.id_persona).pipe(
+        switchMap(() => forkJoin([
+          this.personaService.getGradoById(persona.id_grado_ocp ?? 0).pipe(
+            tap(grado => {
+              this.grados[persona.id_persona] = grado ?? { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
+            }),
+            catchError(() => {
+              this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
+              return of(null);
+            })
+          ),
+          this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
+            tap(titulo => {
+              this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
+            }),
+            catchError(() => {
+              this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
+              return of(null);
+            })
+          ),
+          this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
+            tap(contrato => {
+              this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
+            }),
+            catchError(() => {
+              this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
+              return of(null);
+            })
+          )
+        ]))
+      )
+    );
 
-  loadPersonaData(personaId: number): void {
-    this.personaService.getPersonaById(personaId).subscribe(data => {
-      this.personaEncontrada = data;
-      this.dataSource.data = [this.personaEncontrada];
+    forkJoin(requests).subscribe(() => {
+      this.dataSource = new MatTableDataSource(this.personas);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
+
 
   onChangeBuscar(event: any): void {
     this.cedula = event.target.value;
@@ -92,6 +131,14 @@ export class CoordinadorComponent implements OnInit {
       }
     });
 
+  }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
 
