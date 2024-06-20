@@ -118,6 +118,10 @@ clip-path: polygon(8% 17%, 0% 25%, 50% 84%, 100% 25%, 92% 17%, 50% 65%);
   scrollbar-width: none; 
 
 }
+.boton{
+  background-color: #5A7EC7;
+  width: 200px;
+}
 
 .Cerrar {   
   padding: 0.3rem;

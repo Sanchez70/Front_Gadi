@@ -15,7 +15,9 @@ table {
     flex-direction: column;
 
 }
-
+.contrato-Cerrar{
+    width: 25cap;
+  }
 th {
     color: #fff;
 }

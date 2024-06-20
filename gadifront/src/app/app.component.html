@@ -2,4 +2,11 @@
 <app-sidebar-admin *ngIf="rol() ==='Admin'"></app-sidebar-admin>
 <app-sidebar-coordinador  *ngIf="rol() ==='Coordinador'"></app-sidebar-coordinador>
 <app-sidebar-docente  *ngIf="rol() ==='Docente'"></app-sidebar-docente>
+<ngx-ui-loader
+    bgsColor= "#22d2da"
+	text="Cargando datos, espere por favor..."
+	pbColor="red"
+	fgsType="folding-cube"
+    [hasProgressBar]= true
+></ngx-ui-loader>
 <router-outlet></router-outlet>

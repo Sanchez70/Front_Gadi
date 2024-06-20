@@ -6,15 +6,22 @@
     <div class="card">
         <img src="assets/img/logo.png" alt="GADI" class="logo">
         <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-            
             <div class="form-group">
                 <label class="label" for="usuario">Usuario</label>
-                <input class="form-control" type="text" id="usuario" formControlName="usuario" />
+                <input class="form-control" type="text" id="usuario" formControlName="usuario"   placeholder="Ingrese su cedula"/>
+                <div *ngIf="searchForm.get('usuario')?.touched && searchForm.get('usuario')?.invalid"
+                class="text-danger">
+                Campo Obligatorio
+              </div>
             </div>
 
             <div class="form-group">
                 <label for="contraneusu">Contraseña</label>
-                <input class="form-control" type="password" id="contraneusu" formControlName="contraneusu" />
+                <input class="form-control" type="password" id="contraneusu" formControlName="contraneusu" required placeholder="Ingrese su contraseña"/>
+                <div *ngIf="searchForm.get('contraneusu')?.touched && searchForm.get('contraneusu')?.invalid"
+                class="text-danger">
+                Campo Obligatorio
+              </div>
             </div>
 
             <button type="submit" class="btn btn-primary btn-rounded" >INICIAR SESION</button>

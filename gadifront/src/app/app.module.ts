@@ -22,7 +22,7 @@ import { DistributivoAsignaturaComponent } from './views/distributivo-asignatura
 import { UsuarioRolComponent } from './views/usuario-rol/usuario-rol.component';
 import { MatrizPropuestaComponent } from './views/matriz-propuesta/matriz-propuesta.component';
 import { LoginComponent } from './views/login/login.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginService } from './Services/loginService/login.service';
@@ -80,6 +80,8 @@ import { PersonaListModalComponent } from './views/ModalPersona/persona-list-mod
 import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
 import { DirectorReporteComponent } from './views/director-reporte/director-reporte.component'; 
 import { MatrizDistributivoComponent } from './views/matriz-distributivo/matriz-distributivo.component';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { ApiInterceptor } from './interceptors/api.interceptor';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -148,7 +150,7 @@ const routes: Routes = [
     PersonaListModalComponent,
     PersonaModalComponent,
     DirectorReporteComponent,
-    MatrizDistributivoComponent
+    MatrizDistributivoComponent,
   ],
   
   imports: [
@@ -177,6 +179,7 @@ const routes: Routes = [
     MatOption,
     MatSnackBarModule,
     MatDatepickerModule,
+    NgxUiLoaderModule
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 
@@ -190,6 +193,7 @@ const routes: Routes = [
     tipo_actividadService,
     DistributivoActividadService,
     provideNativeDateAdapter(),
+    { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
