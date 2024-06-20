@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { Asignatura } from './Services/asignaturaService/asignatura';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  asignaturasSeleccionadaAuth: Asignatura[] = [];
+
   isLogeado = false;
   tiporol: any;
   cedula: any;
@@ -44,7 +43,6 @@ export class AuthService {
     this.paralelo = user.paralelo || null;
     this.id_carrera = user.id_carrera || null;
     this.id_actividades = user.id_actividades || null;
-    this.asignaturasSeleccionadaAuth=user.asignaturasSeleccionadaAuth||null;
   }
 
   clearLocalStorage() {
@@ -55,7 +53,6 @@ export class AuthService {
 
   clearLocalStorageAsignatura() {
     this.id_asignaturas = [];
-    this.asignaturasSeleccionadaAuth=[];
   }
 
   clearLocalStorageActividad() {
@@ -76,9 +73,7 @@ export class AuthService {
       id_jornada: this.id_jornada,
       paralelo: this.paralelo,
       id_carrera: this.id_carrera,
-      id_actividades: this.id_actividades,
-      asignaturasSeleccionadaAuth:this.asignaturasSeleccionadaAuth
-      
+      id_actividades: this.id_actividades
     }));
   }
 
