@@ -10,7 +10,9 @@
   align-items: center;
   justify-content: space-between;
 }
-
+i{
+  font-size: 18px;
+}
 .sesion {
   cursor: pointer;
 }
@@ -78,6 +80,7 @@
   text-decoration: none;
   text-align: left;
   padding: 2%;
+  font-size: 18px;
 }
 
 .sidebar a:hover {
@@ -85,7 +88,6 @@
   color: #000000;
   padding: 9px;
 }
-
 .separator {
   border: 0;
   height: 1.5rem;

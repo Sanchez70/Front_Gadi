@@ -47,7 +47,7 @@ interface PersonaExtendida extends Persona {
 export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
-  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion','tipo_actividad'];
+  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad'];
   dataSourceAsig!: MatTableDataSource<Asignatura>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
@@ -118,6 +118,7 @@ export class MatrizPropuestaComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
+        this.loadAdditionalDataForPersonas();
         this.buscarDistributivo(this.authService.id_persona);
       }
     });
@@ -154,7 +155,7 @@ export class MatrizPropuestaComponent implements OnInit {
         );
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         this.cargarAdicional();
-        this.loadAdditionalDataForPersonas();
+
 
       });
     });
@@ -178,7 +179,7 @@ export class MatrizPropuestaComponent implements OnInit {
           idActividades.includes(actividad.id_actividad)
         );
         this.actividades = this.actividades.concat(actividadCargadas);
-      this.cargarTipo();
+        this.cargarTipo();
         console.log('Actividades cargadas:', this.actividades);
       });
     });
@@ -187,15 +188,14 @@ export class MatrizPropuestaComponent implements OnInit {
 
   cargarAdicional(): void {
     const requests = this.asignaturas.map(asignatura =>
-
       forkJoin([
         this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
           tap(periodo => {
-            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado' };
             console.log('periodoPersona' + periodo.nombre_periodo);
           }),
           catchError(() => {
-            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
+            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado' } as Periodo;
             return of(null);
           })
         ),
@@ -241,10 +241,10 @@ export class MatrizPropuestaComponent implements OnInit {
       forkJoin([
         this.tipo_actividadService.gettipoActividadbyId(actividad.id_actividad ?? 0).pipe(
           tap(tipo_actividades => {
-            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado'};
+            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' };
           }),
           catchError(() => {
-            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad:  'No asignado' } as unknown as tipo_actividad;
+            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' } as unknown as tipo_actividad;
             return of(null);
           })
         ),

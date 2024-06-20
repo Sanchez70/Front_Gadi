@@ -82,6 +82,8 @@ import { DirectorReporteComponent } from './views/director-reporte/director-repo
 import { MatrizDistributivoComponent } from './views/matriz-distributivo/matriz-distributivo.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ApiInterceptor } from './interceptors/api.interceptor';
+import { EditarActividadesComponent } from './views/Coordinador/editar-actividades/editar-actividades.component';
+import { EditarAsignaturaComponent } from './views/Coordinador/editar-asignatura/editar-asignatura.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -151,6 +153,8 @@ const routes: Routes = [
     PersonaModalComponent,
     DirectorReporteComponent,
     MatrizDistributivoComponent,
+    EditarActividadesComponent,
+    EditarAsignaturaComponent,
   ],
   
   imports: [
