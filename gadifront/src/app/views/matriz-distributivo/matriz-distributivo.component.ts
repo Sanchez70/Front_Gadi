@@ -107,6 +107,7 @@ export class MatrizDistributivoComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
+        this.loadAdditionalDataForPersonas();
       }
     });
     this.buscarDistributivo(this.authService.id_persona);
@@ -166,8 +167,12 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
+  enviarAsignaturas():void{
+    this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
+  }
+
   cargarAdicional(): void {
-    const requests = this.asignaturas.map(asignatura =>
+     const requests = this.asignaturas.map(asignatura =>
 
       forkJoin([
         this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
@@ -217,6 +222,10 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
+  evaluar():void{
+    
+  }
+
   cargarTipo(): void {
     const requests = this.actividades.map(actividad =>
       forkJoin([
@@ -233,6 +242,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
     );
     forkJoin(requests).subscribe(() => {
+
       this.dataSourceAct = new MatTableDataSource(this.actividades);
       this.dataSourceAct.paginator = this.paginator;
       this.dataSourceAct.sort = this.sort;
@@ -265,12 +275,12 @@ export class MatrizDistributivoComponent implements OnInit {
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
-        this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-        this.dataSourceAsig.paginator = this.paginator;
-        this.dataSourceAsig.sort = this.sort;
+        if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
+          this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
+        }else{
+          this.asignaturas=this.authService.asignaturasSeleccionadaAuth
+        }
         this.calcularHorasTotales();
-        this.loadAdditionalDataForPersonas();
         this.cargarAdicional();
         console.log('Asignaturas cargadas:', this.asignaturas);
       });

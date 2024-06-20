@@ -121,7 +121,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   verDetalle(valor: any): void {
-    console.log(valor)
+    this.authService.clearLocalStorageAsignatura();
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
