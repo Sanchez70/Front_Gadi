@@ -82,8 +82,8 @@ import { DirectorReporteComponent } from './views/director-reporte/director-repo
 import { MatrizDistributivoComponent } from './views/matriz-distributivo/matriz-distributivo.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ApiInterceptor } from './interceptors/api.interceptor';
-import { EditarActividadesComponent } from './views/Coordinador/editar-actividades/editar-actividades.component';
-import { EditarAsignaturaComponent } from './views/Coordinador/editar-asignatura/editar-asignatura.component';
+import { EditarActividadesComponent } from './views/coordinador/editar-actividades/editar-actividades.component';
+import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -102,6 +102,8 @@ const routes: Routes = [
   { path: 'registro', component: RegistroComponent },
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
+  { path: 'editar-asignatura', component: EditarAsignaturaComponent},
+  { path: 'editar-actividads', component: EditarActividadesComponent},
   { path: 'admin_Creacion', component: AdminCreacionComponent},
   { path: 'distributivo', component: DistributivoComponent},
   { path: 'main-admin', component: MainAdminComponent},
@@ -154,7 +156,7 @@ const routes: Routes = [
     DirectorReporteComponent,
     MatrizDistributivoComponent,
     EditarActividadesComponent,
-    EditarAsignaturaComponent,
+    EditarAsignaturaComponent
   ],
   
   imports: [
