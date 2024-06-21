@@ -10,7 +10,7 @@ import { PersonaModalComponent } from './persona-modal.component';
       <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="close()" class="close-button">X</button>
 
     <div mat-dialog-content>
-      <app-Modal-persona></app-Modal-persona>
+      //<app-Modal-persona></app-Modal-persona>
     </div>
     
   `,

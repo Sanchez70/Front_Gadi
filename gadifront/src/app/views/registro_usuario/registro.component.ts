@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Persona } from '../../Services/docenteService/persona';
 import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
-import { Tipo_contrato } from '../../Services/tipo_contrato/tipo_contrato';
 import { TipoContratoService } from '../../Services/tipo_contrato/tipo-contrato.service';
-import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
+import { GradoOcupacionalService } from '../../Services/grado/grado-ocupacional.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegistroService } from '../../Services/registroService/registro.service';
+import { DocenteService } from '../../Services/docenteService/docente.service';
 import Swal from 'sweetalert2';
+import { Usuario } from '../../Services/loginService/usuario';
 
 @Component({
   selector: 'app-registro',
@@ -18,22 +19,33 @@ export class RegistroComponent implements OnInit {
   public registroForm1: FormGroup;
   public registroForm2: FormGroup;
   public edad: number = 0;
-
+  gradoSeleccionado:number=0;
+  id_grado:number=0;
+  public contratoSelec:number=0;
+  public id_contrato:number = 0;
   public persona: Persona = new Persona();
-  public titulo: Titulo_profesional = new Titulo_profesional();
+  public user: Usuario = new Usuario();
+  public titulo: Titulo_profesional  = new Titulo_profesional();
   public contratos: any[] = [];
-  public grado: Grado_ocupacional = new Grado_ocupacional();
+  public grados: any[] = [];
 
   showFinalForm: boolean = false;
   public isTiempoParcial: boolean = false;
 
-  constructor(private router: Router, private fb: FormBuilder, private service: RegistroService, private tipoContratoService: TipoContratoService) {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private service: RegistroService,
+    private tipoContratoService: TipoContratoService,
+    private gradoService: GradoOcupacionalService,
+    private docenteService: DocenteService
+  ) {
     this.registroForm1 = this.fb.group({
       name1: ['', Validators.required],
       name2: ['', Validators.required],
       lastname1: ['', Validators.required],
       lastname2: ['', Validators.required],
-      user: ['', Validators.required],
+      user: ['', [Validators.required, this.validateCedulaEcuatoriana]],
       password: ['', Validators.required]
     });
 
@@ -45,7 +57,6 @@ export class RegistroComponent implements OnInit {
       edad: ['', Validators.required],
       fecha_vinculacion: ['', Validators.required],
       titulos: this.fb.array([]),
-      grado: ['', Validators.required],
       nombre_grado_ocp: ['', Validators.required],
       nombre_contrato: ['', Validators.required],
       hora_contrato: ['', [Validators.required, Validators.min(1)]]
@@ -54,11 +65,18 @@ export class RegistroComponent implements OnInit {
 
   ngOnInit() {
     this.loadContratos();
+    this.loadGradoOcupacional();
   }
 
   loadContratos() {
     this.tipoContratoService.getContrato().subscribe(data => {
       this.contratos = data;
+    });
+  }
+
+  loadGradoOcupacional() {
+    this.gradoService.getGrado().subscribe(data => {
+      this.grados = data;
     });
   }
 
@@ -78,41 +96,47 @@ export class RegistroComponent implements OnInit {
     this.titulos.removeAt(index);
   }
 
-  onSubmit1(): void {
-    if (this.registroForm1.invalid) {
-      this.registroForm1.markAllAsTouched();
-      return;
+  validateCedulaEcuatoriana(control: AbstractControl): ValidationErrors | null {
+    const cedula = control.value;
+    
+    if (cedula.length !== 10) {
+        return { invalidLength: true };
     }
 
-    const { name1, name2, lastname1, lastname2, user, password } = this.registroForm1.value;
-
-    localStorage.setItem('registroData', JSON.stringify({
-      primer_nombre: name1,
-      segundo_nombre: name2,
-      primer_apellido: lastname1,
-      segundo_apellido: lastname2,
-      usuario: user,
-      password: password
-    }));
-
-    this.showFinalForm = true;
-  }
-
-  onSubmit2(): void {
-    if (this.registroForm2.invalid || this.edad < 18) {
-      this.registroForm2.markAllAsTouched();
-      return;
-    } else {
-      this.service.createPer(this.persona)
-        .subscribe(persona => {
-          this.router.navigate(['/persona']);
-          Swal.fire(`Registro exitoso`, '', 'success');
-        });
-
-      this.router.navigate(['./login']);
+    if (!/^\d{10}$/.test(cedula)) {
+        return { invalidCharacters: true };
     }
-  }
 
+    const digitos = cedula.split('').map(Number);
+
+    const codigoProvincia = digitos[0] * 10 + digitos[1];
+    if ((codigoProvincia < 1 || codigoProvincia > 24) && codigoProvincia !== 30) {
+        return { invalidProvince: true };
+    }
+    const tercerDigito = digitos[2];
+    if (tercerDigito < 0 || tercerDigito > 6) {
+        return { invalidThirdDigit: true };
+    }
+    const coeficientes = [2, 1, 2, 1, 2, 1, 2, 1, 2];
+    let suma = 0;
+    for (let i = 0; i < 9; i++) {
+        let digito = digitos[i] * coeficientes[i];
+        if (digito >= 10) {
+            digito -= 9;
+        }
+        suma += digito;
+    }
+
+    const digitoVerificador = digitos[9];
+    const sumaMod10 = suma % 10;
+    const resultadoVerificador = sumaMod10 === 0 ? 0 : 10 - sumaMod10;
+
+    if (resultadoVerificador !== digitoVerificador) {
+        return { invalidCedula: true };
+    }
+
+    return null;
+  }
   calcularEdad(event: any): void {
     const fechaNacimiento = new Date(event.target.value);
     const fechaActual = new Date();
@@ -129,9 +153,84 @@ export class RegistroComponent implements OnInit {
 
   onContratoChange(event: any) {
     const selectedContrato = event.target.value;
-    this.isTiempoParcial = selectedContrato === 'Tiempo Parcial';
+    this.isTiempoParcial = selectedContrato === 'TIEMPO PARCIAL';
     if (!this.isTiempoParcial) {
       this.registroForm2.get('hora_contrato')?.reset();
     }
+    this.contratoSelec = +event.target.value;
+    this.id_contrato = this.contratoSelec;
   }
+
+  onSubmit1(): void {
+    if (this.registroForm1.invalid) {
+      this.registroForm1.markAllAsTouched();
+      return;
+    }
+  
+    const { name1, name2, lastname1, lastname2, user, password } = this.registroForm1.value;
+  
+    this.docenteService.getPersona().subscribe(personas => {
+      if (personas.find(persona => persona.cedula === user)) {
+        Swal.fire('Error', 'La cédula ya está registrada', 'error');
+      } else {
+        localStorage.setItem('registroData', JSON.stringify({
+          primer_nombre: name1,
+          segundo_nombre: name2,
+          primer_apellido: lastname1,
+          segundo_apellido: lastname2,
+          usuario: user,
+          password: password
+        }));
+        this.showFinalForm = true;
+      }
+    }, error => {
+      console.error('Error al obtener personas:', error);
+      Swal.fire('Error', 'Hubo un problema al obtener personas.', 'error');
+    });
+  }
+  
+  onSubmit2(): void {
+    console.log('entroo')
+
+    const registroData = JSON.parse(localStorage.getItem('registroData') || '{}');
+
+    this.persona.cedula= registroData.usuario,
+    this.persona.nombre1= registroData.primer_nombre,
+    this.persona.nombre2= registroData.segundo_nombre,
+    this.persona.apellido1= registroData.primer_apellido,
+    this.persona.apellido2= registroData.segundo_apellido,
+    this.persona.telefono= this.registroForm2.value.telefono,
+    this.persona.direccion= this.registroForm2.value.direccion,
+    this.persona.correo= this.registroForm2.value.correo,
+    this.persona.edad= this.edad,
+    this.persona.fecha_vinculacion = this.registroForm2.value.fecha_vinculacion,
+    this.persona.id_tipo_contrato = this.id_contrato,
+    this.persona.id_grado_ocp = this.id_grado
+    this.service.createPer(this.persona).subscribe(personaRegistrada => {
+      this.user.usuario = this.persona.cedula,
+      this.user.contrasena = registroData.password,
+      this.user.id_persona = personaRegistrada.id_persona,
+      this.service.createUser(this.user).subscribe(() => {
+        this.titulos.controls.forEach(tituloControl => {
+          this.titulo.nombre_titulo = tituloControl.value.nombre_titulo,
+          this.titulo.grado = tituloControl.value.grado
+          this.titulo.id_persona= personaRegistrada.id_persona;
+          this.service.createTitulo(this.titulo).subscribe();
+        });
+  
+        Swal.fire('Registro exitoso', '', 'success');
+        this.router.navigate(['./login']);
+      }, error => {
+        console.error('Error al crear usuario:', error);
+        Swal.fire('Error', 'Hubo un problema al crear el usuario.', 'error');
+      });
+    }, error => {
+      console.error('Error al crear persona:', error);
+      Swal.fire('Error', 'Hubo un problema al crear la persona.', 'error');
+    });
+  } 
+  onGradoChange(event: any): void {
+    this.gradoSeleccionado = +event.target.value;
+    this.id_grado = this.gradoSeleccionado;
+  } 
 }

@@ -45,6 +45,11 @@ width: 100%;
 
 }
 
+.contenedorTitulo{
+  display: flex;
+  flex-direction: row;
+}
+
 th {
   color: #fff;
 text-align: center;

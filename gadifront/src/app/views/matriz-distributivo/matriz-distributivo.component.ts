@@ -107,6 +107,7 @@ export class MatrizDistributivoComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
+        this.loadAdditionalDataForPersonas();
       }
     });
     this.buscarDistributivo(this.authService.id_persona);
@@ -265,12 +266,13 @@ export class MatrizDistributivoComponent implements OnInit {
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
+       if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-        this.dataSourceAsig.paginator = this.paginator;
-        this.dataSourceAsig.sort = this.sort;
+      }else{
+        this.asignaturas=this.authService.asignaturasSeleccionadaAuth
+      }
         this.calcularHorasTotales();
-        this.loadAdditionalDataForPersonas();
+   
         this.cargarAdicional();
         console.log('Asignaturas cargadas:', this.asignaturas);
       });
@@ -289,7 +291,12 @@ export class MatrizDistributivoComponent implements OnInit {
         const actividadesCargadas = activEncontrados.filter(actividad =>
           idActividades.includes(actividad.id_actividad)
         );
-        this.actividades = this.actividades.concat(actividadesCargadas);
+        if (this.authService.id_actividades.length === 0) {
+          this.actividades = this.actividades.concat(actividadesCargadas);
+        }else{
+          this.actividades=this.authService.id_actividades;
+        }
+        //this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
         this.calcularHorasTotalesActividad();
         console.log('actividades cargadas:', this.actividades);
@@ -312,7 +319,14 @@ export class MatrizDistributivoComponent implements OnInit {
     console.log('horas totales actividad', this.horasTotalesActividad);
   }
 
- 
+   enviarAsignaturas():void{
+    this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
+  }
+
+  enviarActividades():void{
+    this.authService.id_actividades = this.actividades;
+    console.log('actividades enviadas:',this.authService.id_actividades);
+  }
 
 
 

@@ -68,6 +68,9 @@
       </div>
       <div class="container">
         <section class="example-container mat-elevation-z8" tabindex="0">
+          <div class="contenedorTitulo">
+            <button mat-raised-button color="primary" routerLink="/editar-asignatura" (click)="enviarAsignaturas()">Editar</button>
+          </div>
           <table mat-table [dataSource]="dataSourceAsig" matSort>
             <ng-container  matColumnDef="carrera" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
@@ -104,8 +107,10 @@
 
       <div class="container">
         <section class="example-container mat-elevation-z8" tabindex="0">
+          <div class="contenedorTitulo">
+            <button mat-raised-button color="primary" routerLink="/editar-actividad" (click)="enviarActividades()">Editar</button>
+          </div>
           <table mat-table [dataSource]="dataSourceAct" matSort>
-  
             <ng-container matColumnDef="nro_horas" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nro. Horas Gestion</th>
               <td mat-cell *matCellDef="let actividad"ngClass="horas">{{actividad.horas_no_docentes}}</td>

@@ -6,4 +6,5 @@ export class Distributivo {
   id_persona !: number;
   id_periodo !: number;
   idpersona: number = 0;
+  estado:string='';
 }

@@ -275,6 +275,7 @@ export class DistributivoComponent implements OnInit {
   public createdistributivo(): void {
     this.distributivo.id_persona = this.persona.id_persona;
     this.distributivo.id_periodo = this.idPeriodo;
+    this.distributivo.estado = 'Pendiente';
     this.distributivoService.create(this.distributivo)
       .subscribe(
         (distributivo) => {
