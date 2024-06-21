@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PersonaService } from '../persona/persona.service';
-import { Persona } from '../persona/persona';
+import { PersonaService } from '../../Services/personaService/persona.service';
+import { Persona } from '../../Services/personaService/persona';
 import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';

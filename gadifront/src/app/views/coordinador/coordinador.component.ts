@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PersonaService } from '../persona/persona.service';
+import { PersonaService } from '../../Services/personaService/persona.service';
 import { TituloProfesionalService } from '../../Services/titulo/titulo-profesional.service';
 import { GradoOcupacionalService } from '../../Services/grado/grado-ocupacional.service';
 import { TipoContratoService } from '../../Services/tipo_contrato/tipo-contrato.service';

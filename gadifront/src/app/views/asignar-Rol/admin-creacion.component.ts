@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PersonaService } from '../persona/persona.service';
+import { PersonaService } from '../../Services/personaService/persona.service';
 import { Rol } from '../rol/rol';
 import { RolService } from '../rol/rol.service';
 import { Carrera } from '../../Services/carreraService/carrera';
