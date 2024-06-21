@@ -10,6 +10,7 @@ import { DocenteService } from '../../Services/docenteService/docente.service';
 import Swal from 'sweetalert2';
 import { Usuario } from '../../Services/loginService/usuario';
 import { UsuarioRol } from '../../Services/UsuarioRol/usuarioRol';
+import { ValidacionesComponent } from '../../validaciones/validaciones.component';
 
 @Component({
   selector: 'app-registro',
@@ -43,12 +44,12 @@ export class RegistroComponent implements OnInit {
     private docenteService: DocenteService
   ) {
     this.registroForm1 = this.fb.group({
-      name1: ['', Validators.required],
-      name2: ['', Validators.required],
-      lastname1: ['', Validators.required],
-      lastname2: ['', Validators.required],
+      name1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
+      name2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
+      lastname1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
+      lastname2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
       user: ['', [Validators.required, this.validateCedulaEcuatoriana]],
-      password: ['', Validators.required]
+      password: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternPasswordValidator())]]
     });
 
     this.registroForm2 = this.fb.group({

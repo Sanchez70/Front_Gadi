@@ -85,6 +85,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { EditarActividadesComponent } from './views/coordinador/editar-actividades/editar-actividades.component';
 import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
+import { ValidacionesComponent } from './validaciones/validaciones.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -159,7 +160,7 @@ const routes: Routes = [
     DirectorReporteComponent,
     MatrizDistributivoComponent,
     EditarActividadesComponent,
-    EditarAsignaturaComponent
+    EditarAsignaturaComponent,
   ],
   
   imports: [
