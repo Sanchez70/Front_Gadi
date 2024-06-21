@@ -68,7 +68,7 @@ export class LoginComponent {
             const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.usuario === usuariol);
             if (usuarioEncontrado) {
               // Encriptar la contraseña ingresada por el usuario
-              bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err, res) => {
+              bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err: any, res: any) => {
                 if (err) {
                   console.error('Error al comparar contraseñas:', err);
                   return;
