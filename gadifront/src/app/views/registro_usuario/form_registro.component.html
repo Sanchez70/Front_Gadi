@@ -87,11 +87,16 @@
       <div class="row">
         <div class="form-group">
           <label class="label" for="telefono">Teléfono</label>
-          <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
+          <input class="form-control" type="tel" id="telefono" formControlName="telefono" required />
           <div *ngIf="registroForm2.get('telefono')?.touched && registroForm2.get('telefono')?.invalid"
             class="text-danger">
-            El teléfono es obligatorio.
+            <div *ngIf="registroForm2.get('telefono')?.hasError('required')">El teléfono es obligatorio.</div>
+            <div *ngIf="registroForm2.get('telefono')?.hasError('invalidLength')">El teléfono debe tener 10 dígitos.
+            </div>
+            <div *ngIf="registroForm2.get('telefono')?.hasError('invalidFormat')">El teléfono debe comenzar con '09'.
+            </div>
           </div>
+
         </div>
 
         <div class="form-group">
@@ -174,10 +179,11 @@
       <div class="row">
         <div class="form-group">
           <label for="contrato">Contrato</label>
-          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)" 
-          (ngModel)="contratoSelec">
+          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)"
+            (ngModel)="contratoSelec">
             <option value="" disabled selected>Seleccione una opción</option>
-            <option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{ contrato.nombre_contrato }}
+            <option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{ contrato.nombre_contrato
+              }}
             </option>
           </select>
           <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid"
