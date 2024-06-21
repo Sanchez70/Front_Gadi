@@ -103,7 +103,7 @@ const routes: Routes = [
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
   { path: 'editar-asignatura', component: EditarAsignaturaComponent},
-  { path: 'editar-actividads', component: EditarActividadesComponent},
+  { path: 'editar-actividad', component: EditarActividadesComponent},
   { path: 'admin_Creacion', component: AdminCreacionComponent},
   { path: 'distributivo', component: DistributivoComponent},
   { path: 'main-admin', component: MainAdminComponent},

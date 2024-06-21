@@ -291,7 +291,12 @@ export class MatrizDistributivoComponent implements OnInit {
         const actividadesCargadas = activEncontrados.filter(actividad =>
           idActividades.includes(actividad.id_actividad)
         );
-        this.actividades = this.actividades.concat(actividadesCargadas);
+        if (this.authService.id_actividades.length === 0) {
+          this.actividades = this.actividades.concat(actividadesCargadas);
+        }else{
+          this.actividades=this.authService.id_actividades;
+        }
+        //this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
         this.calcularHorasTotalesActividad();
         console.log('actividades cargadas:', this.actividades);
@@ -316,6 +321,11 @@ export class MatrizDistributivoComponent implements OnInit {
 
    enviarAsignaturas():void{
     this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
+  }
+
+  enviarActividades():void{
+    this.authService.id_actividades = this.actividades;
+    console.log('actividades enviadas:',this.authService.id_actividades);
   }
 
 
