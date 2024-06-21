@@ -65,13 +65,16 @@ export class MatrizDistributivoComponent implements OnInit {
   distributivos: Distributivo[] = [];
   actividades: Actividad[] = [];
   distributivoFiltrado: any[] = [];
+  periodos: any[] = [];
   distributivoAsignaturas: DistributivoAsignatura[] = [];
   distributivoActividades: DistributivoActividad[] = [];
   distributivoActividadesFiltrado: DistributivoActividad[] = [];
   actividadesFiltradas: any[] = [];
   asignaturas: Asignatura[] = [];
+  periodo: Periodo = new Periodo();
   tipos: tipo_actividad[] = [];
-
+  idPeriodo: number = this.authService.id_periodo;
+  periodoName: string = '';
   horasTotales: number = 0;
   horasTotalesActividad: number = 0;
   constructor(
@@ -101,6 +104,7 @@ export class MatrizDistributivoComponent implements OnInit {
     });
     this.cargarTipoActividad();
     this.cargarCarreras();
+    this.cargarComboPeriodos();
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
@@ -124,6 +128,14 @@ export class MatrizDistributivoComponent implements OnInit {
       this.carreras = data;
     });
   }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodobyId(this.idPeriodo).subscribe(data => {
+      this.periodo = data;
+      this.periodoName = this.periodo.nombre_periodo;
+    });
+  }
+  
 
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
@@ -169,12 +181,12 @@ export class MatrizDistributivoComponent implements OnInit {
 
   cargarAdicional(): void {
     const requests = this.asignaturas.map(asignatura =>
-
       forkJoin([
         this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
           tap(periodo => {
-            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-            console.log('periodoPersona' + periodo.nombre_periodo);
+              this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+              console.log('periodoPersona' + periodo.nombre_periodo);
+            
           }),
           catchError(() => {
             this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
@@ -245,9 +257,13 @@ export class MatrizDistributivoComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
-        distributivo => distributivo.id_persona === idPersona);
+        (distributivo) => (distributivo.id_persona === idPersona &&
+        distributivo.id_periodo === this.authService.id_periodo)
+      );
+     
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
+        
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });

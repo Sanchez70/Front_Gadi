@@ -17,6 +17,7 @@ export class AuthService {
   id_jornada: any;
   id_carrera:any;
   paralelo: any;
+  id_periodo: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
@@ -45,6 +46,7 @@ export class AuthService {
     this.id_carrera = user.id_carrera || null;
     this.id_actividades = user.id_actividades || null;
     this.asignaturasSeleccionadaAuth=user.asignaturasSeleccionadaAuth||null;
+    this.id_periodo = user.id_periodo || null;
   }
 
   clearLocalStorage() {
@@ -77,7 +79,8 @@ export class AuthService {
       paralelo: this.paralelo,
       id_carrera: this.id_carrera,
       id_actividades: this.id_actividades,
-      asignaturasSeleccionadaAuth:this.asignaturasSeleccionadaAuth
+      asignaturasSeleccionadaAuth:this.asignaturasSeleccionadaAuth,
+      id_periodo: this.id_periodo
     }));
   }
 

@@ -16,6 +16,7 @@ import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -32,7 +33,10 @@ export class CoordinadorComponent implements OnInit {
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
   contratos: { [key: number]: TipoContrato } = {};
+  periodos: any[] = [];
   personas: Persona[] = [];
+  periodoSeleccionado: number = 0;
+  idPeriodo: number = 0;
   personaEncontrada: Persona = new Persona();
   gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
@@ -49,6 +53,7 @@ export class CoordinadorComponent implements OnInit {
     private tituloService: TituloProfesionalService,
     private gradoService: GradoOcupacionalService,
     private authService: AuthService,
+    private periodoService: PeriodoService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
   }
@@ -56,12 +61,18 @@ export class CoordinadorComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-
+    this.cargarComboPeriodos();
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
       this.loadAdditionalDataForPersonas();
       console.log(this.dataSource);
     })
+  }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodos = data;
+    });
   }
 
   buscarPersona(): void {
@@ -120,9 +131,18 @@ export class CoordinadorComponent implements OnInit {
     console.log('cedula ingresada', this.cedula)
   }
 
+  onPeriodoChange(event: any): void {
+    this.periodoSeleccionado = +event.target.value;
+    this.idPeriodo = this.periodoSeleccionado;
+    console.log('idPeriodo', this.idPeriodo)
+  }
+
   verDetalle(valor: any): void {
     this.authService.clearLocalStorageAsignatura();
+    this.authService.clearLocalStorageActividad();
     console.log(valor)
+    this.authService.id_periodo = this.idPeriodo;
+    console.log('idPeriodo enviado',this.idPeriodo);
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
