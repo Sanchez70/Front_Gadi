@@ -81,7 +81,6 @@ export class PersonaService {
     return this.http.put<Usuario>(`${this.urlEndPoint}/usuario/${usuario.id_usuario}`, usuario);
   }
 
-
   // updateUsuario(usuario: Usuario): Observable<Usuario> {
   //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
   // }
