@@ -107,6 +107,7 @@ export class MatrizDistributivoComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
+        this.loadAdditionalDataForPersonas();
       }
     });
     this.buscarDistributivo(this.authService.id_persona);
@@ -265,12 +266,13 @@ export class MatrizDistributivoComponent implements OnInit {
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
+       if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-        this.dataSourceAsig.paginator = this.paginator;
-        this.dataSourceAsig.sort = this.sort;
+      }else{
+        this.asignaturas=this.authService.asignaturasSeleccionadaAuth
+      }
         this.calcularHorasTotales();
-        this.loadAdditionalDataForPersonas();
+   
         this.cargarAdicional();
         console.log('Asignaturas cargadas:', this.asignaturas);
       });
@@ -312,7 +314,9 @@ export class MatrizDistributivoComponent implements OnInit {
     console.log('horas totales actividad', this.horasTotalesActividad);
   }
 
- 
+   enviarAsignaturas():void{
+    this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
+  }
 
 
 

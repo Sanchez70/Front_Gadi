@@ -69,7 +69,7 @@
       <div class="container">
         <section class="example-container mat-elevation-z8" tabindex="0">
           <div class="contenedorTitulo">
-            <button mat-raised-button color="primary">Editar</button>
+            <button mat-raised-button color="primary" routerLink="/editar-asignatura" (click)="enviarAsignaturas()">Editar</button>
           </div>
           <table mat-table [dataSource]="dataSourceAsig" matSort>
             <ng-container  matColumnDef="carrera" sticky>
@@ -108,7 +108,7 @@
       <div class="container">
         <section class="example-container mat-elevation-z8" tabindex="0">
           <div class="contenedorTitulo">
-            <button mat-raised-button color="primary">Editar</button>
+            <button mat-raised-button color="primary"  >Editar</button>
           </div>
           <table mat-table [dataSource]="dataSourceAct" matSort>
             <ng-container matColumnDef="nro_horas" sticky>

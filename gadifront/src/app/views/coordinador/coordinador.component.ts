@@ -121,6 +121,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   verDetalle(valor: any): void {
+    this.authService.clearLocalStorageAsignatura();
     console.log(valor)
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];

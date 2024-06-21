@@ -1,1 +1,104 @@
-<p>editar-asignatura works!</p>
+<div class="{{currentExplan}}">
+  <h1 class="h1">ASIGNATURAS</h1>
+  <form class="formulario" ngNativeValidate style="width: 45%;" [formGroup]="myForm">
+
+    <div class="combos-container">
+      <div class="input-group mb-3">
+        <div class="combo-container">
+          <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
+          <div class="custom-select"> <select class="form-control" placeholder="Paralelo"
+              (ngModel)="paraleloSeleccionado" name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
+              (change)="onParaleloChange($event)" formControlName="numeroPer">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let paralelo of paralelos" [value]="paralelo">{{paralelo}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="combo-container">
+          <label for="ciclos" class="label_form font-weight-bold">Ciclos</label>
+          <div class="custom-select">
+            <select class="form-control" placeholder="Seleccione el ciclo" [(ngModel)]="cicloSeleccionado" name="ciclo"
+              aria-label="Ciclo" aria-describedby="basic-addon1" (change)="onCicloChange($event)"
+              formControlName="cicloSelec">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let ciclo of ciclos" [value]="ciclo.id_ciclo">{{ciclo.nombre_ciclo}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="dashed">
+    <div class="tables-container">
+      <div class="table-container">
+        <table class="table table-condensed table-bordered table-striped">
+          <thead>
+            <tr>
+              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173); margin-top: 1cap;">
+                Asignaturas</th>
+            </tr>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Horas Semanales</th>
+              <th scope="col">Ciclo</th>
+              <th scope="col">Seleccionar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asignatura of asignaturaFiltrada">
+              <td>{{asignatura.nombre_asignatura}}</td>
+              <td>{{asignatura.horas_semanales}}</td>
+              <td>{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
+              <td>
+                <div class="btnContenedor" routerLinkActive="active">
+                  <button type="button" class="btnSeleccionar" (click)="escogerAsignatura(asignatura)"><i
+                      class="bi bi-check-circle-fill"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-container">
+        <table class="table table-condensed table-bordered table-striped" style="margin-top: 3cap;">
+          <thead>
+            <tr>
+              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">Asignaturas Seleccionadas
+              </th>
+            </tr>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Ciclo</th>
+              <th colspan="3">Horas Semanales</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asignaturas of asignaturasSeleccionadas; let i=index">
+              <td>{{asignaturas.nombre_asignatura}}</td>
+              <td>{{obtenerNombreCiclo(asignaturas.id_ciclo)}}</td>
+              <td>{{asignaturas.horas_semanales}}</td>
+              <td>
+                <div class="" routerLinkActive="active">
+                  <button type="button" class="btnEliminar" (click)="eliminarAsignatura(i)"><i
+                      class="bi bi-trash3-fill"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th colspan="3" style="text-align: left;">Horas totales:</th>
+              <td>{{horasTotales}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <div class="btnAcept">
+        <button type="submit" class="btnAceptar" (click)="enviarAsignaturasDistributibo()">Aceptar</button>
+      </div>
+    </div>
+  </form>
+</div>
