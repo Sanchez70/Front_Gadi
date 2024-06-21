@@ -32,13 +32,13 @@ export class PersonaService {
     return this.http.get<GradoOcupacional[]>(`${this.baseUrl}/grado_ocupacional`);
   }
 
-  
   getTiposContratos(): Observable<TipoContrato[]> {
     return this.http.get<TipoContrato[]>(`${this.baseUrl}/tipo_contrato`);
   }
   getTitulosProfecionales(): Observable<TituloProfecional[]> {
     return this.http.get<TituloProfecional[]>(`${this.baseUrl}/titulo_profesional`);
   }
+  
   getPersonaById(id: number): Observable<Persona> {
     return this.http.get<Persona>(`${this.baseUrl}/persona/${id}`);
   }
@@ -80,9 +80,4 @@ export class PersonaService {
   updateUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
   }
-
-
-  // updateUsuario(usuario: Usuario): Observable<Usuario> {
-  //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
-  // }
 }
