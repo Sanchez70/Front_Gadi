@@ -1,30 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonaService } from '../persona/persona.service';
-// import { MatSnackBar } from '@angular/material/snack-bar';
-// import { MatSidenavModule } from '@angular/material/sidenav';
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatListModule } from '@angular/material/list';
-// import { MatTableModule } from '@angular/material/table';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatSnackBarModule } from '@angular/material/snack-bar';
-// import { MatOption } from '@angular/material/core';
-// import { MatDividerModule } from '@angular/material/divider';
-// import { MatSelect } from '@angular/material/select';
-// import { MatOptionModule } from '@angular/material/core';
-// import { ReactiveFormsModule } from '@angular/forms';
-import { Rol } from '../rol/rol'; 
+import { Rol } from '../rol/rol';
 import { RolService } from '../rol/rol.service';
-import { Carrera } from '../../Services/carreraService/carrera'; 
+import { Carrera } from '../../Services/carreraService/carrera';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { Periodo } from '../periodo/periodo';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { CommonModule } from '@angular/common';
-import { forkJoin, tap } from 'rxjs';
+import { Subscription, forkJoin, tap } from 'rxjs';
 import { Persona } from '../../Services/docenteService/persona';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { AuthService } from '../../auth.service';
@@ -34,7 +19,6 @@ import Swal from 'sweetalert2';
 import { PersonaListModalComponent } from '../ModalPersona/persona-list-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-// import { MatDialog } from '@angular/material/dialog';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -51,25 +35,7 @@ const Toast = Swal.mixin({
   selector: 'app-admin-creacion',
   templateUrl: './admin-creacion.component.html',
   styleUrls: ['./admin-creacion.component.css'],
-  // standalone: true,
-  // imports: [
-  //   MatSidenavModule,
-  //   MatToolbarModule,
-  //   MatIconModule,
-  //   MatListModule,
-  //   MatTableModule,
-  //   MatInputModule,
-  //   MatFormFieldModule,
-  //   MatButtonModule,
-  //   MatSnackBarModule,
-  //   ReactiveFormsModule,
-  //   MatOption,
-  //   MatDividerModule,
-  //   MatSelect,
-  //   MatOptionModule,
-  //   CommonModule,
-  //   MatDividerModule
-  // ],
+
 })
 export class AdminCreacionComponent implements OnInit {
   searchForm: FormGroup;
@@ -78,15 +44,17 @@ export class AdminCreacionComponent implements OnInit {
   carreras: Carrera[] = [];
   usuario: Usuario | null = null;
   panelOpenState = false;
- 
-  
+  currentExplan: string = '';
+  private sidebarSubscription!: Subscription;
+
   constructor(
     private fb: FormBuilder,
     private personaService: PersonaService,
     private snackBar: MatSnackBar,
     private rolService: RolService,
     private carreraService: CarreraService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService,
   ) {
     this.searchForm = this.fb.group({
       cedula: ['', Validators.required],
@@ -111,7 +79,7 @@ export class AdminCreacionComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {   }
 
   buscarPersona() {
     if (this.searchForm.invalid) {
@@ -230,7 +198,7 @@ export class AdminCreacionComponent implements OnInit {
 
     if (usuarioId) {
       const usuarioRol: UsuarioRol = {
-        id_usuario_rol: 0, 
+        id_usuario_rol: 0,
         id_usuario: usuarioId,
         id_rol: rolId
       };
@@ -276,4 +244,6 @@ export class AdminCreacionComponent implements OnInit {
       height: '80%',
     });
   }
+
+
 }

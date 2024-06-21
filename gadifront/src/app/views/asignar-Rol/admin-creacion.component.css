@@ -27,4 +27,34 @@
     padding: 2%;
   }
   
+
+  .Abrir {
+    margin-left: 22.5cap;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: calc(100% - 22.5cap);
+    box-sizing: border-box;
+    
+  }
+  
+  .Abrir .table-container {
+    flex-grow: 1;
+    overflow: auto;
+    max-height: 70vh;
+    max-width: 167vh;
+    
+  }
+  
+  .Cerrar .table-container {
+    flex-grow: 1;
+    overflow: auto;
+    max-height: 70vh;
+    
+  }
+  
+  .Abrir table {
+    width: 100%;
+  }
+  
   
