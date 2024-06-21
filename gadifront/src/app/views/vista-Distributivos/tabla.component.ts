@@ -1,21 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-// import { MatSort, MatSortModule } from '@angular/material/sort';
-// import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-import { PersonaService } from '../persona/persona.service';
-import { Persona } from '../persona/persona';
+import { PersonaService } from '../../Services/personaService/persona.service';
+import { Persona } from '../../Services/personaService/persona';
 import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional'; 
-import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
+import { Subscription, catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-tabla',
@@ -25,24 +21,42 @@ import { MatSort } from '@angular/material/sort';
 export class TablaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
   dataSource!: MatTableDataSource<Persona>;
-
   personas: Persona[] = [];
   periodos: { [key: number]: Periodo } = {};
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
   contratos: { [key: number]: TipoContrato } = {};
   color = '#1E90FF';
+  currentExplan: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private personaService: PersonaService, private distributivoService: DistributivoService) { }
+  private sidebarSubscription!: Subscription;
+  
+  constructor(private personaService: PersonaService, private distributivoService: DistributivoService,private authService: AuthService,) { }
 
   ngOnInit(): void {
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
       this.loadAdditionalDataForPersonas();
     });
+
+    this.sidebarSubscription = this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+      this.adjustTable();
+    });
   }
+
+  ngAfterViewInit(): void {
+    this.adjustTable();
+  }
+
+  ngOnDestroy(): void {
+    if (this.sidebarSubscription) {
+      this.sidebarSubscription.unsubscribe();
+    }
+  }
+
 
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
@@ -101,6 +115,15 @@ export class TablaComponent implements OnInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+  }
+
+  adjustTable(): void {
+    if (this.dataSource && this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      // Trigger a resize event to adjust table columns
+      window.dispatchEvent(new Event('resize'));
     }
   }
 }

@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-between;
 }
-i{
+
+i {
   font-size: 16x;
 }
 
@@ -24,8 +25,9 @@ i{
   justify-content: space-between;
 }
 
-.avatar-Abrir, .avatar-Cerrar {
-  width: 2.5rem; 
+.avatar-Abrir,
+.avatar-Cerrar {
+  width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
 }
@@ -41,7 +43,7 @@ i{
 }
 
 .logo {
-  max-width: 100%; 
+  max-width: 100%;
   height: auto;
 }
 
@@ -75,8 +77,6 @@ i{
 }
 
 .sidebar a {
- 
- 
   border-radius: 0.2rem;
   color: #ffffff;
   text-decoration: none;
@@ -90,6 +90,7 @@ i{
   color: #000000;
   padding: 9px;
 }
+
 .separator {
   border: 0;
   height: 1.5rem;

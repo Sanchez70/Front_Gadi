@@ -1,9 +1,11 @@
-<div class="container">
+<div class="container {{currentExplan}}">
+
   <h1>DISTRIBUTIVO</h1>
   <mat-form-field appearance="outline">
     <mat-label>Buscar...</mat-label>
     <input matInput (input)="applyFilter($event)" />
   </mat-form-field>
+
   <div class="table-container">
     <section class="example-container mat-elevation-z8" tabindex="0">
       <table mat-table [dataSource]="dataSource" matSort>

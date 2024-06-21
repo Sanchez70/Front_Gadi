@@ -9,7 +9,7 @@ import { AuthService } from '../../auth.service';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 import { ActividadService } from '../../Services/actividadService/actividad.service';
 import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
-import { PersonaService } from '../persona/persona.service';
+import { PersonaService } from '../../Services/personaService/persona.service';
 import { Persona } from '../../Services/docenteService/persona';
 import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
 import { Tipo_contrato } from '../../Services/tipo_contrato/tipo_contrato';

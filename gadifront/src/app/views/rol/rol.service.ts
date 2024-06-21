@@ -8,16 +8,19 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { Usuario } from '../../Services/loginService/usuario';
 import { Carrera } from '../../Services/carreraService/carrera';
 import { Rol } from '../rol/rol';
+import { appConfig } from '../../environment/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RolService {
-    private baseUrl = 'http://localhost:8081/api';
+    // private baseUrl = 'http://localhost:8081/api';
+
+    private urlEndPoint: string = appConfig.baseUrl;
 
   constructor(private http: HttpClient) { }
 
 getRoles(): Observable<Rol[]> {
-    return this.http.get<Rol[]>(`${this.baseUrl}/rol`);
+    return this.http.get<Rol[]>(`${this.urlEndPoint}/rol`);
   }
 }

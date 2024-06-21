@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PersonaService } from '../persona/persona.service';
+import { PersonaService } from '../../Services/personaService/persona.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Persona } from '../../Services/docenteService/persona';
 import { MatPaginator } from '@angular/material/paginator';

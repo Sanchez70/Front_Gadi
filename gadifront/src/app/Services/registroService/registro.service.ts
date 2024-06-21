@@ -34,7 +34,7 @@ export class RegistroService{
         return this.http.post<Titulo_profesional>(`${this.urlBase}/titulo_profesional`, titulo, {headers: this.httpHeaders})
     }
 
-    create(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
+    createUserRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
         return this.http.post<UsuarioRol>(`${this.urlBase}/usuarioRol`, usuarioRol, { headers: this.httpHeaders })
       }
 }

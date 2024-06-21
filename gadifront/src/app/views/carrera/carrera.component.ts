@@ -8,12 +8,15 @@ import { MatSort } from '@angular/material/sort';
 import Swal from 'sweetalert2';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { CarreraModalComponent } from './carrera-modal.component';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../auth.service';
 
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
   showConfirmButton: false,
   timer: 3000,
+  showCloseButton: true,
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.onmouseenter = Swal.stopTimer;
@@ -30,15 +33,33 @@ export class CarreraComponent implements OnInit {
   displayedColumns: string[] = ['nombre_carrera', 'fecha_inicio', 'horas_semanales', 'codigo', 'borrar', 'actualizar'];
   dataSource!: MatTableDataSource<Carrera>;
   color = '#1E90FF';
-
+  currentExplan: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private carreraService: CarreraService, private dialog: MatDialog) { }
+  private sidebarSubscription!: Subscription;
+
+  constructor(private carreraService: CarreraService, private dialog: MatDialog, private authService: AuthService,) { }
 
   ngOnInit(): void {
     this.loadCarreras();
+
+    this.sidebarSubscription = this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+      this.adjustTable();
+    });
   }
+
+  ngAfterViewInit(): void {
+    this.adjustTable();
+  }
+
+  ngOnDestroy(): void {
+    if (this.sidebarSubscription) {
+      this.sidebarSubscription.unsubscribe();
+    }
+  }
+
 
   loadCarreras(): void {
     this.carreraService.getCarrera().subscribe(data => {
@@ -110,5 +131,13 @@ export class CarreraComponent implements OnInit {
         });
       }
     });
+  }
+
+  adjustTable(): void {
+    if (this.dataSource && this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      window.dispatchEvent(new Event('resize'));
+    }
   }
 }

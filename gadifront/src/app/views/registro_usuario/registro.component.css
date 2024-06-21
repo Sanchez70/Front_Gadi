@@ -29,7 +29,9 @@ label {
     text-shadow: 30cap;
 }
 
-input, select, mat-form-field {
+input,
+select,
+mat-form-field {
     width: 100%;
     margin-top: 4px;
     padding: 8px;
@@ -42,7 +44,7 @@ input, select, mat-form-field {
 
 select {
     height: 40px;
-    appearance: none;  
+    appearance: none;
     background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDExIDYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTExIDBMNS41IDZMMS4yMzUyODJlLTE0IDYgTDAgNS4xNTAyODUgNSA3bDUuNSA0SDBWNk0xMSA2TDAgMFYwWiIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==') no-repeat right 10px center;
     background-size: 10px;
 }
@@ -83,7 +85,14 @@ button:hover {
     text-align: center;
 }
 
-.example-container mat-form-field + mat-form-field {
+.example-container mat-form-field+mat-form-field {
     margin-left: 8px;
-  }
-  
+}
+
+.login-link {
+    cursor: pointer;
+}
+
+.login-link:hover {
+    color: #357ae8;
+}

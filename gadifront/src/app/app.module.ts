@@ -60,6 +60,7 @@ import { DistributivoService } from './Services/distributivoService/distributivo
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
+import { FormComponent as PersonsaFormComponent } from './views/persona/form.component';
 import { tipo_actividadService } from './Services/tipo_actividadService/tipo_actividad.service';
 import { AdminCreacionComponent } from './views/asignar-Rol/admin-creacion.component'; 
 import { ChangeDetectorRef } from '@angular/core';
@@ -84,6 +85,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { EditarActividadesComponent } from './views/coordinador/editar-actividades/editar-actividades.component';
 import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
+import { ValidacionesComponent } from './validaciones/validaciones.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -97,8 +99,10 @@ const routes: Routes = [
   { path: 'actividad', component: ActividadComponent },
   { path: 'tabla', component: TablaComponent},
   { path: 'persona', component: PersonaComponent },
-  { path: 'actividad/form', component: ActividadFormComponert },
+  { path: 'actividad/form', component: ActividadFormComponert }, 
   { path: 'actividad/form/:id', component: ActividadFormComponert },
+  { path: 'persona/form', component: PersonsaFormComponent }, 
+  { path: 'persona/form/:id', component: PersonsaFormComponent },
   { path: 'registro', component: RegistroComponent },
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
@@ -156,7 +160,7 @@ const routes: Routes = [
     DirectorReporteComponent,
     MatrizDistributivoComponent,
     EditarActividadesComponent,
-    EditarAsignaturaComponent
+    EditarAsignaturaComponent,
   ],
   
   imports: [

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
-import { PersonaService } from '../persona/persona.service';
+import { PersonaService } from '../../Services/personaService/persona.service';
 import { CicloService } from '../../Services/cicloService/ciclo.service';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { JornadaService } from '../../Services/jornadaService/jornada.service';

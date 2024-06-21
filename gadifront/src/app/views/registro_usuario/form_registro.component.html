@@ -6,7 +6,10 @@
         <div class="form-group">
           <label class="label" for="primer_nombre">Primer nombre</label>
           <input class="form-control" type="text" id="primer_nombre" formControlName="name1" required />
-          <div *ngIf="registroForm1.get('name1')?.touched && registroForm1.get('name1')?.invalid" class="text-danger">
+          <div *ngIf="registroForm1.get('name1')?.hasError('pattern')" class="text-danger">
+            Ingrese solo letras
+          </div>
+          <div *ngIf="registroForm1.get('name1')?.touched && registroForm1.get('name1')?.invalid" class="text-danger"> 
             El primer nombre es obligatorio.
           </div>
         </div>
@@ -14,6 +17,9 @@
         <div class="form-group">
           <label for="segundo_nombre">Segundo nombre</label>
           <input class="form-control" type="text" id="segundo_nombre" formControlName="name2" required />
+          <div *ngIf="registroForm1.get('name2')?.hasError('pattern')" class="text-danger">
+            Ingrese solo letras
+          </div>
           <div *ngIf="registroForm1.get('name2')?.touched && registroForm1.get('name2')?.invalid" class="text-danger">
             El segundo nombre es obligatorio.
           </div>
@@ -23,6 +29,9 @@
         <div class="form-group">
           <label for="primer_apellido">Primer apellido</label>
           <input class="form-control" type="text" id="primer_apellido" formControlName="lastname1" required />
+          <div *ngIf="registroForm1.get('lastname1')?.hasError('pattern')" class="text-danger">
+            Ingrese solo letras
+          </div>
           <div *ngIf="registroForm1.get('lastname1')?.touched && registroForm1.get('lastname1')?.invalid"
             class="text-danger">
             El primer apellido es obligatorio.
@@ -32,6 +41,9 @@
         <div class="form-group">
           <label for="segundo_apellido">Segundo apellido</label>
           <input class="form-control" type="text" id="segundo_apellido" formControlName="lastname2" required />
+          <div *ngIf="registroForm1.get('lastname2')?.hasError('pattern')" class="text-danger">
+            Ingrese solo letras
+          </div>
           <div *ngIf="registroForm1.get('lastname2')?.touched && registroForm1.get('lastname2')?.invalid"
             class="text-danger">
             El segundo apellido es obligatorio.
@@ -64,6 +76,9 @@
         <div class="form-group">
           <label for="contra">Contraseña</label>
           <input class="form-control" type="password" id="password" formControlName="password" required>
+          <div *ngIf="registroForm1.get('password')?.hasError('pattern')" class="text-danger">
+            ¡Ingrese una contraseña de mínimo 8 caracteres, mayúsculas, minúsculas y un caracter especial!
+          </div>
           <div *ngIf="registroForm1.get('password')?.touched && registroForm1.get('password')?.invalid"
             class="text-danger">
             La contraseña es obligatoria.
@@ -87,11 +102,16 @@
       <div class="row">
         <div class="form-group">
           <label class="label" for="telefono">Teléfono</label>
-          <input class="form-control" type="text" id="telefono" formControlName="telefono" required />
+          <input class="form-control" type="tel" id="telefono" formControlName="telefono" required />
           <div *ngIf="registroForm2.get('telefono')?.touched && registroForm2.get('telefono')?.invalid"
             class="text-danger">
-            El teléfono es obligatorio.
+            <div *ngIf="registroForm2.get('telefono')?.hasError('required')">El teléfono es obligatorio.</div>
+            <div *ngIf="registroForm2.get('telefono')?.hasError('invalidLength')">El teléfono debe tener 10 dígitos.
+            </div>
+            <div *ngIf="registroForm2.get('telefono')?.hasError('invalidFormat')">El teléfono debe comenzar con '09'.
+            </div>
           </div>
+
         </div>
 
         <div class="form-group">
@@ -174,10 +194,11 @@
       <div class="row">
         <div class="form-group">
           <label for="contrato">Contrato</label>
-          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)" 
-          (ngModel)="contratoSelec">
+          <select id="contrato" formControlName="nombre_contrato" required (change)="onContratoChange($event)"
+            (ngModel)="contratoSelec">
             <option value="" disabled selected>Seleccione una opción</option>
-            <option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{ contrato.nombre_contrato }}
+            <option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{ contrato.nombre_contrato
+              }}
             </option>
           </select>
           <div *ngIf="registroForm2.get('nombre_contrato')?.touched && registroForm2.get('nombre_contrato')?.invalid"
