@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<div id="htmlData2" style="width: 1000px; margin-left: 25cap; margin-right: 25cap ;">
+<div id="htmlData" style="width: 1000px; margin-left: 25cap; font-family: Arial, Helvetica, sans-serif;">
     <html lang="es">
-
-
 
     <body>
         <div class="container-fluid">
@@ -15,56 +13,77 @@
             <div class="row">
                 <div class="container">
                     <h1 class="h">Docente</h1>
-                    <h1 class="h-fecha">Fecha:</h1>
+                    <h1 class="h-fecha">Cuenca, {{fechaDistributivo}}</h1>
                 </div>
-                <h1 class="h">Nombre y Apellidos</h1>
+                <h1 class="h">{{personaEncontrada.nombre1}} {{personaEncontrada.apellido1}}</h1>
                 <h1 class="h">Docente del Instituto Superior Tecnologico de Azuay</h1>
-                <h1 class="h">A continuación se detalla su asignacion de horas docentes y de gestion para el periodo acádemico: ppppp </h1>
-                <h1 class="h">Horas docentes:</h1>
+                <h1 class="h">A continuación se detalla su asignacion de horas docentes y de gestion para el periodo
+                    acádemico: {{periodoName}} </h1>
+                <h1 class="h" style="margin-top: 20px;">HORAS DOCENTES</h1>
             </div>
             <hr>
 
             <div class="row">
                 <div class="col-xs-12">
-                    <table class="table table-condensed table-bordered table-striped">
+                    <table class="table table-condensed table-bordered table-striped" style="margin-bottom: -1px;">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th> </th>
-                                <th></th>
-                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                            <tr *ngFor="let persona of dataSource.data">
+                                <td style="text-align: center;">{{persona.nombre1}} {{persona.nombre2}} {{persona.apellido1}} {{persona.apellido2}}</td>
+                                <td style="text-align: center;">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <hr>
-            <h1 class="h">Horas no docentes:</h1>
+
             <div class="row">
                 <div class="col-xs-12">
                     <table class="table table-condensed table-bordered table-striped">
-                        <thead>
+                        <thead style="text-align: center;">
                             <tr>
-                                <th></th>
-                                <th></th>
-                                <th> </th>
-                                <th></th>
+                                <th>CARRERA</th>
+                                <th>CURSO</th>
+                                <th>ASIGNATURA</th>
+                                <th>HORAS SEMANALES</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr *ngFor="let asignaturas of dataSourceAsig.data; let i = index">
+                                <td>{{carreras[asignaturas.id_asignatura].nombre_carrera || 'No asignado'}}</td>
+                                <td>{{ciclos[asignaturas.id_asignatura].nombre_ciclo || 'No asignado'}}</td>
+                                <td>{{asignaturas.nombre_asignatura}}</td>
+                                <td style="text-align: center;">{{asignaturas.horas_semanales}}</td>
+                            </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td colspan="3" style="text-align: right;"><b>TOTAL</b></td>
+                                <td style="text-align: center;"><b>{{ horasTotales}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <h1 class="h" style="margin-bottom: 20px;">HORAS NO DOCENTES</h1>
+            <hr>
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-condensed table-bordered table-striped">
+                        <thead style="text-align: center;">
+                            <tr>
+                                <th>ACTIVIDAD</th>
+                                <th>HORAS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let actividades of dataSourceAct.data; let i=index">
+                                <td>{{actividades.nombre_actividad}}</td>
+                                <td style="text-align: center;">{{actividades.horas_no_docentes}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="1" style="text-align: right;"><b>TOTAL</b></td>
+                                <td style="text-align: center;"><b>{{ horasTotalesActividad}}</b></td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,9 +91,16 @@
             </div>
         </div>
     </body>
+    <h1 class="h" style="text-align: center; font-weight: bold; margin-bottom: 10px;">HORAS TOTALES DEL DOCENTE: {{calcularHorasTotalesPorDocente(horasTotales,horasTotalesActividad)}} </h1>
     <h1 class="h">Agradecidos con su aporte a la institución, suscribimos de usted</h1>
-    <h1 class="h">Atentamente</h1>
+    <h1 class="h" style="margin-top: 50px;">Atentamente</h1>
     <h1 class="h-Final">Kevin Alexander SanchezMedina</h1>
-    <h1 class="h-Final1">Rector</h1>
+    <h1 class="h-Final1">RECTOR</h1>
+
     </html>
+</div>
+<div class="form_group btn_reservar">
+    <button type="submit" class="btnDescargar" (click)="downloadPDF()">Descargar
+        <i class="fas fa-download"></i>
+    </button>
 </div>

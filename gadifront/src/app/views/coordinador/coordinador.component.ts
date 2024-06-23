@@ -17,6 +17,19 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -44,7 +57,7 @@ export class CoordinadorComponent implements OnInit {
   cedula: string = '';
   color = '#1E90FF';
   currentExplan: string = '';
-
+  myForm: FormGroup = this.fb.group({});
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -55,12 +68,17 @@ export class CoordinadorComponent implements OnInit {
     private authService: AuthService,
     private periodoService: PeriodoService,
     private router: Router,
+    private fb: FormBuilder,
     private activatedRoute: ActivatedRoute) {
   }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
+
+    this.myForm = this.fb.group({
+      periodoSeleccionado: [null, Validators.required]
+    })
     this.cargarComboPeriodos();
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
@@ -138,19 +156,20 @@ export class CoordinadorComponent implements OnInit {
   }
 
   verDetalle(valor: any): void {
-    this.authService.clearLocalStorageAsignatura();
-    this.authService.clearLocalStorageActividad();
-    console.log(valor)
-    this.authService.id_periodo = this.idPeriodo;
-    console.log('idPeriodo enviado',this.idPeriodo);
-    this.personaService.getPersonas().subscribe(data => {
-      const personaEncontrados = data as Persona[];
-      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
-      if (usuarioEncontrado) {
-        this.authService.id_persona = usuarioEncontrado.id_persona;
-        this.router.navigate(['/matriz-distributivo']);
-      }
-    });
+      this.authService.clearLocalStorageAsignatura();
+      this.authService.clearLocalStorageActividad();
+      console.log(valor)
+      this.authService.id_periodo = this.idPeriodo;
+      console.log('idPeriodo enviado', this.idPeriodo);
+      this.personaService.getPersonas().subscribe(data => {
+        const personaEncontrados = data as Persona[];
+        const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
+        if (usuarioEncontrado) {
+          this.authService.id_persona = usuarioEncontrado.id_persona;
+          this.router.navigate(['/matriz-distributivo']);
+        }
+      });
+  
 
   }
   applyFilter(event: Event) {
