@@ -116,6 +116,7 @@ const routes: Routes = [
   { path: 'director-reporte', component: DirectorReporteComponent},
   { path: 'carrera', component: CarreraComponent},
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent}
+  
 ];
 @NgModule({
   declarations: [

@@ -98,6 +98,12 @@ export class AuthService {
     this.cedula = cedula;
     this.saveUserToLocalStorage();
   }
+  
+ setIdPersona(id_persona:any){
+  this.id_persona=id_persona;
+  this.saveUserToLocalStorage();
+}
+
 
   navbar() {
     const currentExplan = this.explanSubject.value;

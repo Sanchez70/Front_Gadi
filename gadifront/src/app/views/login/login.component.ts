@@ -74,6 +74,7 @@ export class LoginComponent {
                   return;
                 }
                 if (res) {
+                  this.authService.setIdPersona(usuarioEncontrado.id_persona); // Guardar el id_persona
                   this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
                   this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
                 } else {
