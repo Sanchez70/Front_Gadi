@@ -16,6 +16,20 @@ import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -32,7 +46,10 @@ export class CoordinadorComponent implements OnInit {
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
   contratos: { [key: number]: TipoContrato } = {};
+  periodos: any[] = [];
   personas: Persona[] = [];
+  periodoSeleccionado: number = 0;
+  idPeriodo: number = 0;
   personaEncontrada: Persona = new Persona();
   gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
@@ -40,7 +57,7 @@ export class CoordinadorComponent implements OnInit {
   cedula: string = '';
   color = '#1E90FF';
   currentExplan: string = '';
-
+  myForm: FormGroup = this.fb.group({});
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -49,7 +66,9 @@ export class CoordinadorComponent implements OnInit {
     private tituloService: TituloProfesionalService,
     private gradoService: GradoOcupacionalService,
     private authService: AuthService,
+    private periodoService: PeriodoService,
     private router: Router,
+    private fb: FormBuilder,
     private activatedRoute: ActivatedRoute) {
   }
   ngOnInit(): void {
@@ -57,11 +76,21 @@ export class CoordinadorComponent implements OnInit {
       this.currentExplan = explan;
     });
 
+    this.myForm = this.fb.group({
+      periodoSeleccionado: [null, Validators.required]
+    })
+    this.cargarComboPeriodos();
     this.personaService.getPersonas().subscribe(data => {
       this.personas = data;
       this.loadAdditionalDataForPersonas();
       console.log(this.dataSource);
     })
+  }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodos = data;
+    });
   }
 
   buscarPersona(): void {
@@ -120,17 +149,27 @@ export class CoordinadorComponent implements OnInit {
     console.log('cedula ingresada', this.cedula)
   }
 
+  onPeriodoChange(event: any): void {
+    this.periodoSeleccionado = +event.target.value;
+    this.idPeriodo = this.periodoSeleccionado;
+    console.log('idPeriodo', this.idPeriodo)
+  }
+
   verDetalle(valor: any): void {
-    this.authService.clearLocalStorageAsignatura();
-    console.log(valor)
-    this.personaService.getPersonas().subscribe(data => {
-      const personaEncontrados = data as Persona[];
-      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
-      if (usuarioEncontrado) {
-        this.authService.id_persona = usuarioEncontrado.id_persona;
-        this.router.navigate(['/matriz-distributivo']);
-      }
-    });
+      this.authService.clearLocalStorageAsignatura();
+      this.authService.clearLocalStorageActividad();
+      console.log(valor)
+      this.authService.id_periodo = this.idPeriodo;
+      console.log('idPeriodo enviado', this.idPeriodo);
+      this.personaService.getPersonas().subscribe(data => {
+        const personaEncontrados = data as Persona[];
+        const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
+        if (usuarioEncontrado) {
+          this.authService.id_persona = usuarioEncontrado.id_persona;
+          this.router.navigate(['/matriz-distributivo']);
+        }
+      });
+  
 
   }
   applyFilter(event: Event) {

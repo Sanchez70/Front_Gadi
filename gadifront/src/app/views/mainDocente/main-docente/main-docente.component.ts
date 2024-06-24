@@ -16,5 +16,6 @@ export class MainDocenteComponent {
       this.authService.explan$.subscribe(explan => {
         this.currentExplan = explan;
       });
+      
     }
 }
