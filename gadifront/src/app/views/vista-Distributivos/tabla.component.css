@@ -21,6 +21,58 @@ h1 {
 
 }
 
+.combos-container{
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  
+}
+
+.combo-container{
+  flex: 1;
+  margin-right: 20px;
+  min-width: 400px;
+  margin-left: 5cap;
+}
+
+.custom-select {
+position: relative;
+}
+
+.custom-select select {
+appearance: none;
+-webkit-appearance: none;
+width: 100%;
+font-size: 18px;
+padding: 5px 10px 5px 10px;
+background-color: #FFFFFF;
+border: 1px solid #C4D1EB;
+border-radius: 5px;
+color: #000000;
+cursor: pointer;
+outline: none;
+box-shadow: 3px 3px 2px 0px #E2E2E2;
+}
+
+.custom-select select:focus {
+background: #F2F2F2;
+border: 1px solid #5A7EC7;
+border-radius: 5px;
+}
+
+.custom-select::after {
+content: "";
+position: absolute;
+pointer-events: none;
+top: 50%;
+right: 10px;
+transform: translate(0, -50%);
+width: 12px;
+height: 12px;
+background-color: #000000;
+clip-path: polygon(8% 17%, 0% 25%, 50% 84%, 100% 25%, 92% 17%, 50% 65%);
+}
+
 .mat-header-row {
   position: sticky;
   top: 0;
@@ -62,5 +114,31 @@ h1 {
 
 .Abrir table {
   width: 100%;
+}
+
+.mat-button{
+  border-radius: 0.5rem;
+  width: 70px;
+  height: 2.5rem;
+  background-color: #1E90FF;
+  border: none;
+  color: #fff;
+ text-align: center;
+}
+
+.btnRefrescar{
+  border-radius: 0.5rem;
+  height: 2.5rem;
+  margin-top: 20px;
+  margin-left: 20px;
+  width: 40px;
+  background-color: #1E90FF;
+  border: none;
+  color: #fff;
+  text-align: center;
+}
+
+.btnRefrescar:hover{
+  background-color: #17497a;
 }
 
