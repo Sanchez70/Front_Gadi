@@ -122,7 +122,6 @@ export class TablaComponent implements OnInit {
     if (this.dataSource && this.paginator && this.sort) {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      // Trigger a resize event to adjust table columns
       window.dispatchEvent(new Event('resize'));
     }
   }

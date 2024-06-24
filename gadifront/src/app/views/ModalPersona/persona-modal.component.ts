@@ -1,10 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-// import { MatSort, MatSortModule } from '@angular/material/sort';
-// import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatFormFieldModule } from '@angular/material/form-field';
 import { PersonaService } from '../../Services/personaService/persona.service';
 import { Persona } from '../../Services/personaService/persona';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
@@ -21,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
     styleUrl: './persona-modal.component.css',
 })
 export class PersonaModalComponent implements OnInit {
-    displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
+    displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado', 'accion'];
     dataSource!: MatTableDataSource<Persona>;
 
     personas: Persona[] = [];
@@ -32,6 +27,7 @@ export class PersonaModalComponent implements OnInit {
     color = '#1E90FF';
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
+    @Output() personaSeleccionada = new EventEmitter<string>();
 
     constructor(private personaService: PersonaService) { }
 
@@ -91,5 +87,9 @@ export class PersonaModalComponent implements OnInit {
         if (this.dataSource.paginator) {
             this.dataSource.paginator.firstPage();
         }
+    }
+
+    seleccionarPersona(persona: Persona) {
+        this.personaSeleccionada.emit(persona.cedula);
     }
 }

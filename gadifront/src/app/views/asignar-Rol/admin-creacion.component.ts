@@ -79,7 +79,11 @@ export class AdminCreacionComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {   }
+  ngOnInit(): void {
+    this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+    });
+  }
 
   buscarPersona() {
     if (this.searchForm.invalid) {
@@ -239,11 +243,13 @@ export class AdminCreacionComponent implements OnInit {
   }
 
   openModal() {
-    this.dialog.open(PersonaListModalComponent, {
+    const dialogRef = this.dialog.open(PersonaListModalComponent, {
       width: '80%',
       height: '80%',
     });
+    dialogRef.componentInstance.personaSeleccionada.subscribe((cedula: string) => {
+      this.searchForm.patchValue({ cedula });
+      this.buscarPersona();
+    });
   }
-
-
 }

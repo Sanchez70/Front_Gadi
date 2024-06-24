@@ -96,7 +96,7 @@ const routes: Routes = [
   { path: 'main', component: MainComponent },
   { path: 'asignatura', component: AsignaturaComponent },
   { path: 'actividad', component: ActividadComponent },
-  { path: 'tabla', component: TablaComponent},
+  { path: 'mi-distribitivo', component: TablaComponent},
   { path: 'persona', component: PersonaComponent },
   { path: 'actividad/form', component: ActividadFormComponert }, 
   { path: 'actividad/form/:id', component: ActividadFormComponert },
