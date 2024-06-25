@@ -69,6 +69,10 @@ export class PersonaService {
     return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/${id}`);
   }
 
+  getTitulosProfecionalesByPersonaId(personaId: number): Observable<TituloProfecional[]> {
+    return this.http.get<TituloProfecional[]>(`${this.urlEndPoint}/titulo_profesional/persona/${personaId}`);
+  }
+
   createUsuarioRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
     return this.http.post<UsuarioRol>(`${this.urlEndPoint}/usuarioRol`, usuarioRol);
   }
@@ -81,7 +85,5 @@ export class PersonaService {
     return this.http.put<Usuario>(`${this.urlEndPoint}/usuario/${usuario.id_usuario}`, usuario);
   }
 
-  // updateUsuario(usuario: Usuario): Observable<Usuario> {
-  //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
-  // }
+
 }

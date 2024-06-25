@@ -59,8 +59,12 @@
       <input matInput placeholder="Tipo de Contrato" formControlName="tipo_contrato" />
     </mat-form-field>
     <mat-form-field appearance="outline">
-      <mat-label>Título Profesional</mat-label>
-      <input matInput placeholder="Título Profesional" formControlName="titulo_profesional" />
+      <mat-label>Títulos</mat-label>
+      <mat-select formControlName="titulo_profesional">
+        <mat-option *ngFor="let titulo of titulos" [value]="titulo.id_titulo_profesional" disabled>
+          {{ titulo.nombre_titulo }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Grado Ocupacional</mat-label>

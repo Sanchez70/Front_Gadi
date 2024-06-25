@@ -13,7 +13,6 @@ table {
 .container {
   display: flex;
   flex-direction: column;
-
 }
 
 th {
@@ -112,4 +111,10 @@ clip-path: polygon(8% 17%, 0% 25%, 50% 84%, 100% 25%, 92% 17%, 50% 65%);
 .Cerrar {   
   padding: 0.3rem;
   margin-left: 0cap;
+}
+
+.table-container {
+  overflow: auto;
+  max-height: 60vh;
+  flex-grow: 1;
 }

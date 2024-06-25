@@ -21,7 +21,8 @@
         </div>
       </div>
     </div>
-    <section class="example-container mat-elevation-z8" tabindex="0">
+    <div class="table-container">
+    <section class=" mat-elevation-z8" tabindex="0">
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="cedula" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
@@ -92,5 +93,6 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
     </section>
+    </div>
   </div>
 </div>

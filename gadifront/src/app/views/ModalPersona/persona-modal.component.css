@@ -26,3 +26,9 @@ h1 {
     transform: translate(-50%, -50%);
     padding: 2%;
 }
+
+.table-container {
+    overflow: auto;
+    max-height: 40vh;
+    flex-grow: 1;
+}
