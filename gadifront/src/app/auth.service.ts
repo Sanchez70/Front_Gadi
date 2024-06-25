@@ -68,6 +68,11 @@ export class AuthService {
     this.id_persona = '';
   }
 
+  clearLocalStoragePeriodo() {
+    this.id_periodo =  '';
+  }
+
+
   saveUserToLocalStorage() {
     localStorage.setItem('user', JSON.stringify({
       isLogeado: this.isLogeado,
