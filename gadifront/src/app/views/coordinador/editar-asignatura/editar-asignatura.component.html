@@ -4,9 +4,21 @@
 
     <div class="combos-container">
       <div class="input-group mb-3">
-        <div class="combo-container">
+        <div class="combo-container-carrera">
+          <label for="carreras" class="label_form font-weight-bold">Carrera</label>
+          <div class="custom-select"> <select class="form-control" placeholder="Carrera"
+              (ngModel)="carreraSeleccionada" name="carreras" aria-label="Carrera" aria-describedby="basic-addon1"
+              (change)="onCarreraChange($event)">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let carreras of carreras" [value]="carreras.id_carrera">{{carreras.nombre_carrera}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3" >
+        <div class="combo-container-paralelo">
           <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
-          <div class="custom-select"> <select class="form-control" placeholder="Paralelo"
+          <div class="custom-select" > <select class="form-control" placeholder="Paralelo"
               (ngModel)="paraleloSeleccionado" name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
               (change)="onParaleloChange($event)" formControlName="numeroPer">
               <option value=0 disabled selected>Seleccione una opción</option>
@@ -17,12 +29,12 @@
       </div>
 
       <div class="input-group mb-3">
-        <div class="combo-container">
+        <div class="combo-container-ciclo">
           <label for="ciclos" class="label_form font-weight-bold">Ciclos</label>
           <div class="custom-select">
             <select class="form-control" placeholder="Seleccione el ciclo" [(ngModel)]="cicloSeleccionado" name="ciclo"
               aria-label="Ciclo" aria-describedby="basic-addon1" (change)="onCicloChange($event)"
-              formControlName="cicloSelec">
+              formControlName="cicloSeleccionado">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let ciclo of ciclos" [value]="ciclo.id_ciclo">{{ciclo.nombre_ciclo}}</option>
             </select>

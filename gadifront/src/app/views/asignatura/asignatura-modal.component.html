@@ -1,0 +1,25 @@
+<div>
+    <h1 mat-dialog-title>{{ data.id_asignatura ? 'Editar' : 'Crear' }} asignatura</h1>
+</div>
+<div mat-dialog-content>
+    <form [formGroup]="asignaturaForm">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre_asignatura" />
+            <mat-error *ngIf="asignaturaForm.get('nombre_asignatura')?.hasError('required')">Nombre es requerido</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Horas Semanales</mat-label>
+            <input matInput formControlName="horas_semanales" type="number" />
+            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('required')">Horas semanales son
+                requeridas</mat-error>
+            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('min')">Horas semanales deben ser mayores a
+                0</mat-error>
+        </mat-form-field>
+        
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="onCancel()">Cancelar</button>
+    <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="onSave()">Guardar</button>
+</div>

@@ -192,7 +192,7 @@ export class LoginComponent {
           this.router.navigate(['/mainDocente']);
           this.authService.login();
         } else {
-          if (rolNombre == 'admin') {
+          if (rolNombre == 'Administrador') {
             this.authService.tiporol = rolNombre;
             this.router.navigate(['/main-admin']);
             this.authService.login();

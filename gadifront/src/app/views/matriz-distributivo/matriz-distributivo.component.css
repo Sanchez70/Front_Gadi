@@ -2,7 +2,16 @@ mat-form-field {
   margin-bottom: 1%;
   margin-top: 5%;
 }
-
+.mat-button{
+  margin-left: 12px;
+  border-radius: 0.5rem;
+  width: 70px;
+  height: 2.5rem;
+  background-color: #1E90FF;
+  border: none;
+  color: #fff;
+ text-align: center;
+}
 table {
   width: 100%;
   overflow: auto;
@@ -80,7 +89,7 @@ h1 {
   margin-left: 0cap;
 }
 .descripcion-Abrir{
-  width: 65cap;
+  width: 54cap;
 }
 .descripcion-Cerrar{
   width: 65cap;
@@ -89,5 +98,8 @@ h1 {
   width: 20cap;
 }
 .tipo{
-  width: 40cap;
+  width: 25cap;
+}
+.asignar{
+  width: 24cap;
 }

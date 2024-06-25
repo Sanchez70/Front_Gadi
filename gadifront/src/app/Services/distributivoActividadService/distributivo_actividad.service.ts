@@ -12,6 +12,7 @@ export class DistributivoActividadService {
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }
 
+  
   getDistributivoActividad():Observable<DistributivoActividad[]>{
     return this.http.get<DistributivoActividad[]>(`${this.urlEndPoint}/distributivo_actividad`)
   }

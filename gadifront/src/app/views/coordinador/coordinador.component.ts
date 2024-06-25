@@ -156,6 +156,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   verDetalle(valor: any): void {
+    if (this.periodoSeleccionado > 0) {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
       console.log(valor)
@@ -169,7 +170,15 @@ export class CoordinadorComponent implements OnInit {
           this.router.navigate(['/matriz-distributivo']);
         }
       });
-  
+    }else{
+      Toast.fire({
+        icon: "error",
+        title: "Seleccione un Periodo",
+        footer: "Por favor, verifique si ha completado todo lo necesario"
+      });
+    }
+
+
 
   }
   applyFilter(event: Event) {

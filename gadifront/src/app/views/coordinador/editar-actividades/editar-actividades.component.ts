@@ -6,7 +6,7 @@ import { AuthService } from '../../../auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Actividad } from '../../../Services/actividadService/actividad';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -24,7 +24,7 @@ const Toast = Swal.mixin({
   styleUrl: './editar-actividades.component.css'
 })
 export class EditarActividadesComponent {
-  currentExplan: string='';
+  currentExplan: string = '';
   myForm: FormGroup = this.fb.group({});
   public Actividades: Actividad[] = [];
   public Tipos: any[] = [];
@@ -39,7 +39,7 @@ export class EditarActividadesComponent {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-    
+
     this.myForm = this.fb.group({
       tipoActividadSeleccionado: [null, Validators.required]
     })
@@ -47,18 +47,18 @@ export class EditarActividadesComponent {
     this.cargartipo();
   }
 
-  cargarActividadObtenida():void{
+  cargarActividadObtenida(): void {
     this.actividadesSeleccionadas = this.authService.id_actividades;
   }
 
   cargarACti(): Observable<void> {
     return new Observable(observer => {
       this.actividadService.getActividad().subscribe(data => {
-          this.Actividades = data;
-          observer.next();
-          observer.complete();
+        this.Actividades = data;
+        observer.next();
+        observer.complete();
       });
-  });
+    });
   }
 
   cargartipo(): void {
@@ -67,24 +67,24 @@ export class EditarActividadesComponent {
     });
   }
 
-  filtrarActividadabyTipo(): void{
-    this.cargarACti().subscribe(()=>{
+  filtrarActividadabyTipo(): void {
+    this.cargarACti().subscribe(() => {
       this.actividadesFiltrada = this.Actividades.filter(
-        (actividad) => 
-          (this.tipoActividadSeleccionado===null || actividad.id_tipo_actividad === this.idTipo)
+        (actividad) =>
+          (this.tipoActividadSeleccionado === null || actividad.id_tipo_actividad === this.idTipo)
       );
-      console.log('actividad filtrada por tipo',this.actividadesFiltrada);
-    }); 
+      console.log('actividad filtrada por tipo', this.actividadesFiltrada);
+    });
   }
 
-  escogerActividad(actividad:Actividad): void{
+  escogerActividad(actividad: Actividad): void {
     const actividadExistente = this.actividadesSeleccionadas.some(
       (id) => id.id_actividad === actividad.id_actividad
     );
-    if(!actividadExistente){
+    if (!actividadExistente) {
       this.actividadesSeleccionadas.push(actividad);
       this.calcularHorasTotales();
-    }else{
+    } else {
       Toast.fire({
         icon: "warning",
         title: "La actividad se encuentra seleccionada",
@@ -92,44 +92,46 @@ export class EditarActividadesComponent {
     }
   }
 
-  eliminarActividad(fila:number): void{
-    this.actividadesSeleccionadas.splice(fila,1);
+  eliminarActividad(fila: number): void {
+    this.actividadesSeleccionadas.splice(fila, 1);
     this.calcularHorasTotales()
   }
 
-  calcularHorasTotales():void{
+  calcularHorasTotales(): void {
     this.horasTotales = this.actividadesSeleccionadas.reduce(
-      (sum,actividad) => sum + actividad.horas_no_docentes, 0
+      (sum, actividad) => sum + actividad.horas_no_docentes, 0
     );
   }
 
-  enviarActividades():void{
-    if (this.myForm.valid){
+  enviarActividades(): void {
+    if (this.myForm.valid) {
       this.authService.clearLocalStorageActividad();
       this.authService.id_actividades = this.actividadesSeleccionadas;
-      console.log('actividades enviadas',this.authService.id_actividades);
+      console.log('actividades enviadas', this.authService.id_actividades);
       this.authService.saveUserToLocalStorage();
       this.router.navigate(['./matriz-distributivo']);
-    }else{
+    } else {
       Toast.fire({
         icon: "warning",
         title: "Por favor, seleccione una opción",
       });
     }
-    
+
   }
 
-  onTipoChange(event:any): void{
+  onTipoChange(event: any): void {
     this.tipoActividadSeleccionado = +event.target.value;
     this.idTipo = this.tipoActividadSeleccionado;
-    console.log('paralelo',this.tipoActividadSeleccionado);
+    console.log('paralelo', this.tipoActividadSeleccionado);
     this.filtrarActividadabyTipo();
     this.myForm.get('tipoActividadSeleccionado')?.setValue(event.target.value);
   }
 
-  obtenerNombreTipo(id_tipo:number):void{
+  obtenerNombreTipo(id_tipo: number): void {
     const tipo = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo);
-    return tipo ? tipo.nom_tip_actividad :'';
+    return tipo ? tipo.nom_tip_actividad : '';
   }
+
+ 
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
@@ -13,6 +13,13 @@ import { DistributivoAsignaturaService } from '../../Services/distributivoAsigna
 import Swal from 'sweetalert2';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { AsignaturaModalComponent } from './asignatura-model.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+
+
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -24,7 +31,6 @@ const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
-
 @Component({
   selector: 'app-asignatura',
   templateUrl: './asignatura.component.html',
@@ -50,10 +56,23 @@ export class AsignaturaComponent implements OnInit {
   id_distributivo= 1;
   currentExplan: string='';
   myForm: FormGroup = this.fb.group({});
+
+  dataSource!: MatTableDataSource<Asignatura>;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
-  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService, private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, private authService: AuthService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fb: FormBuilder){
+  constructor(private asignaturaService: AsignaturaService,
+    private cicloService: CicloService,
+    private carreraService: CarreraService, 
+    private jornadaService: JornadaService, 
+    private distributivoAsignaturaService: DistributivoAsignaturaService, 
+    private authService: AuthService, 
+    private router: Router,
+    private activatedRoute: ActivatedRoute, 
+    private fb: FormBuilder,
+    private dialog: MatDialog
+  ){
 
   }
 
@@ -207,4 +226,28 @@ export class AsignaturaComponent implements OnInit {
     
   }
 
+  loadAsignatura(): void {
+    this.asignaturaService.getAsignatura().subscribe(data => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
+  }
+
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(AsignaturaModalComponent, {
+      width: '400px',
+      data: new Carrera()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadAsignatura();
+        Toast.fire({
+          icon: "success",
+          title: "La carrera ha sido creada correctamente",
+        });
+      }
+    });
+  }
 }

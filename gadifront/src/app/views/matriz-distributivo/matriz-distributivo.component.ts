@@ -32,6 +32,7 @@ import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaSer
 import { DistributivoActividad } from '../../Services/distributivoActividadService/distributivo_actividad';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { Carrera } from '../../Services/carreraService/carrera';
+import Swal, { SweetAlertOptions } from 'sweetalert2';
 
 @Component({
   selector: 'app-matriz-distributivo',
@@ -43,7 +44,7 @@ import { Carrera } from '../../Services/carreraService/carrera';
 export class MatrizDistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
-  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion','tipo_actividad'];
+  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<Asignatura>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
@@ -55,6 +56,7 @@ export class MatrizDistributivoComponent implements OnInit {
   periodosDis: { [key: number]: Periodo } = {};
   jornada: { [key: number]: Jornada } = {};
   distributivoAsignatura: { [key: number]: DistributivoAsignatura } = {};
+  distributivoActividad:{[key:number]: DistributivoActividad}={};
   carreras: { [key: number]: Carrera } = {};
   tipo_actividad: { [key: number]: tipo_actividad } = {};
 
@@ -68,6 +70,7 @@ export class MatrizDistributivoComponent implements OnInit {
   periodos: any[] = [];
   distributivoAsignaturas: DistributivoAsignatura[] = [];
   distributivoActividades: DistributivoActividad[] = [];
+  distribdistributivoActividadesEn: DistributivoActividad = new DistributivoActividad();
   distributivoActividadesFiltrado: DistributivoActividad[] = [];
   actividadesFiltradas: any[] = [];
   asignaturas: Asignatura[] = [];
@@ -77,6 +80,7 @@ export class MatrizDistributivoComponent implements OnInit {
   periodoName: string = '';
   horasTotales: number = 0;
   horasTotalesActividad: number = 0;
+  id_activida: any;
   constructor(
     private asignaturaService: AsignaturaService,
     private personaService: PersonaService,
@@ -98,7 +102,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
@@ -135,7 +139,7 @@ export class MatrizDistributivoComponent implements OnInit {
       this.periodoName = this.periodo.nombre_periodo;
     });
   }
-  
+
 
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
@@ -184,9 +188,9 @@ export class MatrizDistributivoComponent implements OnInit {
       forkJoin([
         this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
           tap(periodo => {
-              this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-              console.log('periodoPersona' + periodo.nombre_periodo);
-            
+            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+            console.log('periodoPersona' + periodo.nombre_periodo);
+
           }),
           catchError(() => {
             this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
@@ -235,13 +239,23 @@ export class MatrizDistributivoComponent implements OnInit {
       forkJoin([
         this.tipo_actividadService.gettipoActividadbyId(actividad.id_actividad ?? 0).pipe(
           tap(tipo_actividades => {
-            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado'};
+            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' };
           }),
           catchError(() => {
-            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad:  'No asignado' } as unknown as tipo_actividad;
+            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' } as unknown as tipo_actividad;
             return of(null);
           })
+
         ),
+        this.distributivoActividadService.getActividadbyId(actividad.id_actividad).pipe(
+          tap(horas => {
+            this.distributivoActividad[actividad.id_actividad] = horas ??{id_distributivo_actividad:0, hora_no_docente:0 };
+          }),
+          catchError(() => {
+            this.distributivoActividad[actividad.id_actividad] = {id_distributivo_actividad:0, hora_no_docente:0 } as DistributivoActividad;
+            return of(null);
+          })
+        )
       ])
 
     );
@@ -258,12 +272,12 @@ export class MatrizDistributivoComponent implements OnInit {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
         (distributivo) => (distributivo.id_persona === idPersona &&
-        distributivo.id_periodo === this.authService.id_periodo)
+          distributivo.id_periodo === this.authService.id_periodo)
       );
-     
+
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
-        
+
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -282,13 +296,13 @@ export class MatrizDistributivoComponent implements OnInit {
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
-       if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
-        this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-      }else{
-        this.asignaturas=this.authService.asignaturasSeleccionadaAuth
-      }
+        if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
+          this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
+        } else {
+          this.asignaturas = this.authService.asignaturasSeleccionadaAuth
+        }
         this.calcularHorasTotales();
-   
+
         this.cargarAdicional();
         console.log('Asignaturas cargadas:', this.asignaturas);
       });
@@ -309,8 +323,8 @@ export class MatrizDistributivoComponent implements OnInit {
         );
         if (this.authService.id_actividades.length === 0) {
           this.actividades = this.actividades.concat(actividadesCargadas);
-        }else{
-          this.actividades=this.authService.id_actividades;
+        } else {
+          this.actividades = this.authService.id_actividades;
         }
         //this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
@@ -321,29 +335,74 @@ export class MatrizDistributivoComponent implements OnInit {
 
   }
 
-  calcularHorasTotales():void{
+  calcularHorasTotales(): void {
     this.horasTotales = this.asignaturas.reduce(
-      (sum,asignatura) => sum + asignatura.horas_semanales, 0
+      (sum, asignatura) => sum + asignatura.horas_semanales, 0
     );
     console.log('horas totales asignatura', this.horasTotales);
   }
 
-  calcularHorasTotalesActividad():void{
+  calcularHorasTotalesActividad(): void {
     this.horasTotalesActividad = this.actividades.reduce(
-      (sum,actividad) => sum + actividad.horas_no_docentes, 0
+      (sum, actividad) => sum + actividad.horas_no_docentes, 0
     );
     console.log('horas totales actividad', this.horasTotalesActividad);
   }
 
-   enviarAsignaturas():void{
+  enviarAsignaturas(): void {
     this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
   }
 
-  enviarActividades():void{
+  enviarActividades(): void {
     this.authService.id_actividades = this.actividades;
-    console.log('actividades enviadas:',this.authService.id_actividades);
+    console.log('actividades enviadas:', this.authService.id_actividades);
+
   }
 
+  asignarHoras(): void {
+    const swalOptions: SweetAlertOptions = {
+      title: 'Ingrese el número de horas asignadas',
+      input: 'number',
+      inputAttributes: {
+        min: '1',
+        max: '24',
+        step: '1'
+      },
+      inputLabel: 'Horas',
+      inputPlaceholder: 'Ingrese un número entre 1 y 24',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        const numberValue = Number(value);
+        if (isNaN(numberValue) || numberValue < 1 ) {
+          return 'Por favor, Ingrese un numero mayor a cero';
+        }
+        return null;
+      }
+    };
 
+    Swal.fire(swalOptions).then((result) => {
+      if (result.isConfirmed) {
+        const horasAsignadas = result.value;
+        this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+          const resultado = data as DistributivoActividad[];
+          const resultFinal = resultado.find(distributivo => distributivo.id_actividad === this.id_activida);
+          if (resultFinal) {
+            resultFinal.hora_no_docente = horasAsignadas;
+            this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
+              Swal.fire(`Se han asignado ${horasAsignadas} horas.`);
+              this.cargarTipo();
+            });
+          }
+        });
+      }
+    });
+  }
 
+  onRowClicked(row: Actividad) {
+    console.log('Row clicked: ', row);
+    this.id_activida = row.id_actividad;
+    console.log('ID of clicked row: ', row.id_actividad);
+    this.asignarHoras();
+
+  }
 }
