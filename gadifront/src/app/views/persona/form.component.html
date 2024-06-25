@@ -1,63 +1,42 @@
-  <div>
-    <label for="edad">Edad:</label>
-    <input id="edad" formControlName="edad">
-  </div>
-  <div>
-    <label for="fecha_vinculacion">Fecha de Vinculación:</label>
-    <input type="date" id="fecha_vinculacion" formControlName="fecha_vinculacion">
-  </div>
-  <div>
-    <label for="id_grado_ocp">ID Grado OCP:</label>
-    <input id="id_grado_ocp" formControlName="id_grado_ocp">
-  </div>
-  <div>
-    <label for="id_persona">ID Persona:</label>
-    <input id="id_persona" formControlName="id_persona" disabled>
-  </div>
-  <div>
-    <label for="id_tipo_contrato">ID Tipo Contrato:</label>
-    <input id="id_tipo_contrato" formControlName="id_tipo_contrato">
-  </div>
-  <div>
-    <label for="apellido1">Primer Apellido:</label>
-    <input id="apellido1" formControlName="apellido1">
-  </div>
-  <div>
-    <label for="apellido2">Segundo Apellido:</label>
-    <input id="apellido2" formControlName="apellido2">
-  </div>
-  <div>
+<br>
+<form (ngSubmit)="guardarCambios()" class="form-container">
+  <div class="form-group">
     <label for="cedula">Cédula:</label>
-    <input id="cedula" formControlName="cedula">
-  </div>
-  <div>
-    <label for="correo">Correo Electrónico:</label>
-    <input type="email" id="correo" formControlName="correo">
-  </div>
-  <div>
-    <label for="direccion">Dirección:</label>
-    <input id="direccion" formControlName="direccion">
-  </div>
-  <div>
+    <input type="text" id="cedula" name="cedula" [(ngModel)]="persona.cedula" readonly class="form-control">
+  </div>  
+  <div class="form-group">
     <label for="nombre1">Primer Nombre:</label>
-    <input id="nombre1" formControlName="nombre1">
+    <input type="text" id="nombre1" name="nombre1" [(ngModel)]="persona.nombre1" required class="form-control">
   </div>
-  <div>
+  <div class="form-group">
     <label for="nombre2">Segundo Nombre:</label>
-    <input id="nombre2" formControlName="nombre2">
+    <input type="text" id="nombre2" name="nombre2" [(ngModel)]="persona.nombre2" class="form-control">
   </div>
-  <div>
-    <label for="telefono">Teléfono:</label>
-    <input id="telefono" formControlName="telefono">
+  <div class="form-group">
+    <label for="apellido1">Primer Apellido:</label>
+    <input type="text" id="apellido1" name="apellido1" [(ngModel)]="persona.apellido1" required class="form-control">
   </div>
-  <div>
+  <div class="form-group">
+    <label for="apellido2">Segundo Apellido:</label>
+    <input type="text" id="apellido2" name="apellido2" [(ngModel)]="persona.apellido2" class="form-control">
+  </div>
+  <div class="form-group">
     <label for="edad">Edad:</label>
-    <input id="edad" formControlName="edad">
+    <input type="number" id="edad" name="edad" [(ngModel)]="persona.edad" readonly class="form-control">
   </div>
-  <div>
-    <label for="fecha_vinculacion">Fecha de Vinculación:</label>
-    <input type="date" id="fecha_vinculacion" formControlName="fecha_vinculacion">
+  <div class="form-group">
+    <label for="correo">Correo:</label>
+    <input type="email" id="correo" name="correo" [(ngModel)]="persona.correo" required class="form-control">
   </div>
-  <!-- Agrega más campos según sea necesario -->
-  
-  <button type="submit">Guardar Cambios</button>
+  <div class="form-group">
+    <label for="direccion">Dirección:</label>
+    <input type="text" id="direccion" name="direccion" [(ngModel)]="persona.direccion" class="form-control">
+  </div>
+  <div class="form-group">
+    <label for="telefono">Teléfono:</label>
+    <input type="tel" id="telefono" name="telefono" [(ngModel)]="persona.telefono" class="form-control">
+  </div>
+  <button type="submit" class="btn-submit">Guardar cambios</button>
+</form>
+
+<br>

@@ -11,6 +11,7 @@ import { Rol } from '../../views/rol/rol';
 import { UsuarioRol } from '../../views/usuario-rol/UsuarioRol';
 import { Usuario } from '../loginService/usuario';
 import { appConfig } from '../../environment/appConfig';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class PersonaService {
     return this.http.get<GradoOcupacional[]>(`${this.urlEndPoint}/grado_ocupacional`);
   }
 
-  
+
   getTiposContratos(): Observable<TipoContrato[]> {
     return this.http.get<TipoContrato[]>(`${this.urlEndPoint}/tipo_contrato`);
   }
@@ -53,7 +54,7 @@ export class PersonaService {
   getCarreras(): Observable<Carrera[]> {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
   }
-  
+
   getPeriodoById(id: number): Observable<Periodo> {
     return this.http.get<Periodo>(`${this.urlEndPoint}/periodo/${id}`);
   }
@@ -81,7 +82,7 @@ export class PersonaService {
     return this.http.put<Usuario>(`${this.urlEndPoint}/usuario/${usuario.id_usuario}`, usuario);
   }
 
-  // updateUsuario(usuario: Usuario): Observable<Usuario> {
-  //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
-  // }
+  updatePersona(persona: Persona): Observable<Persona> {
+    return this.http.put<Persona>(`${this.urlEndPoint}/persona/${persona.id_persona}`, persona);
+  }
 }
