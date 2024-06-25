@@ -40,7 +40,8 @@
         </mat-form-field>
         <mat-form-field class="form-group" appearance="fill">
           <mat-label>Teléfono</mat-label>
-          <input matInput formControlName="telefono">
+          <input matInput #postalCode maxlength="10" formControlName="telefono">
+          <mat-hint align="end">{{postalCode.value.length}} / 10</mat-hint>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="fill">
           <mat-label>Fecha de Vinculación</mat-label>
