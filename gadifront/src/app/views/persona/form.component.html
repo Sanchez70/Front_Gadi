@@ -36,6 +36,10 @@
     <label for="telefono">Teléfono:</label>
     <input type="tel" id="telefono" name="telefono" [(ngModel)]="persona.telefono" class="form-control">
   </div>
+  <div class="form-group">
+    <label for="fecha">Fecha vinculacion:</label>
+    <input type="tel" id="fecha" name="fecha" [(ngModel)]="persona.fecha_vinculacion" readonly class="form-control">
+  </div>
   <button type="submit" class="btn-submit">Guardar cambios</button>
 </form>
 

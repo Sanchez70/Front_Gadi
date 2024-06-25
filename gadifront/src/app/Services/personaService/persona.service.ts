@@ -33,10 +33,10 @@ export class PersonaService {
     return this.http.get<GradoOcupacional[]>(`${this.urlEndPoint}/grado_ocupacional`);
   }
 
-
   getTiposContratos(): Observable<TipoContrato[]> {
     return this.http.get<TipoContrato[]>(`${this.urlEndPoint}/tipo_contrato`);
   }
+
   getTitulosProfecionales(): Observable<TituloProfecional[]> {
     return this.http.get<TituloProfecional[]>(`${this.urlEndPoint}/titulo_profesional`);
   }
@@ -51,6 +51,10 @@ export class PersonaService {
     return this.http.get<Usuario>(`${this.urlEndPoint}/usuario/persona/${id_persona}`);
   }
 
+  getTituloByPersonaId(id_persona: number): Observable<TituloProfecional> {
+    return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/persona/${id_persona}`);
+  }
+  
   getCarreras(): Observable<Carrera[]> {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
   }
@@ -66,6 +70,7 @@ export class PersonaService {
   getContratoById(id: number): Observable<TipoContrato> {
     return this.http.get<TipoContrato>(`${this.urlEndPoint}/tipo_contrato/${id}`);
   }
+
   getTituloById(id: number): Observable<TituloProfecional> {
     return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/${id}`);
   }

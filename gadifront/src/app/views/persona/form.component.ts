@@ -5,6 +5,7 @@ import { Persona } from '../../Services/docenteService/persona';
 import { Usuario } from '../../Services/loginService/usuario';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -15,10 +16,10 @@ import Swal from 'sweetalert2';
 export class FormComponent implements OnInit {
   persona: Persona = new Persona();
   usuario: Usuario = new Usuario(); 
-  titulosProfesionales: TituloProfecional[] = [];
   mostrarCarga: boolean = false;
 
   constructor(
+    private router: Router,
     private personaService: PersonaService,
     private authService: AuthService
   ) {
@@ -30,7 +31,7 @@ export class FormComponent implements OnInit {
     if (idPersona) {
       this.personaService.getPersonaById(idPersona).subscribe(
         (persona) => {
-          this.persona = persona;
+          this.persona = persona;     
         },
         (error) => {
           console.error('Error al cargar los datos de la persona:', error);
@@ -48,6 +49,7 @@ export class FormComponent implements OnInit {
         console.log('Persona actualizada exitosamente:', response);
         this.mostrarCarga = false;
         this.mostrarMensaje('Datos actualizados correctamente', 'success');
+        this.router.navigate(['/mainDocente']);
       },
       (error) => {
         console.error('Error al actualizar persona:', error);
