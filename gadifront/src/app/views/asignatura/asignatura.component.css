@@ -140,7 +140,7 @@ tbody tr:hover {
 	border-radius: 5px;
 	color: #000000;
 	cursor: pointer;
-	outline: none;
+	outline: none;  
 	box-shadow: 3px 3px 2px 0px #E2E2E2;
 }
 

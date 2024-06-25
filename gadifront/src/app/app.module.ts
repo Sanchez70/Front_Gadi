@@ -77,6 +77,7 @@ import { MainAdminComponent } from './views/main-admin/main-admin.component';
 import { CoordinadorComponent } from './views/coordinador/coordinador.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
+import { AsignaturaModalComponent } from './views/asignatura/asignatura-model.component';
 import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
 import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
 import { DirectorReporteComponent } from './views/director-reporte/director-reporte.component'; 
@@ -155,6 +156,7 @@ const routes: Routes = [
     MainAdminComponent,
     CoordinadorComponent,
     CarreraModalComponent,
+    AsignaturaModalComponent,
     AdminCreacionComponent,
     TablaComponent,
     PersonaListModalComponent,

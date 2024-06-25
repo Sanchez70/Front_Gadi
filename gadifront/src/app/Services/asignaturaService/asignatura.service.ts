@@ -25,6 +25,9 @@ export class AsignaturaService {
     return this.http.get<Asignatura>(`${this.urlEndPoint}/asignatura/${id}`);
   }
 
+  update(asignatura: Asignatura): Observable<Asignatura> {
+    return this.http.put<Asignatura>(`${this.urlEndPoint}/asignatura/${asignatura.id_asignatura}`, asignatura, { headers: this.httpHeaders });
+  }
   
   
 }
