@@ -162,7 +162,7 @@ export class LoginComponent {
   showDialog(usuario: any) {
     Swal.fire({
       title: 'Selecciona un rol',
-      html: `<select id="roleSelect" class="swal2-input">
+      html: `<select id="roleSelect" class="swal2-input" style="width: 50%;border-radius : 1rem; font-size:18px" >
                ${this.roles.map(role => `<option value="${role.nombre_rol}">${role.nombre_rol}</option>`).join('')}
              </select>`,
       focusConfirm: false,
@@ -201,7 +201,7 @@ export class LoginComponent {
           this.router.navigate(['/mainDocente']);
           this.authService.login();
         } else {
-          if (rolNombre == 'admin') {
+          if (rolNombre == 'Administrador') {
             this.authService.tiporol = rolNombre;
             this.router.navigate(['/main-admin']);
             this.authService.login();

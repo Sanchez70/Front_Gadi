@@ -61,14 +61,15 @@ export class EditarAsignaturaComponent {
       this.currentExplan = explan;
     });
     this.cargarComboCarreras();
-    this.cargarComboCiclos();
+   
     this.cargarComboJornada();
     this.cargarAsignaturasENviadas();
-    this.idCarrera = this.authService.id_carrera;
+ 
     
     this.myForm = this.fb.group({
       paraleloSeleccionado: [null, Validators.required],
-      cicloSeleccionado: [null, Validators.required]
+      cicloSeleccionado: [null, Validators.required],
+      carreraSeleccionada:[null, Validators.required]
     })
   }
   cargarAsignaturasENviadas():void{
@@ -111,19 +112,22 @@ export class EditarAsignaturaComponent {
 }
 
 
-  // onCarreraChange(event:any): void{
-  //   this.carreraSeleccionada = +event.target.value;
-  //   this.idCarrera = this.carreraSeleccionada;
-  //   console.log('id carrera',this.idCarrera)
-  //   this.filtrarAsignaturaCarrerabyCiclo();
-  // }
+   onCarreraChange(event:any): void{
+    this.cicloSeleccionado=0;
+    this.carreraSeleccionada = +event.target.value;
+    this.idCarrera = this.carreraSeleccionada;
+    console.log('id carrera',this.idCarrera)
+    this.cargarComboCiclos();
+  
+    
+  }
 
   onCicloChange(event:any): void{
     this.cicloSeleccionado = +event.target.value;
     this.idCiclo = this.cicloSeleccionado;
     console.log('id ciclo',this.idCiclo)
-    this.filtrarAsignaturaCarrerabyCiclo();
     this.myForm.get('cicloSeleccionado')?.setValue(event.target.value);
+    this.filtrarAsignaturaCarrerabyCiclo();
   }
 
   onJornadaChange(event:any): void{
@@ -138,25 +142,6 @@ export class EditarAsignaturaComponent {
     this.myForm.get('paraleloSeleccionado')?.setValue(event.target.value);
   }
 
-  // createAsignaturaDistributivo(): void {
-  //   this.asignaturasSeleccionadas.forEach(asignatura => {
-  //     const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-  //       id_jornada: this.idJornada,
-  //       paralelo: this.paraleloSeleccionado,
-  //       id_distributivo: this.id_distributivo,
-  //       id_asignatura: asignatura.id_asignatura
-  //     };
-  
-  //     this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-  //       Swal.fire('Asignatura guardada', `guardado con éxito`, 'success')
-  //       console.log('Asignatura Distributivo generado');
-  //     }, error => {
-  //       Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning')
-  //       console.log('Error al crear', error);
-  //     });
-  //   });
-  // }
-  
   filtrarAsignaturaCarrerabyCiclo(): void{
     this.cargarAsignaturas().subscribe(()=>{
       this.asignaturaFiltrada = this.asignaturas.filter(

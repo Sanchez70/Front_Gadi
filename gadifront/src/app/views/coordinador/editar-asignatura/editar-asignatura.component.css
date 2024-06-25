@@ -115,14 +115,21 @@ tbody tr:hover {
     display: flex;
     align-items: center;
     margin-top: 30px;
-    margin-left: 10cap;
 }
-
-.combo-container{
+.combo-container-carrera{
     flex: 1;
-    margin-right: 180px;
     min-width: 400px;
     margin-left: 10cap;
+}
+.combo-container-paralelo{
+  flex: 1;
+  min-width: 210px;
+  margin-left: 5cap;
+}
+.combo-container-ciclo{
+  flex: 1;
+  min-width: 350px;
+  margin-left: 5cap;
 }
 
 .custom-select {
@@ -197,7 +204,7 @@ tbody tr:hover {
     border-bottom: none;
     margin-top: 4px;
     size: 90cap;
-    width: 1320px;
+    width: 1200px;
     margin-left: 30px;
     margin-right: 50px;
   }
@@ -217,7 +224,8 @@ tbody tr:hover {
 
 .Cerrar {
     padding: 0.3rem;
-    margin-left: 0cap;
+    margin-left: 12cap;
+    
 }
 
 .btnEliminar {

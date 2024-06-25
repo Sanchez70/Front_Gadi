@@ -2,6 +2,7 @@
 <app-sidebar-admin *ngIf="rol() ==='Admin'"></app-sidebar-admin>
 <app-sidebar-coordinador  *ngIf="rol() ==='Coordinador'"></app-sidebar-coordinador>
 <app-sidebar-docente  *ngIf="rol() ==='Docente'"></app-sidebar-docente>
+<app-sidebar-admin *ngIf="rol() ==='Administrador'"></app-sidebar-admin>
 <ngx-ui-loader
     bgsColor= "#22d2da"
 	text="Cargando datos, espere por favor..."
