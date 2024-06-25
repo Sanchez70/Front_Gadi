@@ -23,4 +23,5 @@ export class TituloProfesionalService {
   getTitulobyId(id: any): Observable<Titulo_profesional> {
     return this.http.get<Titulo_profesional>(`${this.urlBase}/titulo_profesional/${id}`);
   }
+  
 }

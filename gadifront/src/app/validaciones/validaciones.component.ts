@@ -15,7 +15,7 @@ export class ValidacionesComponent {
     }
 
     static patternPasswordValidator(): RegExp {
-        return /^(?=.[A-Za-z])(?=.\d)[A-Za-z\d]{8,}$/;
+        return/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W\_])[A-Za-z\d\W\_]{8,}$/;
     }
 
     static patternEmailValidator(): RegExp {

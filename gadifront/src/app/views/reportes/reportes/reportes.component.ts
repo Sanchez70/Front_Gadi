@@ -175,7 +175,7 @@ export class ReportesComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
-        (distributivo) => (distributivo.id_persona === idPersona 
+        (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.idPeriodo
         )
       );
      

@@ -1,63 +1,48 @@
-  <div>
-    <label for="edad">Edad:</label>
-    <input id="edad" formControlName="edad">
-  </div>
-  <div>
-    <label for="fecha_vinculacion">Fecha de Vinculación:</label>
-    <input type="date" id="fecha_vinculacion" formControlName="fecha_vinculacion">
-  </div>
-  <div>
-    <label for="id_grado_ocp">ID Grado OCP:</label>
-    <input id="id_grado_ocp" formControlName="id_grado_ocp">
-  </div>
-  <div>
-    <label for="id_persona">ID Persona:</label>
-    <input id="id_persona" formControlName="id_persona" disabled>
-  </div>
-  <div>
-    <label for="id_tipo_contrato">ID Tipo Contrato:</label>
-    <input id="id_tipo_contrato" formControlName="id_tipo_contrato">
-  </div>
-  <div>
-    <label for="apellido1">Primer Apellido:</label>
-    <input id="apellido1" formControlName="apellido1">
-  </div>
-  <div>
-    <label for="apellido2">Segundo Apellido:</label>
-    <input id="apellido2" formControlName="apellido2">
-  </div>
-  <div>
-    <label for="cedula">Cédula:</label>
-    <input id="cedula" formControlName="cedula">
-  </div>
-  <div>
-    <label for="correo">Correo Electrónico:</label>
-    <input type="email" id="correo" formControlName="correo">
-  </div>
-  <div>
-    <label for="direccion">Dirección:</label>
-    <input id="direccion" formControlName="direccion">
-  </div>
-  <div>
-    <label for="nombre1">Primer Nombre:</label>
-    <input id="nombre1" formControlName="nombre1">
-  </div>
-  <div>
-    <label for="nombre2">Segundo Nombre:</label>
-    <input id="nombre2" formControlName="nombre2">
-  </div>
-  <div>
-    <label for="telefono">Teléfono:</label>
-    <input id="telefono" formControlName="telefono">
-  </div>
-  <div>
-    <label for="edad">Edad:</label>
-    <input id="edad" formControlName="edad">
-  </div>
-  <div>
-    <label for="fecha_vinculacion">Fecha de Vinculación:</label>
-    <input type="date" id="fecha_vinculacion" formControlName="fecha_vinculacion">
-  </div>
-  <!-- Agrega más campos según sea necesario -->
-  
-  <button type="submit">Guardar Cambios</button>
+<div class="container {{currentExplan}}">
+<div class="contenedorBoton">
+<h1>EDITAR PERFIL</h1>
+</div>
+<form [formGroup]="personaForm" (ngSubmit)="guardarCambios()" class="form-container">
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Cédula</mat-label>
+    <input matInput formControlName="cedula" readonly>
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Primer Nombre</mat-label>
+    <input matInput formControlName="nombre1" required>
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Segundo Nombre</mat-label>
+    <input matInput formControlName="nombre2">
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Primer Apellido</mat-label>
+    <input matInput formControlName="apellido1" required>
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Segundo Apellido</mat-label>
+    <input matInput formControlName="apellido2">
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Edad</mat-label>
+    <input matInput type="number" formControlName="edad" readonly>
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Correo</mat-label>
+    <input matInput formControlName="correo" required>
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Dirección</mat-label>
+    <input matInput formControlName="direccion">
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Teléfono</mat-label>
+    <input matInput formControlName="telefono">
+  </mat-form-field>
+  <mat-form-field class="form-group" appearance="fill">
+    <mat-label>Fecha de Vinculación</mat-label>
+    <input matInput formControlName="fecha_vinculacion" readonly>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit">Guardar cambios</button>
+</form>
+</div>

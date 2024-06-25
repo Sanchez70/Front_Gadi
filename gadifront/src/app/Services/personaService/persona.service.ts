@@ -11,6 +11,7 @@ import { Rol } from '../../views/rol/rol';
 import { UsuarioRol } from '../../views/usuario-rol/UsuarioRol';
 import { Usuario } from '../loginService/usuario';
 import { appConfig } from '../../environment/appConfig';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,10 +33,10 @@ export class PersonaService {
     return this.http.get<GradoOcupacional[]>(`${this.urlEndPoint}/grado_ocupacional`);
   }
 
-  
   getTiposContratos(): Observable<TipoContrato[]> {
     return this.http.get<TipoContrato[]>(`${this.urlEndPoint}/tipo_contrato`);
   }
+
   getTitulosProfecionales(): Observable<TituloProfecional[]> {
     return this.http.get<TituloProfecional[]>(`${this.urlEndPoint}/titulo_profesional`);
   }
@@ -50,10 +51,14 @@ export class PersonaService {
     return this.http.get<Usuario>(`${this.urlEndPoint}/usuario/persona/${id_persona}`);
   }
 
+  getTituloByPersonaId(id_persona: number): Observable<TituloProfecional> {
+    return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/persona/${id_persona}`);
+  }
+  
   getCarreras(): Observable<Carrera[]> {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
   }
-  
+
   getPeriodoById(id: number): Observable<Periodo> {
     return this.http.get<Periodo>(`${this.urlEndPoint}/periodo/${id}`);
   }
@@ -65,8 +70,13 @@ export class PersonaService {
   getContratoById(id: number): Observable<TipoContrato> {
     return this.http.get<TipoContrato>(`${this.urlEndPoint}/tipo_contrato/${id}`);
   }
+
   getTituloById(id: number): Observable<TituloProfecional> {
     return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/${id}`);
+  }
+
+  getTitulosProfecionalesByPersonaId(personaId: number): Observable<TituloProfecional[]> {
+    return this.http.get<TituloProfecional[]>(`${this.urlEndPoint}/titulo_profesional/persona/${personaId}`);
   }
 
   createUsuarioRol(usuarioRol: UsuarioRol): Observable<UsuarioRol> {
@@ -81,7 +91,8 @@ export class PersonaService {
     return this.http.put<Usuario>(`${this.urlEndPoint}/usuario/${usuario.id_usuario}`, usuario);
   }
 
-  // updateUsuario(usuario: Usuario): Observable<Usuario> {
-  //   return this.http.put<Usuario>(`${this.baseUrl}/usuario/${usuario.id_usuario}`, usuario);
-  // }
+
+  updatePersona(persona: Persona): Observable<Persona> {
+    return this.http.put<Persona>(`${this.urlEndPoint}/persona/${persona.id_persona}`, persona);
+  }
 }

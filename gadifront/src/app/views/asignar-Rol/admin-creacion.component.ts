@@ -42,6 +42,7 @@ export class AdminCreacionComponent implements OnInit {
   personaForm: FormGroup;
   roles: Rol[] = [];
   carreras: Carrera[] = [];
+  titulos: TituloProfecional[]=[];
   usuario: Usuario | null = null;
   panelOpenState = false;
   currentExplan: string = '';
@@ -71,7 +72,7 @@ export class AdminCreacionComponent implements OnInit {
       edad: [{ value: '', disabled: true }],
       fecha_vinculacion: [{ value: '', disabled: true }],
       tipo_contrato: [{ value: '', disabled: true }],
-      titulo_profesional: [{ value: '', disabled: true }],
+      titulo_profesional: [{ value: '' }],
       grado_ocupacional: [{ value: '', disabled: true }],
       nombre_usuario: [{ value: '', disabled: true }],
       rol: ['', Validators.required],
@@ -120,17 +121,28 @@ export class AdminCreacionComponent implements OnInit {
                   this.personaForm.patchValue({ grado_ocupacional: grado.nombre_grado_ocp });
                 })
               ),
-              this.personaService.getTituloById(persona.id_titulo_profesional).pipe(
-                tap(titulo => {
-                  this.personaForm.patchValue({ titulo_profesional: titulo.nombre_titulo });
-                })
-              ),
+              // this.personaService.getTituloById(persona.id_titulo_profesional).pipe(
+              //   tap(titulo => {
+              //     this.personaForm.patchValue({ titulo_profesional: titulo.nombre_titulo });
+              //   })
+              // ),
               this.personaService.getContratoById(persona.id_tipo_contrato).pipe(
                 tap(contrato => {
                   this.personaForm.patchValue({ tipo_contrato: contrato.nombre_contrato });
                 })
+              ),
+              this.personaService.getTitulosProfecionalesByPersonaId(persona.id_persona).pipe(
+                tap(titulos => {
+                  this.titulos = titulos;
+                })
               )
             ]).subscribe();
+
+            this.personaService.getTitulosProfecionalesByPersonaId(persona.id_persona).subscribe(
+              (titulos) => {
+                this.titulos = titulos;
+              }
+            );
 
           } else {
             Toast.fire({
@@ -252,4 +264,5 @@ export class AdminCreacionComponent implements OnInit {
       this.buscarPersona();
     });
   }
+
 }

@@ -55,9 +55,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
-
 import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
+import { FormComponent as PersonaFormComponent } from './views/persona/form.component'; // Renombramos como PersonaFormComponent
 import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
 import { FormComponent as PersonsaFormComponent } from './views/persona/form.component';
@@ -86,6 +86,7 @@ import { ApiInterceptor } from './interceptors/api.interceptor';
 import { EditarActividadesComponent } from './views/coordinador/editar-actividades/editar-actividades.component';
 import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
 import { ValidacionesComponent } from './validaciones/validaciones.component';
+import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -101,8 +102,8 @@ const routes: Routes = [
   { path: 'persona', component: PersonaComponent },
   { path: 'actividad/form', component: ActividadFormComponert }, 
   { path: 'actividad/form/:id', component: ActividadFormComponert },
-  { path: 'persona/form', component: PersonsaFormComponent }, 
-  { path: 'persona/form/:id', component: PersonsaFormComponent },
+  { path: 'persona/form', component: PersonaFormComponent },
+  { path: 'persona/form/:id', component: PersonaFormComponent }, 
   { path: 'registro', component: RegistroComponent },
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
@@ -162,6 +163,7 @@ const routes: Routes = [
     MatrizDistributivoComponent,
     EditarActividadesComponent,
     EditarAsignaturaComponent,
+    PersonaFormComponent,
   ],
   
   imports: [
@@ -190,7 +192,8 @@ const routes: Routes = [
     MatOption,
     MatSnackBarModule,
     MatDatepickerModule,
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    CommonModule 
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 

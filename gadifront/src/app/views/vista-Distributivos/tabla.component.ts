@@ -1,17 +1,28 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonaService } from '../../Services/personaService/persona.service';
-import { Persona } from '../../Services/personaService/persona';
+
 import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional'; 
-import { Subscription, catchError, forkJoin, of, switchMap, tap } from 'rxjs';
+import { Subscription, catchError, filter, forkJoin, of, switchMap, tap } from 'rxjs';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AuthService } from '../../auth.service';
+import { Persona } from '../../Services/docenteService/persona';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Distributivo } from '../../Services/distributivoService/distributivo';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
+interface PersonaConDistributivo {
+  persona: Persona;
+  distributivo: Distributivo;
+  periodo?: Periodo;
+  grado?: GradoOcupacional; 
+  contrato?: TipoContrato;
+}
 
 @Component({
   selector: 'app-tabla',
@@ -19,31 +30,74 @@ import { AuthService } from '../../auth.service';
   styleUrls: ['./tabla.component.css'],
 })
 export class TablaComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
-  dataSource!: MatTableDataSource<Persona>;
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo','descargar'];
+  dataSource!: MatTableDataSource<PersonaConDistributivo>;
   personas: Persona[] = [];
   periodos: { [key: number]: Periodo } = {};
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
   contratos: { [key: number]: TipoContrato } = {};
   color = '#1E90FF';
+  periodosTotales: any[] = [];
+  personaBuscar: Persona = new Persona();
+  periodoSeleccionado: number = 0;
+  idPeriodo: number = 0;
   currentExplan: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   private sidebarSubscription!: Subscription;
+  personaEncontrada: Persona = new Persona();
   
-  constructor(private personaService: PersonaService, private distributivoService: DistributivoService,private authService: AuthService,) { }
+  constructor(private personaService: PersonaService, private distributivoService: DistributivoService,private periodoService: PeriodoService,private authService: AuthService, private activatedRoute: ActivatedRoute,private router: Router) { }
 
   ngOnInit(): void {
+    this.cargarComboPeriodos();
     this.personaService.getPersonas().subscribe(data => {
-      this.personas = data;
-      this.loadAdditionalDataForPersonas();
+      const personaEncontrados = data as Persona[];
+      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
+      if (usuarioEncontrado) {
+        this.buscarDistributivos(usuarioEncontrado)
+      }
     });
 
     this.sidebarSubscription = this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
       this.adjustTable();
+    });
+  }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodosTotales = data;
+    });
+  }
+
+  buscarDistributivos(persona: Persona): void{
+    this.distributivoService.getDistributivo().subscribe(data => {
+      const distributivos = data;
+      const distributivoFiltrado = distributivos.filter(
+        (distributivo) => (distributivo.id_persona === persona.id_persona)
+      );
+     
+      console.log('distributivo encontrado', distributivoFiltrado);
+      this.loadTableData(persona, distributivoFiltrado)
+      
+      
+    });
+  }
+
+  buscarDistributivosbyId(idPeriodo: number): void {
+    this.distributivoService.getDistributivo().subscribe(data => {
+      const distributivos = data;
+      const distributivosFiltrados = distributivos.filter(distributivo =>
+        distributivo.id_persona === this.authService.id_persona && distributivo.id_periodo === idPeriodo
+      );
+  
+     
+      this.personaService.getPersonaById(this.authService.id_persona).subscribe(persona => {
+        this.loadTableData(persona, distributivosFiltrados);
+      });
     });
   }
 
@@ -57,58 +111,40 @@ export class TablaComponent implements OnInit {
     }
   }
 
-
-  loadAdditionalDataForPersonas(): void {
-    const requests = this.personas.map(persona =>
-      this.distributivoService.getDistributivoByPersonaId(persona.id_persona).pipe(
-        switchMap(distributivo => forkJoin([
-          this.personaService.getPeriodoById(distributivo?.id_periodo ?? 0).pipe(
-            tap(periodo => {
-              this.periodos[persona.id_persona] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-            }),
-            catchError(() => {
-              this.periodos[persona.id_persona] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-              return of(null);
-            })
-          ),
-          this.personaService.getGradoById(persona.id_grado_ocp ?? 0).pipe(
-            tap(grado => {
-              this.grados[persona.id_persona] = grado ?? { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
-            }),
-            catchError(() => {
-              this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
-              return of(null);
-            })
-          ),
-          this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
-            tap(titulo => {
-              this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
-            }),
-            catchError(() => {
-              this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
-              return of(null);
-            })
-          ),
-          this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
-            tap(contrato => {
-              this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
-            }),
-            catchError(() => {
-              this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
-              return of(null);
-            })
-          )
-        ]))
-      )
-    );
-
-    forkJoin(requests).subscribe(() => {
-      this.dataSource = new MatTableDataSource(this.personas);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+  loadTableData(persona: Persona, distributivos: Distributivo[]): void {
+    const dataTabla: PersonaConDistributivo[] = [];
+  
+    distributivos.forEach(distributivo => {
+      const personaConDistributivo: PersonaConDistributivo = {
+        persona: persona,
+        distributivo: distributivo,
+        periodo: undefined,
+        grado: undefined,
+        contrato: undefined
+      };
+      dataTabla.push(personaConDistributivo);
+    });
+  
+    dataTabla.forEach(item => {
+      forkJoin([
+        this.personaService.getPeriodoById(item.distributivo.id_periodo),
+        this.personaService.getGradoById(item.persona.id_grado_ocp ?? 0),
+        this.personaService.getContratoById(item.persona.id_tipo_contrato?? 0)
+      ]).subscribe(([periodo, grado, contrato]) => {
+        item.periodo = periodo || { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+        item.grado = grado || { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
+        item.contrato = contrato || { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
+        this.dataSource = new MatTableDataSource(dataTabla);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
     });
   }
 
+
+  
+  
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
@@ -124,5 +160,26 @@ export class TablaComponent implements OnInit {
       this.dataSource.sort = this.sort;
       window.dispatchEvent(new Event('resize'));
     }
+  }
+
+  onPeriodoChange(event: any): void {
+    this.periodoSeleccionado = +event.target.value;
+    this.idPeriodo = this.periodoSeleccionado;
+    this.buscarDistributivosbyId(this.idPeriodo);
+    console.log('idPeriodo', this.idPeriodo)
+  }
+
+  generarModeloPDF(idPeriodo: number): void {
+    this.authService.clearLocalStoragePeriodo();
+    this.authService.id_periodo = idPeriodo;
+    if (this.authService.id_periodo) {
+      this.router.navigate(['/reportes']);
+    } else {
+      console.warn('No se encontró id_periodo para esta persona.');
+    }
+  }
+
+  recargarPagina() {
+    window.location.reload();
   }
 }

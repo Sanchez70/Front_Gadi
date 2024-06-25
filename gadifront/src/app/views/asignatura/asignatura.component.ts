@@ -24,6 +24,7 @@ const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
+
 @Component({
   selector: 'app-asignatura',
   templateUrl: './asignatura.component.html',

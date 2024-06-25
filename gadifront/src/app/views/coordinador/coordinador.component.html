@@ -1,28 +1,29 @@
 <div class="{{currentExplan}}">
   <div class="container">
     <h1>Lista</h1>
-    <form class="formulario" ngNativeValidate  [formGroup]="myForm">
-      <div class="combos-container">
-        <mat-form-field appearance="outline" style="width: 100cap;">
-          <mat-label>Buscar...</mat-label>
-          <input matInput (input)="applyFilter($event)" />
-        </mat-form-field>
-        <div class="input-group mb-3">
-          <div class="combo-container">
-            <label for="periodo" class="label_form font-weight-bold">Periodo</label>
-            <div class="custom-select">
-              <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
-                name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
-                formControlName="periodoSelec">
-                <option value=0 disabled selected>Seleccione una opción</option>
-                <option *ngFor="let periodo of periodos" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}
-                </option>
-              </select>
-            </div>
+
+    <div class="combos-container">
+      <mat-form-field appearance="outline" style="width: 100cap;">
+        <mat-label>Buscar...</mat-label>
+        <input matInput (input)="applyFilter($event)" />
+      </mat-form-field>
+      <div class="input-group mb-3">
+        <div class="combo-container">
+          <label for="periodo" class="label_form font-weight-bold">Periodo</label>
+          <div class="custom-select">
+            <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
+              name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
+              formControlName="periodoSelec">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let periodo of periodos" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}
+              </option>
+            </select>
           </div>
         </div>
       </div>
-      <section class="example-container mat-elevation-z8" tabindex="0">
+    </div>
+    <div class="table-container">
+      <section class=" mat-elevation-z8" tabindex="0">
         <table mat-table [dataSource]="dataSource" matSort>
           <ng-container matColumnDef="cedula" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
@@ -93,6 +94,6 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
       </section>
-    </form>
+
+    </div>
   </div>
-</div>
