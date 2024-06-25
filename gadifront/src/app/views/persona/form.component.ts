@@ -6,7 +6,22 @@ import { Usuario } from '../../Services/loginService/usuario';
 import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  showCloseButton: true,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 
 @Component({
   selector: 'app-form',
@@ -17,13 +32,31 @@ export class FormComponent implements OnInit {
   persona: Persona = new Persona();
   usuario: Usuario = new Usuario(); 
   mostrarCarga: boolean = false;
+  personaForm: FormGroup;
+  currentExplan: string = '';
+
+  private sidebarSubscription!: Subscription;
 
   constructor(
     private router: Router,
     private personaService: PersonaService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder,
   ) {
     this.persona.fecha_vinculacion = new Date();
+
+    this.personaForm = this.fb.group({
+      cedula: [{value: ''}],
+      nombre1: [{ value: '' }],
+      nombre2: [{ value: '' }],
+      apellido1: [{ value: '' }],
+      apellido2: [{ value: '' }],
+      telefono: [{ value: '' }],
+      direccion: [{ value: '' }],
+      correo: [{ value: '' }],
+      edad: [{ value: '' }],
+      fecha_vinculacion: [{ value: '' }], 
+    });
   }
 
   ngOnInit(): void {
@@ -31,7 +64,8 @@ export class FormComponent implements OnInit {
     if (idPersona) {
       this.personaService.getPersonaById(idPersona).subscribe(
         (persona) => {
-          this.persona = persona;     
+          this.persona = persona;
+          this.personaForm.patchValue(persona);     
         },
         (error) => {
           console.error('Error al cargar los datos de la persona:', error);
@@ -40,32 +74,46 @@ export class FormComponent implements OnInit {
     } else {
       console.error('ID de persona no disponible');
     }
+
+    this.sidebarSubscription = this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+    });
   }
   
   guardarCambios(): void {
-    this.mostrarCarga = true;
-    this.personaService.updatePersona(this.persona).subscribe(
-      (response) => {
-        console.log('Persona actualizada exitosamente:', response);
-        this.mostrarCarga = false;
-        this.mostrarMensaje('Datos actualizados correctamente', 'success');
-        this.router.navigate(['/mainDocente']);
-      },
-      (error) => {
-        console.error('Error al actualizar persona:', error);
-        this.mostrarCarga = false;
-        this.mostrarMensaje('Error al actualizar los datos', 'error');
-      }
-    );
-  }
-
-  mostrarMensaje(mensaje: string, tipo: 'success' | 'error'): void {
-    Swal.fire({
-      icon: tipo,
-      title: mensaje,
-      showConfirmButton: false,
-      timer: 2000
-    });
+    if (this.personaForm.valid) {
+      Swal.fire({
+        title: '¿Está seguro de actualizar los datos de esta perosna?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+      this.mostrarCarga = true;
+      const updatedPersona: Persona = { ...this.persona, ...this.personaForm.getRawValue() };
+      this.personaService.updatePersona(updatedPersona).subscribe(
+        (response) => {
+          console.log('Persona actualizada exitosamente:', response);
+          this.mostrarCarga = false;
+          Toast.fire({
+            icon: "success",
+            title: "Daros acrualizados con exito",
+          });
+          this.router.navigate(['/mainDocente']);
+        },
+        (error) => {
+          console.error('Error al actualizar persona:', error);
+          this.mostrarCarga = false;
+          Toast.fire({
+            icon: "error",
+            title: "Error al actualizar los datos", 
+          });
+        }
+      );
+    }
+  });
+}
   }
 
 }
