@@ -14,11 +14,6 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { AsignaturaModalComponent } from './asignatura-model.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-
 
 const Toast = Swal.mixin({
   toast: true,
@@ -57,9 +52,6 @@ export class AsignaturaComponent implements OnInit {
   currentExplan: string='';
   myForm: FormGroup = this.fb.group({});
 
-  dataSource!: MatTableDataSource<Asignatura>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
   
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   constructor(private asignaturaService: AsignaturaService,
@@ -224,30 +216,5 @@ export class AsignaturaComponent implements OnInit {
       });
     }
     
-  }
-
-  loadAsignatura(): void {
-    this.asignaturaService.getAsignatura().subscribe(data => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    });
-  }
-
-  openCreateDialog(): void {
-    const dialogRef = this.dialog.open(AsignaturaModalComponent, {
-      width: '400px',
-      data: new Carrera()
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadAsignatura();
-        Toast.fire({
-          icon: "success",
-          title: "La carrera ha sido creada correctamente",
-        });
-      }
-    });
   }
 }

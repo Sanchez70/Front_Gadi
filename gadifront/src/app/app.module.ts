@@ -78,7 +78,6 @@ import { MainAdminComponent } from './views/main-admin/main-admin.component';
 import { CoordinadorComponent } from './views/coordinador/coordinador.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
-import { AsignaturaModalComponent } from './views/asignatura/asignatura-model.component';
 import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
 import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
 import { DirectorReporteComponent } from './views/director-reporte/director-reporte.component'; 
@@ -89,6 +88,8 @@ import { EditarActividadesComponent } from './views/coordinador/editar-actividad
 import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
 import { ValidacionesComponent } from './validaciones/validaciones.component';
 import { RolSelectorComponent } from './views/login/rol-selector.component';
+import { AsignaturaModalComponent } from './views/crud-asignatura/asignatura-model.component';
+import { CrudAsignaturaComponent } from './views/crud-asignatura/crud-asignatura.component';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
@@ -119,7 +120,8 @@ const routes: Routes = [
   { path: 'coordinador', component: CoordinadorComponent},
   { path: 'director-reporte', component: DirectorReporteComponent},
   { path: 'carrera', component: CarreraComponent},
-  { path: 'matriz-distributivo', component: MatrizDistributivoComponent}
+  { path: 'matriz-distributivo', component: MatrizDistributivoComponent},
+  { path: 'crud-asignatura', component: CrudAsignaturaComponent}
   
 ];
 @NgModule({
@@ -158,6 +160,7 @@ const routes: Routes = [
     MainAdminComponent,
     CoordinadorComponent,
     CarreraModalComponent,
+    CrudAsignaturaComponent,
     AsignaturaModalComponent,
     AdminCreacionComponent,
     TablaComponent,

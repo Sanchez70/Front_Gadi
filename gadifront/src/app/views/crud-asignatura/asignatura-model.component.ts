@@ -7,10 +7,9 @@ import { AsignaturaService } from '../../Services/asignaturaService/asignatura.s
 @Component({
     selector: 'app-asignatura-modal',
     templateUrl: './asignatura-modal.component.html',
-    styleUrls: ['./asignatura.component.css'],
+    styleUrls: ['./crud-asignatura.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 
 export class AsignaturaModalComponent implements OnInit {
     asignaturaForm: FormGroup;
@@ -22,7 +21,7 @@ export class AsignaturaModalComponent implements OnInit {
         private asignaturaService: AsignaturaService
     ) {
         this.asignaturaForm = this.fb.group({
-            nombre_carrera: [data?.nombre_asignatura || '', Validators.required],
+            nombre_asignatura: [data?.nombre_asignatura || '', Validators.required],
             horas_semanales: [data?.horas_semanales || 0, [Validators.required, Validators.min(1)]],
         });
     }
@@ -32,7 +31,7 @@ export class AsignaturaModalComponent implements OnInit {
     onSave(): void {
         if (this.asignaturaForm.valid) {
             const asignatura = { ...this.data, ...this.asignaturaForm.value };
-            if (asignatura.id_carrera) {
+            if (asignatura.id_asignatura) {
                 this.asignaturaService.update(asignatura).subscribe(() => this.dialogRef.close(true));
             } else {
                 this.asignaturaService.create(asignatura).subscribe(() => this.dialogRef.close(true));
