@@ -53,6 +53,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelect } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
@@ -86,6 +87,7 @@ import { ApiInterceptor } from './interceptors/api.interceptor';
 import { EditarActividadesComponent } from './views/coordinador/editar-actividades/editar-actividades.component';
 import { EditarAsignaturaComponent } from './views/coordinador/editar-asignatura/editar-asignatura.component';
 import { ValidacionesComponent } from './validaciones/validaciones.component';
+import { RolSelectorComponent } from './views/login/rol-selector.component';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
@@ -164,6 +166,7 @@ const routes: Routes = [
     EditarActividadesComponent,
     EditarAsignaturaComponent,
     PersonaFormComponent,
+    RolSelectorComponent
   ],
   
   imports: [
@@ -193,7 +196,8 @@ const routes: Routes = [
     MatSnackBarModule,
     MatDatepickerModule,
     NgxUiLoaderModule,
-    CommonModule 
+    CommonModule,
+    MatCardModule 
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 

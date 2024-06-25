@@ -10,6 +10,8 @@ import { UsuarioRolService } from '../../Services/UsuarioRol/usuario-rol.service
 import { Rol } from '../../Services/rol/rol';
 import { UsuarioRol } from '../../Services/UsuarioRol/usuarioRol';
 import * as bcrypt from 'bcryptjs';
+import { RolSelectorComponent } from './rol-selector.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -32,7 +34,7 @@ export class LoginComponent {
   usuarioRoles: UsuarioRol[] = [];
   roles: Rol[] = [];
   public searchForm: FormGroup;
-  constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService) {
+  constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService,  public dialog: MatDialog) {
     this.searchForm = this.fb.group({
       usuario: ['', Validators.required],
       contraneusu: ['', Validators.required]
@@ -160,27 +162,16 @@ export class LoginComponent {
 
 
   showDialog(usuario: any) {
-    Swal.fire({
-      title: 'Selecciona un rol',
-      html: `<select id="roleSelect" class="swal2-input">
-               ${this.roles.map(role => `<option value="${role.nombre_rol}">${role.nombre_rol}</option>`).join('')}
-             </select>`,
-      focusConfirm: false,
-      preConfirm: () => {
-        const roleSelect = (Swal.getPopup()!.querySelector('#roleSelect') as HTMLSelectElement).value;
-        Swal.fire(`Bienvenid@ ${usuario}`, 'Inicio de sesion correcto', 'success');
-        this.tipoRol(roleSelect);
+    const dialogRef = this.dialog.open(RolSelectorComponent, {
+      width: '300px',
+      data: { roles: this.roles }
+    });
 
-        console.log(roleSelect);
-        if (!roleSelect) {
-          Swal.showValidationMessage('Por favor selecciona un rol');
-        }
-        return roleSelect;
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.selectedRole = result.value;
-        console.log('Rol seleccionado:', this.selectedRole);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.selectedRole = result;
+        this.tipoRol(result);
+        Swal.fire(`Bienvenid@ ${usuario}`, 'Inicio de sesion correcto', 'success');
       }
     });
   }

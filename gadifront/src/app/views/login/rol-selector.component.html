@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Selecciona un rol</h1>
+<div mat-dialog-content>
+    <form [formGroup]="roleForm">
+        <mat-form-field appearance="fill">
+            <mat-label>Roles</mat-label>
+            <mat-select formControlName="selectedRole">
+                <mat-option *ngFor="let role of roles" [value]="role.nombre_rol">
+                    {{ role.nombre_rol }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="onConfirm()" cdkFocusInitial>Confirmar</button>
+    <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="onCancel()" >Cancelar</button>
+</div>

@@ -10,18 +10,22 @@
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Primer Nombre</mat-label>
     <input matInput formControlName="nombre1" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Segundo Nombre</mat-label>
-    <input matInput formControlName="nombre2">
+    <input matInput formControlName="nombre2" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Primer Apellido</mat-label>
     <input matInput formControlName="apellido1" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Segundo Apellido</mat-label>
-    <input matInput formControlName="apellido2">
+    <input matInput formControlName="apellido2" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Edad</mat-label>
@@ -30,14 +34,18 @@
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Correo</mat-label>
     <input matInput formControlName="correo" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Dirección</mat-label>
-    <input matInput formControlName="direccion">
+    <input matInput formControlName="direccion" required>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Teléfono</mat-label>
-    <input matInput formControlName="telefono">
+    <input matInput formControlName="telefono" maxlength="10" #Telefono required>
+    <mat-hint align="end">{{Telefono.value.length}} / 10</mat-hint>
+    <mat-error>{{'El campo no puede esatr vacio'}}</mat-error>
   </mat-form-field>
   <mat-form-field class="form-group" appearance="fill">
     <mat-label>Fecha de Vinculación</mat-label>

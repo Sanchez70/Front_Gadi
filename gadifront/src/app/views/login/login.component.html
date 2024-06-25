@@ -2,43 +2,39 @@
     <br>
     <h1 class="h1">GESTOR ACADÉMICO DE DISTRIBUTIVOS INSTITUCIONALES</h1>
     <div class="container">
-
-        <div class="card">
+        <mat-card class="card">
             <img src="assets/img/logo.png" alt="GADI" class="logo">
             <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <label class="label" for="usuario">Usuario</label>
-                    <div class="input-container">
-                        <i class="icon fas fa-user"></i>
-                        <input class="form-control" type="text" id="usuario" formControlName="usuario"
-                            placeholder="Ingrese su cedula" />
-                    </div>
-                    <div *ngIf="searchForm.get('usuario')?.touched && searchForm.get('usuario')?.invalid"
-                            class="text-danger">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Usuario</mat-label>
+                        <mat-icon matSuffix>account_circle</mat-icon>
+                        <input matInput type="text" formControlName="usuario" placeholder="Ingrese su cédula">
+                        <mat-error *ngIf="searchForm.get('usuario')?.touched && searchForm.get('usuario')?.invalid">
                             Campo Obligatorio*
-                        </div>
+                        </mat-error>
+                    </mat-form-field>
                 </div>
 
                 <div class="form-group">
-                    <label for="contraneusu">Contraseña</label>
-                    <div class="input-container" >
-                        <i class="icon fas fa-lock"></i>
-                        <input class="form-control" type="password" id="contraneusu" formControlName="contraneusu"
-                            required placeholder="Ingrese su contraseña" />
-                    </div>
-                    <div *ngIf="searchForm.get('contraneusu')?.touched && searchForm.get('contraneusu')?.invalid"
-                            class="text-danger">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Contraseña</mat-label>
+                        <mat-icon matSuffix>lock</mat-icon>
+                        <input matInput type="password" formControlName="contraneusu"
+                            placeholder="Ingrese su contraseña">
+                        <mat-error
+                            *ngIf="searchForm.get('contraneusu')?.touched && searchForm.get('contraneusu')?.invalid">
                             Campo Obligatorio*
-                        </div>
+                        </mat-error>
+                    </mat-form-field>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-rounded">INICIAR SESION</button>
+                <button mat-raised-button color="primary" type="submit">INICIAR SESION</button>
             </form>
             <div class="redirection-buttons">
                 <p></p>
-                <p class="register-link" routerLink="/registro">No tienes cuenta? Registrate</p>
-
+                <p class="register-link" routerLink="/registro">¿No tienes cuenta? Regístrate</p>
             </div>
-        </div>
+        </mat-card>
     </div>
 </div>
