@@ -226,7 +226,7 @@ export class RegistroComponent implements OnInit {
         this.user.contrasena = registroData.password,
         this.user.id_persona = personaRegistrada.id_persona,
         this.service.createUser(this.user).subscribe(usuarioRegistrado => {
-          this.usuarioRol.id_rol = 1,
+          this.usuarioRol.id_rol = 3,
             this.usuarioRol.id_usuario = usuarioRegistrado.id_usuario
           this.service.createUserRol(this.usuarioRol).subscribe(() => {
             this.titulos.controls.forEach((tituloControl) => {

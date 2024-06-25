@@ -29,4 +29,7 @@ export class DistributivoActividadService {
     const url = `${this.urlEndPoint}/distributivo_asignatura/${distributivo_actividad.id_distributivo_actividad}`;
     return this.http.put<DistributivoActividad>(url, distributivo_actividad, { headers: this.httpHeaders })
   }
+  delete(id: any): Observable<DistributivoActividad>{
+    return this.http.delete<DistributivoActividad>(`${this.urlEndPoint}/${id}`)
+  }
 }

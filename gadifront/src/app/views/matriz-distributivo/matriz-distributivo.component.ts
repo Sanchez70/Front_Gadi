@@ -95,6 +95,7 @@ export class MatrizDistributivoComponent implements OnInit {
   validador: string = '';
   jornadas: any[] = [];
   jornadaSeleccionada: number = 0;
+  id_distributivo:number=0;
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad();
@@ -310,7 +311,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
-
+        this.id_distributivo= distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -533,5 +534,22 @@ export class MatrizDistributivoComponent implements OnInit {
           }
         );
     });
+  }
+
+  eliminarDistributivos():void{
+    this.distributivoActividadService.getDistributivoActividad().subscribe(
+      data=>{
+        const distributivoEncontrado = data as DistributivoActividad[];
+        const distributivoFinal = distributivoEncontrado.find(resul=>resul.id_distributivo === this.id_distributivo); 
+        if(distributivoFinal){
+          this.distributivoActividadService.delete(distributivoFinal).subscribe(respuesta=>{
+            this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(dataAsig=>{
+              const distributivoAsig = dataAsig as DistributivoAsignatura[];
+               
+            });
+          });
+        }
+      }
+    );
   }
 }
