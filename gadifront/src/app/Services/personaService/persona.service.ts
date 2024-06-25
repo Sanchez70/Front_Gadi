@@ -54,7 +54,7 @@ export class PersonaService {
   getTituloByPersonaId(id_persona: number): Observable<TituloProfecional> {
     return this.http.get<TituloProfecional>(`${this.urlEndPoint}/titulo_profesional/persona/${id_persona}`);
   }
-  
+
   getCarreras(): Observable<Carrera[]> {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
   }
@@ -90,7 +90,6 @@ export class PersonaService {
   updateUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.put<Usuario>(`${this.urlEndPoint}/usuario/${usuario.id_usuario}`, usuario);
   }
-
 
   updatePersona(persona: Persona): Observable<Persona> {
     return this.http.put<Persona>(`${this.urlEndPoint}/persona/${persona.id_persona}`, persona);
