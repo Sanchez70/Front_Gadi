@@ -154,10 +154,10 @@ export class ReportesComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
-        (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.idPeriodo
+        (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.idPeriodo && distributivo.estado === 'Aceptado'
         )
       );
-     
+     console.log('distributivos filtrados',this.distributivoFiltrado)
       
       this.distributivoFiltrado.forEach(distributivo => {
         
@@ -255,10 +255,11 @@ export class ReportesComponent implements OnInit {
         ),
         this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
           tap(distributivosAsig => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
+            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada', acronimo: 'No asignado' };
+           
           }),
           catchError(() => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
+            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada', acronimo: 'No asignado' } as DistributivoAsignatura;
             return of(null);
           })
         ),

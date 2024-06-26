@@ -54,7 +54,7 @@
                         <tbody>
                             <tr *ngFor="let asignaturas of dataSourceAsig.data; let i = index">
                                 <td>{{carreras[asignaturas.id_asignatura].nombre_carrera || 'No asignado'}}</td>
-                                <td>{{ciclos[asignaturas.id_asignatura].nombre_ciclo || 'No asignado'}}</td>
+                                <td>{{distributivoAsignatura[asignaturas.id_asignatura].acronimo || 'No asignado'}}</td>
                                 <td>{{asignaturas.nombre_asignatura}}</td>
                                 <td style="text-align: center;">{{asignaturas.horas_semanales}}</td>
                             </tr>
