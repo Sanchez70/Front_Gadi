@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
+import { CarreraService } from '../../Services/carreraService/carrera.service';
+import { CicloService } from '../../Services/cicloService/ciclo.service';
 
 @Component({
     selector: 'app-asignatura-modal',
@@ -13,12 +15,16 @@ import { AsignaturaService } from '../../Services/asignaturaService/asignatura.s
 
 export class AsignaturaModalComponent implements OnInit {
     asignaturaForm: FormGroup;
+    public carreras: any[] =[];
+    public ciclos: any[] = [];
 
     constructor(
         public dialogRef: MatDialogRef<AsignaturaModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: Asignatura,
         private fb: FormBuilder,
-        private asignaturaService: AsignaturaService
+        private asignaturaService: AsignaturaService,
+        private carreraService: CarreraService,
+        private cicloService: CicloService
     ) {
         this.asignaturaForm = this.fb.group({
             nombre_asignatura: [data?.nombre_asignatura || '', Validators.required],
@@ -41,5 +47,14 @@ export class AsignaturaModalComponent implements OnInit {
 
     onCancel(): void {
         this.dialogRef.close();
+    }
+
+    loadCarrera(){
+        this.carreraService.getCarrera().subscribe(data => {
+            this.carreras = data;
+        })
+    }
+    loadCiclo(){
+
     }
 }

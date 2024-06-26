@@ -155,11 +155,6 @@ export class RegistroComponent implements OnInit {
   }
 
   onContratoChange(event: any) {
-    const selectedContrato = event.target.value;
-    this.isTiempoParcial = selectedContrato === 'TIEMPO PARCIAL';
-    if (!this.isTiempoParcial) {
-      this.registroForm2.get('hora_contrato')?.reset();
-    }
     this.contratoSelec = +event.target.value;
     this.id_contrato = this.contratoSelec;
   }

@@ -32,7 +32,7 @@ const Toast = Swal.mixin({
 })
 export class CrudAsignaturaComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'ciclo', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'borrar', 'actualizar'];
   dataSource!: MatTableDataSource<Asignatura>;
   color = '#1E90FF';
   currentExplan: string = '';
@@ -67,7 +67,7 @@ export class CrudAsignaturaComponent implements OnInit {
   }
 
   loadAsignaturas(): void {
-    this.asignaturaService.getAsignaturasConCiclos().subscribe(data => {
+    this.asignaturaService.getAsignaturasCrud().subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
