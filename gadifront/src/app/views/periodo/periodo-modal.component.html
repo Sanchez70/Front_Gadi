@@ -1,0 +1,47 @@
+<div>
+    <h1 mat-dialog-title>{{ data.id_periodo ? 'Editar' : 'Crear' }} Periodo</h1>
+</div>
+<div mat-dialog-content>
+    <form [formGroup]="periodoform">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre_periodo" />
+            <mat-error *ngIf="periodoform.get('nombre_periodo')?.hasError('required')">Nombre del periodo es
+                requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de Inicio del Periodo</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="inicio_periodo" />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="periodoform.get('inicio_periodo')?.hasError('required')">Fecha de inicio es
+                requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de Fin del Periodo</mat-label>
+            <input matInput [matDatepicker]="pickerF" formControlName="fin_periodo" />
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerF"></mat-datepicker-toggle>
+            <mat-datepicker #pickerF></mat-datepicker>
+            <mat-error *ngIf="periodoform.get('fin_periodo')?.hasError('required')">Fecha de fin es
+                requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado">
+                <mat-option *ngFor="let estado of estados" [value]="estado.value">
+                  {{estado.viewValue}}
+                </mat-option>
+              </mat-select>
+            <mat-error *ngIf="periodoform.get('estado')?.hasError('required')">Estado es requerido</mat-error>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="onSave()">Guardar</button>
+    <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="onCancel()">Cancelar</button>
+</div>

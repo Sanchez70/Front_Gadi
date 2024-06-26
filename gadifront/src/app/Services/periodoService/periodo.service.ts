@@ -19,8 +19,15 @@ export class PeriodoService {
   create(periodo: Periodo): Observable<Periodo> {
     return this.http.post<Periodo>(`${this.urlEndPoint}/periodo`, periodo, { headers: this.httpHeaders })
   }
-
   getPeriodobyId(id: any): Observable<Periodo> {
     return this.http.get<Periodo>(`${this.urlEndPoint}/periodo/${id}`);
   }
+
+  update(periodo: Periodo): Observable<Periodo> {
+    return this.http.put<Periodo>(`${this.urlEndPoint}/periodo/${periodo.id_periodo}`, periodo, { headers: this.httpHeaders });
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlEndPoint}/periodo/${id}`, { headers: this.httpHeaders });
+  }  
 }

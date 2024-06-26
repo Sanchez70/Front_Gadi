@@ -3,5 +3,5 @@ export class Periodo {
     nombre_periodo: string='';
     inicio_periodo: string = '';
     fin_periodo: string = '';
-
+    estado: string= '';
 }

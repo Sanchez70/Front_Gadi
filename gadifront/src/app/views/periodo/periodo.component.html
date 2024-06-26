@@ -1,1 +1,58 @@
-<p>periodo works!</p>
+<div class="container {{currentExplan}}">
+    <h1>Periodos</h1>
+    <div class="search-bar">
+        <mat-form-field appearance="outline">
+            <mat-label>Buscar...</mat-label>
+            <input matInput (input)="applyFilter($event)" />
+        </mat-form-field>
+        <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Crear</button>
+    </div>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="nombre_periodo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
+                <td mat-cell *matCellDef="let periodo">{{ periodo.nombre_periodo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="inicio_periodo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de Inicio
+                </th>
+                <td mat-cell *matCellDef="let periodo">{{ periodo.inicio_periodo | date }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fin_periodo">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de Fin
+                </th>
+                <td mat-cell *matCellDef="let periodo">{{ periodo.fin_periodo | date }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Estado</th>
+                <td mat-cell *matCellDef="let periodo" [ngClass]="{'activo': periodo.estado === 'Activo', 'inactivo': periodo.estado === 'Inactivo', 'sin-estado': !periodo.estado}">
+                    {{ periodo.estado || 'Sin estado' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="borrar">
+                <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Eliminar</th>
+                <td mat-cell *matCellDef="let periodo">
+                    <button mat-icon-button color="warn" (click)="deletePeriodo(periodo.id_periodo)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>ç
+            <ng-container matColumnDef="actualizar">
+                <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Actualizar</th>
+                <td mat-cell *matCellDef="let periodo">
+                    <button mat-icon-button color="primary" (click)="openEditDialog(periodo)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

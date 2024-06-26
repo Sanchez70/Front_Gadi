@@ -8,7 +8,7 @@ import { UsuarioComponent } from './views/usuario/usuario.component';
 import { AsignaturaComponent } from './views/asignatura/asignatura.component';
 import { ActividadComponent } from './views/actividad/actividad.component';
 import { CarreraComponent } from './views/carrera/carrera.component';
-import { PeriodoComponent } from './views/periodo/periodo.component';
+import { PeriodoComponent } from './views/periodo/periodo.component'; 
 import { CicloComponent } from './views/ciclo/ciclo.component';
 import { JornadaComponent } from './views/jornada/jornada.component';
 import { RolComponent } from './views/rol/rol.component';
@@ -91,6 +91,7 @@ import { ValidacionesComponent } from './validaciones/validaciones.component';
 import { RolSelectorComponent } from './views/login/rol-selector.component';
 import { AsignaturaModalComponent } from './views/crud-asignatura/asignatura-model.component';
 import { CrudAsignaturaComponent } from './views/crud-asignatura/crud-asignatura.component';
+import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
 import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
@@ -122,7 +123,8 @@ const routes: Routes = [
   { path: 'director-reporte', component: DirectorReporteComponent},
   { path: 'carrera', component: CarreraComponent},
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent},
-  { path: 'crud-asignatura', component: CrudAsignaturaComponent}
+  { path: 'crud-asignatura', component: CrudAsignaturaComponent},
+  { path: 'periodo', component: PeriodoComponent} 
   
 ];
 @NgModule({
@@ -172,7 +174,8 @@ const routes: Routes = [
     EditarActividadesComponent,
     EditarAsignaturaComponent,
     PersonaFormComponent,
-    RolSelectorComponent
+    RolSelectorComponent,
+    PeriodoModalComponent
   ],
   
   imports: [
