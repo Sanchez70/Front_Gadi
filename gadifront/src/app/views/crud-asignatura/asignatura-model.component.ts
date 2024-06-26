@@ -15,7 +15,11 @@ import { CicloService } from '../../Services/cicloService/ciclo.service';
 
 export class AsignaturaModalComponent implements OnInit {
     asignaturaForm: FormGroup;
-    public carreras: any[] =[];
+    public carreraSelec: number = 0;
+    public id_carrera: number = 0;
+    public carreras: any[] = [];
+    public cicloSelec: number = 0;
+    public id_ciclo: number = 0;
     public ciclos: any[] = [];
 
     constructor(
@@ -28,11 +32,16 @@ export class AsignaturaModalComponent implements OnInit {
     ) {
         this.asignaturaForm = this.fb.group({
             nombre_asignatura: [data?.nombre_asignatura || '', Validators.required],
-            horas_semanales: [data?.horas_semanales || 0, [Validators.required, Validators.min(1)]],
+            horas_semanales: [data?.horas_semanales || "", [Validators.required, Validators.min(1)]],
+            id_carrera: [data?.id_carrera || 0, Validators.required],
+        id_ciclo: [data?.id_ciclo || 0, Validators.required]
         });
     }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.loadCarrera();
+        this.loadCiclo();
+     }
 
     onSave(): void {
         if (this.asignaturaForm.valid) {
@@ -49,12 +58,23 @@ export class AsignaturaModalComponent implements OnInit {
         this.dialogRef.close();
     }
 
-    loadCarrera(){
+    loadCarrera() {
         this.carreraService.getCarrera().subscribe(data => {
             this.carreras = data;
         })
     }
-    loadCiclo(){
+    onCarreraChange(event: any): void {
+        this.carreraSelec = +event.value;
+        this.asignaturaForm.get('id_carrera')?.setValue(this.carreraSelec);
+    }
 
+    loadCiclo() {
+        this.cicloService.getCiclo().subscribe(data => {
+            this.ciclos = data;
+        })
+    }
+    onCicloChange(event: any): void {
+        this.cicloSelec = +event.value;
+        this.asignaturaForm.get('id_ciclo')?.setValue(this.cicloSelec);
     }
 }

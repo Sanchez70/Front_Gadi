@@ -21,8 +21,8 @@ export class RegistroComponent implements OnInit {
   public registroForm1: FormGroup;
   public registroForm2: FormGroup;
   public edad: number = 0;
-  gradoSeleccionado: number = 0;
-  id_grado: number = 0;
+  public gradoSeleccionado: number = 0;
+  public id_grado: number = 0;
   public contratoSelec: number = 0;
   public id_contrato: number = 0;
   public persona: Persona = new Persona();
@@ -170,7 +170,6 @@ export class RegistroComponent implements OnInit {
     return null;
   }
 
-
   onSubmit1(): void {
     if (this.registroForm1.invalid) {
       this.registroForm1.markAllAsTouched();
@@ -200,8 +199,6 @@ export class RegistroComponent implements OnInit {
   }
 
   onSubmit2(): void {
-    console.log('entroo')
-
     const registroData = JSON.parse(localStorage.getItem('registroData') || '{}');
 
     this.persona.cedula = registroData.usuario,
