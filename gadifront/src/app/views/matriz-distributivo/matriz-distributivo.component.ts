@@ -33,7 +33,17 @@ import { DistributivoActividad } from '../../Services/distributivoActividadServi
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { Carrera } from '../../Services/carreraService/carrera';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
-
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 @Component({
   selector: 'app-matriz-distributivo',
   templateUrl: './matriz-distributivo.component.html',
@@ -56,10 +66,10 @@ export class MatrizDistributivoComponent implements OnInit {
   periodosDis: { [key: number]: Periodo } = {};
   jornada: { [key: number]: Jornada } = {};
   distributivoAsignatura: { [key: number]: DistributivoAsignatura } = {};
-  distributivoActividad:{[key:number]: DistributivoActividad}={};
+  distributivoActividad: { [key: number]: DistributivoActividad } = {};
   carreras: { [key: number]: Carrera } = {};
   tipo_actividad: { [key: number]: tipo_actividad } = {};
-
+  idJornada: number = 0;
   color = '#1E90FF';
   currentExplan: string = '';
   personaEncontrada: Persona = new Persona();
@@ -80,7 +90,16 @@ export class MatrizDistributivoComponent implements OnInit {
   periodoName: string = '';
   horasTotales: number = 0;
   horasTotalesActividad: number = 0;
+  horasTotalesFinal: number = 0;
   id_activida: any;
+  validador: string = '';
+  jornadas: any[] = [];
+  jornadaSeleccionada: number = 0;
+  id_distributivo:number=0;
+  public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
+  public distributivo: Distributivo = new Distributivo();
+  public distributivoacti: DistributivoActividad = new DistributivoActividad();
+  public persona: Persona = new Persona();
   constructor(
     private asignaturaService: AsignaturaService,
     private personaService: PersonaService,
@@ -106,6 +125,7 @@ export class MatrizDistributivoComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
+    this.cargarComboJornada();
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarComboPeriodos();
@@ -118,7 +138,7 @@ export class MatrizDistributivoComponent implements OnInit {
         this.loadAdditionalDataForPersonas();
       }
     });
-    this.buscarDistributivo(this.authService.id_persona);
+    this.buscarDistributivo(this.authService.id_persona); 
   }
 
   cargarTipoActividad(): void {
@@ -138,6 +158,16 @@ export class MatrizDistributivoComponent implements OnInit {
       this.periodo = data;
       this.periodoName = this.periodo.nombre_periodo;
     });
+  }
+  cargarComboJornada(): void {
+    this.jornadaService.getJornada().subscribe(data => {
+      this.jornadas = data;
+    });
+  }
+  onJornadaChange(event: any): void {
+    this.jornadaSeleccionada = +event.target.value;
+    this.idJornada = this.jornadaSeleccionada;
+    console.log('id_jornada', this.idJornada);
   }
 
 
@@ -235,6 +265,7 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   cargarTipo(): void {
+    this.horasTotalesActividad = 0;
     const requests = this.actividades.map(actividad =>
       forkJoin([
         this.tipo_actividadService.gettipoActividadbyId(actividad.id_actividad ?? 0).pipe(
@@ -249,10 +280,13 @@ export class MatrizDistributivoComponent implements OnInit {
         ),
         this.distributivoActividadService.getActividadbyId(actividad.id_actividad).pipe(
           tap(horas => {
-            this.distributivoActividad[actividad.id_actividad] = horas ??{id_distributivo_actividad:0, hora_no_docente:0 };
+            this.distributivoActividad[actividad.id_actividad] = horas ?? { id_distributivo_actividad: 0, hora_no_docente: 0 };
+            this.horasTotalesActividad = horas.hora_no_docente + this.horasTotalesActividad;
+            this.calcularTotales();
+            this.validarHorasContrato();
           }),
           catchError(() => {
-            this.distributivoActividad[actividad.id_actividad] = {id_distributivo_actividad:0, hora_no_docente:0 } as DistributivoActividad;
+            this.distributivoActividad[actividad.id_actividad] = { id_distributivo_actividad: 0, hora_no_docente: 0 } as DistributivoActividad;
             return of(null);
           })
         )
@@ -277,7 +311,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
-
+        this.id_distributivo= distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -328,7 +362,7 @@ export class MatrizDistributivoComponent implements OnInit {
         }
         //this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
-        this.calcularHorasTotalesActividad();
+        this.calcularTotales();
         console.log('actividades cargadas:', this.actividades);
       });
     });
@@ -336,17 +370,18 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   calcularHorasTotales(): void {
+
     this.horasTotales = this.asignaturas.reduce(
       (sum, asignatura) => sum + asignatura.horas_semanales, 0
     );
     console.log('horas totales asignatura', this.horasTotales);
   }
 
-  calcularHorasTotalesActividad(): void {
-    this.horasTotalesActividad = this.actividades.reduce(
-      (sum, actividad) => sum + actividad.horas_no_docentes, 0
-    );
-    console.log('horas totales actividad', this.horasTotalesActividad);
+  calcularHorasTotalesActividad(objeto: DistributivoActividad[]): void {
+    this.horasTotalesActividad = objeto.reduce(
+
+      (sum, actividad) => sum + actividad.hora_no_docente, 0);
+
   }
 
   enviarAsignaturas(): void {
@@ -373,7 +408,7 @@ export class MatrizDistributivoComponent implements OnInit {
       showCancelButton: true,
       inputValidator: (value) => {
         const numberValue = Number(value);
-        if (isNaN(numberValue) || numberValue < 1 ) {
+        if (isNaN(numberValue) || numberValue < 1) {
           return 'Por favor, Ingrese un numero mayor a cero';
         }
         return null;
@@ -389,8 +424,8 @@ export class MatrizDistributivoComponent implements OnInit {
           if (resultFinal) {
             resultFinal.hora_no_docente = horasAsignadas;
             this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
-              Swal.fire(`Se han asignado ${horasAsignadas} horas.`);
               this.cargarTipo();
+              this.calcularTotales();
             });
           }
         });
@@ -403,6 +438,118 @@ export class MatrizDistributivoComponent implements OnInit {
     this.id_activida = row.id_actividad;
     console.log('ID of clicked row: ', row.id_actividad);
     this.asignarHoras();
+  }
 
+  calcularTotales(): void {
+    this.horasTotalesFinal = this.horasTotales + this.horasTotalesActividad;
+  }
+
+
+  validarHorasContrato(): void {
+    console.log('inicio')
+    this.personaService.getPersonaById(this.authService.id_persona).subscribe(
+      data => {
+        this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contrato => {
+          if (this.horasTotalesFinal > contrato.hora_contrato) {
+            this.validador = 'true';
+            console.log('inicio',this.validador)
+          } else {
+            this.validador = 'false';
+            console.log('inicio',this.validador)
+
+          }
+        });
+      });
+  }
+
+  public createdistributivo(): void {
+    this.distributivo.id_persona = this.persona.id_persona;
+    this.distributivo.id_periodo = this.idPeriodo;
+    this.distributivo.estado = 'Pendiente';
+    this.distributivoService.create(this.distributivo)
+      .subscribe(
+        (distributivo) => {
+          console.log("valor", distributivo);
+          this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+          this.createdistributivoacti(distributivo.id_distributivo);
+          
+          Toast.fire({
+            icon: "success",
+            title: "Distributivo Generado con éxito",
+          });
+
+          
+        },
+        (error) => {
+          console.error('Error al guardar:', error);
+          Toast.fire({
+            icon: "error",
+            title: "Hubo un error al guardar",
+            footer: "Por favor, verifique si ha completado todo lo necesario"
+          });
+        }
+      );
+  }
+
+  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
+    this.authService.asignaturasSeleccionadaAuth.forEach(asignatura => {
+      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+        id_jornada: this.idJornada,
+        paralelo: this.authService.paralelo,
+        id_distributivo: id_distributivo,
+        id_asignatura: asignatura.id_asignatura
+      };
+      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+        //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+        console.log('Asignatura Distributivo generado');       
+      }, error => {
+        //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+        console.log('Error al crear', error);
+      });
+    });
+  }
+
+
+  createdistributivoacti(id_distributivo: number): void {
+    this.actividades.forEach(actividad => {
+      const distributivoacti2: DistributivoActividad = {
+        id_actividad: actividad.id_actividad,
+        hora_no_docente: actividad.horas_no_docentes,
+        id_distributivo: id_distributivo,
+        id_distributivo_actividad: 0
+      };
+      this.distributivoActividadService.create(distributivoacti2)
+        .subscribe(
+          (distributivo) => {
+            console.log("valorREVISAR", distributivo);
+            //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
+          },
+          (error) => {
+            console.error('Error al guardar la actividad:', error);
+            // Toast.fire({
+            //   icon: "error",
+            //   title: "Hubo un error al guardar la actividad",
+            //   footer: "Por favor, verifique"
+            // });
+          }
+        );
+    });
+  }
+
+  eliminarDistributivos():void{
+    this.distributivoActividadService.getDistributivoActividad().subscribe(
+      data=>{
+        const distributivoEncontrado = data as DistributivoActividad[];
+        const distributivoFinal = distributivoEncontrado.find(resul=>resul.id_distributivo === this.id_distributivo); 
+        if(distributivoFinal){
+          this.distributivoActividadService.delete(distributivoFinal).subscribe(respuesta=>{
+            this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(dataAsig=>{
+              const distributivoAsig = dataAsig as DistributivoAsignatura[];
+               
+            });
+          });
+        }
+      }
+    );
   }
 }

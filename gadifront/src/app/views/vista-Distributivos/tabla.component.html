@@ -60,7 +60,7 @@
         <ng-container matColumnDef="fecha_vinculacion">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color"> Fecha de Vinculación
           </th>
-          <td mat-cell *matCellDef="let persona"> {{persona.persona.fecha_vinculacion}} | date </td>
+          <td mat-cell *matCellDef="let persona"> {{persona.persona.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="contrato">

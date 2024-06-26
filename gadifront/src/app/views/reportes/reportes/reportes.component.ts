@@ -41,6 +41,10 @@ export interface PersonaAsignatura {
   persona: Persona;
   asignaturas: Asignatura[];
 }
+
+export interface PersonaTitulo extends Persona{
+  titulos: TituloProfecional[];
+}
 @Component({
   selector: 'app-reportes',
   templateUrl: './reportes.component.html',
@@ -49,7 +53,7 @@ export interface PersonaAsignatura {
 export class ReportesComponent implements OnInit {
   dataSourceAsig!: MatTableDataSource<Asignatura>;
   dataSourceAct!: MatTableDataSource<Actividad>;
-  dataSource!: MatTableDataSource<Persona>;
+  dataSource!: MatTableDataSource<PersonaTitulo>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   grados: { [key: number]: GradoOcupacional } = {};
@@ -75,6 +79,8 @@ export class ReportesComponent implements OnInit {
   distributivoActividadesFiltrado: DistributivoActividad[] = [];
   actividadesFiltradas: any[] = [];
   asignaturas: Asignatura[] = [];
+  titulosCargados: any[] = [];
+  titulosFiltrado: any[] = [];
   periodo: Periodo = new Periodo();
   tipos: tipo_actividad[] = [];
   idPeriodo: number = this.authService.id_periodo;
@@ -116,7 +122,7 @@ export class ReportesComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
-        this.loadAdditionalDataForPersonas();
+        this.cargarTitulos(this.personaEncontrada);
         this.buscarDistributivo(this.authService.id_persona);
       }
     });
@@ -129,44 +135,17 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  loadAdditionalDataForPersonas(): void {
-    const requests = this.personas.map(persona =>
-      forkJoin([
-        this.personaService.getGradoById(persona.id_grado_ocp ?? 0).pipe(
-          tap(grado => {
-            this.grados[persona.id_persona] = grado ?? { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
-          }),
-          catchError(() => {
-            this.grados[persona.id_persona] = { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' } as GradoOcupacional;
-            return of(null);
-          })
-        ),
-        this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
-          tap(titulo => {
-            this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
-          }),
-          catchError(() => {
-            this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
-            return of(null);
-          })
-        ),
-        this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
-          tap(contrato => {
-            this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
-          }),
-          catchError(() => {
-            this.contratos[persona.id_persona] = { id_tipo_contrato: 0, nombre_contrato: 'No asignado' } as unknown as TipoContrato;
-            return of(null);
-          })
-        )
-      ])
-
-    );
-
-    forkJoin(requests).subscribe(() => {
-      this.dataSource = new MatTableDataSource(this.personas);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+  cargarTitulos(personaEncontrada: Persona):void {
+    this.tituloService.getTitulo().subscribe(data =>{
+      this.titulosCargados = data;
+      this.titulosFiltrado = this.titulosCargados.filter(
+        (titulo) => (titulo.id_persona === this.authService.id_persona)
+      );
+      const personaConTitulo: PersonaTitulo = {
+        ...personaEncontrada,
+        titulos: this.titulosFiltrado
+      };
+      this.dataSource = new MatTableDataSource([personaConTitulo]);
     });
   }
 

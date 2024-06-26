@@ -31,7 +31,9 @@
                         <tbody>
                             <tr *ngFor="let persona of dataSource.data">
                                 <td style="text-align: center;">{{persona.nombre1}} {{persona.nombre2}} {{persona.apellido1}} {{persona.apellido2}}</td>
-                                <td style="text-align: center;">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}</td>
+                                <td style="text-align: center;">
+                                      <li *ngFor="let titulo of persona.titulos">{{ titulo.nombre_titulo }}</li>
+                                  </td>
                             </tr>
                         </tbody>
                     </table>
