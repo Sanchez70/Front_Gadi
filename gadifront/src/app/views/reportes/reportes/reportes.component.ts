@@ -158,7 +158,7 @@ export class ReportesComponent implements OnInit {
         )
       );
      
-      console.log('distributivo encontrado', this.distributivoFiltrado);
+      
       this.distributivoFiltrado.forEach(distributivo => {
         
         this.buscarAsignatura(distributivo.id_distributivo);
@@ -182,7 +182,7 @@ export class ReportesComponent implements OnInit {
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         this.cargarAdicional();
         this.calcularHorasTotales();
-        console.log('Asignaturas cargadas:', this.asignaturas);
+        
       });
     });
   }
@@ -202,7 +202,7 @@ export class ReportesComponent implements OnInit {
         this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
         this.calcularHorasTotalesActividad();
-        console.log('actividades cargadas:', this.actividades);
+        
       });
     });
 
@@ -236,7 +236,7 @@ export class ReportesComponent implements OnInit {
         this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
           tap(periodo => {
               this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-              console.log('periodoPersona' + periodo.nombre_periodo);
+              
             
           }),
           catchError(() => {
@@ -305,7 +305,7 @@ export class ReportesComponent implements OnInit {
     this.horasTotalesActividad = this.actividades.reduce(
       (sum,actividad) => sum + actividad.horas_no_docentes, 0
     );
-    console.log('horas totales actividad', this.horasTotalesActividad);
+    
   }
 
   calcularHorasTotalesPorDocente(horasAsignatura:number, horasActividades:number):number{

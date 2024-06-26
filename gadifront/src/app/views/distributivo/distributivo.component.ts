@@ -69,7 +69,7 @@ const Toast = Swal.mixin({
 })
 export class DistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'nombre_contrato', 'nombre_titulo', 'nombre_grado_ocp', 'fecha_vinculacion'];
-  displayedColumns2: string[] = ['nombre_asignatura', 'horas_semanales', 'id_carrera', 'id_ciclo'];
+  displayedColumns2: string[] = ['nombre_asignatura', 'horas_semanales', 'id_carrera', 'id_ciclo', 'jornada'];
   displayedColumns3: string[] = ['id_actividad', 'nombre_actividad', 'descripcion_actividad', 'horas_no_docentes', 'id_tipo_actividad'];
   dataSource!: MatTableDataSource<PersonaExtendida>;
   dataSource2!: MatTableDataSource<Asignatura>;
@@ -94,7 +94,7 @@ export class DistributivoComponent implements OnInit {
   periodoSeleccionado: number = 0;
   paraleloSeleccionado: string = '';
   jornadas: any[] = [];
-  jornadaSeleccionada: number = 0;
+  jornadaSeleccionada: { [key: number]: number } = {};
   idPeriodo: number = 0;
   idJornada: number = 0;
   horasTotales: number = 0;
@@ -131,7 +131,7 @@ export class DistributivoComponent implements OnInit {
     if (this.authService.id_persona) {
       this.loadPersonaData(this.authService.id_persona);
     }
-    
+
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarCiclos();
@@ -213,10 +213,10 @@ export class DistributivoComponent implements OnInit {
     });
   }
 
-  onJornadaChange(event: any): void {
-    this.jornadaSeleccionada = +event.target.value;
-    this.idJornada = this.jornadaSeleccionada;
-    console.log('id_jornada', this.idJornada);
+  onJornadaChange(event: any, idAsignatura: any): void {
+    this.idJornada = +event.target.value
+    this.jornadaSeleccionada[idAsignatura] = this.idJornada;
+    console.log(`Asignatura ID: ${idAsignatura}, Jornada seleccionada: ${this.idJornada}`);
   }
 
   obtenerTipoActividad(id_tipo_actividad: number): string {
@@ -242,11 +242,11 @@ export class DistributivoComponent implements OnInit {
     }
   }
 
-  buscarActividades(): void{
-    if(this.authService.id_actividades){
-      this.authService.id_actividades.forEach(actividad =>{
+  buscarActividades(): void {
+    if (this.authService.id_actividades) {
+      this.authService.id_actividades.forEach(actividad => {
         const idActividades: any = actividad.id_actividad;
-        this.actividadService.getActividadbyId(idActividades).subscribe(response =>{
+        this.actividadService.getActividadbyId(idActividades).subscribe(response => {
           this.actividad = response;
           this.Actividades.push(this.actividad);
           this.dataSource3 = new MatTableDataSource(this.Actividades);
@@ -282,7 +282,7 @@ export class DistributivoComponent implements OnInit {
           console.log("valor", distributivo);
           this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
           this.createdistributivoacti(distributivo.id_distributivo);
-          
+
           this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
           this.dataSource2 = new MatTableDataSource<Asignatura>([]);
           this.dataSource3 = new MatTableDataSource<Actividad>([]);
@@ -295,7 +295,7 @@ export class DistributivoComponent implements OnInit {
             title: "Distributivo Generado con éxito",
           });
 
-          
+
         },
         (error) => {
           console.error('Error al guardar:', error);
@@ -308,21 +308,27 @@ export class DistributivoComponent implements OnInit {
       );
   }
 
-  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
+  createAsignaturaDistributivo(id_distributivo: number): void {
     this.authService.id_asignaturas.forEach(asignatura => {
-      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-        id_jornada: this.idJornada,
-        paralelo: this.authService.paralelo,
-        id_distributivo: id_distributivo,
-        id_asignatura: asignatura.id_asignatura
-      };
-      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-        //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-        console.log('Asignatura Distributivo generado');       
-      }, error => {
-        //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
-        console.log('Error al crear', error);
-      });
+      const id_jornada = this.jornadaSeleccionada[asignatura.id_asignatura];
+      console.log(id_jornada);
+      if (id_jornada) {
+        const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+          id_jornada: id_jornada,
+          paralelo: this.authService.paralelo,
+          id_distributivo: id_distributivo,
+          id_asignatura: asignatura.id_asignatura
+        };
+        this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+          //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+          console.log('Asignatura Distributivo generado');
+        }, error => {
+          //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+          console.log('Error al crear', error);
+        });
+      }else{
+        console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
+      }
     });
   }
 

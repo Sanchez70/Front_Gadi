@@ -16,7 +16,20 @@
             <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('min')">Horas semanales deben ser mayores a
                 0</mat-error>
         </mat-form-field>
-        
+        <mat-form-field appearance="outline">
+            <mat-label>Carrera</mat-label>
+            <mat-select formControlName="id_carrera" (selectionChange)="onCarreraChange($event)">
+                <mat-option *ngFor="let carrera of carreras" [value]="carrera.id_carrera">{{ carrera.nombre_carrera }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="asignaturaForm.get('id_carrera')?.hasError('required')">Carrera es requerida</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Ciclo</mat-label>
+            <mat-select formControlName="id_ciclo" (selectionChange)="onCicloChange($event)">
+                <mat-option *ngFor="let ciclo of ciclos" [value]="ciclo.id_ciclo">{{ ciclo.nombre_ciclo }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="asignaturaForm.get('id_ciclo')?.hasError('required')">Ciclo es requerido</mat-error>
+        </mat-form-field>
     </form>
 </div>
 <div mat-dialog-actions>

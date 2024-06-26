@@ -21,8 +21,8 @@ export class RegistroComponent implements OnInit {
   public registroForm1: FormGroup;
   public registroForm2: FormGroup;
   public edad: number = 0;
-  gradoSeleccionado: number = 0;
-  id_grado: number = 0;
+  public gradoSeleccionado: number = 0;
+  public id_grado: number = 0;
   public contratoSelec: number = 0;
   public id_contrato: number = 0;
   public persona: Persona = new Persona();
@@ -155,11 +155,6 @@ export class RegistroComponent implements OnInit {
   }
 
   onContratoChange(event: any) {
-    const selectedContrato = event.target.value;
-    this.isTiempoParcial = selectedContrato === 'TIEMPO PARCIAL';
-    if (!this.isTiempoParcial) {
-      this.registroForm2.get('hora_contrato')?.reset();
-    }
     this.contratoSelec = +event.target.value;
     this.id_contrato = this.contratoSelec;
   }
@@ -174,7 +169,6 @@ export class RegistroComponent implements OnInit {
     }
     return null;
   }
-
 
   onSubmit1(): void {
     if (this.registroForm1.invalid) {
@@ -205,8 +199,6 @@ export class RegistroComponent implements OnInit {
   }
 
   onSubmit2(): void {
-    console.log('entroo')
-
     const registroData = JSON.parse(localStorage.getItem('registroData') || '{}');
 
     this.persona.cedula = registroData.usuario,

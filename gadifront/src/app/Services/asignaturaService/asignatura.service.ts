@@ -4,6 +4,7 @@ import { Asignatura } from './asignatura';
 import { Ciclo } from '../cicloService/ciclo';
 import { Observable, forkJoin, map} from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Carrera } from '../carreraService/carrera';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +19,17 @@ export class AsignaturaService {
     return this.http.get<Asignatura[]>(`${this.urlEndPoint}/asignatura`)
   }
 
-  getAsignaturasConCiclos(): Observable<Asignatura[]> {
+  getAsignaturasCrud(): Observable<Asignatura[]> {
     const asignaturas$ = this.http.get<Asignatura[]>(`${this.urlEndPoint}/asignatura`);
-    const ciclos$ = this.http.get<Ciclo[]>(`${this.urlEndPoint}/ciclox`);
+    const ciclos$ = this.http.get<Ciclo[]>(`${this.urlEndPoint}/ciclo`);
+    const carreras$ = this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
 
-    return forkJoin([asignaturas$, ciclos$]).pipe(
-      map(([asignaturas, ciclos]) => {
+    return forkJoin([asignaturas$, ciclos$, carreras$]).pipe(
+      map(([asignaturas, ciclos, carreras]) => {
         return asignaturas.map(asignatura => {
+          const carrera = carreras.find(ca => ca.id_carrera == asignatura.id_carrera);
           const ciclo = ciclos.find(c => c.id_ciclo === asignatura.id_ciclo);
-          return { ...asignatura, nombre_ciclo: ciclo ? ciclo.nombre_ciclo : '' };
+          return { ...asignatura, nombre_ciclo: ciclo ? ciclo.nombre_ciclo : '', nombre_carrera: carrera ? carrera.nombre_carrera : '' };
         });
       })
     );
