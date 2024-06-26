@@ -33,4 +33,7 @@ export class DistributivoService {
   getDistributivoByPersonaId(id_persona: number): Observable<Distributivo> {
     return this.http.get<Distributivo>(`${this.urlEndPoint}/distributivo/persona/${id_persona}`);
   }
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlEndPoint}/distributivo/${id}`, { headers: this.httpHeaders });
+  } 
 }

@@ -7,6 +7,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Actividad } from '../../../Services/actividadService/actividad';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { DistributivoActividad } from '../../../Services/distributivoActividadService/distributivo_actividad';
+import { DistributivoActividadService } from '../../../Services/distributivoActividadService/distributivo_actividad.service';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -32,8 +34,9 @@ export class EditarActividadesComponent {
   actividadesSeleccionadas: Actividad[] = [];
   tipoActividadSeleccionado: number = 0;
   idTipo: number = 0;
+  distributivoActividad: DistributivoActividad = new DistributivoActividad();
   horasTotales: number = 0;
-  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -107,9 +110,26 @@ export class EditarActividadesComponent {
     if (this.myForm.valid) {
       this.authService.clearLocalStorageActividad();
       this.authService.id_actividades = this.actividadesSeleccionadas;
-      console.log('actividades enviadas', this.authService.id_actividades);
-      this.authService.saveUserToLocalStorage();
-      this.router.navigate(['./matriz-distributivo']);
+      this.distributivoActividad.id_distributivo = this.authService.id_distributivo;
+      this.distributivoActividadService.getDistributivoActividad().subscribe(
+        data => {
+          const distributivoEncontrado = data as DistributivoActividad[];
+          const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
+          if (distributivosFinales.length > 0) {
+             distributivosFinales.forEach(distributivoFinal => {
+              this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad).subscribe(eliminado => {
+                this.actividadesSeleccionadas.forEach(data => {  
+                  this.distributivoActividad.id_actividad = data.id_actividad;
+                  this.distributivoActividadService.create(this.distributivoActividad).subscribe(respuest => {
+                    this.authService.id_distributivoActividad=respuest.id_distributivo_actividad;
+                    this.authService.saveUserToLocalStorage();
+                    this.router.navigate(['./matriz-distributivo']);
+                  });
+                })
+              })
+            });
+          }
+        });
     } else {
       Toast.fire({
         icon: "warning",
@@ -132,6 +152,8 @@ export class EditarActividadesComponent {
     return tipo ? tipo.nom_tip_actividad : '';
   }
 
- 
+  crearDistributivoActividad(): void {
+
+  }
 
 }

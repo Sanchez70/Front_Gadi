@@ -70,6 +70,7 @@ export class MatrizDistributivoComponent implements OnInit {
   carreras: { [key: number]: Carrera } = {};
   tipo_actividad: { [key: number]: tipo_actividad } = {};
   idJornada: number = 0;
+  horasDistributivo:any;
   color = '#1E90FF';
   currentExplan: string = '';
   personaEncontrada: Persona = new Persona();
@@ -95,7 +96,7 @@ export class MatrizDistributivoComponent implements OnInit {
   validador: string = '';
   jornadas: any[] = [];
   jornadaSeleccionada: number = 0;
-  id_distributivo:number=0;
+  id_distributivo: number = 0;
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad();
@@ -138,7 +139,7 @@ export class MatrizDistributivoComponent implements OnInit {
         this.loadAdditionalDataForPersonas();
       }
     });
-    this.buscarDistributivo(this.authService.id_persona); 
+    this.buscarDistributivo(this.authService.id_persona);
   }
 
   cargarTipoActividad(): void {
@@ -264,6 +265,16 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
+  cargarHorasDistributivo():void{
+    this.distributivoActividadService.getDistributivoActividad().subscribe(result=>{
+      const distributivoEncontrado = result as DistributivoActividad[];
+      const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
+      distributivosFinales.forEach(respuest=>{
+        this.horasDistributivo = respuest.hora_no_docente; 
+      })
+    })
+  }
+
   cargarTipo(): void {
     this.horasTotalesActividad = 0;
     const requests = this.actividades.map(actividad =>
@@ -311,7 +322,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
-        this.id_distributivo= distributivo.id_distributivo;
+        this.id_distributivo = distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -349,6 +360,7 @@ export class MatrizDistributivoComponent implements OnInit {
       const actividadesFiltradas = this.distributivoActividades.filter(
         activDis => activDis.id_distributivo === idDistributivo
       );
+      this.authService.id_distributivo = idDistributivo;
       const idActividades = actividadesFiltradas.map(acti => acti.id_actividad);
       this.actividadService.getActividad().subscribe(acti => {
         const activEncontrados = acti as Actividad[];
@@ -357,9 +369,11 @@ export class MatrizDistributivoComponent implements OnInit {
         );
         if (this.authService.id_actividades.length === 0) {
           this.actividades = this.actividades.concat(actividadesCargadas);
+
         } else {
           this.actividades = this.authService.id_actividades;
         }
+
         //this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
         this.calcularTotales();
@@ -420,7 +434,7 @@ export class MatrizDistributivoComponent implements OnInit {
         const horasAsignadas = result.value;
         this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
           const resultado = data as DistributivoActividad[];
-          const resultFinal = resultado.find(distributivo => distributivo.id_actividad === this.id_activida);
+          const resultFinal = resultado.find(distributivo => distributivo.id_distributivo === this.id_distributivo && distributivo.id_actividad === this.id_activida);
           if (resultFinal) {
             resultFinal.hora_no_docente = horasAsignadas;
             this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
@@ -452,10 +466,10 @@ export class MatrizDistributivoComponent implements OnInit {
         this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contrato => {
           if (this.horasTotalesFinal > contrato.hora_contrato) {
             this.validador = 'true';
-            console.log('inicio',this.validador)
+            console.log('inicio', this.validador)
           } else {
             this.validador = 'false';
-            console.log('inicio',this.validador)
+            console.log('inicio', this.validador)
 
           }
         });
@@ -463,22 +477,15 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   public createdistributivo(): void {
-    this.distributivo.id_persona = this.persona.id_persona;
+    this.distributivo.id_persona = this.authService.id_persona;
     this.distributivo.id_periodo = this.idPeriodo;
-    this.distributivo.estado = 'Pendiente';
+    this.distributivo.estado = 'Aceptado';
     this.distributivoService.create(this.distributivo)
       .subscribe(
         (distributivo) => {
           console.log("valor", distributivo);
           this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
           this.createdistributivoacti(distributivo.id_distributivo);
-          
-          Toast.fire({
-            icon: "success",
-            title: "Distributivo Generado con éxito",
-          });
-
-          
         },
         (error) => {
           console.error('Error al guardar:', error);
@@ -492,7 +499,7 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
-    this.authService.asignaturasSeleccionadaAuth.forEach(asignatura => {
+    this.asignaturas.forEach(asignatura => {
       const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
         id_jornada: this.idJornada,
         paralelo: this.authService.paralelo,
@@ -501,7 +508,7 @@ export class MatrizDistributivoComponent implements OnInit {
       };
       this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
         //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-        console.log('Asignatura Distributivo generado');       
+        console.log('Asignatura Distributivo generado');
       }, error => {
         //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
         console.log('Error al crear', error);
@@ -512,6 +519,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   createdistributivoacti(id_distributivo: number): void {
     this.actividades.forEach(actividad => {
+      this.distributivoActividades
       const distributivoacti2: DistributivoActividad = {
         id_actividad: actividad.id_actividad,
         hora_no_docente: actividad.horas_no_docentes,
@@ -522,34 +530,56 @@ export class MatrizDistributivoComponent implements OnInit {
         .subscribe(
           (distributivo) => {
             console.log("valorREVISAR", distributivo);
-            //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
+            Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
           },
           (error) => {
             console.error('Error al guardar la actividad:', error);
-            // Toast.fire({
-            //   icon: "error",
-            //   title: "Hubo un error al guardar la actividad",
-            //   footer: "Por favor, verifique"
-            // });
+            Toast.fire({
+              icon: "error",
+              title: "Hubo un error al guardar la actividad",
+              footer: "Por favor, verifique"
+            });
           }
         );
     });
   }
 
-  eliminarDistributivos():void{
+  eliminarDistributivos(): void {
+    console.log('antes de asig');
     this.distributivoActividadService.getDistributivoActividad().subscribe(
-      data=>{
+      data => {
         const distributivoEncontrado = data as DistributivoActividad[];
-        const distributivoFinal = distributivoEncontrado.find(resul=>resul.id_distributivo === this.id_distributivo); 
-        if(distributivoFinal){
-          this.distributivoActividadService.delete(distributivoFinal).subscribe(respuesta=>{
-            this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(dataAsig=>{
-              const distributivoAsig = dataAsig as DistributivoAsignatura[];
-               
+        const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.id_distributivo);
+        if (distributivosFinales.length > 0) {
+          console.log('Registros de distributivoActividad encontrados:', distributivosFinales);
+          distributivosFinales.forEach(distributivoFinal => {
+            this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad).subscribe(() => {
+              console.log('Eliminado distributivoActividad id:', distributivoFinal.id_distributivo_actividad);
+              this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(dataAsig => {
+                const distributivoAsig = dataAsig as DistributivoAsignatura[];
+                const asignaturasFinales = distributivoAsig.filter(result => result.id_distributivo === this.id_distributivo);
+                if (asignaturasFinales.length > 0) {
+                  asignaturasFinales.forEach(asignaturaFinal => {
+                    this.distributivoAsignaturaService.delete(asignaturaFinal.id_distributivo_asig ?? 0).subscribe(() => {
+                      console.log('Eliminado distributivoAsignatura id:', asignaturaFinal.id_distributivo_asig);
+                      this.distributivoService.delete(asignaturaFinal.id_distributivo).subscribe(() => {
+                        console.log('Eliminado actividad id_distributivo:', asignaturaFinal.id_distributivo);
+                        this.createdistributivo();
+                      });
+                    });
+                  });
+                } else {
+                  console.log('No se encontraron asignaturas con el id_distributivo:', this.id_distributivo);
+                }
+              });
             });
           });
+        } else {
+          console.log('No se encontraron distributivosActividad con el id_distributivo:', this.id_distributivo);
         }
+
       }
     );
   }
+
 }
