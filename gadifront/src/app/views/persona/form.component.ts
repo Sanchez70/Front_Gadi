@@ -10,7 +10,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",

@@ -4,6 +4,20 @@ import { PersonaService } from '../../Services/personaService/persona.service';
 import { AuthService } from '../../auth.service';
 import { TituloProfesionalService } from '../../Services/titulo/titulo-profesional.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  showCloseButton: true,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
 
 @Component({
   selector: 'app-titulo-profesional',
@@ -33,13 +47,17 @@ export class TituloProfesionalComponent implements OnInit {
     if (this.tituloForm.valid) {
       this.tituloService.create(this.tituloForm.value).subscribe(
         response => {
+          Toast.fire({
+            icon: "success",
+            title: "Titulo registrado con exito",
+          });
           this.router.navigate(['./persona/form']);
-          console.log('Título guardado exitosamente', response);
-          // Aquí puedes manejar la respuesta del servidor
         },
         error => {
-          console.error('Error al guardar el título', error);
-          // Aquí puedes manejar los errores de la solicitud
+          Toast.fire({
+            icon: "error",
+            title: "Error al Registrar Título",
+          });
         }
       );
     } else {
