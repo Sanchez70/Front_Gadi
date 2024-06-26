@@ -28,8 +28,12 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-
-                <button mat-raised-button color="primary" type="submit">INICIAR SESION</button>
+                <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+                    <ng-container *ngIf="!isLoading">INICIAR SESION</ng-container>
+                    <ng-container *ngIf="isLoading">
+                        <mat-spinner diameter="24"></mat-spinner>
+                    </ng-container>
+                </button>
             </form>
             <div class="redirection-buttons">
                 <p></p>

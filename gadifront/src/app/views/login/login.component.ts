@@ -34,6 +34,7 @@ export class LoginComponent {
   usuarioRoles: UsuarioRol[] = [];
   roles: Rol[] = [];
   public searchForm: FormGroup;
+  isLoading = false;
   constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService,  public dialog: MatDialog) {
     this.searchForm = this.fb.group({
       usuario: ['', Validators.required],
@@ -42,6 +43,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.isLoading = true; 
     this.validar();
   }
 
@@ -51,12 +53,14 @@ export class LoginComponent {
     const contraneusu = this.searchForm.value.contraneusu;
 
     if (usuariol === '') {
+      this.isLoading = false;
       Toast.fire({
         icon: "error",
         title: "Campo Usuario Vacio",
         footer: "Por favor, verifique si ha completado todo lo necesario"
       });
     } else if (contraneusu === '') {
+      this.isLoading = false;
       Toast.fire({
         icon: "error",
         title: "Campo Contraseña Vacio",
@@ -71,6 +75,7 @@ export class LoginComponent {
             if (usuarioEncontrado) {
               // Encriptar la contraseña ingresada por el usuario
               bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err: any, res: any) => {
+                this.isLoading = false;
                 if (err) {
                   console.error('Error al comparar contraseñas:', err);
                   return;
@@ -84,12 +89,13 @@ export class LoginComponent {
                 }
               });
             } else {
+              this.isLoading = false;
               Swal.fire('Usuario no encontrado', 'Intente nuevamente', 'error');
             }
           }
         },
         (error) => {
-          // Manejo de error para la solicitud de usuario
+          this.isLoading = false;
           Swal.fire('Error al obtener los datos del usuario', 'Intente nuevamente', 'error');
         }
       );

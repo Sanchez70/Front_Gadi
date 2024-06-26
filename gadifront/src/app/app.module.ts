@@ -53,6 +53,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSelect } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
@@ -199,7 +200,8 @@ const routes: Routes = [
     MatDatepickerModule,
     NgxUiLoaderModule,
     CommonModule,
-    MatCardModule 
+    MatCardModule,
+    MatProgressSpinnerModule 
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 
