@@ -80,7 +80,7 @@ export class TablaComponent implements OnInit {
         (distributivo) => (distributivo.id_persona === persona.id_persona)
       );
      
-      console.log('distributivo encontrado', distributivoFiltrado);
+      
       this.loadTableData(persona, distributivoFiltrado)
       
       
@@ -166,7 +166,7 @@ export class TablaComponent implements OnInit {
     this.periodoSeleccionado = +event.target.value;
     this.idPeriodo = this.periodoSeleccionado;
     this.buscarDistributivosbyId(this.idPeriodo);
-    console.log('idPeriodo', this.idPeriodo)
+    
   }
 
   generarModeloPDF(idPeriodo: number): void {
@@ -180,6 +180,13 @@ export class TablaComponent implements OnInit {
   }
 
   recargarPagina() {
-    window.location.reload();
+    this.personaService.getPersonas().subscribe(data => {
+      const personaEncontrados = data as Persona[];
+      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
+      if (usuarioEncontrado) {
+        this.buscarDistributivos(usuarioEncontrado)
+      }
+    });
+    
   }
 }

@@ -9,7 +9,6 @@ export class ApiInterceptor implements HttpInterceptor {
 	private _activeRequest = 0;
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-		console.log('**INGRESANDO AL INTERCEPTOR**');
         if(this._activeRequest==0){
             this._ngxUiLoaderService.start();
         }
