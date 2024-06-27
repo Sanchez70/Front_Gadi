@@ -42,7 +42,15 @@ export interface PersonaAsignatura {
   asignaturas: Asignatura[];
 }
 
-export interface PersonaTitulo extends Persona{
+interface AsignaturaConDistributivo {
+  distributivoAsignatura: DistributivoAsignatura;
+  asignaturas: Asignatura;
+  carreras?: Carrera;
+}
+
+
+
+export interface PersonaTitulo extends Persona {
   titulos: TituloProfecional[];
 }
 @Component({
@@ -51,7 +59,7 @@ export interface PersonaTitulo extends Persona{
   styleUrl: './reportes.component.css',
 })
 export class ReportesComponent implements OnInit {
-  dataSourceAsig!: MatTableDataSource<Asignatura>;
+  dataSourceAsig!: MatTableDataSource<AsignaturaConDistributivo>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<PersonaTitulo>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -65,7 +73,7 @@ export class ReportesComponent implements OnInit {
   carreras: { [key: number]: Carrera } = {};
   tipo_actividad: { [key: number]: tipo_actividad } = {};
   ciclos: { [key: number]: Ciclo } = {};
-  
+
   fechaDistributivo: string = '';
   currentExplan: string = '';
   personaEncontrada: Persona = new Persona();
@@ -135,8 +143,8 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  cargarTitulos(personaEncontrada: Persona):void {
-    this.tituloService.getTitulo().subscribe(data =>{
+  cargarTitulos(personaEncontrada: Persona): void {
+    this.tituloService.getTitulo().subscribe(data => {
       this.titulosCargados = data;
       this.titulosFiltrado = this.titulosCargados.filter(
         (titulo) => (titulo.id_persona === this.authService.id_persona)
@@ -157,10 +165,10 @@ export class ReportesComponent implements OnInit {
         (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.idPeriodo && distributivo.estado === 'Aceptado'
         )
       );
-     console.log('distributivos filtrados',this.distributivoFiltrado)
-      
+      console.log('distributivos filtrados', this.distributivoFiltrado)
+
       this.distributivoFiltrado.forEach(distributivo => {
-        
+
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -180,9 +188,39 @@ export class ReportesComponent implements OnInit {
           idAsignaturas.includes(materia.id_asignatura)
         );
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.cargarAdicional();
-        this.calcularHorasTotales();
-        
+        this.loadTableData(this.asignaturas, asignaturasFiltradas);
+
+      });
+    });
+  }
+
+  loadTableData(asignaturas: Asignatura[], distributivosAsignatura: DistributivoAsignatura[]): void {
+    const dataTabla: AsignaturaConDistributivo[] = [];
+    
+    distributivosAsignatura.forEach(distributivoAsig => {
+      const asignatura = asignaturas.find(asig => asig.id_asignatura === distributivoAsig.id_asignatura);
+      if (asignatura) {
+        const asignaturaConDistributivo: AsignaturaConDistributivo = {
+          asignaturas: asignatura,
+          distributivoAsignatura: distributivoAsig,
+          carreras: undefined
+
+        };
+        dataTabla.push(asignaturaConDistributivo);
+      }
+    });
+
+    dataTabla.forEach(item => {
+      forkJoin([
+        this.distributivoAsignaturaService.getDistributivobyId(item.distributivoAsignatura.id_distributivo_asig),
+        this.carreraService.getCarreraById(item.asignaturas.id_carrera ?? 0)
+      ]).subscribe(([distributivoAsig, carrera]) => {
+        item.distributivoAsignatura = distributivoAsig || { id_distributivo_asig: 0, id_distributivo: 0, id_jornada: 0, paralelo: 'No asignado', acronimo: 'No asignado' };
+        item.carreras = carrera || { id_carrera: 0, nombre_carrera: 'No asignado' };
+        this.dataSourceAsig = new MatTableDataSource(dataTabla);
+        this.dataSourceAsig.paginator = this.paginator;
+        this.dataSourceAsig.sort = this.sort;
+        this.calcularHorasTotales(item.asignaturas.horas_semanales);
       });
     });
   }
@@ -202,7 +240,7 @@ export class ReportesComponent implements OnInit {
         this.actividades = this.actividades.concat(actividadesCargadas);
         this.cargarTipo();
         this.calcularHorasTotalesActividad();
-        
+
       });
     });
 
@@ -213,10 +251,10 @@ export class ReportesComponent implements OnInit {
       forkJoin([
         this.tipo_actividadService.gettipoActividadbyId(actividad.id_actividad ?? 0).pipe(
           tap(tipo_actividades => {
-            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado'};
+            this.tipo_actividad[actividad.id_actividad] = tipo_actividades ?? { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' };
           }),
           catchError(() => {
-            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad:  'No asignado' } as unknown as tipo_actividad;
+            this.tipo_actividad[actividad.id_actividad] = { id_tipo_actividad: 0, nom_tip_actividad: 'No asignado' } as unknown as tipo_actividad;
             return of(null);
           })
         ),
@@ -230,86 +268,23 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  cargarAdicional(): void {
-    const requests = this.asignaturas.map(asignatura =>
-      forkJoin([
-        this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(periodo => {
-              this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-              
-            
-          }),
-          catchError(() => {
-            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-            return of(null);
-          })
-        ),
-        this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(jornada => {
-            this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-          }),
-          catchError(() => {
-            this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-            return of(null);
-          })
-        ),
-        this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(distributivosAsig => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada', acronimo: 'No asignado' };
-           
-          }),
-          catchError(() => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada', acronimo: 'No asignado' } as DistributivoAsignatura;
-            return of(null);
-          })
-        ),
-        this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-          tap(carrera => {
-            this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-          }),
-          catchError(() => {
-            this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-            return of(null);
-          })
-        ),
-        this.cicloService.getCiclobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(ciclo => {
-            this.ciclos[asignatura.id_asignatura] = ciclo ?? { id_ciclo: 0, nombre_ciclo: 'No asignada' };
-          }),
-          catchError(() => {
-            this.ciclos[asignatura.id_asignatura] = { id_ciclo: 0, nombre_ciclo: 'No nombre_ciclo' } as unknown as Ciclo;
-            return of(null);
-          })
-        ),
-      ])
-
-    );
-    forkJoin(requests).subscribe(() => {
-      this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-      this.dataSourceAsig.paginator = this.paginator;
-      this.dataSourceAsig.sort = this.sort;
-    });
-  }
-
-  formatearFecha(fecha: Date): string{
+  formatearFecha(fecha: Date): string {
     const opciones = { month: 'long', day: 'numeric', year: 'numeric' } as const;
     return new Intl.DateTimeFormat('es-ES', opciones).format(fecha);
   }
 
-  calcularHorasTotales():void{
-    this.horasTotales = this.asignaturas.reduce(
-      (sum,asignatura) => sum + asignatura.horas_semanales, 0
-    );
+  calcularHorasTotales(horasAsignatura:number): void {
+    this.horasTotales = this.horasTotales + horasAsignatura;
   }
 
-  calcularHorasTotalesActividad():void{
+  calcularHorasTotalesActividad(): void {
     this.horasTotalesActividad = this.actividades.reduce(
-      (sum,actividad) => sum + actividad.horas_no_docentes, 0
+      (sum, actividad) => sum + actividad.horas_no_docentes, 0
     );
-    
+
   }
 
-  calcularHorasTotalesPorDocente(horasAsignatura:number, horasActividades:number):number{
+  calcularHorasTotalesPorDocente(horasAsignatura: number, horasActividades: number): number {
     const horasPorDocente = horasAsignatura + horasActividades;
     return horasPorDocente ? horasPorDocente : 0;
   }
@@ -325,8 +300,8 @@ export class ReportesComponent implements OnInit {
     html2canvas(DATA, options).then((canvas) => {
       this.ngxLoader.stop();
       const img = canvas.toDataURL('image/PNG');
-      const bufferX = 15;
-      const bufferY = 15;
+      const bufferX = 50;
+      const bufferY = 50;
       const imgProps = (doc as any).getImageProperties(img);
       const pdfWidth = doc.internal.pageSize.getWidth() - 2 * bufferX;
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;

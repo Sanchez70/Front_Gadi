@@ -39,6 +39,15 @@ interface PersonaExtendida extends Persona {
   nombre_titulo?: string;
   nombre_grado_ocp?: string;
 }
+
+interface AsignaturaConDistributivo {
+  distributivoAsignatura: DistributivoAsignatura;
+  asignaturas: Asignatura;
+  carreras?: Carrera;
+  distributivo: Distributivo;
+  jornada?: Jornada;
+  periodo?: Periodo;
+}
 @Component({
   selector: 'app-matriz-propuesta',
   templateUrl: './matriz-propuesta.component.html',
@@ -48,7 +57,7 @@ export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad'];
-  dataSourceAsig!: MatTableDataSource<Asignatura>;
+  dataSourceAsig!: MatTableDataSource<AsignaturaConDistributivo>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -154,12 +163,57 @@ export class MatrizPropuestaComponent implements OnInit {
           idAsignaturas.includes(materia.id_asignatura)
         );
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.cargarAdicional();
+        this.loadTableData(this.asignaturas, asignaturasFiltradas, this.distributivoFiltrado);
 
 
       });
     });
   }
+
+  loadTableData(asignaturas: Asignatura[], distributivosAsignatura: DistributivoAsignatura[], distributivos: Distributivo[]): void {
+    const dataTabla: AsignaturaConDistributivo[] = [];
+
+    distributivos.forEach(distributivo => {
+      const asignaturasFiltradas = distributivosAsignatura.filter(distributivoAsig => distributivoAsig.id_distributivo === distributivo.id_distributivo);
+
+      const asignaturasParaDistributivo = asignaturas.filter(asig => asignaturasFiltradas.some(distributivoAsig => distributivoAsig.id_asignatura === asig.id_asignatura));
+
+      asignaturasParaDistributivo.forEach(asignatura => {
+        const distributivoAsig = asignaturasFiltradas.find(distributivoAsig => distributivoAsig.id_asignatura === asignatura.id_asignatura);
+        if (distributivoAsig) {
+
+          this.carreraService.getCarreraById(asignatura.id_carrera ?? 0).subscribe(carrera => {
+            const carreraAsociada = carrera || { id_carrera: 0, nombre_carrera: 'No asignada' };
+            this.jornadaService.getJornadabyId(distributivoAsig.id_jornada).subscribe(jornada => {
+              const jornadaAsociada = jornada || { id_jornada: 0, descrip_jornada: 'No asignada' };
+              this.periodoService.getPeriodobyId(distributivo.id_periodo).subscribe(periodo => {
+                const periodoAsociado = periodo || { id_periodo: 0, nombre_periodo: 'No asignada' };
+                const asignaturaConDistributivo: AsignaturaConDistributivo = {
+                  asignaturas: asignatura,
+                  distributivo: distributivo,
+                  distributivoAsignatura: distributivoAsig,
+                  carreras: carreraAsociada,
+                  jornada: jornadaAsociada,
+                  periodo: periodoAsociado
+                };
+
+
+                dataTabla.push(asignaturaConDistributivo);
+
+                if (dataTabla.length === asignaturasParaDistributivo.length) {
+                  dataTabla.sort((a, b) => a.asignaturas.id_asignatura - b.asignaturas.id_asignatura);
+                  this.dataSourceAsig = new MatTableDataSource(dataTabla);
+                  this.dataSourceAsig.paginator = this.paginator;
+                  this.dataSourceAsig.sort = this.sort;
+                }
+              });
+            });
+          });
+        }
+      });
+    });
+  }
+
 
 
   buscarActividad(idDistributivo: number): void {
@@ -229,11 +283,11 @@ export class MatrizPropuestaComponent implements OnInit {
       ])
 
     );
-    forkJoin(requests).subscribe(() => {
-      this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-      this.dataSourceAsig.paginator = this.paginator;
-      this.dataSourceAsig.sort = this.sort;
-    });
+    // forkJoin(requests).subscribe(() => {
+    //   this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
+    //   this.dataSourceAsig.paginator = this.paginator;
+    //   this.dataSourceAsig.sort = this.sort;
+    // });
   }
 
   cargarTipo(): void {
