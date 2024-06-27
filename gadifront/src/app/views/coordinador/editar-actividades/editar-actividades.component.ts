@@ -4,7 +4,7 @@ import { tipo_actividadService } from '../../../Services/tipo_actividadService/t
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { Actividad } from '../../../Services/actividadService/actividad';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { DistributivoActividad } from '../../../Services/distributivoActividadService/distributivo_actividad';
@@ -115,20 +115,20 @@ export class EditarActividadesComponent {
         data => {
           const distributivoEncontrado = data as DistributivoActividad[];
           const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
-          if (distributivosFinales.length > 0) {
-             distributivosFinales.forEach(distributivoFinal => {
-              this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad).subscribe(eliminado => {
-                this.actividadesSeleccionadas.forEach(data => {  
-                  this.distributivoActividad.id_actividad = data.id_actividad;
-                  this.distributivoActividadService.create(this.distributivoActividad).subscribe(respuest => {
-                    this.authService.id_distributivoActividad=respuest.id_distributivo_actividad;
-                    this.authService.saveUserToLocalStorage();
-                    this.router.navigate(['./matriz-distributivo']);
-                  });
-                })
-              })
+          const deleteObservables = distributivosFinales.map(distributivoFinal =>
+            this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad)
+          );
+          forkJoin(deleteObservables).subscribe(() => {
+            const createObservables = this.actividadesSeleccionadas.map(data => {
+              const newDistributivoActividad = { ...this.distributivoActividad, id_actividad: data.id_actividad };
+              return this.distributivoActividadService.create(newDistributivoActividad);
             });
-          }
+            forkJoin(createObservables).subscribe(responses => {
+              const idsDistributivoActividad = responses.map(respuest => respuest.id_distributivo_actividad);
+              this.authService.id_distributivoActividad = idsDistributivoActividad;
+              this.router.navigate(['./matriz-distributivo']);
+            });
+          });
         });
     } else {
       Toast.fire({
@@ -136,8 +136,8 @@ export class EditarActividadesComponent {
         title: "Por favor, seleccione una opción",
       });
     }
-
   }
+  
 
   onTipoChange(event: any): void {
     this.tipoActividadSeleccionado = +event.target.value;
