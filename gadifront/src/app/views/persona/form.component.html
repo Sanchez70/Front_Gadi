@@ -1,3 +1,4 @@
+<br>
 <div class="container {{currentExplan}}">
   <div class="grid-container">
     <!-- Columna para Editar Perfil -->
@@ -54,15 +55,16 @@
     <!-- Columna para Mis Títulos -->
     <div class="mis-titulos">
       <h1>MIS TÍTULOS</h1>
+      <br><button mat-raised-button color="primary" routerLink="/titulo">Añadir</button> <br> <br>
       <!-- Mini tabla para mostrar los títulos -->
       <table mat-table [dataSource]="titulos" class="mat-elevation-z8">
         <ng-container matColumnDef="grado">
-          <th mat-header-cell *matHeaderCellDef> Grado </th>
-          <td mat-cell *matCellDef="let element"> {{element.grado}} </td>
+          <th mat-header-cell *matHeaderCellDef> Nombre del Titulo </th>
+          <td mat-cell *matCellDef="let element"> {{element.nombre_titulo}} </td>
         </ng-container>
         <ng-container matColumnDef="nombre_titulo">
-          <th mat-header-cell *matHeaderCellDef> Nombre del Título </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombre_titulo}} </td>
+          <th mat-header-cell *matHeaderCellDef> Grado del Título </th>
+          <td mat-cell *matCellDef="let element"> {{element.grado}} </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

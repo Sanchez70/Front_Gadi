@@ -1,1 +1,17 @@
-<p>titulo-profesional works!</p>
+<div class="ingreso-titulos">
+    <div class="contenedorBoton">
+      <h1>INGRESO DE TÍTULOS</h1>
+    </div>
+    <form [formGroup]="tituloForm" (ngSubmit)="guardarTitulo()" class="form-container">
+      <mat-form-field class="form-group" appearance="fill">
+        <mat-label>Grado</mat-label>
+        <input matInput formControlName="grado" required>
+      </mat-form-field>
+      <mat-form-field class="form-group" appearance="fill">
+        <mat-label>Nombre del Título</mat-label>
+        <input matInput formControlName="nombre_titulo" required>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" class="btn-submit">Guardar Título</button>
+    </form>
+  </div>
+  

@@ -174,15 +174,15 @@ export class AsignaturaComponent implements OnInit {
     const asignaturaExistente = this.asignaturasSeleccionadas.some(
       (id) => id.id_asignatura === asignatura.id_asignatura
     );
-    if(!asignaturaExistente){
+   
       this.asignaturasSeleccionadas.push(asignatura);
       this.calcularHorasTotales();
-    }else{
-      Toast.fire({
-        icon: "warning",
-        title: "La asignatura se encuentra seleccionada",
-      });
-    }
+    //else{
+    //   Toast.fire({
+    //     icon: "warning",
+    //     title: "La asignatura se encuentra seleccionada",
+    //   });
+    // }
   }
 
   eliminarAsignatura(fila:number): void{

@@ -124,7 +124,8 @@ const routes: Routes = [
   { path: 'carrera', component: CarreraComponent},
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent},
   { path: 'crud-asignatura', component: CrudAsignaturaComponent},
-  { path: 'periodo', component: PeriodoComponent} 
+  { path: 'periodo', component: PeriodoComponent} ,
+  { path: 'titulo', component: TituloProfesionalComponent} 
   
 ];
 @NgModule({

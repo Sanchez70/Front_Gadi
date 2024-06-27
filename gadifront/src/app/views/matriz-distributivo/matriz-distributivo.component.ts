@@ -496,7 +496,8 @@ export class MatrizDistributivoComponent implements OnInit {
         id_jornada: this.idJornada,
         paralelo: this.authService.paralelo,
         id_distributivo: id_distributivo,
-        id_asignatura: asignatura.id_asignatura
+        id_asignatura: asignatura.id_asignatura,
+        acronimo: ''
       };
       this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
         //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');

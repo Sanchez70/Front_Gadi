@@ -10,7 +10,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -30,13 +29,13 @@ const Toast = Swal.mixin({
   styleUrls: ['./form.component.css']
 })
 export class FormComponent implements OnInit {
-  displayedColumns: string[] = ['grado', 'nombre_titulo']; // Definir columnas a mostrar
+  displayedColumns: string[] = ['grado', 'nombre_titulo'];
   persona: Persona = new Persona();
   usuario: Usuario = new Usuario();
   mostrarCarga: boolean = false;
   personaForm: FormGroup;
   currentExplan: string = '';
-  titulos: TituloProfecional[] = []; // Para almacenar los títulos
+  titulos: TituloProfecional[] = [];
   private sidebarSubscription!: Subscription;
 
   constructor(
@@ -71,7 +70,7 @@ export class FormComponent implements OnInit {
         },
         (error) => {
           console.error('Error al cargar los datos de la persona:', error);
-        }
+        } 
       );
     } else {
       console.error('ID de persona no disponible');
@@ -85,7 +84,7 @@ export class FormComponent implements OnInit {
   mostrarTitulos(idPersona: number): void {
     this.personaService.getTitulosProfecionalesByPersonaId(idPersona).subscribe(
       (titulos: TituloProfecional[]) => {
-        this.titulos = titulos; // Almacena los títulos en la propiedad
+        this.titulos = titulos;
         console.log('Títulos de la persona:', titulos);
       },
       (error) => {

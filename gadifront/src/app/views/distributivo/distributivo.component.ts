@@ -81,6 +81,7 @@ export class DistributivoComponent implements OnInit {
   public asignatura: Asignatura = new Asignatura();
   public grado: Grado_ocupacional = new Grado_ocupacional();
   public actividad: Actividad = new Actividad();
+  public periodoEncontrado: Periodo = new Periodo();
   public Actividades: Actividad[] = [];
   public Tipos: tipo_actividad[] = [];
   public ciclos: any[] = [];
@@ -91,10 +92,10 @@ export class DistributivoComponent implements OnInit {
   public Distributivos: Distributivo[] = [];
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   periodos: any[] = [];
-  periodoSeleccionado: number = 0;
+  periodoActual: string = '';
   paraleloSeleccionado: string = '';
   jornadas: any[] = [];
-  jornadaSeleccionada: { [key: number]: number } = {};
+  jornadaSeleccionada: { [key: string]: number } = {};
   idPeriodo: number = 0;
   idJornada: number = 0;
   horasTotales: number = 0;
@@ -198,14 +199,18 @@ export class DistributivoComponent implements OnInit {
   cargarComboPeriodos(): void {
     this.periodoService.getPeriodo().subscribe(data => {
       this.periodos = data;
+      this.periodoEncontrado = this.periodos.find(
+        (periodo) => (periodo.estado === 'Activo')
+      );
+      this.idPeriodo = this.periodoEncontrado.id_periodo
+      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
-  onPeriodoChange(event: any): void {
-    this.periodoSeleccionado = +event.target.value;
-    this.idPeriodo = this.periodoSeleccionado;
-    console.log('idPeriodo', this.idPeriodo)
-  }
+  // onPeriodoChange(event: any): void {
+  //   this.periodoSeleccionado = +event.target.value;
+  //   this.idPeriodo = this.periodoSeleccionado;
+  // }
 
   cargarComboJornada(): void {
     this.jornadaService.getJornada().subscribe(data => {
@@ -213,11 +218,15 @@ export class DistributivoComponent implements OnInit {
     });
   }
 
-  onJornadaChange(event: any, idAsignatura: any): void {
-    this.idJornada = +event.target.value
-    this.jornadaSeleccionada[idAsignatura] = this.idJornada;
-    console.log(`Asignatura ID: ${idAsignatura}, Jornada seleccionada: ${this.idJornada}`);
+  onJornadaChange(event: any, idAsignatura: any, index: number): void {
+    this.idJornada = +event.target.value;
+    const key = `${idAsignatura}-${index}`;
+    this.jornadaSeleccionada[key] = this.idJornada;
   }
+
+  generateKey(id_asignatura: number, index: number): string {
+    return `${id_asignatura}-${index}`;
+}
 
   obtenerTipoActividad(id_tipo_actividad: number): string {
     const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
@@ -309,26 +318,33 @@ export class DistributivoComponent implements OnInit {
   }
 
   createAsignaturaDistributivo(id_distributivo: number): void {
-    this.authService.id_asignaturas.forEach(asignatura => {
-      const id_jornada = this.jornadaSeleccionada[asignatura.id_asignatura];
-      console.log(id_jornada);
-      if (id_jornada) {
-        const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-          id_jornada: id_jornada,
-          paralelo: this.authService.paralelo,
-          id_distributivo: id_distributivo,
-          id_asignatura: asignatura.id_asignatura
-        };
-        this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-          //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-          console.log('Asignatura Distributivo generado');
-        }, error => {
-          //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
-          console.log('Error al crear', error);
-        });
-      }else{
-        console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
-      }
+    this.authService.id_asignaturas.forEach((asignatura, index) => {
+      const key = `${asignatura.id_asignatura}-${index}`;
+      const id_jornada = this.jornadaSeleccionada[key];
+
+      this.jornadaService.getJornadabyId(id_jornada).subscribe(data => {
+        const jornadaNombre = data.descrip_jornada.charAt(0);
+        const acronimo = this.crearAcronimo(jornadaNombre, this.authService.paralelo, asignatura.id_ciclo);
+
+        if (id_jornada) {
+          const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+            id_jornada: id_jornada,
+            paralelo: this.authService.paralelo,
+            id_distributivo: id_distributivo,
+            id_asignatura: asignatura.id_asignatura,
+            acronimo: acronimo
+          };
+          this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+            //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+            console.log('Asignatura Distributivo generado');
+          }, error => {
+            //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+            console.log('Error al crear', error);
+          });
+        } else {
+          console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
+        }
+      });
     });
   }
 
@@ -357,6 +373,11 @@ export class DistributivoComponent implements OnInit {
           }
         );
     });
+  }
+
+  crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
+    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo );
+    return jornadaNombre + id_ciclo + paralelo;
   }
 
 }
