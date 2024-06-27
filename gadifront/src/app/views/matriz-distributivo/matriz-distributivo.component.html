@@ -130,7 +130,7 @@
       <section class="example-container mat-elevation-z8" tabindex="0">
         <div class="contenedorTitulo">
           <button mat-raised-button color="primary" routerLink="/editar-actividad" 
-            style="width: 100%;" (click)="enviarActividades()">Editar</button>
+            style="width: 100%;" (click)="openModal()">Editar</button>
         </div>
         <table mat-table [dataSource]="dataSourceAct" matSort>
           <ng-container matColumnDef="nro_horas" sticky>

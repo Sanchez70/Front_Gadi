@@ -33,6 +33,9 @@ import { DistributivoActividad } from '../../Services/distributivoActividadServi
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { Carrera } from '../../Services/carreraService/carrera';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
+import { MatDialog } from '@angular/material/dialog';
+import { EditarActividadesComponent } from '../coordinador/editar-actividades/editar-actividades.component';
+import { ActividadListaComponent } from '../coordinador/editar-actividades/actividad-lista.component';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -57,6 +60,7 @@ export class MatrizDistributivoComponent implements OnInit {
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<Asignatura>;
   dataSourceAct!: MatTableDataSource<any>;
+
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -107,6 +111,7 @@ export class MatrizDistributivoComponent implements OnInit {
     private cicloService: CicloService,
     private carreraService: CarreraService,
     private jornadaService: JornadaService,
+    private dialog: MatDialog,
     private distributivoAsignaturaService: DistributivoAsignaturaService,
     private distributivoService: DistributivoService,
     private distributivoActividadService: DistributivoActividadService,
@@ -574,5 +579,14 @@ export class MatrizDistributivoComponent implements OnInit {
       }
     );
   }
+
+  openModal() {
+    const dialogRef = this.dialog.open(ActividadListaComponent, {
+      width: '80%',
+      height: '80%',
+    });
+   
+  }
+
 
 }

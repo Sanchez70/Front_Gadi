@@ -92,7 +92,8 @@ import { RolSelectorComponent } from './views/login/rol-selector.component';
 import { AsignaturaModalComponent } from './views/crud-asignatura/asignatura-model.component';
 import { CrudAsignaturaComponent } from './views/crud-asignatura/crud-asignatura.component';
 import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
-import { CommonModule } from '@angular/common'; // Asegúrate de importar CommonModule
+import { CommonModule } from '@angular/common';
+import { ActividadListaComponent } from './views/coordinador/editar-actividades/actividad-lista.component'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -114,7 +115,6 @@ const routes: Routes = [
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent },
   { path: 'tipo_actividad', component: TipoActividadComponent },
   { path: 'editar-asignatura', component: EditarAsignaturaComponent},
-  { path: 'editar-actividad', component: EditarActividadesComponent},
   { path: 'admin_Creacion', component: AdminCreacionComponent},
   { path: 'distributivo', component: DistributivoComponent},
   { path: 'main-admin', component: MainAdminComponent},
@@ -176,7 +176,8 @@ const routes: Routes = [
     EditarAsignaturaComponent,
     PersonaFormComponent,
     RolSelectorComponent,
-    PeriodoModalComponent
+    PeriodoModalComponent,
+    ActividadListaComponent
   ],
   
   imports: [
