@@ -35,7 +35,6 @@ import { Carrera } from '../../Services/carreraService/carrera';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarActividadesComponent } from '../coordinador/editar-actividades/editar-actividades.component';
-import { ActividadListaComponent } from '../coordinador/editar-actividades/actividad-lista.component';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
