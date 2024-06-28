@@ -132,6 +132,7 @@ export class MatrizDistributivoComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
+    this.combinarDatos();
     this.cargarComboJornada();
     this.cargarTipoActividad();
     this.cargarCarreras();
@@ -581,11 +582,14 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   openModal() {
-    const dialogRef = this.dialog.open(ActividadListaComponent, {
-      width: '80%',
-      height: '80%',
+    this.enviarActividades();
+    const dialogRef = this.dialog.open(EditarActividadesComponent, {
+      width: '90%',
+      height: '90%',
     });
-   
+    dialogRef.afterClosed().subscribe(result => {
+      window.location.reload();
+    });
   }
 
 

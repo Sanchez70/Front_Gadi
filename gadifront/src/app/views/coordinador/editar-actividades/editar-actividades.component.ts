@@ -9,6 +9,7 @@ import { Actividad } from '../../../Services/actividadService/actividad';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { DistributivoActividad } from '../../../Services/distributivoActividadService/distributivo_actividad';
 import { DistributivoActividadService } from '../../../Services/distributivoActividadService/distributivo_actividad.service';
+import { MatDialog } from '@angular/material/dialog';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -36,7 +37,7 @@ export class EditarActividadesComponent {
   idTipo: number = 0;
   distributivoActividad: DistributivoActividad = new DistributivoActividad();
   horasTotales: number = 0;
-  constructor(private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private dialog: MatDialog,private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -108,7 +109,6 @@ export class EditarActividadesComponent {
 
   enviarActividades(): void {
     if (this.myForm.valid) {
-      this.authService.clearLocalStorageActividad();
       this.authService.id_actividades = this.actividadesSeleccionadas;
       this.distributivoActividad.id_distributivo = this.authService.id_distributivo;
       this.distributivoActividadService.getDistributivoActividad().subscribe(
@@ -123,10 +123,12 @@ export class EditarActividadesComponent {
               const newDistributivoActividad = { ...this.distributivoActividad, id_actividad: data.id_actividad };
               return this.distributivoActividadService.create(newDistributivoActividad);
             });
+  
             forkJoin(createObservables).subscribe(responses => {
+              // Guardar todos los IDs de las distribuciones creadas
               const idsDistributivoActividad = responses.map(respuest => respuest.id_distributivo_actividad);
               this.authService.id_distributivoActividad = idsDistributivoActividad;
-              this.router.navigate(['./matriz-distributivo']);
+              this.dialog.closeAll();
             });
           });
         });

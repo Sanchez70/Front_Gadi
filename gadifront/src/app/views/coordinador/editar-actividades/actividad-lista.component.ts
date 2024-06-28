@@ -5,9 +5,9 @@ import { MatDialogRef } from '@angular/material/dialog';
   selector: 'app-actividad-lista',
   template: `
     <h1 mat-dialog-title></h1>
-    <button mat-button style="color: #fff; background-color: #ff3a3a;" class="close-button" (click)="close()">X</button>
-    <div mat-dialog-content>
-      <app-editar-actividades></app-editar-actividades>
+   
+    <div class=".dialog-content" mat-dialog-content style="width: 100%, height: 100%;">
+    <app-editar-actividades style="width: 100%; height: 100%;"></app-editar-actividades>
     </div>
   `,
   styles: [`
@@ -15,6 +15,10 @@ import { MatDialogRef } from '@angular/material/dialog';
       position: absolute;
       top: 0;
       right: 0;
+    }
+    .dialog-content {
+      width: 100%;
+      height: 100%;
     }
   `],
 })
