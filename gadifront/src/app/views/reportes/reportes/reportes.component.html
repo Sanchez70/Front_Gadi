@@ -53,10 +53,10 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let asignaturas of dataSourceAsig.data; let i = index">
-                                <td>{{carreras[asignaturas.id_asignatura].nombre_carrera || 'No asignado'}}</td>
-                                <td>{{distributivoAsignatura[asignaturas.id_asignatura].acronimo || 'No asignado'}}</td>
-                                <td>{{asignaturas.nombre_asignatura}}</td>
-                                <td style="text-align: center;">{{asignaturas.horas_semanales}}</td>
+                                <td>{{asignaturas.carreras?.nombre_carrera}}</td>
+                                <td>{{asignaturas.distributivoAsignatura.acronimo}}</td>
+                                <td>{{asignaturas.asignaturas.nombre_asignatura}}</td>
+                                <td style="text-align: center;">{{asignaturas.asignaturas.horas_semanales}}</td>
                             </tr>
                             <tr>
                                 <td colspan="3" style="text-align: right;"><b>TOTAL</b></td>

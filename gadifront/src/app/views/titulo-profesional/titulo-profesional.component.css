@@ -57,3 +57,8 @@
     background-color: #fff;
   }
   
+  .mat-form-field .mat-error {
+    font-size: 12px;
+    color: red;
+  }
+  

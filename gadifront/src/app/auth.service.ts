@@ -92,7 +92,9 @@ export class AuthService {
       id_distributivo: this.id_distributivo
     }));
   }
-
+limpieza(){
+  localStorage.clear();
+}
   login() {
     this.isLogeado = true;
     this.saveUserToLocalStorage();

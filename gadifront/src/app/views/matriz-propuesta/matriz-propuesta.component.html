@@ -70,39 +70,45 @@
     </div>
     <div class="container">
       <section class="example-container mat-elevation-z8" tabindex="0">
+        <div *ngIf="dataSourceAsig && dataSourceAsig.data.length > 0; else noData">
         <table mat-table [dataSource]="dataSourceAsig" matSort>
 
-          <ng-container  matColumnDef="carrera" sticky>
+          <ng-container  matColumnDef="carrera" sticky >
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
-            <td mat-cell *matCellDef="let asignatura" class="carrera-{{currentExplan}}">{{carreras[asignatura.id_asignatura].nombre_carrera || 'No asignado'}}</td>
+            <td mat-cell *matCellDef="let asignatura" class="carrera-{{currentExplan}}">{{asignatura.carreras.nombre_carrera}}</td>
           </ng-container>
           <ng-container matColumnDef="asignatura" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Asignatura</th>
-            <td mat-cell *matCellDef="let asigantura" class="asignatura">{{asigantura.nombre_asignatura}}</td>
+            <td mat-cell *matCellDef="let asigantura" class="asignatura">{{asigantura.asignaturas.nombre_asignatura}}</td>
           </ng-container>
           <ng-container matColumnDef="paralelo" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Paralelo</th>
-            <td mat-cell *matCellDef="let asignatura">{{distributivoAsignatura[asignatura.id_asignatura].paralelo || 'No asignado'}}</td>
+            <td mat-cell *matCellDef="let asignatura">{{asignatura.distributivoAsignatura.paralelo}}</td>
           </ng-container>
           <ng-container matColumnDef="nro_horas" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas</th>
-            <td mat-cell *matCellDef="let asigantura">{{asigantura.horas_semanales}}</td>
+            <td mat-cell *matCellDef="let asigantura">{{asigantura.asignaturas.horas_semanales}}</td>
           </ng-container>
           <ng-container matColumnDef="jornada" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Jornada</th>
-            <td mat-cell *matCellDef="let asignatura" class="jornada">{{jornada[asignatura.id_asignatura].descrip_jornada || 'No asignado'}}</td>
+            <td mat-cell *matCellDef="let asignatura" class="jornada">{{asignatura.jornada.descrip_jornada}}</td>
           </ng-container>
           <ng-container matColumnDef="periodo" sticky>
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Periodo</th>
-            <td mat-cell *matCellDef="let asignatura" class="periodo">{{periodosDis[asignatura.id_asignatura].nombre_periodo || 'No asignado'}}</td>
+            <td mat-cell *matCellDef="let asignatura" class="periodo">{{asignatura.periodo.nombre_periodo}}</td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumnsAsig"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumnsAsig;"></tr>
         </table>
+      </div>
+      <ng-template #noData>
+        <p style="text-align: center;">No se ha asignado ninguna propuesta aún...</p>
+      </ng-template>
       </section>
     </div>
     <div class="container">
       <section class="c mat-elevation-z8" tabindex="0">
+        <div *ngIf="dataSourceAct && dataSourceAct.data.length > 0; else noData">
         <table class="actividad" mat-table [dataSource]="dataSourceAct" matSort>
 
           <ng-container matColumnDef="nro_horas" sticky>
@@ -125,6 +131,10 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumnsAct"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumnsAct;"></tr>
         </table>
+      </div>
+      <ng-template #noData>
+        <p style="text-align: center;">No se ha asignado ninguna propuesta aún...</p>
+      </ng-template>
       </section>
     </div>
   </div>

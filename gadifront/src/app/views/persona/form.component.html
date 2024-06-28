@@ -55,7 +55,8 @@
     <!-- Columna para Mis Títulos -->
     <div class="mis-titulos">
       <h1>MIS TÍTULOS</h1>
-      <br><button mat-raised-button color="primary" routerLink="/titulo">Añadir</button> <br> <br>
+      <button mat-raised-button color="primary" (click)="openModal()">Añadir</button>
+      <br> <br>
       <!-- Mini tabla para mostrar los títulos -->
       <table mat-table [dataSource]="titulos" class="mat-elevation-z8">
         <ng-container matColumnDef="grado">

@@ -1,17 +1,22 @@
 <div class="ingreso-titulos">
-    <div class="contenedorBoton">
-      <h1>INGRESO DE TÍTULOS</h1>
-    </div>
-    <form [formGroup]="tituloForm" (ngSubmit)="guardarTitulo()" class="form-container">
-      <mat-form-field class="form-group" appearance="fill">
-        <mat-label>Grado</mat-label>
-        <input matInput formControlName="grado" required>
-      </mat-form-field>
-      <mat-form-field class="form-group" appearance="fill">
-        <mat-label>Nombre del Título</mat-label>
-        <input matInput formControlName="nombre_titulo" required>
-      </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" class="btn-submit">Guardar Título</button>
-    </form>
+  <div class="contenedorBoton">
+    <h1>INGRESO DE TÍTULOS</h1>
   </div>
-  
+  <form [formGroup]="tituloForm" (ngSubmit)="guardarTitulo()" class="form-container">
+    <mat-form-field class="form-group" appearance="fill">
+      <mat-label>Grado</mat-label>
+      <mat-select formControlName="grado" required>
+        <mat-option *ngFor="let grado of grados" [value]="grado">{{ grado }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="tituloForm.get('grado')?.hasError('required')">El grado es requerido.</mat-error>
+    </mat-form-field>
+    
+    <mat-form-field class="form-group" appearance="fill">
+      <mat-label>Nombre del Título</mat-label>
+      <input matInput formControlName="nombre_titulo" required>
+      <mat-error *ngIf="tituloForm.get('nombre_titulo')?.hasError('required')">El nombre del título es requerido.</mat-error>
+      <mat-error *ngIf="tituloForm.get('nombre_titulo')?.hasError('pattern')">Ingrese un nombre de título válido (letras, espacios, Ejm: Ingeniero en Sistemas).</mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" class="btn-submit">Guardar Título</button>
+  </form>
+</div>
