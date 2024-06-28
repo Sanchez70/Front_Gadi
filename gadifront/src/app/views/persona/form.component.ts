@@ -63,14 +63,14 @@ export class FormComponent implements OnInit {
   }
 
   openModal(): void {
+    const idPersona = this.authService.id_persona;
     const dialogRef = this.dialog.open(TituloProfesionalComponent, {
-      width: '80%',
-      height: '80%',
+      width: '30%',
+      height: '60%',
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.router.navigate(['./persona/form']);
-
+      this.mostrarTitulos(idPersona);
     });
   }
 
