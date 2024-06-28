@@ -1,4 +1,4 @@
-.container {
+ .container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6,8 +6,9 @@
     background-repeat: repeat-x;
     background-size: 100% 100%;
     background-attachment: fixed;
+    flex-direction: column;
 }
-
+/*
 .card {
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -29,18 +30,7 @@ label {
     text-shadow: 30cap;
 }
 
-input,
-select,
-mat-form-field {
-    width: 100%;
-    margin-top: 4px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    font-size: 14px;
-}
+
 
 select {
     height: 40px;
@@ -95,4 +85,28 @@ button:hover {
 
 .login-link:hover {
     color: #357ae8;
+} */
+
+.registro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+form {
+    width: 100%;
+    max-width: 800px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+button {
+    margin: 10px 0;
+}
+
+button[mat-raised-button] {
+    margin-right: 10px;
 }
