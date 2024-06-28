@@ -93,7 +93,6 @@ import { AsignaturaModalComponent } from './views/crud-asignatura/asignatura-mod
 import { CrudAsignaturaComponent } from './views/crud-asignatura/crud-asignatura.component';
 import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
 import { CommonModule } from '@angular/common';
-import { ActividadListaComponent } from './views/coordinador/editar-actividades/actividad-lista.component'; // Asegúrate de importar CommonModule
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -176,8 +175,7 @@ const routes: Routes = [
     EditarAsignaturaComponent,
     PersonaFormComponent,
     RolSelectorComponent,
-    PeriodoModalComponent,
-    ActividadListaComponent
+    PeriodoModalComponent
   ],
   
   imports: [
