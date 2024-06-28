@@ -1,144 +1,162 @@
-<div class="container">
+    <div class="container">
+      <div class="contenedorHeader">
+      <h1 class="titulo">REGISTRO DE USUARIOS</h1>
   <img src="assets/img/logo.png" alt="GADI" class="logo">
-  <form [formGroup]="registroForm1" (ngSubmit)="onSubmit()">
-
-    <mat-form-field appearance="outline">
-      <mat-label>Primer Nombre</mat-label>
-      <input matInput formControlName="name1">
-      <mat-error *ngIf="registroForm1.get('name1')?.hasError('required')">El primer nombre es obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('name1')?.hasError('pattern')">El primer nombre solo puede contener
-        letras</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Segundo Nombre</mat-label>
-      <input matInput formControlName="name2">
-      <mat-error *ngIf="registroForm1.get('name2')?.hasError('required')">El segundo nombre es obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('name2')?.hasError('pattern')">El segundo nombre solo puede contener
-        letras</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Primer Apellido</mat-label>
-      <input matInput formControlName="lastname1">
-      <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('required')">El primer apellido es
-        obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('pattern')">El primer apellido solo puede contener
-        letras</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Segundo Apellido</mat-label>
-      <input matInput formControlName="lastname2">
-      <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('required')">El segundo apellido es
-        obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('pattern')">El segundo apellido solo puede contener
-        letras</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Cédula</mat-label>
-      <input matInput formControlName="user">
-      <mat-error *ngIf="registroForm1.get('user')?.hasError('required')">La cédula es obligatoria</mat-error>
-      <mat-error *ngIf="registroForm1.get('user')?.hasError('invalidCedula')">La cédula es inválida</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Contraseña</mat-label>
-      <input matInput formControlName="password" type="password">
-      <mat-error *ngIf="registroForm1.get('password')?.hasError('required')">La contraseña es obligatoria</mat-error>
-      <mat-error *ngIf="registroForm1.get('password')?.hasError('pattern')">La contraseña debe tener al menos 8
-        caracteres y contener letras, números y caracteres especiales</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Teléfono</mat-label>
-      <input matInput formControlName="telefono">
-      <mat-error *ngIf="registroForm1.get('telefono')?.hasError('required')">El teléfono es obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidLength')">El teléfono debe tener 10
-        dígitos</mat-error>
-      <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidFormat')">El teléfono debe empezar con
-        09</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Dirección</mat-label>
-      <input matInput formControlName="direccion">
-      <mat-error *ngIf="registroForm1.get('direccion')?.hasError('required')">La dirección es obligatoria</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Correo</mat-label>
-      <input matInput formControlName="correo" type="email">
-      <mat-error *ngIf="registroForm1.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
-      <mat-error *ngIf="registroForm1.get('correo')?.hasError('email')">El correo es inválido</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha de Nacimiento</mat-label>
-      <input matInput formControlName="fecha_nacimiento" type="date" (change)="calcularEdad($event)">
-      <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('required')">La fecha de nacimiento es
-        obligatoria</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Edad</mat-label>
-      <input matInput formControlName="edad" [value]="edad" readonly>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Fecha de Vinculación</mat-label>
-      <input matInput formControlName="fecha_vinculacion" type="date">
-      <mat-error *ngIf="registroForm1.get('fecha_vinculacion')?.hasError('required')">La fecha de vinculación es
-        obligatoria</mat-error>
-    </mat-form-field>
-
-    <div formArrayName="titulos">
-      <div *ngFor="let titulo of titulos.controls; let i = index" [formGroupName]="i">
+</div>
+      <form [formGroup]="registroForm1" (ngSubmit)="onSubmit()">
+        <div class="contenedor1">
         <mat-form-field appearance="outline">
-          <mat-label>Nombre del Título</mat-label>
-          <input matInput formControlName="nombre_titulo">
-          <mat-error *ngIf="titulo.get('nombre_titulo')?.hasError('required')">El nombre del título es
+          <mat-label>Primer Nombre</mat-label>
+          <input matInput formControlName="name1">
+          <mat-error *ngIf="registroForm1.get('name1')?.hasError('required')">El primer nombre es
+            obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('name1')?.hasError('pattern')">El primer nombre solo puede contener
+            letras</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Segundo Nombre</mat-label>
+          <input matInput formControlName="name2">
+          <mat-error *ngIf="registroForm1.get('name2')?.hasError('required')">El segundo nombre es
+            obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('name2')?.hasError('pattern')">El segundo nombre solo puede contener
+            letras</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Primer Apellido</mat-label>
+          <input matInput formControlName="lastname1">
+          <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('required')">El primer apellido es
+            obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('pattern')">El primer apellido solo puede contener
+            letras</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Segundo Apellido</mat-label>
+          <input matInput formControlName="lastname2">
+          <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('required')">El segundo apellido es
+            obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('pattern')">El segundo apellido solo puede contener
+            letras</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cédula</mat-label>
+          <input matInput formControlName="user">
+          <mat-error *ngIf="registroForm1.get('user')?.hasError('required')">La cédula es obligatoria</mat-error>
+          <mat-error *ngIf="registroForm1.get('user')?.hasError('invalidCedula')">La cédula es inválida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" type="password">
+          <mat-error *ngIf="registroForm1.get('password')?.hasError('required')">La contraseña es
+            obligatoria</mat-error>
+          <mat-error *ngIf="registroForm1.get('password')?.hasError('pattern')">La contraseña debe tener al menos 8
+            caracteres y contener letras, números y caracteres especiales</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono">
+          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('required')">El teléfono es obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidLength')">El teléfono debe tener 10
+            dígitos</mat-error>
+          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidFormat')">El teléfono debe empezar con
+            09</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="direccion">
+          <mat-error *ngIf="registroForm1.get('direccion')?.hasError('required')">La dirección es
+            obligatoria</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo</mat-label>
+          <input matInput formControlName="correo" type="email">
+          <mat-error *ngIf="registroForm1.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('correo')?.hasError('email')">El correo es inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput formControlName="fecha_nacimiento" type="date" (change)="calcularEdad($event)">
+          <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('required')">La fecha de nacimiento es
+            obligatoria</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Edad</mat-label>
+          <input matInput formControlName="edad" [value]="edad" readonly>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Vinculación</mat-label>
+          <input matInput formControlName="fecha_vinculacion" type="date">
+          <mat-error *ngIf="registroForm1.get('fecha_vinculacion')?.hasError('required')">La fecha de vinculación es
+            obligatoria</mat-error>
+        </mat-form-field>
+
+      </div>
+
+      <div class="contenedor2">
+        <div formArrayName="titulos">
+          <div *ngFor="let titulo of titulos.controls; let i = index" [formGroupName]="i">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre del Título</mat-label>
+              <input matInput formControlName="nombre_titulo">
+              <mat-error *ngIf="titulo.get('nombre_titulo')?.hasError('required')">El nombre del título es
+                obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Grado</mat-label>
+              <input matInput formControlName="grado">
+              <mat-error *ngIf="titulo.get('grado')?.hasError('required')">El grado es obligatorio</mat-error>
+            </mat-form-field>
+            <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="removeTitulo(i)">Eliminar Titulo</button>
+            <!-- <button mat-raised-button color="warn" (click)="removeTitulo(i)">Eliminar Título</button> -->
+          </div>
+        </div>
+        <button mat-button style="color: #fff; background-color: #1E90FF;"  (click)="addTitulo()">Agregar Titulo</button>
+        <!-- <button mat-raised-button color="primary" (click)="addTitulo()">Agregar Título</button> -->
+
+      </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Grado Ocupacional</mat-label>
+          <mat-select formControlName="nombre_grado_ocp">
+            <mat-option *ngFor="let grado of grados"
+              [value]="grado.id_grado_ocp">{{grado.nombre_grado_ocp}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="registroForm1.get('nombre_grado_ocp')?.hasError('required')">El grado ocupacional es
             obligatorio</mat-error>
         </mat-form-field>
+
         <mat-form-field appearance="outline">
-          <mat-label>Grado</mat-label>
-          <input matInput formControlName="grado">
-          <mat-error *ngIf="titulo.get('grado')?.hasError('required')">El grado es obligatorio</mat-error>
+          <mat-label>Tipo de Contrato</mat-label>
+          <mat-select formControlName="nombre_contrato">
+            <mat-option *ngFor="let contrato of contratos"
+              [value]="contrato.id_tipo_contrato">{{contrato.nombre_contrato}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="registroForm1.get('nombre_contrato')?.hasError('required')">El tipo de contrato es
+            obligatorio</mat-error>
         </mat-form-field>
-        <button mat-raised-button color="warn" (click)="removeTitulo(i)">Eliminar Título</button>
-      </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Horas de Contrato</mat-label>
+          <input matInput formControlName="hora_contrato" type="number">
+          <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('required')">Las horas de contrato son
+            obligatorias</mat-error>
+          <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('min')">Debe ser al menos 1 hora</mat-error>
+        </mat-form-field>
+
+        <!-- <button mat-raised-button color="primary" type="submit">Registrar</button> -->
+        <button mat-button style="color: #fff; background-color: #1E90FF;"  type="submit">Registrar</button>
+        <!-- <button type="submit" class="btn btn-primary btn-rounded">CONTINUAR</button> -->
+      </form>
+
     </div>
-    <button mat-raised-button color="primary" (click)="addTitulo()">Agregar Título</button>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Grado Ocupacional</mat-label>
-      <mat-select formControlName="nombre_grado_ocp">
-        <mat-option *ngFor="let grado of grados" [value]="grado.id_grado_ocp">{{grado.nombre_grado_ocp}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="registroForm1.get('nombre_grado_ocp')?.hasError('required')">El grado ocupacional es
-        obligatorio</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Tipo de Contrato</mat-label>
-      <mat-select formControlName="nombre_contrato">
-        <mat-option *ngFor="let contrato of contratos"[value]="contrato.id_tipo_contrato">{{contrato.nombre_contrato}}</mat-option>
-      </mat-select>
-      <mat-error *ngIf="registroForm1.get('nombre_contrato')?.hasError('required')">El tipo de contrato es
-        obligatorio</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Horas de Contrato</mat-label>
-      <input matInput formControlName="hora_contrato" type="number">
-      <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('required')">Las horas de contrato son
-        obligatorias</mat-error>
-      <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('min')">Debe ser al menos 1 hora</mat-error>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit">Registrar</button>
-    <!-- <button type="submit" class="btn btn-primary btn-rounded">CONTINUAR</button> -->
-  </form>
-
-</div>
