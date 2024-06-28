@@ -591,6 +591,4 @@ export class MatrizDistributivoComponent implements OnInit {
       window.location.reload();
     });
   }
-
-
 }
