@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { TituloProfesionalComponent } from '../titulo-profesional/titulo-profesional.component';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -39,6 +41,7 @@ export class FormComponent implements OnInit {
   private sidebarSubscription!: Subscription;
 
   constructor(
+    private dialog: MatDialog, 
     private router: Router,
     private personaService: PersonaService,
     private authService: AuthService,
@@ -56,6 +59,18 @@ export class FormComponent implements OnInit {
       correo: [{ value: '' }],
       edad: [{ value: '' }],
       fecha_vinculacion: [{ value: '' }],
+    });
+  }
+
+  openModal(): void {
+    const dialogRef = this.dialog.open(TituloProfesionalComponent, {
+      width: '80%',
+      height: '80%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.router.navigate(['./persona/form']);
+
     });
   }
 

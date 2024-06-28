@@ -587,6 +587,4 @@ export class MatrizDistributivoComponent implements OnInit {
     });
    
   }
-
-
 }
