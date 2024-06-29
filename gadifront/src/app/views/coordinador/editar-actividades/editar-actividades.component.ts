@@ -110,6 +110,7 @@ export class EditarActividadesComponent {
   enviarActividades(): void {
     if (this.myForm.valid) {
       this.authService.id_actividades = this.actividadesSeleccionadas;
+
       this.distributivoActividad.id_distributivo = this.authService.id_distributivo;
       this.distributivoActividadService.getDistributivoActividad().subscribe(
         data => {
@@ -128,6 +129,7 @@ export class EditarActividadesComponent {
               // Guardar todos los IDs de las distribuciones creadas
               const idsDistributivoActividad = responses.map(respuest => respuest.id_distributivo_actividad);
               this.authService.id_distributivoActividad = idsDistributivoActividad;
+              this.authService.saveUserToLocalStorage();
               this.dialog.closeAll();
             });
           });

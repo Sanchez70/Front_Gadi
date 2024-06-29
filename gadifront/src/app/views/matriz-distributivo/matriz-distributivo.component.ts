@@ -143,9 +143,10 @@ export class MatrizDistributivoComponent implements OnInit {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
         this.loadAdditionalDataForPersonas();
+        this.buscarDistributivo(this.authService.id_persona);
       }
     });
-    this.buscarDistributivo(this.authService.id_persona);
+
   }
 
   cargarTipoActividad(): void {

@@ -63,6 +63,10 @@ export class AuthService {
     this.asignaturasSeleccionadaAuth=[];
   }
 
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
   clearLocalStorageActividad() {
     this.id_actividades = [];
   }
@@ -102,6 +106,7 @@ limpieza(){
 
   logout() {
     this.isLogeado = false;
+    localStorage.removeItem('token');
     this.saveUserToLocalStorage();
   }
 
