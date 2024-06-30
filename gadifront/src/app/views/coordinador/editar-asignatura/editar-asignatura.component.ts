@@ -10,7 +10,7 @@ import { CicloService } from '../../../Services/cicloService/ciclo.service';
 import { CarreraService } from '../../../Services/carreraService/carrera.service';
 import { DistributivoAsignaturaService } from '../../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import { Asignatura } from '../../../Services/asignaturaService/asignatura';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -38,6 +38,7 @@ export class EditarAsignaturaComponent {
   jornadaSeleccionada: number = 0;
   idJornada: number = 0;
   asignaturasSeleccionadas: Asignatura[] = [];
+  distributivoAsignatura: DistributivoAsignatura = new DistributivoAsignatura();
   nombreCiclo : string = '';
   horasTotales: number = 0;
   idCarrera : number = 0;
@@ -184,20 +185,34 @@ export class EditarAsignaturaComponent {
     return ciclo ? ciclo.nombre_ciclo : '';
   }
 
-  enviarAsignaturas():void{
-    if (this.myForm.valid){
-      this.authService.clearLocalStorageAsignatura();
+  enviarAsignaturas(): void {
+    console.log('id distributivo:',this.id_distributivo);
       this.authService.id_asignaturas = this.asignaturasSeleccionadas;
-      this.authService.id_jornada = this.jornadaSeleccionada;
-      this.authService.paralelo = this.paraleloSeleccionado;
-      this.authService.saveUserToLocalStorage();
-      this.router.navigate(['./distributivo']);
-    }else{
-      Toast.fire({
-        icon: "warning",
-        title: "Por favor, seleccione una opción",
-      });
-    }
+      this.distributivoAsignatura.id_distributivo = this.authService.id_distributivo;
+      for (const distributivo of this.authService.distributivos){
+      this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
+        data => {
+          const distributivoEncontrado = data as DistributivoAsignatura[];
+          const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
+          const deleteObservables = distributivosFinales.map(distributivoFinal =>
+            this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
+          );
+          forkJoin(deleteObservables).subscribe(() => {
+            const createObservables = this.asignaturasSeleccionadas.map(data => {
+              const newDistributivoAsignatura= { ...this.distributivoAsignatura, id_asignatura: data.id_asignatura };
+              return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
+            });
+  
+            forkJoin(createObservables).subscribe(responses => {
+              // Guardar todos los IDs de las distribuciones creadas
+              const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
+              this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
+              this.authService.saveUserToLocalStorage();
+              this.router.navigate(['./matriz-distributivo']);
+            });
+          });
+        });
+        }
     
   }
 }

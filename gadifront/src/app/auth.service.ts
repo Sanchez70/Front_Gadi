@@ -19,7 +19,9 @@ export class AuthService {
   paralelo: any;
   id_periodo: any;
   id_distributivo:any;
+  distributivos: any[] = [];
   id_distributivoActividad:any;
+  id_distributivoAsignatura: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
