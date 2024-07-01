@@ -13,6 +13,7 @@ import { UsuarioRol } from '../../Services/UsuarioRol/usuarioRol';
 import { ValidacionesComponent } from '../../validaciones/validaciones.component';
 import { Tipo_contrato } from '../../Services/tipo_contrato/tipo_contrato';
 import { Grado_ocupacional } from '../../Services/grado/grado_ocupacional';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -34,6 +35,8 @@ export class RegistroComponent implements OnInit {
   public contratos: Tipo_contrato[] = [];
   public grados: Grado_ocupacional[] = [];
 
+  currentExplan: string = '';
+
   showFinalForm: boolean = false;
   public isTiempoParcial: boolean = false;
 
@@ -43,7 +46,8 @@ export class RegistroComponent implements OnInit {
     private service: RegistroService,
     private tipoContratoService: TipoContratoService,
     private gradoOcupacionalService: GradoOcupacionalService,
-    private docenteService: DocenteService
+    private docenteService: DocenteService,
+    private authService: AuthService,
   ) {
     this.registroForm1 = this.fb.group({
       name1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
@@ -67,6 +71,9 @@ export class RegistroComponent implements OnInit {
   ngOnInit() {
     this.loadContratos();
     this.loadGradoOcupacional();
+    this.authService.explan$.subscribe(explan => {
+      this.currentExplan = explan;
+    });
   }
 
   loadContratos() {
