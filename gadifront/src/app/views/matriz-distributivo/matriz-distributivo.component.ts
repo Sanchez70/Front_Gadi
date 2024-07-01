@@ -46,6 +46,15 @@ const Toast = Swal.mixin({
     toast.onmouseleave = Swal.resumeTimer;
   }
 });
+
+interface AsignaturaConDistributivo {
+  distributivoAsignatura: DistributivoAsignatura;
+  asignaturas: Asignatura;
+  carreras?: Carrera;
+  distributivo: Distributivo;
+  jornada?: Jornada;
+  periodo?: Periodo;
+}
 @Component({
   selector: 'app-matriz-distributivo',
   templateUrl: './matriz-distributivo.component.html',
@@ -55,9 +64,9 @@ const Toast = Swal.mixin({
 
 export class MatrizDistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
-  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
+  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo','asig_jornada'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
-  dataSourceAsig!: MatTableDataSource<Asignatura>;
+  dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<any>;
 
   dataSource!: MatTableDataSource<Persona>;
@@ -98,7 +107,7 @@ export class MatrizDistributivoComponent implements OnInit {
   id_activida: any;
   validador: string = '';
   jornadas: any[] = [];
-  jornadaSeleccionada: number = 0;
+  jornadaSeleccionada: { [key: string]: number } = {};
   id_distributivo: number = 0;
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   public distributivo: Distributivo = new Distributivo();
@@ -124,6 +133,7 @@ export class MatrizDistributivoComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute) {
     this.dataSourceAct = new MatTableDataSource<any>();
+    this.dataSourceAsig = new MatTableDataSource<any>();
 
   }
 
@@ -143,9 +153,10 @@ export class MatrizDistributivoComponent implements OnInit {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
         this.loadAdditionalDataForPersonas();
+        this.buscarDistributivo(this.authService.id_persona);
       }
     });
-    this.buscarDistributivo(this.authService.id_persona);
+
   }
 
   cargarTipoActividad(): void {
@@ -171,11 +182,16 @@ export class MatrizDistributivoComponent implements OnInit {
       this.jornadas = data;
     });
   }
-  onJornadaChange(event: any): void {
-    this.jornadaSeleccionada = +event.target.value;
-    this.idJornada = this.jornadaSeleccionada;
-    console.log('id_jornada', this.idJornada);
+  
+  onJornadaChange(event: any, idAsignatura: any, index: number): void {
+    this.idJornada = +event.target.value;
+    const key = `${idAsignatura}-${index}`;
+    this.jornadaSeleccionada[key] = this.idJornada;
   }
+
+  generateKey(id_asignatura: number, index: number): string {
+    return `${id_asignatura}-${index}`;
+}
 
 
   loadAdditionalDataForPersonas(): void {
@@ -220,56 +236,56 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
-  cargarAdicional(): void {
-    const requests = this.asignaturas.map(asignatura =>
-      forkJoin([
-        this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(periodo => {
-            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-            console.log('periodoPersona' + periodo.nombre_periodo);
+  // cargarAdicional(): void {
+  //   const requests = this.asignaturas.map(asignatura =>
+  //     forkJoin([
+  //       this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(periodo => {
+  //           this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
+  //           console.log('periodoPersona' + periodo.nombre_periodo);
 
-          }),
-          catchError(() => {
-            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-            return of(null);
-          })
-        ),
-        this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(jornada => {
-            this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-          }),
-          catchError(() => {
-            this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-            return of(null);
-          })
-        ),
-        this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(distributivosAsig => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
-          }),
-          catchError(() => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
-            return of(null);
-          })
-        ),
-        this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-          tap(carrera => {
-            this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-          }),
-          catchError(() => {
-            this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-            return of(null);
-          })
-        ),
-      ])
+  //         }),
+  //         catchError(() => {
+  //           this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(jornada => {
+  //           this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(distributivosAsig => {
+  //           this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(carrera => {
+  //           this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
+  //           return of(null);
+  //         })
+  //       ),
+  //     ])
 
-    );
-    forkJoin(requests).subscribe(() => {
-      this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-      this.dataSourceAsig.paginator = this.paginator;
-      this.dataSourceAsig.sort = this.sort;
-    });
-  }
+  //   );
+  //   forkJoin(requests).subscribe(() => {
+  //     this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
+  //     this.dataSourceAsig.paginator = this.paginator;
+  //     this.dataSourceAsig.sort = this.sort;
+  //   });
+  // }
   combinarDatos(): void {
     this.horasTotalesActividad=0;
     forkJoin({
@@ -329,6 +345,7 @@ export class MatrizDistributivoComponent implements OnInit {
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;
+        this.authService.distributivos.concat(distributivo.id_distributivo);
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -341,24 +358,68 @@ export class MatrizDistributivoComponent implements OnInit {
       const asignaturasFiltradas = this.distributivoAsignaturas.filter(
         materiaAs => materiaAs.id_distributivo === idDistributivo
       );
+ 
       const idAsignaturas = asignaturasFiltradas.map(asig => asig.id_asignatura);
       this.asignaturaService.getAsignatura().subscribe(asig => {
         const asigEncontrados = asig as Asignatura[];
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
-        if (this.authService.asignaturasSeleccionadaAuth.length === 0) {
-          this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        } else {
-          this.asignaturas = this.authService.asignaturasSeleccionadaAuth
-        }
-        this.calcularHorasTotales();
-
-        this.cargarAdicional();
+      
+        this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         console.log('Asignaturas cargadas:', this.asignaturas);
+        this.combinarDatosAsignatura(this.distributivoFiltrado);
       });
     });
   }
+
+  combinarDatosAsignatura(distributivos: Distributivo[]): void {
+    forkJoin({
+      asignaturas: this.asignaturaService.getAsignatura(),
+      carreras: this.carreraService.getCarrera(),
+      distributivoAsignatura: this.distributivoAsignaturaService.getDistributivoAsignatura(),
+      jornadas: this.jornadaService.getJornada(),
+      periodo: this.periodoService.getPeriodo()
+    }).pipe(
+      map(({ asignaturas, carreras, distributivoAsignatura, jornadas, periodo }) => {
+        const data: any[] = [];
+        const asignaturaMap = new Map<number, any>();
+        const asignaturaFiltradas: Asignatura[] = [];
+        distributivos.forEach(dis => {
+          const distributivosFiltrados = distributivoAsignatura.filter(da => da.id_distributivo === dis.id_distributivo);
+          distributivosFiltrados.forEach(da => {
+            const asignatura = asignaturas.find(a => a.id_asignatura === da.id_asignatura);
+            if (asignatura) {
+              asignaturaFiltradas.push(asignatura); // Guardar la actividad filtrada en el array
+
+              const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
+              const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
+              const periodos = periodo.find(pe => pe.id_periodo === dis?.id_periodo);
+              
+              data.push({
+                nombreAsignatura: asignatura ? asignatura.nombre_asignatura : '',
+                carrera: carrera ? carrera.nombre_carrera : '',
+                horaAsignatura: asignatura ? asignatura.horas_semanales : '',
+                jornada: jornada ? jornada.descrip_jornada : '',
+                paralelo: da.paralelo,
+                periodo: periodos ? periodos.nombre_periodo : '',
+              });
+            }
+            
+          });
+        });
+        
+        this.asignaturas = asignaturaFiltradas;
+        this.calcularHorasTotalesAsig();
+        return data;
+      })
+    ).subscribe(data => {
+      this.dataSourceAsig.data = data;
+      
+    });
+  }
+
+
 
   buscarActividad(idDistributivo: number): void {
     this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
@@ -382,12 +443,10 @@ export class MatrizDistributivoComponent implements OnInit {
 
   }
 
-  calcularHorasTotales(): void {
-
+  calcularHorasTotalesAsig():void{
     this.horasTotales = this.asignaturas.reduce(
-      (sum, asignatura) => sum + asignatura.horas_semanales, 0
+      (sum,asignatura) => sum + asignatura.horas_semanales, 0
     );
-    console.log('horas totales asignatura', this.horasTotales);
   }
 
  
@@ -502,7 +561,8 @@ export class MatrizDistributivoComponent implements OnInit {
         paralelo: this.authService.paralelo,
         id_distributivo: id_distributivo,
         id_asignatura: asignatura.id_asignatura,
-        acronimo: ''
+        acronimo: '',
+        id_distributivo_asig: 0
       };
       this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
         //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');

@@ -21,7 +21,7 @@ import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_activi
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, forkJoin, of, switchMap, tap, throwIfEmpty } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap, tap, throwIfEmpty } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
@@ -57,7 +57,7 @@ export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad'];
-  dataSourceAsig!: MatTableDataSource<AsignaturaConDistributivo>;
+  dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -96,6 +96,8 @@ export class MatrizPropuestaComponent implements OnInit {
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
   titulo: Titulo_profesional = new Titulo_profesional();
   currentExplan: string = '';
+  id_distributivo: number = 0;
+
   constructor(
     private asignaturaService: AsignaturaService,
     private personaService: PersonaService,
@@ -114,7 +116,7 @@ export class MatrizPropuestaComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
-
+    this.dataSourceAsig = new MatTableDataSource<any>();
   }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -142,6 +144,7 @@ export class MatrizPropuestaComponent implements OnInit {
         distributivo => distributivo.id_persona === idPersona);
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
+        this.id_distributivo = distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -163,55 +166,59 @@ export class MatrizPropuestaComponent implements OnInit {
           idAsignaturas.includes(materia.id_asignatura)
         );
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
-        this.loadTableData(this.asignaturas, asignaturasFiltradas, this.distributivoFiltrado);
-
+        this.combinarDatos(this.distributivoFiltrado);
 
       });
     });
   }
 
-  loadTableData(asignaturas: Asignatura[], distributivosAsignatura: DistributivoAsignatura[], distributivos: Distributivo[]): void {
-    const dataTabla: AsignaturaConDistributivo[] = [];
+  combinarDatos(distributivos: Distributivo[]): void {
+    console.log('llegué inicio');
+    forkJoin({
+      asignaturas: this.asignaturaService.getAsignatura(),
+      carreras: this.carreraService.getCarrera(),
+      distributivoAsignatura: this.distributivoAsignaturaService.getDistributivoAsignatura(),
+      jornadas: this.jornadaService.getJornada(),
+      periodo: this.periodoService.getPeriodo()
+    }).pipe(
+      map(({ asignaturas, carreras, distributivoAsignatura, jornadas, periodo }) => {
+        const data: any[] = [];
+        const asignaturaFiltradas: Asignatura[] = [];
+        distributivos.forEach(dis => {
+          const distributivosFiltrados = distributivoAsignatura.filter(da => da.id_distributivo === dis.id_distributivo);
+          distributivosFiltrados.forEach(da => {
+            const asignatura = asignaturas.find(a => a.id_asignatura === da.id_asignatura);
+            if (asignatura) {
+              asignaturaFiltradas.push(asignatura); // Guardar la actividad filtrada en el array
 
-    distributivos.forEach(distributivo => {
-      const asignaturasFiltradas = distributivosAsignatura.filter(distributivoAsig => distributivoAsig.id_distributivo === distributivo.id_distributivo);
+              const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
+              const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
+              const periodos = periodo.find(pe => pe.id_periodo === dis?.id_periodo);
 
-      const asignaturasParaDistributivo = asignaturas.filter(asig => asignaturasFiltradas.some(distributivoAsig => distributivoAsig.id_asignatura === asig.id_asignatura));
-
-      asignaturasParaDistributivo.forEach(asignatura => {
-        const distributivoAsig = asignaturasFiltradas.find(distributivoAsig => distributivoAsig.id_asignatura === asignatura.id_asignatura);
-        if (distributivoAsig) {
-
-          this.carreraService.getCarreraById(asignatura.id_carrera ?? 0).subscribe(carrera => {
-            const carreraAsociada = carrera || { id_carrera: 0, nombre_carrera: 'No asignada' };
-            this.jornadaService.getJornadabyId(distributivoAsig.id_jornada).subscribe(jornada => {
-              const jornadaAsociada = jornada || { id_jornada: 0, descrip_jornada: 'No asignada' };
-              this.periodoService.getPeriodobyId(distributivo.id_periodo).subscribe(periodo => {
-                const periodoAsociado = periodo || { id_periodo: 0, nombre_periodo: 'No asignada' };
-                const asignaturaConDistributivo: AsignaturaConDistributivo = {
-                  asignaturas: asignatura,
-                  distributivo: distributivo,
-                  distributivoAsignatura: distributivoAsig,
-                  carreras: carreraAsociada,
-                  jornada: jornadaAsociada,
-                  periodo: periodoAsociado
-                };
-
-
-                dataTabla.push(asignaturaConDistributivo);
-
-                if (dataTabla.length === asignaturasParaDistributivo.length) {
-                  dataTabla.sort((a, b) => a.asignaturas.id_asignatura - b.asignaturas.id_asignatura);
-                  this.dataSourceAsig = new MatTableDataSource(dataTabla);
-                  this.dataSourceAsig.paginator = this.paginator;
-                  this.dataSourceAsig.sort = this.sort;
-                }
+              data.push({
+                nombreAsignatura: asignatura ? asignatura.nombre_asignatura : '',
+                carrera: carrera ? carrera.nombre_carrera : '',
+                horaAsignatura: asignatura ? asignatura.horas_semanales : '',
+                jornada: jornada ? jornada.descrip_jornada : '',
+                paralelo: da.paralelo,
+                periodo: periodos ? periodos.nombre_periodo : '',
               });
-            });
+
+
+            }
           });
-        }
-      });
+        });
+
+
+        this.asignaturas = asignaturaFiltradas;
+        console.log('respuesta asignaturas', this.asignaturas)
+        return data;
+      })
+    ).subscribe(data => {
+      this.dataSourceAsig.data = data;
+      console.log('data source', this.dataSourceAsig.data);
     });
+    console.log('llegué final');
   }
 
 
@@ -240,55 +247,55 @@ export class MatrizPropuestaComponent implements OnInit {
 
   }
 
-  cargarAdicional(): void {
-    const requests = this.asignaturas.map(asignatura =>
-      forkJoin([
-        this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(periodo => {
-            this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado' };
-            console.log('periodoPersona' + periodo.nombre_periodo);
-          }),
-          catchError(() => {
-            this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado' } as Periodo;
-            return of(null);
-          })
-        ),
-        this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(jornada => {
-            this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-          }),
-          catchError(() => {
-            this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-            return of(null);
-          })
-        ),
-        this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-          tap(distributivosAsig => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
-          }),
-          catchError(() => {
-            this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
-            return of(null);
-          })
-        ),
-        this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-          tap(carrera => {
-            this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-          }),
-          catchError(() => {
-            this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-            return of(null);
-          })
-        ),
-      ])
+  // cargarAdicional(): void {
+  //   const requests = this.asignaturas.map(asignatura =>
+  //     forkJoin([
+  //       this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(periodo => {
+  //           this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado' };
+  //           console.log('periodoPersona' + periodo.nombre_periodo);
+  //         }),
+  //         catchError(() => {
+  //           this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado' } as Periodo;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(jornada => {
+  //           this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(distributivosAsig => {
+  //           this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
+  //           return of(null);
+  //         })
+  //       ),
+  //       this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
+  //         tap(carrera => {
+  //           this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
+  //         }),
+  //         catchError(() => {
+  //           this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
+  //           return of(null);
+  //         })
+  //       ),
+  //     ])
 
-    );
-    // forkJoin(requests).subscribe(() => {
-    //   this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-    //   this.dataSourceAsig.paginator = this.paginator;
-    //   this.dataSourceAsig.sort = this.sort;
-    // });
-  }
+  //   );
+  //   // forkJoin(requests).subscribe(() => {
+  //   //   this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
+  //   //   this.dataSourceAsig.paginator = this.paginator;
+  //   //   this.dataSourceAsig.sort = this.sort;
+  //   // });
+  // }
 
   cargarTipo(): void {
     const requests = this.actividades.map(actividad =>

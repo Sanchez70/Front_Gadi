@@ -332,7 +332,8 @@ export class DistributivoComponent implements OnInit {
             paralelo: this.authService.paralelo,
             id_distributivo: id_distributivo,
             id_asignatura: asignatura.id_asignatura,
-            acronimo: acronimo
+            acronimo: acronimo,
+            id_distributivo_asig: 0
           };
           this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
             //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
