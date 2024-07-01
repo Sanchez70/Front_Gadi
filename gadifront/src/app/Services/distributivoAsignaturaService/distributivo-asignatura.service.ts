@@ -26,7 +26,7 @@ export class DistributivoAsignaturaService {
 
   updateDistributivo(distributivoAsignatura: DistributivoAsignatura): Observable<DistributivoAsignatura> {
     const url = `${this.urlEndPoint}/distributivo_asignatura/${distributivoAsignatura.id_distributivo_asig}`;
-    return this.http.put<DistributivoAsignatura>(url, distributivoAsignatura, { headers: this.httpHeaders })
+    return this.http.put<DistributivoAsignatura>(url, distributivoAsignatura);
   }
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.urlEndPoint}/distributivo_asignatura/${id}`, { headers: this.httpHeaders });

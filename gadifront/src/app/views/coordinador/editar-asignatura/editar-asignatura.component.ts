@@ -32,48 +32,46 @@ export class EditarAsignaturaComponent {
   carreraSeleccionada: number = 0;
   asignaturas: any[] = [];
   asignaturaFiltrada: any[] = [];
-  paralelos: string[] = ['A','B'];
+  paralelos: string[] = ['A', 'B'];
   paraleloSeleccionado: string = '';
   jornadas: any[] = [];
   jornadaSeleccionada: number = 0;
   idJornada: number = 0;
   asignaturasSeleccionadas: Asignatura[] = [];
   distributivoAsignatura: DistributivoAsignatura = new DistributivoAsignatura();
-  nombreCiclo : string = '';
+  nombreCiclo: string = '';
   horasTotales: number = 0;
-  idCarrera : number = 0;
-  idCiclo : number = 0;
+  idCarrera: number = 0;
+  idCiclo: number = 0;
   ciclos: any[] = [];
-  cicloSeleccionado:  number = 0;
-  id_distributivo= 1;
-  currentExplan: string='';
+  cicloSeleccionado: number = 0;
+  id_distributivo = 1;
+  currentExplan: string = '';
   myForm: FormGroup = this.fb.group({});
-  
+
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
-  constructor(private asignaturaService: AsignaturaService,private cicloService: CicloService,private carreraService: CarreraService,
-     private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService, 
-     private authService: AuthService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fb: FormBuilder){
+  constructor(private asignaturaService: AsignaturaService, private cicloService: CicloService, private carreraService: CarreraService,
+    private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService,
+    private authService: AuthService, private router: Router,
+    private activatedRoute: ActivatedRoute, private fb: FormBuilder) {
 
   }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
     this.cargarComboCarreras();
-   
-    this.cargarComboJornada();
-    this.cargarAsignaturasENviadas();
- 
-    
+    //this.cargarComboJornada();
+    //this.cargarAsignaturasENviadas();
+
     this.myForm = this.fb.group({
       paraleloSeleccionado: [null, Validators.required],
       cicloSeleccionado: [null, Validators.required],
-      carreraSeleccionada:[null, Validators.required]
+      carreraSeleccionada: [null, Validators.required]
     })
   }
-  cargarAsignaturasENviadas():void{
+  cargarAsignaturasENviadas(): void {
     this.asignaturasSeleccionadas = this.authService.asignaturasSeleccionadaAuth;
   }
   cargarComboCarreras(): void {
@@ -83,85 +81,85 @@ export class EditarAsignaturaComponent {
 
   }
 
-  cargarComboCiclos(): void{
+  cargarComboCiclos(): void {
     this.cicloService.getCiclo().subscribe(data => {
       this.ciclos = data;
 
     });
   }
 
-  cargarComboJornada(): void{
-    this.jornadaService.getJornada().subscribe(data =>{
+  cargarComboJornada(): void {
+    this.jornadaService.getJornada().subscribe(data => {
       this.jornadas = data;
     });
   }
 
-  enviarAsignaturasDistributibo():void{
+  enviarAsignaturasDistributibo(): void {
     this.authService.clearLocalStorageAsignatura();
-    this.authService.asignaturasSeleccionadaAuth= this.asignaturasSeleccionadas;
+    this.authService.asignaturasSeleccionadaAuth = this.asignaturasSeleccionadas;
     this.router.navigate(['/matriz-distributivo']);
   }
 
   cargarAsignaturas(): Observable<void> {
     return new Observable(observer => {
-        this.asignaturaService.getAsignatura().subscribe(data => {
-            this.asignaturas = data;
-            observer.next();
-            observer.complete();
-        });
+      this.asignaturaService.getAsignatura().subscribe(data => {
+        this.asignaturas = data;
+        observer.next();
+        observer.complete();
+      });
     });
-}
-
-
-   onCarreraChange(event:any): void{
-    this.cicloSeleccionado=0;
-    this.carreraSeleccionada = +event.target.value;
-    this.idCarrera = this.carreraSeleccionada;
-    console.log('id carrera',this.idCarrera)
-    this.cargarComboCiclos();
-  
-    
   }
 
-  onCicloChange(event:any): void{
+
+  onCarreraChange(event: any): void {
+    this.cicloSeleccionado = 0;
+    this.carreraSeleccionada = +event.target.value;
+    this.idCarrera = this.carreraSeleccionada;
+    console.log('id carrera', this.idCarrera)
+    this.cargarComboCiclos();
+
+
+  }
+
+  onCicloChange(event: any): void {
     this.cicloSeleccionado = +event.target.value;
     this.idCiclo = this.cicloSeleccionado;
-    console.log('id ciclo',this.idCiclo)
+    console.log('id ciclo', this.idCiclo)
     this.myForm.get('cicloSeleccionado')?.setValue(event.target.value);
     this.filtrarAsignaturaCarrerabyCiclo();
   }
 
-  onJornadaChange(event:any): void{
+  onJornadaChange(event: any): void {
     this.jornadaSeleccionada = +event.target.value;
     this.idJornada = this.jornadaSeleccionada;
-    console.log('id_jornada',this.idJornada);
+    console.log('id_jornada', this.idJornada);
   }
 
-  onParaleloChange(event:any): void{
+  onParaleloChange(event: any): void {
     this.paraleloSeleccionado = event.target.value;
-    console.log('paralelo',this.paraleloSeleccionado);
+    console.log('paralelo', this.paraleloSeleccionado);
     this.myForm.get('paraleloSeleccionado')?.setValue(event.target.value);
   }
 
-  filtrarAsignaturaCarrerabyCiclo(): void{
-    this.cargarAsignaturas().subscribe(()=>{
+  filtrarAsignaturaCarrerabyCiclo(): void {
+    this.cargarAsignaturas().subscribe(() => {
       this.asignaturaFiltrada = this.asignaturas.filter(
-        (asignatura) => 
-          (asignatura.id_carrera === this.idCarrera) && 
-          (this.cicloSeleccionado===null || asignatura.id_ciclo === this.idCiclo)
+        (asignatura) =>
+          (asignatura.id_carrera === this.idCarrera) &&
+          (this.cicloSeleccionado === null || asignatura.id_ciclo === this.idCiclo)
       );
-      console.log('asignatura filtrada por ciclo',this.asignaturaFiltrada)
-    }); 
+      console.log('asignatura filtrada por ciclo', this.asignaturaFiltrada)
+    });
   }
 
-  escogerAsignatura(asignatura:Asignatura): void{
+  escogerAsignatura(asignatura: Asignatura): void {
     const asignaturaExistente = this.asignaturasSeleccionadas.some(
       (id) => id.id_asignatura === asignatura.id_asignatura
     );
-    if(!asignaturaExistente){
+    if (!asignaturaExistente) {
       this.asignaturasSeleccionadas.push(asignatura);
       this.calcularHorasTotales();
-    }else{
+    } else {
       Toast.fire({
         icon: "warning",
         title: "La asignatura se encuentra seleccionada",
@@ -169,50 +167,51 @@ export class EditarAsignaturaComponent {
     }
   }
 
-  eliminarAsignatura(fila:number): void{
-    this.asignaturasSeleccionadas.splice(fila,1);
+  eliminarAsignatura(fila: number): void {
+    this.asignaturasSeleccionadas.splice(fila, 1);
     this.calcularHorasTotales()
   }
 
-  calcularHorasTotales():void{
+  calcularHorasTotales(): void {
     this.horasTotales = this.asignaturasSeleccionadas.reduce(
-      (sum,asignatura) => sum + asignatura.horas_semanales, 0
+      (sum, asignatura) => sum + asignatura.horas_semanales, 0
     );
   }
 
-  obtenerNombreCiclo(id_ciclo:number):void{
+  obtenerNombreCiclo(id_ciclo: number): void {
     const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
     return ciclo ? ciclo.nombre_ciclo : '';
   }
 
   enviarAsignaturas(): void {
-    console.log('id distributivo:',this.id_distributivo);
-      this.authService.id_asignaturas = this.asignaturasSeleccionadas;
-      this.distributivoAsignatura.id_distributivo = this.authService.id_distributivo;
-      for (const distributivo of this.authService.distributivos){
-      this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
-        data => {
-          const distributivoEncontrado = data as DistributivoAsignatura[];
-          const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
-          const deleteObservables = distributivosFinales.map(distributivoFinal =>
-            this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
-          );
-          forkJoin(deleteObservables).subscribe(() => {
-            const createObservables = this.asignaturasSeleccionadas.map(data => {
-              const newDistributivoAsignatura= { ...this.distributivoAsignatura, id_asignatura: data.id_asignatura };
-              return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
-            });
-  
-            forkJoin(createObservables).subscribe(responses => {
-              // Guardar todos los IDs de las distribuciones creadas
-              const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
-              this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
-              this.authService.saveUserToLocalStorage();
-              this.router.navigate(['./matriz-distributivo']);
-            });
-          });
-        });
+    console.log('id distributivo:', this.id_distributivo);
+    this.authService.id_asignaturas = this.asignaturasSeleccionadas;
+    //this.distributivoAsignatura.id_distributivo = this.authService.id_distributivo;
+    this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(data => {
+      const distributivoEncontrado = data as DistributivoAsignatura[];
+      const createObservables = this.asignaturasSeleccionadas.map(data => {
+        const newDistributivoAsignaturas = {
+          ...this.distributivoAsignatura,
+          id_asignatura: data.id_asignatura,
+          paralelo: '',
+          id_jornada: 1,
+          id_distributivo: this.authService.id_distributivo
+        };
+        return this.distributivoAsignaturaService.create(newDistributivoAsignaturas);
+      });
+
+      forkJoin(createObservables).subscribe({
+        next: (responses) => {
+          const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
+          this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
+          this.authService.saveUserToLocalStorage();
+          this.router.navigate(['./matriz-distributivo']);
+        },
+        error: (error) => {
+          console.error('Error al crear asignaturasDistributivos ', error);
         }
-    
+      });
+    });
+
   }
 }
