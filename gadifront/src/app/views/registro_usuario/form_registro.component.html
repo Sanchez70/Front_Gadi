@@ -1,4 +1,4 @@
-    <div class="container">
+    <div class="container {{currentExplan}}">
       <div class="contenedorHeader">
       <h1 class="titulo">REGISTRO DE USUARIOS</h1>
   <img src="assets/img/logo.png" alt="GADI" class="logo">
@@ -81,11 +81,19 @@
           <mat-error *ngIf="registroForm1.get('correo')?.hasError('email')">El correo es inválido</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <!-- <mat-form-field appearance="outline">
           <mat-label>Fecha de Nacimiento</mat-label>
           <input matInput formControlName="fecha_nacimiento" type="date" (change)="calcularEdad($event)">
           <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('required')">La fecha de nacimiento es
             obligatoria</mat-error>
+        </mat-form-field> -->
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fecha_inicio" (change)="calcularEdad($event)"/>
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('required')">Fecha de nacimiento es requerida</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -93,11 +101,20 @@
           <input matInput formControlName="edad" [value]="edad" readonly>
         </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <!-- <mat-form-field appearance="outline">
           <mat-label>Fecha de Vinculación</mat-label>
           <input matInput formControlName="fecha_vinculacion" type="date">
           <mat-error *ngIf="registroForm1.get('fecha_vinculacion')?.hasError('required')">La fecha de vinculación es
             obligatoria</mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Vinculacion</mat-label>
+          <input matInput [matDatepicker]="picker2" formControlName="fecha_vinculacion" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <mat-error *ngIf="registroForm1.get('fecha_vinculacion')?.hasError('required')">Fecha de vinculación es requerida</mat-error>
         </mat-form-field>
 
       </div>

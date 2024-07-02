@@ -64,7 +64,7 @@ interface AsignaturaConDistributivo {
 
 export class MatrizDistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
-  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo', 'asig_jornada'];
+  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo','asig_jornada','eliminar'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<any>;
@@ -347,9 +347,9 @@ export class MatrizDistributivoComponent implements OnInit {
       );
 
       console.log('distributivo encontrado', this.distributivoFiltrado);
+      this.authService.distributivos = this.distributivoFiltrado.map(distributivo => distributivo.id_distributivo);
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;
-        this.authService.distributivos.concat(distributivo.id_distributivo);
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
       });
@@ -395,7 +395,7 @@ export class MatrizDistributivoComponent implements OnInit {
             const asignatura = asignaturas.find(a => a.id_asignatura === da.id_asignatura);
             if (asignatura) {
               asignaturaFiltradas.push(asignatura); // Guardar la actividad filtrada en el array
-
+              
               const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
               const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
               const periodos = periodo.find(pe => pe.id_periodo === dis?.id_periodo);
@@ -408,6 +408,7 @@ export class MatrizDistributivoComponent implements OnInit {
                 paralelo: da.paralelo,
                 periodo: periodos ? periodos.nombre_periodo : '',
               });
+              
             }
 
           });
