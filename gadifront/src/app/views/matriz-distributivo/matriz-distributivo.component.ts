@@ -64,7 +64,7 @@ interface AsignaturaConDistributivo {
 
 export class MatrizDistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
-  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo','asig_jornada'];
+  displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo', 'asig_jornada'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<any>;
@@ -141,7 +141,6 @@ export class MatrizDistributivoComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-    this.combinarDatos();
     this.cargarComboJornada();
     this.cargarTipoActividad();
     this.cargarCarreras();
@@ -182,7 +181,7 @@ export class MatrizDistributivoComponent implements OnInit {
       this.jornadas = data;
     });
   }
-  
+
   onJornadaChange(event: any, idAsignatura: any, index: number): void {
     this.idJornada = +event.target.value;
     const key = `${idAsignatura}-${index}`;
@@ -191,7 +190,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   generateKey(id_asignatura: number, index: number): string {
     return `${id_asignatura}-${index}`;
-}
+  }
 
 
   loadAdditionalDataForPersonas(): void {
@@ -286,8 +285,8 @@ export class MatrizDistributivoComponent implements OnInit {
   //     this.dataSourceAsig.sort = this.sort;
   //   });
   // }
-  combinarDatos(): void {
-    this.horasTotalesActividad=0;
+  combinarDatos(distributivos: Distributivo[]): void {
+    this.horasTotalesActividad = 0;
     forkJoin({
       actividades: this.actividadService.getActividad(),
       tiposActividad: this.tipo_actividadService.gettipoActividad(),
@@ -297,34 +296,39 @@ export class MatrizDistributivoComponent implements OnInit {
         const data: any[] = [];
         const actividadesMap = new Map<number, any>();
         const actividadesFiltradas: Actividad[] = [];
-  
-        const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === this.id_distributivo);
-        distributivosFiltrados.forEach(da => {
-          const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
-          if (actividad) {
-            actividadesFiltradas.push(actividad); // Guardar la actividad filtrada en el array
-          }
-          const tipoActividad = tiposActividad.find(ta => ta.id_tipo_actividad === actividad?.id_tipo_actividad);
-          if (!actividadesMap.has(da.id_actividad)) {
-            actividadesMap.set(da.id_actividad, {
-              descripcionActividad: actividad ? actividad.descripcion_actividad : '',
-              tiposActividad: tipoActividad ? tipoActividad.nom_tip_actividad : '',
-              horaActividad: actividad ? actividad.horas_no_docentes : '',
-              horasTotales: da.hora_no_docente,
-              idActividad: actividad ? actividad.id_actividad : '',
-            });
-            this.horasTotalesActividad +=  da.hora_no_docente ;
-          } else {
-            const existingActividad = actividadesMap.get(da.id_actividad);
-            existingActividad.horasTotales += da.hora_no_docente;
-          }
+
+        distributivos.forEach(dist => {
+          const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === dist.id_distributivo);
+          distributivosFiltrados.forEach(da => {
+            const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
+            if (actividad) {
+              actividadesFiltradas.push(actividad); // Guardar la actividad filtrada en el array
+            }
+            const tipoActividad = tiposActividad.find(ta => ta.id_tipo_actividad === actividad?.id_tipo_actividad);
+            if (!actividadesMap.has(da.id_actividad)) {
+              actividadesMap.set(da.id_actividad, {
+                descripcionActividad: actividad ? actividad.descripcion_actividad : '',
+                tiposActividad: tipoActividad ? tipoActividad.nom_tip_actividad : '',
+                horaActividad: actividad ? actividad.horas_no_docentes : '',
+                horasTotales: da.hora_no_docente,
+                idActividad: actividad ? actividad.id_actividad : '',
+              });
+              this.horasTotalesActividad += da.hora_no_docente;
+            } else {
+              const existingActividad = actividadesMap.get(da.id_actividad);
+              existingActividad.horasTotales += da.hora_no_docente;
+            }
+
+          });
+
+
         });
         actividadesMap.forEach(value => {
           data.push(value);
         });
-  
-        this.actividades = actividadesFiltradas; 
-        console.log('respuesta Actividades',this.actividades)
+
+        this.actividades = actividadesFiltradas;
+        console.log('respuesta Actividades', this.actividades)
         return data;
       })
     ).subscribe(data => {
@@ -358,14 +362,14 @@ export class MatrizDistributivoComponent implements OnInit {
       const asignaturasFiltradas = this.distributivoAsignaturas.filter(
         materiaAs => materiaAs.id_distributivo === idDistributivo
       );
- 
+
       const idAsignaturas = asignaturasFiltradas.map(asig => asig.id_asignatura);
       this.asignaturaService.getAsignatura().subscribe(asig => {
         const asigEncontrados = asig as Asignatura[];
         const asignaturasCargadas = asigEncontrados.filter(materia =>
           idAsignaturas.includes(materia.id_asignatura)
         );
-      
+
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         console.log('Asignaturas cargadas:', this.asignaturas);
         this.combinarDatosAsignatura(this.distributivoFiltrado);
@@ -395,7 +399,7 @@ export class MatrizDistributivoComponent implements OnInit {
               const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
               const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
               const periodos = periodo.find(pe => pe.id_periodo === dis?.id_periodo);
-              
+
               data.push({
                 nombreAsignatura: asignatura ? asignatura.nombre_asignatura : '',
                 carrera: carrera ? carrera.nombre_carrera : '',
@@ -405,17 +409,17 @@ export class MatrizDistributivoComponent implements OnInit {
                 periodo: periodos ? periodos.nombre_periodo : '',
               });
             }
-            
+
           });
         });
-        
+
         this.asignaturas = asignaturaFiltradas;
         this.calcularHorasTotalesAsig();
         return data;
       })
     ).subscribe(data => {
       this.dataSourceAsig.data = data;
-      
+
     });
   }
 
@@ -435,7 +439,7 @@ export class MatrizDistributivoComponent implements OnInit {
           idActividades.includes(actividad.id_actividad)
         );
         this.actividades = this.actividades.concat(actividadesCargadas);
-        this.combinarDatos();
+        this.combinarDatos(this.distributivoFiltrado);
         this.calcularTotales();
         console.log('actividades cargadas:', this.actividades);
       });
@@ -443,13 +447,13 @@ export class MatrizDistributivoComponent implements OnInit {
 
   }
 
-  calcularHorasTotalesAsig():void{
+  calcularHorasTotalesAsig(): void {
     this.horasTotales = this.asignaturas.reduce(
-      (sum,asignatura) => sum + asignatura.horas_semanales, 0
+      (sum, asignatura) => sum + asignatura.horas_semanales, 0
     );
   }
 
- 
+
 
   enviarAsignaturas(): void {
     this.authService.asignaturasSeleccionadaAuth = this.asignaturas;
@@ -457,6 +461,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   enviarActividades(): void {
     this.authService.id_actividades = this.actividades;
+    this.authService.distributivos= this.distributivoFiltrado;
 
   }
 
@@ -489,8 +494,8 @@ export class MatrizDistributivoComponent implements OnInit {
           const resultFinal = resultado.find(distributivo => distributivo.id_distributivo === this.id_distributivo && distributivo.id_actividad === this.id_activida);
           if (resultFinal) {
             resultFinal.hora_no_docente = horasAsignadas;
-            this.distributivoActividadService.create(resultFinal).subscribe(data1 => {        
-              this.combinarDatos();
+            this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
+              this.combinarDatos(this.distributivoFiltrado);
               Toast.fire({
                 icon: "success",
                 title: "Horas asignadas con exito",
@@ -510,7 +515,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   calcularTotales(): void {
     this.horasTotalesFinal = this.horasTotales + this.horasTotalesActividad;
-    console.log('horas',this.horasTotalesFinal, this.horasTotalesActividad)
+    console.log('horas', this.horasTotalesFinal, this.horasTotalesActividad)
     this.validarHorasContrato();
   }
 
