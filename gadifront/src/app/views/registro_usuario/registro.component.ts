@@ -145,8 +145,27 @@ export class RegistroComponent implements OnInit {
 
     return null;
   }
+  validateEdadMinima(minimaEdad: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const fechaNacimiento = new Date(control.value);
+      const fechaActual = new Date();
+      let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
+      const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
+
+      if (mes < 0 || (mes === 0 && fechaActual.getDate() < fechaNacimiento.getDate())) {
+        edad--;
+      }
+
+      if (edad < minimaEdad) {
+        return { invalidAge: true };
+      }
+
+      return null;
+    };
+  }
+
   calcularEdad(event: any): void {
-    const fechaNacimiento = new Date(event.target.value);
+    const fechaNacimiento = new Date(event.value);
     const fechaActual = new Date();
     let edad = fechaActual.getFullYear() - fechaNacimiento.getFullYear();
     const mes = fechaActual.getMonth() - fechaNacimiento.getMonth();
@@ -316,5 +335,14 @@ export class RegistroComponent implements OnInit {
       });
     }
   });  
+}
+
+toggleHoraContrato(value: number): void {
+  this.isTiempoParcial = value === 2; // Suponiendo que el ID del contrato parcial es 2
+  if (this.isTiempoParcial) {
+    this.registroForm1.get('hora_contrato')?.enable();
+  } else {
+    this.registroForm1.get('hora_contrato')?.disable();
+  }
 }
 }

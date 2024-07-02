@@ -89,24 +89,20 @@
         </mat-form-field> -->
         <mat-form-field appearance="outline">
           <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha_inicio" (change)="calcularEdad($event)"/>
+          <input matInput [matDatepicker]="picker" formControlName="fecha_nacimiento" (dateChange)="calcularEdad($event)" />
           <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('required')">Fecha de nacimiento es requerida</mat-error>
+          <mat-error *ngIf="registroForm1.get('fecha_nacimiento')?.hasError('invalidAge')">Debes tener al menos 18 años</mat-error>
         </mat-form-field>
-
+  
+        <!-- Edad -->
         <mat-form-field appearance="outline">
           <mat-label>Edad</mat-label>
           <input matInput formControlName="edad" [value]="edad" readonly>
         </mat-form-field>
-
-        <!-- <mat-form-field appearance="outline">
-          <mat-label>Fecha de Vinculación</mat-label>
-          <input matInput formControlName="fecha_vinculacion" type="date">
-          <mat-error *ngIf="registroForm1.get('fecha_vinculacion')?.hasError('required')">La fecha de vinculación es
-            obligatoria</mat-error>
-        </mat-form-field> -->
+  
 
         <mat-form-field appearance="outline">
           <mat-label>Fecha de Vinculacion</mat-label>
@@ -154,19 +150,17 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Tipo de Contrato</mat-label>
-          <mat-select formControlName="nombre_contrato">
-            <mat-option *ngFor="let contrato of contratos"
-              [value]="contrato.id_tipo_contrato">{{contrato.nombre_contrato}}</mat-option>
+          <mat-select formControlName="nombre_contrato" (selectionChange)="toggleHoraContrato($event.value)">
+            <mat-option *ngFor="let contrato of contratos" [value]="contrato.id_tipo_contrato">{{contrato.nombre_contrato}}</mat-option>
           </mat-select>
-          <mat-error *ngIf="registroForm1.get('nombre_contrato')?.hasError('required')">El tipo de contrato es
-            obligatorio</mat-error>
+          <mat-error *ngIf="registroForm1.get('nombre_contrato')?.hasError('required')">El tipo de contrato es obligatorio</mat-error>
         </mat-form-field>
-
-        <mat-form-field appearance="outline">
+    
+        <!-- Horas de Contrato -->
+        <mat-form-field appearance="outline" [ngClass]="{'disabled-field': !isTiempoParcial}">
           <mat-label>Horas de Contrato</mat-label>
-          <input matInput formControlName="hora_contrato" type="number">
-          <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('required')">Las horas de contrato son
-            obligatorias</mat-error>
+          <input matInput formControlName="hora_contrato" type="number" [disabled]="!isTiempoParcial">
+          <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('required')">Las horas de contrato son obligatorias</mat-error>
           <mat-error *ngIf="registroForm1.get('hora_contrato')?.hasError('min')">Debe ser al menos 1 hora</mat-error>
         </mat-form-field>
 
