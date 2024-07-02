@@ -299,6 +299,8 @@ export class MatrizDistributivoComponent implements OnInit {
 
         distributivos.forEach(dist => {
           const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === dist.id_distributivo);
+          this.distributivoActividades.concat(distributivosFiltrados);
+          console.log('distributivos:', this.distributivoActividades);
           distributivosFiltrados.forEach(da => {
             const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
             if (actividad) {
@@ -463,6 +465,8 @@ export class MatrizDistributivoComponent implements OnInit {
   enviarActividades(): void {
     this.authService.id_actividades = this.actividades;
     this.authService.distributivos= this.distributivoFiltrado;
+    this.authService.id_distributivoActividad = this.distributivoActividades;
+    console.log('distributivos enviados', this.authService.id_distributivoActividad);
 
   }
 
@@ -481,33 +485,74 @@ export class MatrizDistributivoComponent implements OnInit {
       inputValidator: (value) => {
         const numberValue = Number(value);
         if (isNaN(numberValue) || numberValue < 1) {
-          return 'Por favor, Ingrese un numero mayor a cero';
+          return 'Por favor, ingrese un número mayor a cero';
         }
         return null;
       }
     };
-
+  
     Swal.fire(swalOptions).then((result) => {
       if (result.isConfirmed) {
         const horasAsignadas = result.value;
-        this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
-          const resultado = data as DistributivoActividad[];
-          const resultFinal = resultado.find(distributivo => distributivo.id_distributivo === this.id_distributivo && distributivo.id_actividad === this.id_activida);
-          if (resultFinal) {
-            resultFinal.hora_no_docente = horasAsignadas;
-            this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
-              this.combinarDatos(this.distributivoFiltrado);
-              Toast.fire({
-                icon: "success",
-                title: "Horas asignadas con exito",
-              });
-            });
-          }
+  
+        // Iterar sobre los distributivos y actualizar DistributivoActividad si existe
+        this.distributivos.forEach(distributivo => {
+          const distributivoActividad: DistributivoActividad = {
+            id_distributivo_actividad: distributivo.id_distributivo, // Asegúrate de ajustar esto al campo correcto de tu modelo
+            id_distributivo: distributivo.id_distributivo,
+            id_actividad: this.id_activida,
+            hora_no_docente: horasAsignadas
+          };
+  
+          // Buscar el DistributivoActividad correspondiente
+          this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+            const resultado = data as DistributivoActividad[];
+  
+            const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
+            if (resultFinal) {
+              // Actualizar horas si existe
+              resultFinal.hora_no_docente = horasAsignadas;
+              this.distributivoActividadService.create(resultFinal).subscribe(
+                () => {
+                  this.combinarDatos(this.distributivoFiltrado);
+                  Toast.fire({
+                    icon: "success",
+                    title: "Horas asignadas con éxito",
+                  });
+                },
+                (error) => {
+                  console.error('Error al actualizar DistributivoActividad:', error);
+                  Toast.fire({
+                    icon: "error",
+                    title: "Error al actualizar horas",
+                  });
+                }
+              );
+            } else {
+              // Si no existe, crear un nuevo DistributivoActividad
+              this.distributivoActividadService.create(distributivoActividad).subscribe(
+                () => {
+                  this.combinarDatos(this.distributivoFiltrado);
+                  Toast.fire({
+                    icon: "success",
+                    title: "Horas asignadas con éxito",
+                  });
+                },
+                (error) => {
+                  console.error('Error al crear DistributivoActividad:', error);
+                  Toast.fire({
+                    icon: "error",
+                    title: "Error al asignar horas",
+                  });
+                }
+              );
+            }
+          });
         });
       }
     });
   }
-
+  
   onRowClicked(row: any) {
     this.id_activida = row.idActividad;
     console.log('ID of clicked row: ', row.idActividad);

@@ -63,7 +63,7 @@ export class EditarAsignaturaComponent {
     });
     this.cargarComboCarreras();
     //this.cargarComboJornada();
-    //this.cargarAsignaturasENviadas();
+    this.cargarAsignaturasENviadas();
 
     this.myForm = this.fb.group({
       paraleloSeleccionado: [null, Validators.required],
