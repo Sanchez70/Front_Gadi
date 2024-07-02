@@ -37,7 +37,7 @@ export class EditarActividadesComponent {
   idTipo: number = 0;
   distributivoActividad: DistributivoActividad = new DistributivoActividad();
   horasTotales: number = 0;
-  constructor(private dialog: MatDialog,private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private dialog: MatDialog, private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -108,40 +108,44 @@ export class EditarActividadesComponent {
   }
 
   enviarActividades(): void {
-    if (this.myForm.valid) {
+  
       this.authService.id_actividades = this.actividadesSeleccionadas;
-
       this.distributivoActividad.id_distributivo = this.authService.id_distributivo;
-      this.distributivoActividadService.getDistributivoActividad().subscribe(
-        data => {
-          const distributivoEncontrado = data as DistributivoActividad[];
-          const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.authService.id_distributivo);
-          const deleteObservables = distributivosFinales.map(distributivoFinal =>
-            this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad)
-          );
-          forkJoin(deleteObservables).subscribe(() => {
+  
+      this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+        const distributivoEncontrado = data as DistributivoActividad[];
+  
+        // Filtrar los distributivos que coinciden con el distributivo seleccionado
+        const distributivosFinales = distributivoEncontrado.filter(resul =>
+          this.authService.distributivos.some(dist => dist.id_distributivo === resul.id_distributivo)
+        );
+  
+        const deleteObservables = distributivosFinales.map(distributivoFinal =>
+          this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad)
+        );
+  
+        forkJoin(deleteObservables).subscribe(() => {
+          if (this.authService.distributivos.length > 0) {
+            const primaryDistributivo = this.authService.distributivos[0]; // Utiliza solo el primer distributivo
             const createObservables = this.actividadesSeleccionadas.map(data => {
-              const newDistributivoActividad = { ...this.distributivoActividad, id_actividad: data.id_actividad };
+              const newDistributivoActividad = { ...primaryDistributivo, id_actividad: data.id_actividad };
               return this.distributivoActividadService.create(newDistributivoActividad);
             });
   
             forkJoin(createObservables).subscribe(responses => {
-              // Guardar todos los IDs de las distribuciones creadas
               const idsDistributivoActividad = responses.map(respuest => respuest.id_distributivo_actividad);
               this.authService.id_distributivoActividad = idsDistributivoActividad;
               this.authService.saveUserToLocalStorage();
               this.dialog.closeAll();
             });
-          });
+          }
         });
-    } else {
-      Toast.fire({
-        icon: "warning",
-        title: "Por favor, seleccione una opción",
       });
-    }
+
   }
   
+
+
 
   onTipoChange(event: any): void {
     this.tipoActividadSeleccionado = +event.target.value;

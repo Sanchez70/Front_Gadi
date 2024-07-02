@@ -12,6 +12,8 @@ import { response } from 'express';
 import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
+
+
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
