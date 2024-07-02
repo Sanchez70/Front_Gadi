@@ -1,4 +1,9 @@
-<div class="{{currentExplan}}">
+<div class="main">
+  <div class="dialog-header">
+    <button mat-icon-button  class="close-button" (click)="cerrarDialogo()">
+      <i class="bi bi-x"></i>
+    </button>
+  </div>
   <h1 class="h1">ASIGNATURAS</h1>
   <form class="formulario" ngNativeValidate style="width: 45%;" [formGroup]="myForm">
 
@@ -8,14 +13,14 @@
           <label for="carreras" class="label_form font-weight-bold">Carrera</label>
           <div class="custom-select"> <select class="form-control" placeholder="Carrera"
               (ngModel)="carreraSeleccionada" name="carreras" aria-label="Carrera" aria-describedby="basic-addon1"
-              (change)="onCarreraChange($event)">
+              (change)="onCarreraChange($event)" formControlName="cicloSeleccionado">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let carreras of carreras" [value]="carreras.id_carrera">{{carreras.nombre_carrera}}</option>
             </select>
           </div>
         </div>
       </div>
-      <div class="input-group mb-3" >
+      <!-- <div class="input-group mb-3" >
         <div class="combo-container-paralelo">
           <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
           <div class="custom-select" > <select class="form-control" placeholder="Paralelo"
@@ -26,8 +31,8 @@
             </select>
           </div>
         </div>
-      </div>
-
+      </div> -->
+      
       <div class="input-group mb-3">
         <div class="combo-container-ciclo">
           <label for="ciclos" class="label_form font-weight-bold">Ciclos</label>
@@ -42,6 +47,7 @@
         </div>
       </div>
     </div>
+    <h2 style="font-size: 10px; color: red; text-align: center; margin-left: 50px;">Al elegir o quitar asignaturas, deberá seleccionar nuevamente su jornada y paralelo*</h2>
     <hr class="dashed">
     <div class="tables-container">
       <div class="table-container">
@@ -108,7 +114,7 @@
     </div>
 
     <div class="d-flex justify-content-center">
-      <div class="btnAcept">
+      <div class="btnContenedor">
         <button type="submit" class="btnAceptar" (click)="enviarAsignaturas()">Aceptar</button>
       </div>
     </div>

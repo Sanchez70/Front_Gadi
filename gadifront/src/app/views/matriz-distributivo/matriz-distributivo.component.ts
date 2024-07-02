@@ -35,6 +35,7 @@ import { Carrera } from '../../Services/carreraService/carrera';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarActividadesComponent } from '../coordinador/editar-actividades/editar-actividades.component';
+import { EditarAsignaturaComponent } from '../coordinador/editar-asignatura/editar-asignatura.component';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -109,6 +110,9 @@ export class MatrizDistributivoComponent implements OnInit {
   jornadas: any[] = [];
   jornadaSeleccionada: { [key: string]: number } = {};
   id_distributivo: number = 0;
+  paralelos: string[] = ['A', 'B'];
+  paraleloSeleccionado: { [key: string]: string } = {};
+  paralelo: string = '';
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad();
@@ -188,6 +192,12 @@ export class MatrizDistributivoComponent implements OnInit {
     this.jornadaSeleccionada[key] = this.idJornada;
   }
 
+  onParaleloChange(event: any, idAsignatura: any, index: number): void {
+    this.paralelo = event.target.value;
+    const key = `${idAsignatura}-${index}`;
+    this.paraleloSeleccionado[key] = this.paralelo;
+  }
+
   generateKey(id_asignatura: number, index: number): string {
     return `${id_asignatura}-${index}`;
   }
@@ -235,56 +245,7 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
-  // cargarAdicional(): void {
-  //   const requests = this.asignaturas.map(asignatura =>
-  //     forkJoin([
-  //       this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(periodo => {
-  //           this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-  //           console.log('periodoPersona' + periodo.nombre_periodo);
-
-  //         }),
-  //         catchError(() => {
-  //           this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(jornada => {
-  //           this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(distributivosAsig => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(carrera => {
-  //           this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-  //           return of(null);
-  //         })
-  //       ),
-  //     ])
-
-  //   );
-  //   forkJoin(requests).subscribe(() => {
-  //     this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-  //     this.dataSourceAsig.paginator = this.paginator;
-  //     this.dataSourceAsig.sort = this.sort;
-  //   });
-  // }
+ 
   combinarDatos(distributivos: Distributivo[]): void {
     this.horasTotalesActividad = 0;
     forkJoin({
@@ -325,6 +286,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
 
         });
+        
         actividadesMap.forEach(value => {
           data.push(value);
         });
@@ -375,6 +337,7 @@ export class MatrizDistributivoComponent implements OnInit {
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         console.log('Asignaturas cargadas:', this.asignaturas);
         this.combinarDatosAsignatura(this.distributivoFiltrado);
+        this.calcularTotales();
       });
     });
   }
@@ -515,6 +478,7 @@ export class MatrizDistributivoComponent implements OnInit {
               this.distributivoActividadService.create(resultFinal).subscribe(
                 () => {
                   this.combinarDatos(this.distributivoFiltrado);
+                  this.calcularTotales();
                   Toast.fire({
                     icon: "success",
                     title: "Horas asignadas con éxito",
@@ -571,11 +535,11 @@ export class MatrizDistributivoComponent implements OnInit {
     this.personaService.getPersonaById(this.authService.id_persona).subscribe(
       data => {
         this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contrato => {
-          if (this.horasTotalesFinal === contrato.hora_contrato) {
+          if (this.horasTotalesFinal < contrato.hora_contrato) {
             this.validador = 'false';
             console.log('inicio', this.validador)
           } else {
-            this.validador = 'tru';
+            this.validador = 'true';
             console.log('inicio', this.validador)
 
           }
@@ -605,22 +569,35 @@ export class MatrizDistributivoComponent implements OnInit {
       );
   }
 
-  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
-    this.asignaturas.forEach(asignatura => {
-      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-        id_jornada: this.idJornada,
-        paralelo: this.authService.paralelo,
-        id_distributivo: id_distributivo,
-        id_asignatura: asignatura.id_asignatura,
-        acronimo: '',
-        id_distributivo_asig: 0
-      };
-      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-        //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-        console.log('Asignatura Distributivo generado');
-      }, error => {
-        //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
-        console.log('Error al crear', error);
+  createAsignaturaDistributivo(id_distributivo: number): void {
+    this.asignaturas.forEach((asignatura, index) => {
+      const key = `${asignatura.id_asignatura}-${index}`;
+      const id_jornada = this.jornadaSeleccionada[key];
+      const paralelo = this.paraleloSeleccionado[key];
+
+      this.jornadaService.getJornadabyId(id_jornada).subscribe(data => {
+        const jornadaNombre = data.descrip_jornada.charAt(0);
+        const acronimo = this.crearAcronimo(jornadaNombre, paralelo, asignatura.id_ciclo);
+
+        if (id_jornada) {
+          const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+            id_jornada: id_jornada,
+            paralelo: paralelo,
+            id_distributivo: id_distributivo,
+            id_asignatura: asignatura.id_asignatura,
+            acronimo: acronimo,
+            id_distributivo_asig: 0
+          };
+          this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+            //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+            console.log('Asignatura Distributivo generado');
+          }, error => {
+            //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+            console.log('Error al crear', error);
+          });
+        } else {
+          console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
+        }
       });
     });
   }
@@ -700,5 +677,21 @@ export class MatrizDistributivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       window.location.reload();
     });
+  }
+
+  openModalAsignatura() {
+    this.enviarAsignaturas();
+    const dialogRef = this.dialog.open(EditarAsignaturaComponent, {
+      width: '90%',
+      height: '90%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.location.reload();
+    });
+  }
+
+  crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
+    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo );
+    return jornadaNombre + id_ciclo + paralelo;
   }
 }
