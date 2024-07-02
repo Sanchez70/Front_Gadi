@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Actividad } from '../../Services/actividadService/actividad';
 import { ActividadService } from '../../Services/actividadService/actividad.service';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { AuthService } from '../../auth.service';
+import { ValidacionesComponent } from '../../validaciones/validaciones.component';
+
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -28,14 +30,32 @@ export class ActividadComponent implements OnInit {
   public actividad: Actividad = new Actividad();
   public tipo: tipo_actividad = new tipo_actividad();
   public Tipos: tipo_actividad[] = [];
-  currentExplan: string='';
-  constructor(private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  actividadForm!: FormGroup;
+  currentExplan: string = '';
+
+  constructor(
+    private actividadService: ActividadService,
+    private tipo_actividadService: tipo_actividadService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+
+  ) { }
 
   ngOnInit(): void {
     this.cargarTipoActividad();
+    this.initForm();
   }
 
-  
+  initForm(): void {
+    this.actividadForm = this.fb.group({
+      nombre_actividad: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
+      descripcion_actividad: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternPeriodNameValidator())]],
+      horas_no_docentes: ['', [Validators.required, Validators.min(0)]],
+      id_tipo_actividad: ['', Validators.required]
+    });
+  }
+
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe(
       (Tipos) => {
@@ -47,8 +67,21 @@ export class ActividadComponent implements OnInit {
     );
   }
 
-  public create(form:any): void {
-    this.actividad.id_tipo_actividad = this.tipo.id_tipo_actividad
+  public create(): void {
+    if (this.actividadForm.invalid) {
+      Toast.fire({
+        icon: "warning",
+        title: "Por favor, completa todos los campos correctamente",
+      });
+      return;
+    }
+
+    this.actividad = {
+      ...this.actividad,
+      ...this.actividadForm.value,
+      id_tipo_actividad: this.actividadForm.value.id_tipo_actividad
+    };
+
     this.actividadService.create(this.actividad)
       .subscribe(
         (actividad) => {
@@ -57,7 +90,7 @@ export class ActividadComponent implements OnInit {
             icon: "success",
             title: "Actividad Guardada Correctamente",
           });
-          form.resetForm();
+          this.actividadForm.reset();
         },
         (error) => {
           console.error('Error al guardar la actividad:', error);
@@ -73,5 +106,5 @@ export class ActividadComponent implements OnInit {
     return tipoActividad ? tipoActividad.nom_tip_actividad : '';
   }
 
- 
+
 }
