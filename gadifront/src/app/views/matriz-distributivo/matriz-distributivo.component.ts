@@ -63,7 +63,7 @@ interface AsignaturaConDistributivo {
 
 
 export class MatrizDistributivoComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo','asig_jornada','eliminar'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<any>;
@@ -177,8 +177,13 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
   cargarComboJornada(): void {
-    this.jornadaService.getJornada().subscribe(data => {
-      this.jornadas = data;
+    this.tituloService.getTitulo().subscribe(data => {
+      const titulosEncontrados = data as unknown as TituloProfecional[];
+      const titulosFitrados = titulosEncontrados.filter(respuest=> respuest.id_persona === this.authService.id_persona);
+      if(titulosFitrados){
+        this.jornadas = titulosFitrados;
+      }
+   
     });
   }
 
@@ -286,7 +291,7 @@ export class MatrizDistributivoComponent implements OnInit {
   //   });
   // }
   combinarDatos(distributivos: Distributivo[]): void {
-    this.horasTotalesActividad = 0;
+   
     forkJoin({
       actividades: this.actividadService.getActividad(),
       tiposActividad: this.tipo_actividadService.gettipoActividad(),
@@ -315,12 +320,12 @@ export class MatrizDistributivoComponent implements OnInit {
                 horasTotales: da.hora_no_docente,
                 idActividad: actividad ? actividad.id_actividad : '',
               });
-              this.horasTotalesActividad += da.hora_no_docente;
+             
             } else {
               const existingActividad = actividadesMap.get(da.id_actividad);
               existingActividad.horasTotales += da.hora_no_docente;
             }
-
+         
           });
 
 
@@ -335,6 +340,11 @@ export class MatrizDistributivoComponent implements OnInit {
       })
     ).subscribe(data => {
       this.dataSourceAct.data = data;
+      this.horasTotalesActividad = 0;
+      data.forEach(respuesta=>{
+    
+        this.horasTotalesActividad += respuesta.horasTotales ;
+      });
       this.calcularTotales();
     });
 

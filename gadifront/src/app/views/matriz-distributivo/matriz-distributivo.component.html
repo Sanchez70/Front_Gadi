@@ -69,7 +69,21 @@
           <ng-container matColumnDef="titulo">
             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">TÍTULO PROFESIONAL
             </th>
-            <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo || 'No asignado' }}
+            <td mat-cell *matCellDef="let persona">
+              <div class="combos-container">
+              
+                <div class="combo-container">
+                  <div class="custom-select">
+                    <select class="form-control" placeholder="Seleccione la Jornada" 
+                      name="jornada" aria-label="Jornada" aria-describedby="basic-addon1"
+                      formControlName="carreraSelec">
+                      <option value=0 disabled selected>Seleccione una opción</option>
+                      <option *ngFor="let jornada of jornadas" >{{jornada.nombre_titulo}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            
             </td>
           </ng-container>
 
