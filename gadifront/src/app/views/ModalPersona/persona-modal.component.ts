@@ -16,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
     styleUrl: './persona-modal.component.css',
 })
 export class PersonaModalComponent implements OnInit {
-    displayedColumns: string[] = ['accion','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
+    displayedColumns: string[] = ['accion','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado'];
     dataSource!: MatTableDataSource<Persona>;
 
     personas: Persona[] = [];
@@ -51,15 +51,15 @@ export class PersonaModalComponent implements OnInit {
                             return of(null);
                         })
                     ),
-                    this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
-                        tap(titulo => {
-                            this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
-                        }),
-                        catchError(() => {
-                            this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
-                            return of(null);
-                        })
-                    ),
+                    // this.personaService.getTituloById(persona.id_titulo_profesional ?? 0).pipe(
+                    //     tap(titulo => {
+                    //         this.titulos[persona.id_persona] = titulo ?? { id_titulo_profesional: 0, nombre_titulo: 'No asignado' };
+                    //     }),
+                    //     catchError(() => {
+                    //         this.titulos[persona.id_persona] = { id_titulo_profesional: 0, nombre_titulo: 'No asignado' } as unknown as TituloProfecional;
+                    //         return of(null);
+                    //     })
+                    // ),
                     this.personaService.getContratoById(persona.id_tipo_contrato ?? 0).pipe(
                         tap(contrato => {
                             this.contratos[persona.id_persona] = contrato ?? { id_tipo_contrato: 0, nombre_contrato: 'No asignado' };
