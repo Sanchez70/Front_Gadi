@@ -90,7 +90,7 @@
           <td mat-cell *matCellDef="let persona"> {{ persona.periodo.fin_periodo | date }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="descargar">
+        <ng-container matColumnDef="descargar" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Descargar</th>
           <td mat-cell *matCellDef="let persona"><button class="mat-button"
               (click)="generarModeloPDF(persona.periodo.id_periodo)"><mat-icon>download</mat-icon></button></td>

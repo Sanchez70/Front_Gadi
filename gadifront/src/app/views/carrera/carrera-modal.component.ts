@@ -12,7 +12,6 @@ import { CarreraService } from '../../Services/carreraService/carrera.service';
 export class CarreraModalComponent implements OnInit {
     carreraForm: FormGroup;
 
-
     constructor(
         public dialogRef: MatDialogRef<CarreraModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: Carrera,
@@ -30,17 +29,25 @@ export class CarreraModalComponent implements OnInit {
     ngOnInit(): void { }
 
     onSave(): void {
-        if (this.carreraForm.valid) {
-            const carrera = { ...this.data, ...this.carreraForm.value };
-            if (carrera.id_carrera) {
-                this.carreraService.update(carrera).subscribe(() => this.dialogRef.close(true));
-            } else {
+        if (this.carreraForm.invalid) {
+            this.markAllAsTouched();
+            return;
+        }
+
+        const carrera = { ...this.data, ...this.carreraForm.value };
+        if (carrera.id_carrera) {
+            this.carreraService.update(carrera).subscribe(() => this.dialogRef.close(true));
+        }
+            else {
                 this.carreraService.create(carrera).subscribe(() => this.dialogRef.close(true));
             }
         }
+    
+        onCancel(): void {
+            this.dialogRef.close();
+        }
+    
+        private markAllAsTouched(): void {
+            this.carreraForm.markAllAsTouched();
+        }
     }
-
-    onCancel(): void {
-        this.dialogRef.close();
-    }
-}

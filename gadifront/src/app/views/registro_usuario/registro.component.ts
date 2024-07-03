@@ -59,7 +59,7 @@ export class RegistroComponent implements OnInit {
       telefono: ['', [Validators.required, this.validateTelefono]],
       direccion: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
-      fecha_nacimiento: ['', Validators.required],
+      fecha_nacimiento: ['', [Validators.required, this.validarEdadMinima(18)]],
       edad: ['', Validators.required],
       fecha_vinculacion: ['', Validators.required],
       titulos: this.fb.array([]),
@@ -145,7 +145,7 @@ export class RegistroComponent implements OnInit {
 
     return null;
   }
-  validateEdadMinima(minimaEdad: number) {
+  validarEdadMinima(minimaEdad: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       const fechaNacimiento = new Date(control.value);
       const fechaActual = new Date();
@@ -175,8 +175,13 @@ export class RegistroComponent implements OnInit {
     }
 
     this.edad = edad;
+    if(edad <= 0 ){
+      this.registroForm1.get('edad')?.setValue('Edad no válida');
+    }else{
     this.registroForm1.get('edad')?.setValue(edad);
+    }
   }
+
 
   validateTelefono(control: AbstractControl): ValidationErrors | null {
     const telefono = control.value;

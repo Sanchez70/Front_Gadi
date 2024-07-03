@@ -30,7 +30,7 @@ interface PersonaConDistributivo {
   styleUrls: ['./tabla.component.css'],
 })
 export class TablaComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo','descargar'];
+  displayedColumns: string[] = ['descargar','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
   dataSource!: MatTableDataSource<PersonaConDistributivo>;
   personas: Persona[] = [];
   periodos: { [key: number]: Periodo } = {};

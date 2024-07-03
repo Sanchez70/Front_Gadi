@@ -16,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
     styleUrl: './persona-modal.component.css',
 })
 export class PersonaModalComponent implements OnInit {
-    displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado', 'accion'];
+    displayedColumns: string[] = ['accion','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
     dataSource!: MatTableDataSource<Persona>;
 
     personas: Persona[] = [];

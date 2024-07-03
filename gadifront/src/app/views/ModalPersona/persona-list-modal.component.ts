@@ -4,9 +4,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-persona-list-modal',
   template: `
-    <h1 mat-dialog-title></h1>
+   <h1 mat-dialog-title>Lista de Personas</h1>
     <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="close()" class="close-button">X</button>
-   
+    <div mat-dialog-content>
+      <app-Modal-persona (personaSeleccionada)="emitirSeleccion($event)"></app-Modal-persona>
+    </div>
   `,
   styles: [`
     .close-button {
