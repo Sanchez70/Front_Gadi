@@ -35,6 +35,7 @@ import { Carrera } from '../../Services/carreraService/carrera';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarActividadesComponent } from '../coordinador/editar-actividades/editar-actividades.component';
+import { EditarAsignaturaComponent } from '../coordinador/editar-asignatura/editar-asignatura.component';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -63,7 +64,7 @@ interface AsignaturaConDistributivo {
 
 
 export class MatrizDistributivoComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo','asig_jornada','eliminar'];
   displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
   dataSourceAsig!: MatTableDataSource<any>;
@@ -109,6 +110,9 @@ export class MatrizDistributivoComponent implements OnInit {
   jornadas: any[] = [];
   jornadaSeleccionada: { [key: string]: number } = {};
   id_distributivo: number = 0;
+  paralelos: string[] = ['A', 'B'];
+  paraleloSeleccionado: { [key: string]: string } = {};
+  paralelo: string = '';
   public asignaturaDistributivo: DistributivoAsignatura = new DistributivoAsignatura();
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad();
@@ -177,8 +181,13 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
   cargarComboJornada(): void {
-    this.jornadaService.getJornada().subscribe(data => {
-      this.jornadas = data;
+    this.tituloService.getTitulo().subscribe(data => {
+      const titulosEncontrados = data as unknown as TituloProfecional[];
+      const titulosFitrados = titulosEncontrados.filter(respuest=> respuest.id_persona === this.authService.id_persona);
+      if(titulosFitrados){
+        this.jornadas = titulosFitrados;
+      }
+   
     });
   }
 
@@ -186,6 +195,12 @@ export class MatrizDistributivoComponent implements OnInit {
     this.idJornada = +event.target.value;
     const key = `${idAsignatura}-${index}`;
     this.jornadaSeleccionada[key] = this.idJornada;
+  }
+
+  onParaleloChange(event: any, idAsignatura: any, index: number): void {
+    this.paralelo = event.target.value;
+    const key = `${idAsignatura}-${index}`;
+    this.paraleloSeleccionado[key] = this.paralelo;
   }
 
   generateKey(id_asignatura: number, index: number): string {
@@ -235,58 +250,9 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
-  // cargarAdicional(): void {
-  //   const requests = this.asignaturas.map(asignatura =>
-  //     forkJoin([
-  //       this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(periodo => {
-  //           this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
-  //           console.log('periodoPersona' + periodo.nombre_periodo);
-
-  //         }),
-  //         catchError(() => {
-  //           this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null } as unknown as Periodo;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(jornada => {
-  //           this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(distributivosAsig => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(carrera => {
-  //           this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-  //           return of(null);
-  //         })
-  //       ),
-  //     ])
-
-  //   );
-  //   forkJoin(requests).subscribe(() => {
-  //     this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-  //     this.dataSourceAsig.paginator = this.paginator;
-  //     this.dataSourceAsig.sort = this.sort;
-  //   });
-  // }
+ 
   combinarDatos(distributivos: Distributivo[]): void {
-    this.horasTotalesActividad = 0;
+   
     forkJoin({
       actividades: this.actividadService.getActividad(),
       tiposActividad: this.tipo_actividadService.gettipoActividad(),
@@ -299,6 +265,8 @@ export class MatrizDistributivoComponent implements OnInit {
 
         distributivos.forEach(dist => {
           const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === dist.id_distributivo);
+          this.distributivoActividades.concat(distributivosFiltrados);
+          console.log('distributivos:', this.distributivoActividades);
           distributivosFiltrados.forEach(da => {
             const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
             if (actividad) {
@@ -313,16 +281,17 @@ export class MatrizDistributivoComponent implements OnInit {
                 horasTotales: da.hora_no_docente,
                 idActividad: actividad ? actividad.id_actividad : '',
               });
-              this.horasTotalesActividad += da.hora_no_docente;
+             
             } else {
               const existingActividad = actividadesMap.get(da.id_actividad);
               existingActividad.horasTotales += da.hora_no_docente;
             }
-
+         
           });
 
 
         });
+        
         actividadesMap.forEach(value => {
           data.push(value);
         });
@@ -333,6 +302,11 @@ export class MatrizDistributivoComponent implements OnInit {
       })
     ).subscribe(data => {
       this.dataSourceAct.data = data;
+      this.horasTotalesActividad = 0;
+      data.forEach(respuesta=>{
+    
+        this.horasTotalesActividad += respuesta.horasTotales ;
+      });
       this.calcularTotales();
     });
 
@@ -373,6 +347,7 @@ export class MatrizDistributivoComponent implements OnInit {
         this.asignaturas = this.asignaturas.concat(asignaturasCargadas);
         console.log('Asignaturas cargadas:', this.asignaturas);
         this.combinarDatosAsignatura(this.distributivoFiltrado);
+        this.calcularTotales();
       });
     });
   }
@@ -463,6 +438,8 @@ export class MatrizDistributivoComponent implements OnInit {
   enviarActividades(): void {
     this.authService.id_actividades = this.actividades;
     this.authService.distributivos= this.distributivoFiltrado;
+    this.authService.id_distributivoActividad = this.distributivoActividades;
+    console.log('distributivos enviados', this.authService.id_distributivoActividad);
 
   }
 
@@ -481,33 +458,75 @@ export class MatrizDistributivoComponent implements OnInit {
       inputValidator: (value) => {
         const numberValue = Number(value);
         if (isNaN(numberValue) || numberValue < 1) {
-          return 'Por favor, Ingrese un numero mayor a cero';
+          return 'Por favor, ingrese un número mayor a cero';
         }
         return null;
       }
     };
-
+  
     Swal.fire(swalOptions).then((result) => {
       if (result.isConfirmed) {
         const horasAsignadas = result.value;
-        this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
-          const resultado = data as DistributivoActividad[];
-          const resultFinal = resultado.find(distributivo => distributivo.id_distributivo === this.id_distributivo && distributivo.id_actividad === this.id_activida);
-          if (resultFinal) {
-            resultFinal.hora_no_docente = horasAsignadas;
-            this.distributivoActividadService.create(resultFinal).subscribe(data1 => {
-              this.combinarDatos(this.distributivoFiltrado);
-              Toast.fire({
-                icon: "success",
-                title: "Horas asignadas con exito",
-              });
-            });
-          }
+  
+        // Iterar sobre los distributivos y actualizar DistributivoActividad si existe
+        this.distributivos.forEach(distributivo => {
+          const distributivoActividad: DistributivoActividad = {
+            id_distributivo_actividad: distributivo.id_distributivo, // Asegúrate de ajustar esto al campo correcto de tu modelo
+            id_distributivo: distributivo.id_distributivo,
+            id_actividad: this.id_activida,
+            hora_no_docente: horasAsignadas
+          };
+  
+          // Buscar el DistributivoActividad correspondiente
+          this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+            const resultado = data as DistributivoActividad[];
+  
+            const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
+            if (resultFinal) {
+              // Actualizar horas si existe
+              resultFinal.hora_no_docente = horasAsignadas;
+              this.distributivoActividadService.create(resultFinal).subscribe(
+                () => {
+                  this.combinarDatos(this.distributivoFiltrado);
+                  this.calcularTotales();
+                  Toast.fire({
+                    icon: "success",
+                    title: "Horas asignadas con éxito",
+                  });
+                },
+                (error) => {
+                  console.error('Error al actualizar DistributivoActividad:', error);
+                  Toast.fire({
+                    icon: "error",
+                    title: "Error al actualizar horas",
+                  });
+                }
+              );
+            } else {
+              // Si no existe, crear un nuevo DistributivoActividad
+              this.distributivoActividadService.create(distributivoActividad).subscribe(
+                () => {
+                  this.combinarDatos(this.distributivoFiltrado);
+                  Toast.fire({
+                    icon: "success",
+                    title: "Horas asignadas con éxito",
+                  });
+                },
+                (error) => {
+                  console.error('Error al crear DistributivoActividad:', error);
+                  Toast.fire({
+                    icon: "error",
+                    title: "Error al asignar horas",
+                  });
+                }
+              );
+            }
+          });
         });
       }
     });
   }
-
+  
   onRowClicked(row: any) {
     this.id_activida = row.idActividad;
     console.log('ID of clicked row: ', row.idActividad);
@@ -526,11 +545,11 @@ export class MatrizDistributivoComponent implements OnInit {
     this.personaService.getPersonaById(this.authService.id_persona).subscribe(
       data => {
         this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contrato => {
-          if (this.horasTotalesFinal === contrato.hora_contrato) {
+          if (this.horasTotalesFinal < contrato.hora_contrato) {
             this.validador = 'false';
             console.log('inicio', this.validador)
           } else {
-            this.validador = 'tru';
+            this.validador = 'true';
             console.log('inicio', this.validador)
 
           }
@@ -560,22 +579,35 @@ export class MatrizDistributivoComponent implements OnInit {
       );
   }
 
-  createAsignaturaDistributivo(id_distributivo: number): void { // Recibe el id_distributivo como argumento
-    this.asignaturas.forEach(asignatura => {
-      const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-        id_jornada: this.idJornada,
-        paralelo: this.authService.paralelo,
-        id_distributivo: id_distributivo,
-        id_asignatura: asignatura.id_asignatura,
-        acronimo: '',
-        id_distributivo_asig: 0
-      };
-      this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-        //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-        console.log('Asignatura Distributivo generado');
-      }, error => {
-        //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
-        console.log('Error al crear', error);
+  createAsignaturaDistributivo(id_distributivo: number): void {
+    this.asignaturas.forEach((asignatura, index) => {
+      const key = `${asignatura.id_asignatura}-${index}`;
+      const id_jornada = this.jornadaSeleccionada[key];
+      const paralelo = this.paraleloSeleccionado[key];
+
+      this.jornadaService.getJornadabyId(id_jornada).subscribe(data => {
+        const jornadaNombre = data.descrip_jornada.charAt(0);
+        const acronimo = this.crearAcronimo(jornadaNombre, paralelo, asignatura.id_ciclo);
+
+        if (id_jornada) {
+          const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
+            id_jornada: id_jornada,
+            paralelo: paralelo,
+            id_distributivo: id_distributivo,
+            id_asignatura: asignatura.id_asignatura,
+            acronimo: acronimo,
+            id_distributivo_asig: 0
+          };
+          this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
+            //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
+            console.log('Asignatura Distributivo generado');
+          }, error => {
+            //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
+            console.log('Error al crear', error);
+          });
+        } else {
+          console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
+        }
       });
     });
   }
@@ -655,5 +687,21 @@ export class MatrizDistributivoComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       window.location.reload();
     });
+  }
+
+  openModalAsignatura() {
+    this.enviarAsignaturas();
+    const dialogRef = this.dialog.open(EditarAsignaturaComponent, {
+      width: '90%',
+      height: '90%',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      window.location.reload();
+    });
+  }
+
+  crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
+    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo );
+    return jornadaNombre + id_ciclo + paralelo;
   }
 }
