@@ -75,10 +75,10 @@
                 <div class="combo-container">
                   <div class="custom-select">
                     <select class="form-control" placeholder="Seleccione la Jornada" 
-                      name="jornada" aria-label="Jornada" aria-describedby="basic-addon1"
+                      name="titulo" aria-label="Jornada" aria-describedby="basic-addon1"
                       formControlName="carreraSelec">
                       <option value=0 disabled selected>Seleccione una opción</option>
-                      <option *ngFor="let jornada of jornadas" >{{jornada.nombre_titulo}}</option>
+                      <option *ngFor="let titulo of titulo" >{{titulo.nombre_titulo}}</option>
                     </select>
                   </div>
                 </div>
@@ -149,7 +149,7 @@
               Asignar Horas</th>
             <td mat-cell *matCellDef="let asignatura; let i=index">
               <div class="custom-select">
-                <select class="form-control" placeholder="Paralelo" (ngModel)="generateKey(asignatura.id_asignatura,i)"
+                <select class="form-control" placeholder="Paralelo" 
                   name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
                   (change)="onParaleloChange($event,asignatura.id_asignatura,i)">
                   <option value=0 disabled selected>Seleccione una opción</option>

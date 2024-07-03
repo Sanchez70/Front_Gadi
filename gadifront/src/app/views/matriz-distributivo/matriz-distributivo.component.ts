@@ -108,6 +108,7 @@ export class MatrizDistributivoComponent implements OnInit {
   id_activida: any;
   validador: string = '';
   jornadas: any[] = [];
+  titulo: any[] = [];
   jornadaSeleccionada: { [key: string]: number } = {};
   id_distributivo: number = 0;
   paralelos: string[] = ['A', 'B'];
@@ -146,6 +147,7 @@ export class MatrizDistributivoComponent implements OnInit {
       this.currentExplan = explan;
     });
     this.cargarComboJornada();
+    this.cargarComboTitulos();
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarComboPeriodos();
@@ -180,14 +182,20 @@ export class MatrizDistributivoComponent implements OnInit {
       this.periodoName = this.periodo.nombre_periodo;
     });
   }
-  cargarComboJornada(): void {
+  cargarComboTitulos(): void {
     this.tituloService.getTitulo().subscribe(data => {
       const titulosEncontrados = data as unknown as TituloProfecional[];
       const titulosFitrados = titulosEncontrados.filter(respuest=> respuest.id_persona === this.authService.id_persona);
       if(titulosFitrados){
-        this.jornadas = titulosFitrados;
+        this.titulo = titulosFitrados;
       }
    
+    });
+  }
+
+  cargarComboJornada(): void {
+    this.jornadaService.getJornada().subscribe(data => {
+      this.jornadas = data;
     });
   }
 
@@ -195,6 +203,7 @@ export class MatrizDistributivoComponent implements OnInit {
     this.idJornada = +event.target.value;
     const key = `${idAsignatura}-${index}`;
     this.jornadaSeleccionada[key] = this.idJornada;
+    console.log(`Asignatura ID: ${idAsignatura}, Jornada seleccionada: ${this.idJornada}`);
   }
 
   onParaleloChange(event: any, idAsignatura: any, index: number): void {
@@ -377,6 +386,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
               data.push({
                 nombreAsignatura: asignatura ? asignatura.nombre_asignatura : '',
+                id_asignatura: asignatura ? asignatura.id_asignatura: '',
                 carrera: carrera ? carrera.nombre_carrera : '',
                 horaAsignatura: asignatura ? asignatura.horas_semanales : '',
                 jornada: jornada ? jornada.descrip_jornada : '',
@@ -545,7 +555,7 @@ export class MatrizDistributivoComponent implements OnInit {
     this.personaService.getPersonaById(this.authService.id_persona).subscribe(
       data => {
         this.tipo_contratoService.getcontratobyId(data.id_tipo_contrato).subscribe(contrato => {
-          if (this.horasTotalesFinal < contrato.hora_contrato) {
+          if (this.horasTotalesFinal === contrato.hora_contrato) {
             this.validador = 'false';
             console.log('inicio', this.validador)
           } else {
@@ -583,16 +593,15 @@ export class MatrizDistributivoComponent implements OnInit {
     this.asignaturas.forEach((asignatura, index) => {
       const key = `${asignatura.id_asignatura}-${index}`;
       const id_jornada = this.jornadaSeleccionada[key];
-      const paralelo = this.paraleloSeleccionado[key];
 
       this.jornadaService.getJornadabyId(id_jornada).subscribe(data => {
         const jornadaNombre = data.descrip_jornada.charAt(0);
-        const acronimo = this.crearAcronimo(jornadaNombre, paralelo, asignatura.id_ciclo);
+        const acronimo = this.crearAcronimo(jornadaNombre, this.authService.paralelo, asignatura.id_ciclo);
 
         if (id_jornada) {
           const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
             id_jornada: id_jornada,
-            paralelo: paralelo,
+            paralelo: this.authService.paralelo,
             id_distributivo: id_distributivo,
             id_asignatura: asignatura.id_asignatura,
             acronimo: acronimo,
@@ -646,37 +655,54 @@ export class MatrizDistributivoComponent implements OnInit {
       data => {
         const distributivoEncontrado = data as DistributivoActividad[];
         const distributivosFinales = distributivoEncontrado.filter(resul => resul.id_distributivo === this.id_distributivo);
+  
         if (distributivosFinales.length > 0) {
           console.log('Registros de distributivoActividad encontrados:', distributivosFinales);
+  
+          let totalPendientes = distributivosFinales.length;
+          let totalAsignaturas = 0;
+  
+          const eliminarAsignaturas = () => {
+            if (totalPendientes === 0 && totalAsignaturas === 0) {
+              this.distributivoService.delete(this.id_distributivo).subscribe(() => {
+                console.log('Eliminado actividad id_distributivo:', this.id_distributivo);
+                this.createdistributivo();
+              });
+            }
+          };
+  
           distributivosFinales.forEach(distributivoFinal => {
             this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad).subscribe(() => {
               console.log('Eliminado distributivoActividad id:', distributivoFinal.id_distributivo_actividad);
               this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(dataAsig => {
                 const distributivoAsig = dataAsig as DistributivoAsignatura[];
                 const asignaturasFinales = distributivoAsig.filter(result => result.id_distributivo === this.id_distributivo);
+                totalAsignaturas += asignaturasFinales.length;
+  
                 if (asignaturasFinales.length > 0) {
                   asignaturasFinales.forEach(asignaturaFinal => {
                     this.distributivoAsignaturaService.delete(asignaturaFinal.id_distributivo_asig ?? 0).subscribe(() => {
                       console.log('Eliminado distributivoAsignatura id:', asignaturaFinal.id_distributivo_asig);
-                      this.distributivoService.delete(asignaturaFinal.id_distributivo).subscribe(() => {
-                        console.log('Eliminado actividad id_distributivo:', asignaturaFinal.id_distributivo);
-                        this.createdistributivo();
-                      });
+                      totalAsignaturas--;
+                      eliminarAsignaturas();
                     });
                   });
                 } else {
-                  console.log('No se encontraron asignaturas con el id_distributivo:', this.id_distributivo);
+                  eliminarAsignaturas();
                 }
               });
+              totalPendientes--;
+              eliminarAsignaturas();
             });
           });
         } else {
           console.log('No se encontraron distributivosActividad con el id_distributivo:', this.id_distributivo);
+          this.createdistributivo();
         }
-
       }
     );
   }
+  
 
   openModal() {
     this.enviarActividades();
