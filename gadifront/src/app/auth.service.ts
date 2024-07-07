@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NonNullableFormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Asignatura } from './Services/asignaturaService/asignatura';
+import { Distributivo } from './Services/distributivoService/distributivo';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class AuthService {
   paralelo: any;
   id_periodo: any;
   id_distributivo:any;
-  distributivos: any[] = [];
+  distributivos: Distributivo[] = [];
   id_distributivoActividad:any[]=[];
   id_distributivoAsignatura: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
@@ -80,6 +81,11 @@ export class AuthService {
   clearLocalStoragePeriodo() {
     this.id_periodo =  '';
   }
+
+  clearLocalStorageDistributivos() {
+    this.distributivos =  [];
+  }
+
 
 
   saveUserToLocalStorage() {
