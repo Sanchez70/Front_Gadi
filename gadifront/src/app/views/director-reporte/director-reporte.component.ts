@@ -10,6 +10,9 @@ import { TipoContrato } from '../tipo-contrato/tipo-contrato';
 import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import {  Router } from '@angular/router';
 import { AuthService } from '../../auth.service';
+import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
+import { PeriodoService } from '../../Services/periodoService/periodo.service';
+import { Periodo } from '../../Services/periodoService/periodo';
 
 @Component({
   selector: 'app-director-reporte',
@@ -27,16 +30,36 @@ export class DirectorReporteComponent {
     color = '#1E90FF';
   personas: Persona[] = [];
   currentExplan: string = '';
-  constructor(private authService: AuthService,private personaService: PersonaService, private roter:Router) { }
-
+  periodos: any[] = [];
+   idPeriodo: number = 0;
+  public periodoEncontrado: Periodo = new Periodo();
+  constructor(private authService: AuthService,private personaService: PersonaService, private roter:Router, private distributivoService:DistributivoService, private periodoService:PeriodoService) { }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-      this.personaService.getPersonas().subscribe(data => {
-          this.personas = data;
+    this.cargarComboPeriodos();
+    this.distributivoService.getDistributivo().subscribe(distributivos => {
+        const distributivosPendientes = distributivos.filter(distributivo => distributivo.estado === 'Pendiente');
+        const idsPersonasPendiente = new Set(distributivosPendientes.map(distributivo => distributivo.id_persona));
+  
+        this.personaService.getPersonas().subscribe(data => {
+          this.personas = data.filter(persona => idsPersonasPendiente.has(persona.id_persona));
           this.loadAdditionalDataForPersonas();
+          
+        })
       });
+  }
+
+  cargarComboPeriodos(): void {
+    this.periodoService.getPeriodo().subscribe(data => {
+      this.periodos = data;
+      this.periodoEncontrado = this.periodos.find(
+        (periodo) => (periodo.estado === 'Activo')
+      );
+      this.idPeriodo = this.periodoEncontrado.id_periodo
+      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
+    });
   }
 
   loadAdditionalDataForPersonas(): void {
@@ -97,6 +120,7 @@ export class DirectorReporteComponent {
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona===valor );
       if (usuarioEncontrado){
         this.authService.id_persona=usuarioEncontrado.id_persona;
+        this.authService.id_periodo=this.idPeriodo;
         this.roter.navigate(['/matriz-propuesta']);
       }
   });

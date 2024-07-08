@@ -578,27 +578,34 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   public createdistributivo(): void {
-    this.distributivo.id_persona = this.authService.id_persona;
-    this.distributivo.id_periodo = this.idPeriodo;
-    this.distributivo.estado = 'Aceptado';
-    this.distributivoService.create(this.distributivo)
-      .subscribe(
-        (distributivo) => {
-          console.log("valor", distributivo);
-          this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
-          this.createdistributivoacti(distributivo.id_distributivo);
-          this.eliminarDistributivos();
-          
-        },
-        (error) => {
-          console.error('Error al guardar:', error);
-          Toast.fire({
-            icon: "error",
-            title: "Hubo un error al guardar",
-            footer: "Por favor, verifique si ha completado todo lo necesario"
-          });
-        }
-      );
+    if (!this.validarJornadasSeleccionadas() || !this.validarParaleloSeleccionado()) {
+      Toast.fire({
+        icon: "warning",
+        title: "Por favor, seleccione alguna opción en Jornada o Paralelo",
+      });
+    } else {
+      this.distributivo.id_persona = this.authService.id_persona;
+      this.distributivo.id_periodo = this.idPeriodo;
+      this.distributivo.estado = 'Aceptado';
+      this.distributivoService.create(this.distributivo)
+        .subscribe(
+          (distributivo) => {
+            console.log("valor", distributivo);
+            this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+            this.createdistributivoacti(distributivo.id_distributivo);
+            this.eliminarDistributivos();
+
+          },
+          (error) => {
+            console.error('Error al guardar:', error);
+            Toast.fire({
+              icon: "error",
+              title: "Hubo un error al guardar",
+              footer: "Por favor, verifique si ha completado todo lo necesario"
+            });
+          }
+        );
+    }
   }
 
   createAsignaturaDistributivo(id_distributivo: number): void {
@@ -664,11 +671,11 @@ export class MatrizDistributivoComponent implements OnInit {
 
   eliminarDistributivos(): void {
     console.log('Iniciando eliminación de distributivos y sus relaciones.');
-  
+
     this.eliminarActividadDistributivo();
     this.eliminarAsignaturaDistributivo();
-    this.distributivoFiltrado.forEach(distributivo =>{
-      this.distributivoService.delete(distributivo.id_distributivo).subscribe(response=>{
+    this.distributivoFiltrado.forEach(distributivo => {
+      this.distributivoService.delete(distributivo.id_distributivo).subscribe(response => {
         console.log('Distributivos eliminado');
       })
     });
@@ -725,7 +732,7 @@ export class MatrizDistributivoComponent implements OnInit {
         const distributivosFinales = distributivoEncontrado.filter(
           resul => resul.id_distributivo === distributivoId.id_distributivo
         );
-        
+
         if (distributivosFinales.length > 0) {
           const deleteObservables = distributivosFinales.map(distributivoFinal =>
             this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad)
@@ -774,5 +781,13 @@ export class MatrizDistributivoComponent implements OnInit {
   crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
     console.log('acronimo ', jornadaNombre + id_ciclo + paralelo);
     return jornadaNombre + id_ciclo + paralelo;
+  }
+
+  validarJornadasSeleccionadas(): boolean {
+    return Object.keys(this.jornadaSeleccionada).length === this.asignaturas.length;
+  }
+
+  validarParaleloSeleccionado(): boolean {
+    return Object.keys(this.paraleloSeleccionado).length === this.asignaturas.length;
   }
 }

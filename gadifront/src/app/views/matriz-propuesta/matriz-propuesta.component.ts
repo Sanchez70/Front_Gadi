@@ -56,7 +56,7 @@ interface AsignaturaConDistributivo {
 export class MatrizPropuestaComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo'];
-  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad'];
+  displayedColumnsAct: string[] = ['nro_horas', 'descripcion', 'tipo_actividad'];
   dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<Actividad>;
   dataSource!: MatTableDataSource<Persona>;
@@ -97,7 +97,7 @@ export class MatrizPropuestaComponent implements OnInit {
   titulo: Titulo_profesional = new Titulo_profesional();
   currentExplan: string = '';
   id_distributivo: number = 0;
-
+  tituloCargado: any[] = [];
   constructor(
     private asignaturaService: AsignaturaService,
     private personaService: PersonaService,
@@ -122,7 +122,7 @@ export class MatrizPropuestaComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-
+    this.cargarComboTitulos();
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
@@ -141,7 +141,7 @@ export class MatrizPropuestaComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
-        distributivo => distributivo.id_persona === idPersona);
+        distributivo => distributivo.id_persona === idPersona && distributivo.estado === 'Pendiente' && distributivo.id_periodo === this.authService.id_periodo);
       console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;
@@ -247,56 +247,6 @@ export class MatrizPropuestaComponent implements OnInit {
 
   }
 
-  // cargarAdicional(): void {
-  //   const requests = this.asignaturas.map(asignatura =>
-  //     forkJoin([
-  //       this.periodoService.getPeriodobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(periodo => {
-  //           this.periodosDis[asignatura.id_asignatura] = periodo ?? { id_periodo: 0, nombre_periodo: 'No asignado' };
-  //           console.log('periodoPersona' + periodo.nombre_periodo);
-  //         }),
-  //         catchError(() => {
-  //           this.periodosDis[asignatura.id_asignatura] = { id_periodo: 0, nombre_periodo: 'No asignado' } as Periodo;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.jornadaService.getJornadabyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(jornada => {
-  //           this.jornada[asignatura.id_asignatura] = jornada ?? { id_jornada: 0, descrip_jornada: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.jornada[asignatura.id_asignatura] = { id_jornada: 0, descrip_jornada: 'No asignada' } as Jornada;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.distributivoAsignaturaService.getDistributivobyId(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(distributivosAsig => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = distributivosAsig ?? { id_distributivo_asig: 0, paralelo: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.distributivoAsignatura[asignatura.id_asignatura] = { id_distributivo_asig: 0, paralelo: 'No asignada' } as DistributivoAsignatura;
-  //           return of(null);
-  //         })
-  //       ),
-  //       this.carreraService.getCarreraById(asignatura.id_asignatura ?? 0).pipe(
-  //         tap(carrera => {
-  //           this.carreras[asignatura.id_asignatura] = carrera ?? { id_carrera: 0, nombre_carrera: 'No asignada' };
-  //         }),
-  //         catchError(() => {
-  //           this.carreras[asignatura.id_asignatura] = { id_carrera: 0, paralelo: 'No nombre_carrera' } as unknown as Carrera;
-  //           return of(null);
-  //         })
-  //       ),
-  //     ])
-
-  //   );
-  //   // forkJoin(requests).subscribe(() => {
-  //   //   this.dataSourceAsig = new MatTableDataSource(this.asignaturas);
-  //   //   this.dataSourceAsig.paginator = this.paginator;
-  //   //   this.dataSourceAsig.sort = this.sort;
-  //   // });
-  // }
-
   cargarTipo(): void {
     const requests = this.actividades.map(actividad =>
       forkJoin([
@@ -358,6 +308,17 @@ export class MatrizPropuestaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.personas);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+    });
+  }
+
+  cargarComboTitulos(): void {
+    this.tituloService.getTitulo().subscribe(data => {
+      const titulosEncontrados = data as unknown as TituloProfecional[];
+      const titulosFitrados = titulosEncontrados.filter(respuest => respuest.id_persona === this.authService.id_persona);
+      if (titulosFitrados) {
+        this.tituloCargado = titulosFitrados;
+      }
+
     });
   }
 }

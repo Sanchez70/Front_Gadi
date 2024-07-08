@@ -20,6 +20,7 @@ import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
+import { Periodo } from '../../Services/periodoService/periodo';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -55,6 +56,7 @@ export class CoordinadorComponent implements OnInit {
   gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
   titulo: Titulo_profesional = new Titulo_profesional();
+  public periodoEncontrado: Periodo = new Periodo();
   cedula: string = '';
   color = '#1E90FF';
   currentExplan: string = '';
@@ -97,6 +99,11 @@ export class CoordinadorComponent implements OnInit {
   cargarComboPeriodos(): void {
     this.periodoService.getPeriodo().subscribe(data => {
       this.periodos = data;
+      this.periodoEncontrado = this.periodos.find(
+        (periodo) => (periodo.estado === 'Activo')
+      );
+      this.idPeriodo = this.periodoEncontrado.id_periodo
+      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
@@ -156,14 +163,13 @@ export class CoordinadorComponent implements OnInit {
     console.log('cedula ingresada', this.cedula)
   }
 
-  onPeriodoChange(event: any): void {
-    this.periodoSeleccionado = +event.target.value;
-    this.idPeriodo = this.periodoSeleccionado;
-    console.log('idPeriodo', this.idPeriodo)
-  }
+  // onPeriodoChange(event: any): void {
+  //   this.periodoSeleccionado = +event.target.value;
+  //   this.idPeriodo = this.periodoSeleccionado;
+  //   console.log('idPeriodo', this.idPeriodo)
+  // }
 
   verDetalle(valor: any): void {
-    if (this.periodoSeleccionado > 0) {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
       console.log(valor)
@@ -178,17 +184,8 @@ export class CoordinadorComponent implements OnInit {
           this.router.navigate(['/matriz-distributivo']);
         }
       });
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: "Seleccione un Periodo",
-        footer: "Por favor, verifique si ha completado todo lo necesario"
-      });
-    }
-
-
-
   }
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
