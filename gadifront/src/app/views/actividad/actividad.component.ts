@@ -38,7 +38,7 @@ export class ActividadComponent implements OnInit {
     private tipo_actividadService: tipo_actividadService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService, 
+    private authService: AuthService,
     private fb: FormBuilder
 
   ) { }
