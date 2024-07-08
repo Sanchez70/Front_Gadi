@@ -25,6 +25,7 @@ export class AuthService {
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
+
   constructor() {
     try {
       if (typeof localStorage !== 'undefined') {
@@ -52,6 +53,7 @@ export class AuthService {
     this.asignaturasSeleccionadaAuth=user.asignaturasSeleccionadaAuth||null;
     this.id_periodo = user.id_periodo || null;
     this.id_distributivo=user.id_distributivo||null;
+
   }
 
   clearLocalStorage() {
@@ -95,7 +97,8 @@ export class AuthService {
       id_actividades: this.id_actividades,
       asignaturasSeleccionadaAuth:this.asignaturasSeleccionadaAuth,
       id_periodo: this.id_periodo,
-      id_distributivo: this.id_distributivo
+      id_distributivo: this.id_distributivo,
+
     }));
   }
 limpieza(){
@@ -127,6 +130,26 @@ limpieza(){
     const currentExplan = this.explanSubject.value;
     const newExplan = currentExplan === 'Abrir' ? 'Cerrar' : 'Abrir';
     this.explanSubject.next(newExplan);
+    this.saveUserToLocalStorage();
+  }
+
+  getUser() {
+    return JSON.parse(localStorage.getItem('user') || '{}');
+  }
+
+  setUser(user: any) {
+    this.isLogeado = user.isLogeado;
+    this.cedula = user.cedula;
+    this.tiporol = user.tiporol;
+    this.id_persona = user.id_persona;
+    this.id_asignaturas = user.id_asignaturas;
+    this.id_jornada = user.id_jornada;
+    this.paralelo = user.paralelo;
+    this.id_carrera = user.id_carrera;
+    this.id_actividades = user.id_actividades;
+    this.asignaturasSeleccionadaAuth = user.asignaturasSeleccionadaAuth;
+    this.id_periodo = user.id_periodo;
+    this.id_distributivo = user.id_distributivo;
     this.saveUserToLocalStorage();
   }
 }

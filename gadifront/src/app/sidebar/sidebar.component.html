@@ -1,55 +1,66 @@
-<nav class="{{explan}} nav navbar-expand-lg navbar-link ">
+<nav class="{{explan}} nav navbar-expand-lg navbar-link">
   <button mat-icon-button (click)="navbar()">
     <mat-icon>menu</mat-icon>
   </button>
+  <div class="container-fluid">
+    <span class="navbar-brand">GADI</span>
+    <span class="flex-spacer"></span>
+    <div class="avatar-{{explan}}">
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="User menu">
 
-    <div class="container-fluid">
-     
-        <ul class="navbar-nav">
-          <li class="nav-item" routerLinkActive="active">
-            <a class="nav-link">GADI</a>
-          </li>
-        </ul>
-        <ul class="navbar-nav align-items-center">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="assets/img/usu.png" alt="User Avatar" class="avatar-{{explan}} avatar-sm rounded-circle">
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li>
-                <a class="sesion dropdown-item" (click)="cerrar()" >
-                  <i class="ni ni-single-02"></i>
-                  <span >Cerrar Sesion</span>
-                </a>
-              </li>
-              <!-- Agrega más opciones aquí -->
-            </ul>
-          </li>
-        </ul>
+        {{ inicialesUsuario }}
+
+      </button>
     </div>
-
-</nav>
-<mat-sidenav-container class="main"></mat-sidenav-container>
-  <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
-    <mat-toolbar color="primary">
-    </mat-toolbar>
-<div class="main">
-  <div class="sidebar">
-    <mat-nav-list >
-    <img class="logo" src="assets/img/logo.png">
-
-    <hr class="separator">
-    <li class="nav-item active" routerLinkActive="active">
-    <a routerLink="/main"><i class="bi bi-house-fill"></i> Inicio</a>
-
-  </li>
-    <hr class="separator">
-    <li class="nav-item active" routerLinkActive="active">
-    <a routerLink="/distributivo" (click)="limpiar()"><i class="bi bi-diagram-3-fill"></i> Nuevo Distributivo</a>
-    </li>
-    <hr class="separator">
-    <li class="nav-item active" routerLinkActive="active">
-    <a routerLink="/director-reporte"><i class="bi bi-clipboard2-data-fill"></i> Reporte</a>
-  </li>
-  </mat-nav-list>
   </div>
+</nav>
+
+<mat-menu #userMenu="matMenu">
+  
+  <button mat-menu-item (click)="cerrar()">
+    <mat-icon>logout</mat-icon>
+    <span>Cerrar Sesión</span>
+  </button>
+</mat-menu>
+
+<mat-sidenav-container class="main">
+  <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
+    <mat-toolbar color="primary"></mat-toolbar>
+    <div class="main">
+      <div class="sidebar">
+        <mat-nav-list>
+          <img class="logo" src="assets/img/logo.png">
+          <hr class="separator">
+          <li class="nav-item active" routerLinkActive="active">
+            <a routerLink="/main"><i class="bi bi-house-fill"></i> Inicio</a>
+          </li>
+          <hr class="separator">
+          <li class="nav-item active" routerLinkActive="active">
+            <a routerLink="/distributivo" (click)="limpiar()"><i class="bi bi-diagram-3-fill"></i> Nuevo
+              Distributivo</a>
+          </li>
+          <hr class="separator">
+          <li class="nav-item active" routerLinkActive="active">
+            <a routerLink="/director-reporte"><i class="bi bi-clipboard2-data-fill"></i> Reporte</a>
+          </li>
+        </mat-nav-list>
+      </div>
+    </div>
+  </mat-sidenav>
+</mat-sidenav-container>
+<!-- <mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>Shiba Inu</mat-card-title>
+      <mat-card-subtitle>Extra large</mat-card-subtitle>
+      <img mat-card-xl-image src="assets/img/logo.png" >
+    </mat-card-title-group>
+  </mat-card-header>
+  <mat-card-content>
+  </mat-card-content>
+</mat-card> -->
+<mat-divider/>
+<!-- <mat-card class="bienvenida-card">
+  <mat-card-title>{{ mensajeBienvenida }}</mat-card-title>
+  <mat-card-subtitle>Explora en GADI</mat-card-subtitle>
+</mat-card> -->

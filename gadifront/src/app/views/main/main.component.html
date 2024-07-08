@@ -1,21 +1,58 @@
+<div class="contenedorPrincipal {{currentExplan}}">
 <hr class="separator-horizontal">
-<div class="main {{currentExplan}} ">
-    <div class=" card-container" routerLinkActive="active">
 
-        <a class="card" routerLink="/distributivo">
-            <span class="Arriba">Distributivo</span>
-            <br>
-            <br>
-            <i class="bi bi-book-half"></i>
-        </a>
-        <hr class="separator-vertical" card>
-        <a class="card" routerLink="/matriz-propuesta/">
-            <span class="Arriba">Resumen</span>
-            <br>
-            <br>
-            <i class="bi bi-book-half"></i>
-        </a>
+<mat-card class="bienvenida-card">
+  <mat-card-title>{{ mensajeBienvenida }}</mat-card-title>
+  <mat-card-subtitle>Explora en GADI</mat-card-subtitle>
+  <div class="Saludo"></div>
+</mat-card>
+<div class="ContenedorData">
+<mat-accordion >
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title> Datos Personales </mat-panel-title>
+    </mat-expansion-panel-header>
 
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Mis Datos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Rol:</strong> {{ rol }}</p>
+        <p><strong>Edad:</strong> {{ additionalPersonaData.edad }}</p>
+        <p><strong>Cedula:</strong> {{ additionalPersonaData.cedula }}</p>
+        <p><strong>Correo:</strong> {{ additionalPersonaData.correo }}</p>
+        <p><strong>Teléfono:</strong> {{ additionalPersonaData.telefono }}</p>
+        <p><strong>Fecha de Vinculacion:</strong> {{ additionalPersonaData.fecha_vinculacion }}</p>
+        <p><strong>Tipo de contrato:</strong> {{ additionalPersonaData.tipo_contrato }}</p> <!-- Cambiado a tipo_contrato -->
+        <p><strong>Títulos:</strong></p>
+        <ul>
+          <li *ngFor="let titulo of titulos">{{ titulo.nombre_titulo }}</li> <!-- Asegúrate de que 'nombre_titulo' es la propiedad correcta -->
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </mat-expansion-panel>
+</mat-accordion>
+</div>
 
-    </div>
+<div class="dashboard-container">
+  
+  <div class="slider">
+    <mat-card class="image-slider" appearance="outlined">
+      <img [src]="imagenes[imagenActual]" alt="Imagen slider" class="slider-image">
+    </mat-card>
+  </div>
+
+  <div class="info-section">
+    <mat-card class="card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Que es GADI?</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>GADI es una plataforma para gestionar distributivos institucionales. Provee herramientas y funcionalidades para administrar eficientemente las tareas y recursos de una institución...</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
 </div>

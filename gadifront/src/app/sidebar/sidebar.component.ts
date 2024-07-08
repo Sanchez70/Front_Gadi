@@ -3,6 +3,9 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../auth.service';
+import { HttpClient } from '@angular/common/http';
+import { appConfig } from '../environment/appConfig';
+import { PersonaService } from '../Services/personaService/persona.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,12 +17,16 @@ export class SidebarComponent {
   mostrarDocente: boolean = false;
   isExpanded = true;
   explan: string = 'Abrir';
-
-  constructor(private authService: AuthService, private router: Router) { }
+  mensajeBienvenida: string = ''; 
+  inicialesUsuario: string = '';
+  constructor(private authService: AuthService, private router: Router,  private personaService: PersonaService) { }
 
   toggleSidenav() {
     this.isExpanded = !this.isExpanded;
     this.sidenav.toggle();
+  }
+  ngOnInit(): void { // Agrega el método ngOnInit
+    this.fetchUserDetails(); // Llama a fetchUserDetails() en ngOnInit
   }
 
   cerrar(): void {
@@ -57,5 +64,40 @@ export class SidebarComponent {
   limpiar():void{
     this.authService.id_persona='';
     this.authService.id_asignaturas=[];
+  }
+
+  fetchUserDetails(): void {
+    console.log('Fetching user details');
+    const user = this.authService.getUser();
+    console.log('User from localStorage:', user);
+
+    const id_persona = user.id_persona;
+
+    if (id_persona) {
+      console.log('id_persona found:', id_persona);
+      this.personaService.getPersonaById(id_persona).subscribe(
+        (persona) => {
+          console.log('Persona details fetched:', persona);
+          const nombre = persona.nombre1 || '';
+          const apellido = persona.apellido1 || '';
+          this.inicialesUsuario = this.getInitials(nombre, apellido);
+          console.log('User initials set to:', this.inicialesUsuario);
+          // this.mensajeBienvenida = `Bienvenido ${nombre} ${apellido}`;
+          // console.log('Welcome message set to:', this.mensajeBienvenida);
+        },
+        (error) => {
+          console.error('Error fetching persona details:', error);
+        }
+      );
+    } else {
+      console.error('No id_persona found in user data');
+    }
+  }
+
+  getInitials(nombre: string, apellido: string): string {
+    if (!nombre || !apellido) return 'U'; 
+    const initials = `${nombre.charAt(0)}${apellido.charAt(0)}`;
+    console.log('Initials generated:', initials);
+    return initials.toUpperCase();
   }
 }

@@ -52,6 +52,7 @@ import { MatOption } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelect } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCardModule} from '@angular/material/card';
@@ -78,6 +79,7 @@ import { SidebarAdminComponent } from './sidebar-admin/sidebar-admin.component';
 import { MainAdminComponent } from './views/main-admin/main-admin.component';
 import { CoordinadorComponent } from './views/coordinador/coordinador.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatMenuModule} from '@angular/material/menu';
 import { CarreraModalComponent } from './views/carrera/carrera-modal.component';
 import { PersonaListModalComponent } from './views/ModalPersona/persona-list-modal.component';
 import { PersonaModalComponent } from './views/ModalPersona/persona-modal.component';
@@ -207,7 +209,10 @@ const routes: Routes = [
     NgxUiLoaderModule,
     CommonModule,
     MatCardModule,
-    MatProgressSpinnerModule 
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatAccordion,
+    MatExpansionModule
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 
