@@ -16,7 +16,11 @@ export class RectorService {
     return this.http.post<Rector>(`${this.urlEndPoint}/rector`, rector, { headers: this.httpHeaders })
   }
 
-  getAsignaturabyId(id: any): Observable<Rector> {
+  getRector():Observable<Rector[]>{
+    return this.http.get<Rector[]>(`${this.urlEndPoint}/rector`);
+  }
+
+  getRectorbyId(id: any): Observable<Rector> {
     return this.http.get<Rector>(`${this.urlEndPoint}/rector/${id}`);
   }
 
