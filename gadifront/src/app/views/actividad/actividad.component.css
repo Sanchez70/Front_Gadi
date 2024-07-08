@@ -1,162 +1,135 @@
-/* Estilo general del formulario */
-form {
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+}
+
+/* Container styles */
+.ingreso-titulos {
+  max-width: 800px;
+  margin: 20px auto;
   padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 800px; /* Para limitar el ancho del formulario */
-  margin: 0 auto; /* Centrar el formulario */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo de las etiquetas */
-.label {
-  color: #606770;
-  font-size: 14px;
+/* Heading styles */
+.ingreso-titulos h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Form container styles */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group, .mat-form-field {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Label styles */
+.mat-label {
   font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
+  color: #666;
 }
 
-.form-control {
-  border-radius: 5px;
-  border: 1px solid #ccd0d5;
+/* Input styles */
+.mat-input-element {
   padding: 10px;
-  margin-bottom: 10px;
-  width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
-  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border-color 0.3s;
 }
 
-.form-text {
+.mat-input-element:focus {
+  border-color: #4285f4;
+  outline: none;
+}
+
+/* Error message styles */
+.mat-error {
+  color: #f44336;
   font-size: 12px;
-  color: #606770;
+  margin-top: 5px;
+  font-style: italic;
 }
 
-.btn-primary {
-  background-color: #1877f2;
-  border-color: #1877f2;
+/* Button container styles */
+.btnContenedor {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* espacio entre botones */
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .btnContenedor {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Button styles */
+.btn-submit, button[mat-raised-button][color="warn"] {
+  font-size: 14px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn-submit {
+  background-color: #4285f4;
   color: white;
 }
 
-.btn-primary:hover {
-  color: rgb(17, 16, 16);
-  background-color: #145dbf;
+.btn-submit:hover {
+  background-color: #357ae8;
+  transform: scale(1.05);
 }
 
-
-.form-group {
-  margin-bottom: 15px;
+button[mat-raised-button][color="warn"] {
+  background-color: #f44336;
+  color: white;
 }
 
-/* Estilo de las filas del formulario */
-.row {
-  display: flex;
-  justify-content: space-between;
+button[mat-raised-button][color="warn"]:hover {
+  background-color: #e53935;
+  transform: scale(1.05);
 }
 
-/* Estilo de las columnas del formulario */
-.col-sm-6 {
-  flex: 0 0 48%;
-  max-width: 48%;
-  box-sizing: border-box; /* Incluye el relleno y el borde en el ancho */
-  margin-bottom: 15px; /* Espacio entre las filas en pantallas pequeñas */
-}
-
-.col-sm-6 .form-control,
-.col-sm-6 .btn-primary {
-  width: 100%; /* Asegura que el contenido de la columna ocupe todo el ancho */
-}
-
-.row .col-sm-12 {
-  flex: 0 0 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-}
-
-/* Ajustes para el responsive design */
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column;
-  }
-
-  .col-sm-6 {
-    flex: 0 0 100%;
-    max-width: 100%;
+@media (max-width: 600px) {
+  .btn-submit, button[mat-raised-button][color="warn"] {
+    width: 100%;
   }
 }
 
-.btnCrear {
-  background-color: #4285f4;
-  color: #fff;
-  padding: 1rem 2rem;
-  align-items: center;
-  text-align: center;
-  border: none;
-  border-radius: 4px;
-  font-size: 15px;
-  cursor: pointer;
-  width: 150px;
-  margin-right: 70px;
-  margin-left: -60px;
-  text-transform: uppercase;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -webkit-transition-property: box-shadow, transform;
-  transition-property: box-shadow, transform;
+/* Custom styles as requested */
+.Abrir {
+  padding: 0.3rem;
+  margin-left: 22cap;
 }
 
-.btnCrear:hover {
-  background-color: #5cafc4; 
+.Cerrar {
+  padding: 0.3rem;
+  margin-left: 0cap;
 }
 
-.btnCrear i {
-  margin-right: 4px; 
- 
-}
-
-.btnCrear:focus {
-  outline: none; 
-}
-
-.btnRegresar {
-  background-color: #d81e1e;
-  color: #fff;
-  padding: 1rem 2rem;
-  align-items: center;
-  text-align: center;
-  border: none;
-  border-radius: 4px;
-  font-size: 15px;
-  cursor: pointer;
-  width: 150px;
-  margin-right: 70px;
-  margin-left: -60px;
-  text-transform: uppercase;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
-  -webkit-transition-property: box-shadow, transform;
-  transition-property: box-shadow, transform;
-}
-
-.btnRegresar:hover {
-  background-color: #ca5151; 
-}
-
-.btnRegresar i {
-  margin-right: 4px; 
- 
-}
-
-.btnRegresar:focus {
-  outline: none; 
-}
-
-.btnContenedor{
-  display: flex;
-  align-items: center;
-  margin-left: 28cap;
-  margin-top: 20px;
+/* Margin to separate from sidebar */
+.container {
+  margin-left: 300px; /* Adjust this value as needed */
 }
