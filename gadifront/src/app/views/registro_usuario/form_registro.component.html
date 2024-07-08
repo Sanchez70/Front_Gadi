@@ -154,9 +154,9 @@
         obligatorio</mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" [ngClass]="{'disabled-field': !isTiempoParcial}">
+    <mat-form-field appearance="outline">
       <mat-label>Horas de Contrato</mat-label>
-      <input matInput formControlName="hora_contrato" type="number" [disabled]="!isTiempoParcial" readonly>
+      <input matInput formControlName="hora_contrato" type="number" readonly>
     </mat-form-field>
 
     <button mat-button style="color: #fff; background-color: #1E90FF;" type="submit">Registrar</button>
