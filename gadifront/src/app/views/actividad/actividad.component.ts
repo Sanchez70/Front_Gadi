@@ -38,15 +38,11 @@ export class ActividadComponent implements OnInit {
     private tipo_actividadService: tipo_actividadService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
     private fb: FormBuilder
 
   ) { }
 
   ngOnInit(): void {
-    this.authService.explan$.subscribe(explan => {
-      this.currentExplan = explan;
-    });
     this.cargarTipoActividad();
     this.initForm();
   }
