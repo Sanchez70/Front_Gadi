@@ -10,7 +10,7 @@ import { CicloService } from '../../../Services/cicloService/ciclo.service';
 import { CarreraService } from '../../../Services/carreraService/carrera.service';
 import { DistributivoAsignaturaService } from '../../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import { Asignatura } from '../../../Services/asignaturaService/asignatura';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 const Toast = Swal.mixin({
   toast: true,
@@ -54,7 +54,7 @@ export class EditarAsignaturaComponent {
   constructor(private asignaturaService: AsignaturaService, private cicloService: CicloService, private carreraService: CarreraService,
     private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService,
     private authService: AuthService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dialog:MatDialog) {
+    private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog) {
 
   }
 
@@ -159,8 +159,8 @@ export class EditarAsignaturaComponent {
     const asignaturaExistente = this.asignaturasSeleccionadas.some(
       (id) => id.id_asignatura === asignatura.id_asignatura
     );
-      this.asignaturasSeleccionadas.push(asignatura);
-      this.calcularHorasTotales();
+    this.asignaturasSeleccionadas.push(asignatura);
+    this.calcularHorasTotales();
     // } else {
     //   Toast.fire({
     //     icon: "warning",
@@ -189,22 +189,28 @@ export class EditarAsignaturaComponent {
     console.log('id distributivo:', this.id_distributivo);
     this.authService.id_asignaturas = this.asignaturasSeleccionadas;
 
-    
+
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
       data => {
         const distributivoEncontrado = data as DistributivoAsignatura[];
 
         const allDeleteObservables = this.authService.distributivos.map(distributivoId => {
           const distributivosFinales = distributivoEncontrado.filter(
-            resul => resul.id_distributivo === distributivoId
+            resul => resul.id_distributivo === distributivoId.id_distributivo
           );
-          const deleteObservables = distributivosFinales.map(distributivoFinal =>
-            this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
-          );
-          return forkJoin(deleteObservables);
+
+          if (distributivosFinales.length > 0) {
+            const deleteObservables = distributivosFinales.map(distributivoFinal =>
+              this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
+            );
+            return forkJoin(deleteObservables);
+          } else {
+            // No hay actividades asociadas, retornar un observable vacío
+            return of(null);
+          }
         });
 
-        
+
         forkJoin(allDeleteObservables).subscribe({
           next: () => {
             const createObservables = this.asignaturasSeleccionadas.map(data => {
@@ -240,7 +246,7 @@ export class EditarAsignaturaComponent {
 
   }
 
-  cerrarDialogo():void{
+  cerrarDialogo(): void {
     this.dialog.closeAll();
   }
 }

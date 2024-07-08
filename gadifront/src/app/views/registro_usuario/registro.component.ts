@@ -20,14 +20,10 @@ import { AuthService } from '../../auth.service';
   templateUrl: './form_registro.component.html',
   styleUrls: ['./registro.component.css']
 })
+
 export class RegistroComponent implements OnInit {
   public registroForm1: FormGroup;
-  //public registroForm2: FormGroup;
   public edad: number = 0;
-  //public gradoSeleccionado: number = 0;
-  //public id_grado: number = 0;
-  // public contratoSelec: number = 0;
-  // public id_contrato: number = 0;
   public persona: Persona = new Persona();
   public user: Usuario = new Usuario();
   public titulo: Titulo_profesional = new Titulo_profesional();
@@ -65,9 +61,9 @@ export class RegistroComponent implements OnInit {
       titulos: this.fb.array([]),
       nombre_grado_ocp: ['', Validators.required],
       nombre_contrato: ['', Validators.required],
-      hora_contrato: ['', [Validators.required, Validators.min(1)]]
     });
   }
+
   ngOnInit() {
     this.loadContratos();
     this.loadGradoOcupacional();
@@ -145,6 +141,7 @@ export class RegistroComponent implements OnInit {
 
     return null;
   }
+
   validarEdadMinima(minimaEdad: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       const fechaNacimiento = new Date(control.value);
@@ -175,13 +172,12 @@ export class RegistroComponent implements OnInit {
     }
 
     this.edad = edad;
-    if(edad <= 0 ){
+    if (edad <= 0) {
       this.registroForm1.get('edad')?.setValue('Edad no válida');
-    }else{
-    this.registroForm1.get('edad')?.setValue(edad);
+    } else {
+      this.registroForm1.get('edad')?.setValue(edad);
     }
   }
-
 
   validateTelefono(control: AbstractControl): ValidationErrors | null {
     const telefono = control.value;
@@ -194,12 +190,6 @@ export class RegistroComponent implements OnInit {
     return null;
   }
 
-  
-  // onContratoChange(event: any) {
-  //   this.contratoSelec = +event.target.value;
-  //   this.id_contrato = this.contratoSelec;
-  // }
-
   onSubmit(): void {
     if (this.registroForm1.invalid) {
       this.registroForm1.markAllAsTouched();
@@ -208,146 +198,71 @@ export class RegistroComponent implements OnInit {
 
     const registroData = this.registroForm1.value;
 
-   // const { name1, name2, lastname1, lastname2, user, password } = this.registroForm1.value;
+    this.docenteService.getPersona().subscribe(personas => {
+      if (personas.find(persona => persona.cedula === registroData.user)) {
+        Swal.fire('Error', 'La cédula ya está registrada', 'error');
+      } else {
+        this.persona.cedula = registroData.user;
+        this.persona.nombre1 = registroData.name1;
+        this.persona.nombre2 = registroData.name2;
+        this.persona.apellido1 = registroData.lastname1;
+        this.persona.apellido2 = registroData.lastname2;
+        this.persona.telefono = registroData.telefono;
+        this.persona.direccion = registroData.direccion;
+        this.persona.correo = registroData.correo;
+        this.persona.edad = this.edad;
+        this.persona.fecha_vinculacion = registroData.fecha_vinculacion;
+        this.persona.id_grado_ocp = registroData.nombre_grado_ocp;
+        this.persona.id_tipo_contrato = registroData.nombre_contrato;
 
-  //   this.docenteService.getPersona().subscribe(personas => {
-  //     if (personas.find(persona => persona.cedula === registroData.user)) {
-  //       Swal.fire('Error', 'La cédula ya está registrada', 'error');
-  //     } else {
-  //       localStorage.setItem('registroData', JSON.stringify({
-  //         primer_nombre: name1,
-  //         segundo_nombre: name2,
-  //         primer_apellido: lastname1,
-  //         segundo_apellido: lastname2,
-  //         usuario: user,
-  //         password: password
-  //       }));
-  //       this.showFinalForm = true;
-  //     }
-  //   }, error => {
-  //     console.error('Error al obtener personas:', error);
-  //     Swal.fire('Error', 'Hubo un problema al obtener personas.', 'error');
-  //   });
-  // }
+        this.service.createPer(this.persona).subscribe(personaRegistrada => {
+          this.user.usuario = this.persona.cedula;
+          this.user.contrasena = registroData.password;
+          this.user.id_persona = personaRegistrada.id_persona;
 
-  // onSubmit2(): void {
-  //   const registroData = JSON.parse(localStorage.getItem('registroData') || '{}');
+          this.service.createUser(this.user).subscribe(usuarioRegistrado => {
+            this.usuarioRol.id_rol = 3;
+            this.usuarioRol.id_usuario = usuarioRegistrado.id_usuario;
 
-  //   this.persona.cedula = registroData.usuario,
-  //     this.persona.nombre1 = registroData.primer_nombre,
-  //     this.persona.nombre2 = registroData.segundo_nombre,
-  //     this.persona.apellido1 = registroData.primer_apellido,
-  //     this.persona.apellido2 = registroData.segundo_apellido,
-  //     this.persona.telefono = this.registroForm2.value.telefono,
-  //     this.persona.direccion = this.registroForm2.value.direccion,
-  //     this.persona.correo = this.registroForm2.value.correo,
-  //     this.persona.edad = this.edad,
-  //     this.persona.fecha_vinculacion = this.registroForm2.value.fecha_vinculacion,
-  //     this.persona.id_tipo_contrato = this.id_contrato,
-  //     this.persona.id_grado_ocp = this.id_grado
-  //   this.service.createPer(this.persona).subscribe(personaRegistrada => {
-  //     this.user.usuario = this.persona.cedula,
-  //       this.user.contrasena = registroData.password,
-  //       this.user.id_persona = personaRegistrada.id_persona,
-  //       this.service.createUser(this.user).subscribe(usuarioRegistrado => {
-  //         this.usuarioRol.id_rol = 3,
-  //           this.usuarioRol.id_usuario = usuarioRegistrado.id_usuario
-  //         this.service.createUserRol(this.usuarioRol).subscribe(() => {
-  //           this.titulos.controls.forEach((tituloControl) => {
-  //             this.titulo = new Titulo_profesional();
-  //             this.titulo.nombre_titulo = tituloControl.value.nombre_titulo;
-  //             this.titulo.grado = tituloControl.value.grado;
-  //             this.titulo.id_persona = personaRegistrada.id_persona;
-  //             this.service.createTitulo(this.titulo).subscribe(
-  //               () => {
-  //                 console.log('Título guardado correctamente');
-  //               },
-  //               (error) => {
-  //                 console.error('Error al crear título:', error);
-  //                 Swal.fire('Error', 'Hubo un problema al crear el título.', 'error');
-  //               }
-  //             );
-  //           });
-  //         });
+            this.service.createUserRol(this.usuarioRol).subscribe(() => {
+              this.titulos.controls.forEach((tituloControl) => {
+                this.titulo = new Titulo_profesional();
+                this.titulo.nombre_titulo = tituloControl.value.nombre_titulo;
+                this.titulo.grado = tituloControl.value.grado;
+                this.titulo.id_persona = personaRegistrada.id_persona;
 
-  //         Swal.fire('Registro exitoso', '', 'success');
-  //         this.router.navigate(['./login']);
-  //       }, error => {
-  //         console.error('Error al crear usuario:', error);
-  //         Swal.fire('Error', 'Hubo un problema al crear el usuario.', 'error');
-  //       });
-  //   }, error => {
-  //     console.error('Error al crear persona:', error);
-  //     Swal.fire('Error', 'Hubo un problema al crear la persona.', 'error');
-  //   });
-  // }
-  // onGradoChange(event: any): void {
-  //   this.gradoSeleccionado = +event.target.value;
-  //   this.id_grado = this.gradoSeleccionado;
-  this.docenteService.getPersona().subscribe(personas => {
-    if (personas.find(persona => persona.cedula === registroData.user)) {
-      Swal.fire('Error', 'La cédula ya está registrada', 'error');
-    } else {
-      this.persona.cedula = registroData.user;
-      this.persona.nombre1 = registroData.name1;
-      this.persona.nombre2 = registroData.name2;
-      this.persona.apellido1 = registroData.lastname1;
-      this.persona.apellido2 = registroData.lastname2;
-      this.persona.telefono = registroData.telefono;
-      this.persona.direccion = registroData.direccion;
-      this.persona.correo = registroData.correo;
-      this.persona.edad = this.edad;
-      this.persona.fecha_vinculacion = registroData.fecha_vinculacion;
-      this.persona.id_grado_ocp = registroData.nombre_grado_ocp;
-      this.persona.id_tipo_contrato = registroData.nombre_contrato;
-
-      this.service.createPer(this.persona).subscribe(personaRegistrada => {
-        this.user.usuario = this.persona.cedula;
-        this.user.contrasena = registroData.password;
-        this.user.id_persona = personaRegistrada.id_persona;
-
-        this.service.createUser(this.user).subscribe(usuarioRegistrado => {
-          this.usuarioRol.id_rol = 3;
-          this.usuarioRol.id_usuario = usuarioRegistrado.id_usuario;
-
-          this.service.createUserRol(this.usuarioRol).subscribe(() => {
-            this.titulos.controls.forEach((tituloControl) => {
-              this.titulo = new Titulo_profesional();
-              this.titulo.nombre_titulo = tituloControl.value.nombre_titulo;
-              this.titulo.grado = tituloControl.value.grado;
-              this.titulo.id_persona = personaRegistrada.id_persona;
-
-              this.service.createTitulo(this.titulo).subscribe(
-                () => {
-                  console.log('Título guardado correctamente');
-                },
-                (error) => {
-                  console.error('Error al crear título:', error);
-                  Swal.fire('Error', 'Hubo un problema al crear el título.', 'error');
-                }
-              );
+                this.service.createTitulo(this.titulo).subscribe(
+                  () => {
+                    console.log('Título guardado correctamente');
+                  },
+                  (error) => {
+                    console.error('Error al crear título:', error);
+                    Swal.fire('Error', 'Hubo un problema al crear el título.', 'error');
+                  }
+                );
+              });
+              Swal.fire('Registro exitoso', '', 'success');
+              this.router.navigate(['./login']);
             });
-            Swal.fire('Registro exitoso', '', 'success');
-            this.router.navigate(['./login']);
+          }, error => {
+            console.error('Error al crear usuario:', error);
+            Swal.fire('Error', 'Hubo un problema al crear el usuario.', 'error');
           });
         }, error => {
-          console.error('Error al crear usuario:', error);
-          Swal.fire('Error', 'Hubo un problema al crear el usuario.', 'error');
+          console.error('Error al crear persona:', error);
+          Swal.fire('Error', 'Hubo un problema al crear la persona.', 'error');
         });
-      }, error => {
-        console.error('Error al crear persona:', error);
-        Swal.fire('Error', 'Hubo un problema al crear la persona.', 'error');
-      });
-    }
-  });  
-}
-
-toggleHoraContrato(value: number): void {
-  this.isTiempoParcial = value === 2; // Suponiendo que el ID del contrato parcial es 2
-  if (this.isTiempoParcial) {
-    this.registroForm1.get('hora_contrato')?.enable();
-  } else {
-    this.registroForm1.get('hora_contrato')?.disable();
+      }
+    });
   }
-}
+
+  toggleHoraContrato(idContrato: number): void {
+    const contratoSeleccionado = this.contratos.find(contrato => contrato.id_tipo_contrato === idContrato);
+
+    if (contratoSeleccionado) {
+      this.registroForm1.get('hora_contrato')?.setValue(contratoSeleccionado.hora_contrato);
+    } else {
+      this.registroForm1.get('hora_contrato')?.setValue('');
+    }
+  }
 }
