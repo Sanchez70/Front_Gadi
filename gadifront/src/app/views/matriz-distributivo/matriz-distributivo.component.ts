@@ -332,7 +332,6 @@ export class MatrizDistributivoComponent implements OnInit {
           distributivo.id_periodo === this.authService.id_periodo && distributivo.estado === 'Pendiente')
       );
 
-      console.log('distributivo encontrado', this.distributivoFiltrado);
       this.authService.distributivos = this.distributivoFiltrado;
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;

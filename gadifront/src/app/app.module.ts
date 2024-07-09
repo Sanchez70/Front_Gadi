@@ -99,6 +99,7 @@ import { loginRedirectGuardGuard } from './guards/login-redirect-guard.guard';
 import { TipoActividadModalComponent } from './views/tipo-actividad/tipo-actividad-modal.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { DistributivosGeneradosComponent } from './views/coordinador/distributivos-generados/distributivos-generados.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -130,7 +131,8 @@ const routes: Routes = [
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent,canActivate: [loginRedirectGuardGuard]},
   { path: 'crud-asignatura', component: CrudAsignaturaComponent,canActivate: [loginRedirectGuardGuard]},
   { path: 'periodo', component: PeriodoComponent,canActivate: [loginRedirectGuardGuard]} ,
-  { path: 'titulo', component: TituloProfesionalComponent,canActivate: [loginRedirectGuardGuard]} 
+  { path: 'titulo', component: TituloProfesionalComponent,canActivate: [loginRedirectGuardGuard]},
+  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [loginRedirectGuardGuard]}  
   
 ];
 @NgModule({
@@ -183,6 +185,7 @@ const routes: Routes = [
     PersonaFormComponent,
     RolSelectorComponent,
     PeriodoModalComponent,
+    DistributivosGeneradosComponent,
   ],
   
   imports: [

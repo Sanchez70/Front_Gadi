@@ -1,0 +1,104 @@
+<div class="{{currentExplan}}">
+    <div class="container">
+        <h1>Lista</h1>
+        <mat-form-field appearance="outline">
+            <mat-label>Buscar...</mat-label>
+            <input matInput (input)="applyFilter($event)" />
+        </mat-form-field>
+        <div class="input-group mb-3">
+            <label for="periodo" class="label_form font-weight-bold"
+                style="font-size: 20px;">{{periodoEncontrado.nombre_periodo}}</label>
+        </div>
+        <section class="example-container mat-elevation-z8" tabindex="0">
+            <div *ngIf="dataSource && dataSource.data.length > 0; else noData">
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <ng-container matColumnDef="cedula" sticky>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="nombre" sticky>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }} {{ persona.nombre2 }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="apellido">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }} {{ persona.apellido2 }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="telefono">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Teléfono
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.telefono }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="direccion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Dirección
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.direccion }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="correo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Correo
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.correo }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="edad">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Edad</th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.edad }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="fecha_vinculacion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de
+                            Vinculación</th>
+                        <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="contrato">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Contrato
+                        </th>
+                        <td mat-cell *matCellDef="let persona" class="contrato-{{currentExplan}}">{{
+                            contratos[persona.id_persona].nombre_contrato || 'No asignado'}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="titulo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{ titulos[persona.id_persona].nombre_titulo || 'No
+                            asignado'
+                            }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="grado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado
+                        </th>
+                        <td mat-cell *matCellDef="let persona">{{grados[persona.id_persona].nombre_grado_ocp || 'No
+                            asignado'}}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="detalle">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Descargar
+                        </th>
+                        <td mat-cell *matCellDef="let persona"><button class="mat-button"
+                                (click)="generarModeloPDF(persona.id_persona)"><mat-icon>download</mat-icon></button>
+                        </td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+            <ng-template #noData>
+                <p style="text-align: center;">No se ha asignado ninguna propuesta aún...</p>
+            </ng-template>
+        </section>
+    </div>
+</div>

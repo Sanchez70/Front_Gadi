@@ -32,8 +32,22 @@
           <td mat-cell *matCellDef="let persona">{{ persona.nombre_contrato }}</td>
         </ng-container>
         <ng-container matColumnDef="nombre_titulo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Título</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.nombre_titulo }}</td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">TÍTULO PROFESIONAL
+          </th>
+          <td mat-cell *matCellDef="let persona">
+            <div class="combos-container">
+              <div class="combo-container">
+                <div class="custom-select">
+                  <select class="form-control"
+                    name="titulo" aria-label="Jornada" aria-describedby="basic-addon1"
+                    formControlName="carreraSelec">
+                    <option *ngFor="let titulo of titulos" disabled selected>{{titulo.nombre_titulo}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          
+          </td>
         </ng-container>
         <ng-container matColumnDef="nombre_grado_ocp">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado Ocupacional</th>
@@ -76,11 +90,13 @@
         <ng-container matColumnDef="jornada" sticky>
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Jornada</th>
           <td mat-cell *matCellDef="let asignatura; let i=index" class="jornada">
+            <div class="custom-select">
             <select class="form-control" (ngModel)="generateKey(asignatura.id_asignatura,i)"
                     name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event,asignatura.id_asignatura,i)">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
             </select>
+          </div>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
