@@ -104,6 +104,7 @@ const routes: Routes = [
   { path: 'mainDocente', component: MainDocenteComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'mainCoordinador', component: MainCoordiandorComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'main', component: MainComponent,canActivate: [loginRedirectGuardGuard] },
+  { path: 'main-admin', component:  MainAdminComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'asignatura', component: AsignaturaComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'actividad', component: ActividadComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'mi-distribitivo', component: TablaComponent,canActivate: [loginRedirectGuardGuard]},
@@ -177,7 +178,7 @@ const routes: Routes = [
     EditarAsignaturaComponent,
     PersonaFormComponent,
     RolSelectorComponent,
-    PeriodoModalComponent
+    PeriodoModalComponent,
   ],
   
   imports: [

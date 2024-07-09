@@ -17,7 +17,6 @@ export class SidebarComponent {
   mostrarDocente: boolean = false;
   isExpanded = true;
   explan: string = 'Abrir';
-  mensajeBienvenida: string = ''; 
   inicialesUsuario: string = '';
   constructor(private authService: AuthService, private router: Router,  private personaService: PersonaService) { }
 
@@ -25,8 +24,8 @@ export class SidebarComponent {
     this.isExpanded = !this.isExpanded;
     this.sidenav.toggle();
   }
-  ngOnInit(): void { // Agrega el método ngOnInit
-    this.fetchUserDetails(); // Llama a fetchUserDetails() en ngOnInit
+  ngOnInit(): void { 
+    this.fetchUserDetails(); 
   }
 
   cerrar(): void {
@@ -82,8 +81,6 @@ export class SidebarComponent {
           const apellido = persona.apellido1 || '';
           this.inicialesUsuario = this.getInitials(nombre, apellido);
           console.log('User initials set to:', this.inicialesUsuario);
-          // this.mensajeBienvenida = `Bienvenido ${nombre} ${apellido}`;
-          // console.log('Welcome message set to:', this.mensajeBienvenida);
         },
         (error) => {
           console.error('Error fetching persona details:', error);

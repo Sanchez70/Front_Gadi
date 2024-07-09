@@ -3,6 +3,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { PersonaService } from '../../Services/personaService/persona.service';
 
 @Component({
   selector: 'app-sidebar-docente',
@@ -14,13 +15,19 @@ export class SidebarDocenteComponent {
   mostrarDocente: boolean = false;
   isExpanded = true;
   explan: string = 'Abrir';
+  inicialesUsuario: string = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router,  private personaService: PersonaService) { }
 
   toggleSidenav() {
     this.isExpanded = !this.isExpanded;
     this.sidenav.toggle();
   }
+
+  ngOnInit(): void { 
+    this.fetchUserDetails(); 
+  }
+
 
   cerrar(): void {
     Swal.fire({
@@ -53,4 +60,37 @@ export class SidebarDocenteComponent {
     }
   
   }
+  fetchUserDetails(): void {
+    console.log('Fetching user details');
+    const user = this.authService.getUser();
+    console.log('User from localStorage:', user);
+
+    const id_persona = user.id_persona;
+
+    if (id_persona) {
+      console.log('id_persona found:', id_persona);
+      this.personaService.getPersonaById(id_persona).subscribe(
+        (persona) => {
+          console.log('Persona details fetched:', persona);
+          const nombre = persona.nombre1 || '';
+          const apellido = persona.apellido1 || '';
+          this.inicialesUsuario = this.getInitials(nombre, apellido);
+          console.log('User initials set to:', this.inicialesUsuario);
+        },
+        (error) => {
+          console.error('Error fetching persona details:', error);
+        }
+      );
+    } else {
+      console.error('No id_persona found in user data');
+    }
+  }
+
+  getInitials(nombre: string, apellido: string): string {
+    if (!nombre || !apellido) return 'U'; 
+    const initials = `${nombre.charAt(0)}${apellido.charAt(0)}`;
+    console.log('Initials generated:', initials);
+    return initials.toUpperCase();
+  }
 }
+
