@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 
 export class ValidacionesComponent {
 
+    static patternOnlyNames(): RegExp {
+        return /^[A-ZÑÁÉÍÓÚ][a-zñáéíóú]{1,19}$/;
+    }
+    
+
     static patternOnlyLettersValidator(): RegExp {
         return /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{2,20}$/;
     } 
