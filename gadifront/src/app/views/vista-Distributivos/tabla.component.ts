@@ -16,6 +16,7 @@ import { Persona } from '../../Services/docenteService/persona';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Distributivo } from '../../Services/distributivoService/distributivo';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
+import { ReportesComponent } from '../reportes/reportes/reportes.component';
 interface PersonaConDistributivo {
   persona: Persona;
   distributivo: Distributivo;
@@ -28,6 +29,7 @@ interface PersonaConDistributivo {
   selector: 'app-tabla',
   templateUrl: './tabla.component.html',
   styleUrls: ['./tabla.component.css'],
+  providers:[ReportesComponent]
 })
 export class TablaComponent implements OnInit {
   displayedColumns: string[] = ['descargar','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
@@ -49,7 +51,7 @@ export class TablaComponent implements OnInit {
   private sidebarSubscription!: Subscription;
   personaEncontrada: Persona = new Persona();
   
-  constructor(private personaService: PersonaService, private distributivoService: DistributivoService,private periodoService: PeriodoService,private authService: AuthService, private activatedRoute: ActivatedRoute,private router: Router) { }
+  constructor(private report: ReportesComponent,private personaService: PersonaService, private distributivoService: DistributivoService,private periodoService: PeriodoService,private authService: AuthService, private activatedRoute: ActivatedRoute,private router: Router) { }
 
   ngOnInit(): void {
     this.cargarComboPeriodos();
@@ -173,7 +175,7 @@ export class TablaComponent implements OnInit {
     this.authService.clearLocalStoragePeriodo();
     this.authService.id_periodo = idPeriodo;
     if (this.authService.id_periodo) {
-      this.router.navigate(['/reportes']);
+      this.report.captureAndDownloadPdf();
     } else {
       console.warn('No se encontró id_periodo para esta persona.');
     }
