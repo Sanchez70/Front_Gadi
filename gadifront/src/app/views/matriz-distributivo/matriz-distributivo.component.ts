@@ -333,7 +333,7 @@ export class MatrizDistributivoComponent implements OnInit {
       );
 
       console.log('distributivo encontrado', this.distributivoFiltrado);
-      this.authService.distributivos = this.distributivoFiltrado.map(distributivo => distributivo.id_distributivo);
+      this.authService.distributivos = this.distributivoFiltrado;
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);

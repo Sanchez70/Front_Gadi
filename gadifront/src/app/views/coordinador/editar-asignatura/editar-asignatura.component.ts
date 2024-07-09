@@ -188,62 +188,70 @@ export class EditarAsignaturaComponent {
   enviarAsignaturas(): void {
     console.log('id distributivo:', this.id_distributivo);
     this.authService.id_asignaturas = this.asignaturasSeleccionadas;
-
-
+  
+    // Obtener todas las distributivoAsignaturas
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
       data => {
         const distributivoEncontrado = data as DistributivoAsignatura[];
-
+        // Filtrar las asignaturas relacionadas a cada distributivo cargado
         const allDeleteObservables = this.authService.distributivos.map(distributivoId => {
           const distributivosFinales = distributivoEncontrado.filter(
             resul => resul.id_distributivo === distributivoId.id_distributivo
           );
-
           if (distributivosFinales.length > 0) {
             const deleteObservables = distributivosFinales.map(distributivoFinal =>
               this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
             );
+            console.log('eliminado')
             return forkJoin(deleteObservables);
           } else {
-            // No hay actividades asociadas, retornar un observable vacío
+      
             return of(null);
           }
         });
 
-
         forkJoin(allDeleteObservables).subscribe({
           next: () => {
-            const createObservables = this.asignaturasSeleccionadas.map(data => {
-              const newDistributivoAsignatura = {
-                ...this.distributivoAsignatura,
-                id_asignatura: data.id_asignatura,
-                paralelo: '',
-                id_jornada: 1,
-                id_distributivo: this.authService.id_distributivo
-              };
-              return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
-            });
-
-            forkJoin(createObservables).subscribe({
-              next: (responses) => {
-                // Guardar todos los IDs de las distribuciones creadas
-                const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
-                this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
-                this.authService.saveUserToLocalStorage();
-                this.dialog.closeAll();
-              },
-              error: (error) => {
-                console.error('Error al crear asignaturas:', error);
-              }
-            });
+            this.crearNuevasAsignaturas();
           },
           error: (error) => {
             console.error('Error al eliminar asignaturas:', error);
           }
         });
+      },
+      error => {
+        console.error('Error al obtener distributivoAsignaturas:', error);
       }
     );
-
+  }
+  
+  // Método para crear nuevas asignaturas
+  crearNuevasAsignaturas(): void {
+    const createObservables = this.asignaturasSeleccionadas.map(data => {
+      const newDistributivoAsignatura = {
+        ...this.distributivoAsignatura,
+        id_asignatura: data.id_asignatura,
+        paralelo: '',
+        id_jornada: 1,
+        id_distributivo: this.authService.id_distributivo
+      };
+      return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
+    });
+  
+    // Ejecutar la creación de nuevas asignaturas
+    forkJoin(createObservables).subscribe({
+      next: (responses) => {
+        // Guardar todos los IDs de las distribuciones creadas
+        const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
+        this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
+        this.authService.saveUserToLocalStorage();
+        this.dialog.closeAll();
+        console.log('Asignaturas creadas correctamente');
+      },
+      error: (error) => {
+        console.error('Error al crear asignaturas:', error);
+      }
+    });
   }
 
   cerrarDialogo(): void {

@@ -212,6 +212,11 @@ export class AdminCreacionComponent implements OnInit {
       return;
     }
 
+    if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Rector' ) {
+
+    }
+
+
     if (usuarioId) {
       const usuarioRol: UsuarioRol = {
         id_usuario_rol: 0,

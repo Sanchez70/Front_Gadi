@@ -19,6 +19,7 @@ import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -41,7 +42,7 @@ interface PersonaExtendida extends Persona {
   styleUrl: './coordinador.component.css'
 })
 export class CoordinadorComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'detalle'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'detalle'];
   dataSource = new MatTableDataSource<Persona>();
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
@@ -67,6 +68,7 @@ export class CoordinadorComponent implements OnInit {
     private gradoService: GradoOcupacionalService,
     private authService: AuthService,
     private periodoService: PeriodoService,
+    private distributivoService: DistributivoService,
     private router: Router,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute) {
@@ -80,11 +82,16 @@ export class CoordinadorComponent implements OnInit {
       periodoSeleccionado: [null, Validators.required]
     })
     this.cargarComboPeriodos();
-    this.personaService.getPersonas().subscribe(data => {
-      this.personas = data;
-      this.loadAdditionalDataForPersonas();
-      console.log(this.dataSource);
-    })
+    this.distributivoService.getDistributivo().subscribe(distributivos => {
+      const distributivosPendientes = distributivos.filter(distributivo => distributivo.estado === 'Pendiente');
+      const idsPersonasPendiente = new Set(distributivosPendientes.map(distributivo => distributivo.id_persona));
+
+      this.personaService.getPersonas().subscribe(data => {
+        this.personas = data.filter(persona => idsPersonasPendiente.has(persona.id_persona));
+        this.loadAdditionalDataForPersonas();
+        console.log(this.dataSource);
+      })
+    });
   }
 
   cargarComboPeriodos(): void {
@@ -161,6 +168,7 @@ export class CoordinadorComponent implements OnInit {
       this.authService.clearLocalStorageActividad();
       console.log(valor)
       this.authService.id_periodo = this.idPeriodo;
+      this.authService.saveUserToLocalStorage();
       console.log('idPeriodo enviado', this.idPeriodo);
       this.personaService.getPersonas().subscribe(data => {
         const personaEncontrados = data as Persona[];
@@ -170,7 +178,7 @@ export class CoordinadorComponent implements OnInit {
           this.router.navigate(['/matriz-distributivo']);
         }
       });
-    }else{
+    } else {
       Toast.fire({
         icon: "error",
         title: "Seleccione un Periodo",
