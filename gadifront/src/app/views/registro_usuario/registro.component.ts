@@ -61,6 +61,7 @@ export class RegistroComponent implements OnInit {
       titulos: this.fb.array([]),
       nombre_grado_ocp: ['', Validators.required],
       nombre_contrato: ['', Validators.required],
+      hora_contrato: ['', Validators.required]
     });
   }
 
@@ -258,11 +259,11 @@ export class RegistroComponent implements OnInit {
 
   toggleHoraContrato(idContrato: number): void {
     const contratoSeleccionado = this.contratos.find(contrato => contrato.id_tipo_contrato === idContrato);
-
+  
     if (contratoSeleccionado) {
-      this.registroForm1.get('hora_contrato')?.setValue(contratoSeleccionado.hora_contrato);
+      this.registroForm1.get('hora_contrato')?.setValue(contratoSeleccionado.hora_contrato); 
     } else {
       this.registroForm1.get('hora_contrato')?.setValue('');
     }
-  }
+  } 
 }

@@ -1,0 +1,47 @@
+.container1 {
+  padding: 20px;
+
+  margin: auto;
+  margin-left: 100px; /* Ajusta el margen izquierdo según tu preferencia */
+}
+
+.search-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow: auto;
+}
+
+mat-form-field {
+  flex: 1;
+}
+
+button {
+  align-self: center;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  text-align: left;
+}
+
+mat-paginator {
+  margin-top: 20px;
+}
+
+/* Custom styles as requested */
+.Abrir {
+  padding: 0.3rem;
+  margin-left: 22cap;
+}
+
+.Cerrar {
+  padding: 0.3rem;
+  margin-left: 0cap;
+}

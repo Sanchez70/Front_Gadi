@@ -226,7 +226,7 @@ export class DistributivoComponent implements OnInit {
 
   generateKey(id_asignatura: number, index: number): string {
     return `${id_asignatura}-${index}`;
-}
+  }
 
   obtenerTipoActividad(id_tipo_actividad: number): string {
     const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
@@ -282,39 +282,46 @@ export class DistributivoComponent implements OnInit {
 
 
   public createdistributivo(): void {
-    this.distributivo.id_persona = this.persona.id_persona;
-    this.distributivo.id_periodo = this.idPeriodo;
-    this.distributivo.estado = 'Pendiente';
-    this.distributivoService.create(this.distributivo)
-      .subscribe(
-        (distributivo) => {
-          console.log("valor", distributivo);
-          this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
-          this.createdistributivoacti(distributivo.id_distributivo);
+    if (!this.validarJornadasSeleccionadas()) {
+      Toast.fire({
+        icon: "warning",
+        title: "Por favor, seleccione una jornada para todas las asignaturas",
+      });
+    } else {
+      this.distributivo.id_persona = this.persona.id_persona;
+      this.distributivo.id_periodo = this.idPeriodo;
+      this.distributivo.estado = 'Pendiente';
+      this.distributivoService.create(this.distributivo)
+        .subscribe(
+          (distributivo) => {
+            console.log("valor", distributivo);
+            this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+            this.createdistributivoacti(distributivo.id_distributivo);
 
-          this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
-          this.dataSource2 = new MatTableDataSource<Asignatura>([]);
-          this.dataSource3 = new MatTableDataSource<Actividad>([]);
-          this.authService.clearLocalStorageAsignatura();
-          this.authService.clearLocalStorageActividad();
-          this.authService.clearLocalStoragePersona();
-          this.authService.saveUserToLocalStorage();
-          Toast.fire({
-            icon: "success",
-            title: "Distributivo Generado con éxito",
-          });
+            this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
+            this.dataSource2 = new MatTableDataSource<Asignatura>([]);
+            this.dataSource3 = new MatTableDataSource<Actividad>([]);
+            this.authService.clearLocalStorageAsignatura();
+            this.authService.clearLocalStorageActividad();
+            this.authService.clearLocalStoragePersona();
+            this.authService.saveUserToLocalStorage();
+            Toast.fire({
+              icon: "success",
+              title: "Distributivo Generado con éxito",
+            });
 
 
-        },
-        (error) => {
-          console.error('Error al guardar:', error);
-          Toast.fire({
-            icon: "error",
-            title: "Hubo un error al guardar",
-            footer: "Por favor, verifique si ha completado todo lo necesario"
-          });
-        }
-      );
+          },
+          (error) => {
+            console.error('Error al guardar:', error);
+            Toast.fire({
+              icon: "error",
+              title: "Hubo un error al guardar",
+              footer: "Por favor, verifique si ha completado todo lo necesario"
+            });
+          }
+        );
+    }
   }
 
   createAsignaturaDistributivo(id_distributivo: number): void {
@@ -354,7 +361,7 @@ export class DistributivoComponent implements OnInit {
     this.Actividades.forEach(actividad => {
       const distributivoacti2: DistributivoActividad = {
         id_actividad: actividad.id_actividad,
-        hora_no_docente: actividad.horas_no_docentes,
+        hora_no_docente: 0,
         id_distributivo: id_distributivo,
         id_distributivo_actividad: 0
       };
@@ -377,8 +384,12 @@ export class DistributivoComponent implements OnInit {
   }
 
   crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
-    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo );
+    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo);
     return jornadaNombre + id_ciclo + paralelo;
+  }
+
+  validarJornadasSeleccionadas(): boolean {
+    return Object.keys(this.jornadaSeleccionada).length === this.asignaturas.length;
   }
 
 }

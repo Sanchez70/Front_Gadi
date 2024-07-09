@@ -13,7 +13,7 @@
           <label for="carreras" class="label_form font-weight-bold">Carrera</label>
           <div class="custom-select"> <select class="form-control" placeholder="Carrera"
               (ngModel)="carreraSeleccionada" name="carreras" aria-label="Carrera" aria-describedby="basic-addon1"
-              (change)="onCarreraChange($event)" formControlName="cicloSeleccionado">
+              (change)="onCarreraChange($event)">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let carreras of carreras" [value]="carreras.id_carrera">{{carreras.nombre_carrera}}</option>
             </select>

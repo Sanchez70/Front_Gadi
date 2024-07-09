@@ -19,6 +19,8 @@ import Swal from 'sweetalert2';
 import { PersonaListModalComponent } from '../ModalPersona/persona-list-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { Rector } from '../../Services/rectorService/rector';
+import { RectorService } from '../../Services/rectorService/rector.service';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -42,10 +44,12 @@ export class AdminCreacionComponent implements OnInit {
   personaForm: FormGroup;
   roles: Rol[] = [];
   carreras: Carrera[] = [];
-  titulos: TituloProfecional[]=[];
+  titulos: TituloProfecional[] = [];
   usuario: Usuario | null = null;
   panelOpenState = false;
   currentExplan: string = '';
+  rector: Rector = new Rector();
+  idPersona: number = 0;
   private sidebarSubscription!: Subscription;
 
   constructor(
@@ -54,6 +58,7 @@ export class AdminCreacionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private rolService: RolService,
     private carreraService: CarreraService,
+    private rectorService: RectorService,
     private dialog: MatDialog,
     private authService: AuthService,
   ) {
@@ -105,7 +110,7 @@ export class AdminCreacionComponent implements OnInit {
               icon: "success",
               title: "Datos cargados correctamente"
             });
-
+            this.idPersona = persona.id_persona;
             this.personaService.getUsuarioByPersonaId(persona.id_persona).subscribe((usuario) => {
               if (usuario) {
                 this.usuario = usuario;
@@ -212,36 +217,63 @@ export class AdminCreacionComponent implements OnInit {
       return;
     }
 
-    if (usuarioId) {
-      const usuarioRol: UsuarioRol = {
-        id_usuario_rol: 0,
-        id_usuario: usuarioId,
-        id_rol: rolId
-      };
-
-      this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
-        Toast.fire({
-          icon: "success",
-          title: "Rol asignado correctamente",
-        });
-
-        if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && carreraId) {
-          this.carreraService.getCarreraById(carreraId).subscribe(carrera => {
-            if (this.usuario) {
-              this.usuario.carrera = carrera;
-              this.personaService.updateUsuario(this.usuario).subscribe(() => {
-                Toast.fire({
-                  icon: "success",
-                  title: "Carrera asignada correctamente",
-                });
-                this.limpiarCampos();
-              });
-            }
+    if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Rector') {
+      this.rectorService.getRector().subscribe(data =>{
+        if(data.length === 0){
+          this.rector.id_persona = this.idPersona;
+          this.rectorService.create(this.rector).subscribe(response => {
+          Toast.fire({
+            icon: "success",
+            title: "Rol asignado correctamente",
           });
-        } else {
           this.limpiarCampos();
+      })
+        }else{
+          this.rector = data[0];
+          this.rector.id_persona = this.idPersona;
+          this.rectorService.update(this.rector).subscribe(response =>{
+            Toast.fire({
+              icon: "success",
+              title: "Rol asignado correctamente",
+            });
+            this.limpiarCampos();
+          })
         }
       });
+      
+    } else {
+
+      if (usuarioId) {
+        const usuarioRol: UsuarioRol = {
+          id_usuario_rol: 0,
+          id_usuario: usuarioId,
+          id_rol: rolId
+        };
+
+        this.personaService.saveUsuarioRol(usuarioRol).subscribe(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Rol asignado correctamente",
+          });
+
+          if (this.roles.find(rol => rol.id_rol === rolId)?.nombre_rol === 'Director' && carreraId) {
+            this.carreraService.getCarreraById(carreraId).subscribe(carrera => {
+              if (this.usuario) {
+                this.usuario.carrera = carrera;
+                this.personaService.updateUsuario(this.usuario).subscribe(() => {
+                  Toast.fire({
+                    icon: "success",
+                    title: "Carrera asignada correctamente",
+                  });
+                  this.limpiarCampos();
+                });
+              }
+            });
+          } else {
+            this.limpiarCampos();
+          }
+        });
+      }
     }
   }
 

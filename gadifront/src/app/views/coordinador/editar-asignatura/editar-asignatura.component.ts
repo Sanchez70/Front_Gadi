@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import Swal from 'sweetalert2';
 import { DistributivoAsignatura } from '../../../Services/distributivoAsignaturaService/distributivo-asignatura';
 import { AsignaturaService } from '../../../Services/asignaturaService/asignatura.service';
@@ -54,7 +54,7 @@ export class EditarAsignaturaComponent {
   constructor(private asignaturaService: AsignaturaService, private cicloService: CicloService, private carreraService: CarreraService,
     private jornadaService: JornadaService, private distributivoAsignaturaService: DistributivoAsignaturaService,
     private authService: AuthService, private router: Router,
-    private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog) {
+    private activatedRoute: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog, private cdr: ChangeDetectorRef) {
 
   }
 
@@ -63,8 +63,7 @@ export class EditarAsignaturaComponent {
       this.currentExplan = explan;
     });
     this.cargarComboCarreras();
-    //this.cargarComboJornada();
-
+    this.cargarComboCiclos();
     this.cargarAsignaturasENviadas();
 
     this.myForm = this.fb.group({
@@ -74,8 +73,10 @@ export class EditarAsignaturaComponent {
     })
   }
   cargarAsignaturasENviadas(): void {
+    this.asignaturasSeleccionadas = [];
     this.asignaturasSeleccionadas = this.authService.asignaturasSeleccionadaAuth;
     this.calcularHorasTotales();
+    this.cdr.detectChanges();
   }
   cargarComboCarreras(): void {
     this.carreraService.getCarrera().subscribe(data => {
@@ -85,6 +86,7 @@ export class EditarAsignaturaComponent {
   }
 
   cargarComboCiclos(): void {
+    this.ciclos = [];
     this.cicloService.getCiclo().subscribe(data => {
       this.ciclos = data;
 
@@ -115,27 +117,21 @@ export class EditarAsignaturaComponent {
 
 
   onCarreraChange(event: any): void {
-    this.cicloSeleccionado = 0;
     this.carreraSeleccionada = +event.target.value;
     this.idCarrera = this.carreraSeleccionada;
-    console.log('id carrera', this.idCarrera)
+    this.asignaturaFiltrada = [];
     this.cargarComboCiclos();
-
-
   }
 
   onCicloChange(event: any): void {
     this.cicloSeleccionado = +event.target.value;
     this.idCiclo = this.cicloSeleccionado;
-    console.log('id ciclo', this.idCiclo)
-    this.myForm.get('cicloSeleccionado')?.setValue(event.target.value);
     this.filtrarAsignaturaCarrerabyCiclo();
   }
 
   onJornadaChange(event: any): void {
     this.jornadaSeleccionada = +event.target.value;
     this.idJornada = this.jornadaSeleccionada;
-    console.log('id_jornada', this.idJornada);
   }
 
   onParaleloChange(event: any): void {
@@ -148,10 +144,9 @@ export class EditarAsignaturaComponent {
     this.cargarAsignaturas().subscribe(() => {
       this.asignaturaFiltrada = this.asignaturas.filter(
         (asignatura) =>
-          (asignatura.id_carrera === this.idCarrera) &&
+          (this.carreraSeleccionada === null || asignatura.id_carrera === this.idCarrera) &&
           (this.cicloSeleccionado === null || asignatura.id_ciclo === this.idCiclo)
       );
-      console.log('asignatura filtrada por ciclo', this.asignaturaFiltrada)
     });
   }
 
@@ -161,12 +156,6 @@ export class EditarAsignaturaComponent {
     );
     this.asignaturasSeleccionadas.push(asignatura);
     this.calcularHorasTotales();
-    // } else {
-    //   Toast.fire({
-    //     icon: "warning",
-    //     title: "La asignatura se encuentra seleccionada",
-    //   });
-    // }
   }
 
   eliminarAsignatura(fila: number): void {
@@ -180,70 +169,77 @@ export class EditarAsignaturaComponent {
     );
   }
 
-  obtenerNombreCiclo(id_ciclo: number): void {
+  obtenerNombreCiclo(id_ciclo: number): string {
     const ciclo = this.ciclos.find(ciclo => ciclo.id_ciclo === id_ciclo);
     return ciclo ? ciclo.nombre_ciclo : '';
   }
 
   enviarAsignaturas(): void {
-    console.log('id distributivo:', this.id_distributivo);
     this.authService.id_asignaturas = this.asignaturasSeleccionadas;
-
-
+  
+    // Obtener todas las distributivoAsignaturas
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
       data => {
         const distributivoEncontrado = data as DistributivoAsignatura[];
-
+        // Filtrar las asignaturas relacionadas a cada distributivo cargado
         const allDeleteObservables = this.authService.distributivos.map(distributivoId => {
           const distributivosFinales = distributivoEncontrado.filter(
             resul => resul.id_distributivo === distributivoId.id_distributivo
           );
-
           if (distributivosFinales.length > 0) {
             const deleteObservables = distributivosFinales.map(distributivoFinal =>
               this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
             );
+            console.log('eliminado')
             return forkJoin(deleteObservables);
           } else {
-            // No hay actividades asociadas, retornar un observable vacío
+      
             return of(null);
           }
         });
 
-
         forkJoin(allDeleteObservables).subscribe({
           next: () => {
-            const createObservables = this.asignaturasSeleccionadas.map(data => {
-              const newDistributivoAsignatura = {
-                ...this.distributivoAsignatura,
-                id_asignatura: data.id_asignatura,
-                paralelo: '',
-                id_jornada: 1,
-                id_distributivo: this.authService.id_distributivo
-              };
-              return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
-            });
-
-            forkJoin(createObservables).subscribe({
-              next: (responses) => {
-                // Guardar todos los IDs de las distribuciones creadas
-                const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
-                this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
-                this.authService.saveUserToLocalStorage();
-                this.dialog.closeAll();
-              },
-              error: (error) => {
-                console.error('Error al crear asignaturas:', error);
-              }
-            });
+            this.crearNuevasAsignaturas();
           },
           error: (error) => {
             console.error('Error al eliminar asignaturas:', error);
           }
         });
+      },
+      error => {
+        console.error('Error al obtener distributivoAsignaturas:', error);
       }
     );
-
+  }
+  
+  // Método para crear nuevas asignaturas
+  crearNuevasAsignaturas(): void {
+    const createObservables = this.asignaturasSeleccionadas.map(data => {
+      const newDistributivoAsignatura = {
+        ...this.distributivoAsignatura,
+        id_asignatura: data.id_asignatura,
+        paralelo: '',
+        id_jornada: 1,
+        id_distributivo: this.authService.id_distributivo
+      };
+      return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
+    });
+  
+    // Ejecutar la creación de nuevas asignaturas
+    forkJoin(createObservables).subscribe({
+      next: (responses) => {
+        // Guardar todos los IDs de las distribuciones creadas
+        const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
+        this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
+        this.authService.saveUserToLocalStorage();
+        this.dialog.closeAll();
+        console.log('Asignaturas creadas correctamente');
+      },
+      error: (error) => {
+        console.error('Error al crear asignaturas:', error);
+      }
+    });
   }
 
   cerrarDialogo(): void {

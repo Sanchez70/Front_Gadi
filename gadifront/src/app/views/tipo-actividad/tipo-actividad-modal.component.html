@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }} Tipo de Actividad</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nombre de la Actividad</mat-label>
+    <input matInput [(ngModel)]="data.nom_tip_actividad" required>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">Cancelar</button>
+  <button mat-button color="primary" (click)="save()">{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }}</button>
+</div>

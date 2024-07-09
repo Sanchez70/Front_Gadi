@@ -19,6 +19,8 @@ import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
+import { Periodo } from '../../Services/periodoService/periodo';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -41,7 +43,7 @@ interface PersonaExtendida extends Persona {
   styleUrl: './coordinador.component.css'
 })
 export class CoordinadorComponent implements OnInit {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'detalle'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'detalle'];
   dataSource = new MatTableDataSource<Persona>();
   grados: { [key: number]: GradoOcupacional } = {};
   titulos: { [key: number]: TituloProfecional } = {};
@@ -54,6 +56,7 @@ export class CoordinadorComponent implements OnInit {
   gradoOcupacional: Grado_ocupacional = new Grado_ocupacional();
   tipo_contrato: Tipo_contrato = new Tipo_contrato();
   titulo: Titulo_profesional = new Titulo_profesional();
+  public periodoEncontrado: Periodo = new Periodo();
   cedula: string = '';
   color = '#1E90FF';
   currentExplan: string = '';
@@ -67,6 +70,7 @@ export class CoordinadorComponent implements OnInit {
     private gradoService: GradoOcupacionalService,
     private authService: AuthService,
     private periodoService: PeriodoService,
+    private distributivoService: DistributivoService,
     private router: Router,
     private fb: FormBuilder,
     private activatedRoute: ActivatedRoute) {
@@ -80,16 +84,26 @@ export class CoordinadorComponent implements OnInit {
       periodoSeleccionado: [null, Validators.required]
     })
     this.cargarComboPeriodos();
-    this.personaService.getPersonas().subscribe(data => {
-      this.personas = data;
-      this.loadAdditionalDataForPersonas();
-      console.log(this.dataSource);
-    })
+    this.distributivoService.getDistributivo().subscribe(distributivos => {
+      const distributivosPendientes = distributivos.filter(distributivo => distributivo.estado === 'Pendiente');
+      const idsPersonasPendiente = new Set(distributivosPendientes.map(distributivo => distributivo.id_persona));
+
+      this.personaService.getPersonas().subscribe(data => {
+        this.personas = data.filter(persona => idsPersonasPendiente.has(persona.id_persona));
+        this.loadAdditionalDataForPersonas();
+        console.log(this.dataSource);
+      })
+    });
   }
 
   cargarComboPeriodos(): void {
     this.periodoService.getPeriodo().subscribe(data => {
       this.periodos = data;
+      this.periodoEncontrado = this.periodos.find(
+        (periodo) => (periodo.estado === 'Activo')
+      );
+      this.idPeriodo = this.periodoEncontrado.id_periodo
+      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
@@ -149,18 +163,18 @@ export class CoordinadorComponent implements OnInit {
     console.log('cedula ingresada', this.cedula)
   }
 
-  onPeriodoChange(event: any): void {
-    this.periodoSeleccionado = +event.target.value;
-    this.idPeriodo = this.periodoSeleccionado;
-    console.log('idPeriodo', this.idPeriodo)
-  }
+  // onPeriodoChange(event: any): void {
+  //   this.periodoSeleccionado = +event.target.value;
+  //   this.idPeriodo = this.periodoSeleccionado;
+  //   console.log('idPeriodo', this.idPeriodo)
+  // }
 
   verDetalle(valor: any): void {
-    if (this.periodoSeleccionado > 0) {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
       console.log(valor)
       this.authService.id_periodo = this.idPeriodo;
+      this.authService.saveUserToLocalStorage();
       console.log('idPeriodo enviado', this.idPeriodo);
       this.personaService.getPersonas().subscribe(data => {
         const personaEncontrados = data as Persona[];
@@ -170,17 +184,8 @@ export class CoordinadorComponent implements OnInit {
           this.router.navigate(['/matriz-distributivo']);
         }
       });
-    }else{
-      Toast.fire({
-        icon: "error",
-        title: "Seleccione un Periodo",
-        footer: "Por favor, verifique si ha completado todo lo necesario"
-      });
-    }
-
-
-
   }
+  
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;

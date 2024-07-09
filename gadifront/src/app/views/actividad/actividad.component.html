@@ -1,52 +1,55 @@
-<div class="ingreso-titulos">
-  <div class="contenedorBoton">
-    <h1>INGRESO DE ACTIVIDADES</h1>
-  </div>
-  <form [formGroup]="actividadForm" (ngSubmit)="create()" aria-label="Formulario de Actividades" class="form-container">
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Nombre Actividad</mat-label>
-        <input matInput formControlName="nombre_actividad" placeholder="Ingrese nombre de la actividad" required>
-        <mat-error *ngIf="actividadForm.get('nombre_actividad')?.hasError('required')">El nombre de la actividad es requerido.</mat-error>
-        <mat-error *ngIf="actividadForm.get('nombre_actividad')?.hasError('pattern')">Ingrese un nombre válido (solo letras, 2-20 caracteres).</mat-error>
-      </mat-form-field>
+<div class="container" >
+  <div class="ingreso-titulos {{currentExplan}}">
+    <div class="contenedorBoton">
+      <h1>INGRESO DE ACTIVIDADES</h1>
     </div>
-
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Descripción de la Actividad</mat-label>
-        <input matInput formControlName="descripcion_actividad" placeholder="Ingrese descripción de la actividad" required>
-        <mat-error *ngIf="actividadForm.get('descripcion_actividad')?.hasError('required')">La descripción de la actividad es requerida.</mat-error>
-        <mat-error *ngIf="actividadForm.get('descripcion_actividad')?.hasError('pattern')">Ingrese una descripción válida (5-50 caracteres, letras y números).</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Horas Docente</mat-label>
-        <input matInput type="number" formControlName="horas_no_docentes" placeholder="Ingrese las horas no docentes" required min="0">
-        <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('required')">Las horas no docentes son requeridas.</mat-error>
-        <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('min')">El valor debe ser mayor o igual a 0.</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <mat-form-field appearance="fill">
-        <mat-label>Tipo</mat-label>
-        <mat-select formControlName="id_tipo_actividad" required>
-          <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">
-            {{ tipo.nom_tip_actividad }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="actividadForm.get('id_tipo_actividad')?.hasError('required')">El tipo de actividad es requerido.</mat-error>
-      </mat-form-field>
-    </div>
-
-    <div class="form-group">
-      <div class="btnContenedor">
-        <button mat-raised-button color="primary" type="submit" class="btn-submit">Enviar</button>
-        <button mat-raised-button color="warn" routerLinkActive="active" routerLink="/actividad/form">Regresar</button>
+    <form [formGroup]="actividadForm" (ngSubmit)="create()" aria-label="Formulario de Actividades" class="form-container">
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre Actividad</mat-label>
+          <input matInput formControlName="nombre_actividad" placeholder="Ingrese nombre de la actividad" required>
+          <mat-error *ngIf="actividadForm.get('nombre_actividad')?.hasError('required')">El nombre de la actividad es requerido.</mat-error>
+          <mat-error *ngIf="actividadForm.get('nombre_actividad')?.hasError('pattern')">Ingrese un nombre válido (solo letras, 2-20 caracteres).</mat-error>
+        </mat-form-field>
       </div>
-    </div>
-  </form>
+  
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Descripción de la Actividad</mat-label>
+          <input matInput formControlName="descripcion_actividad" placeholder="Ingrese descripción de la actividad" required>
+          <mat-error *ngIf="actividadForm.get('descripcion_actividad')?.hasError('required')">La descripción de la actividad es requerida.</mat-error>
+          <mat-error *ngIf="actividadForm.get('descripcion_actividad')?.hasError('pattern')">Ingrese una descripción válida (5-50 caracteres, letras y números).</mat-error>
+        </mat-form-field>
+      </div>
+  
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Horas Docente</mat-label>
+          <input matInput type="number" formControlName="horas_no_docentes" placeholder="Ingrese las horas no docentes" required min="0">
+          <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('required')">Las horas no docentes son requeridas.</mat-error>
+          <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('min')">El valor debe ser mayor o igual a 0.</mat-error>
+        </mat-form-field>
+      </div>
+  
+      <div class="form-group">
+        <mat-form-field appearance="fill">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="id_tipo_actividad" required>
+            <mat-option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">
+              {{ tipo.nom_tip_actividad }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="actividadForm.get('id_tipo_actividad')?.hasError('required')">El tipo de actividad es requerido.</mat-error>
+        </mat-form-field>
+      </div>
+  
+      <div class="form-group">
+        <div class="btnContenedor">
+          <button mat-raised-button color="primary" type="submit" class="btn-submit">Enviar</button>
+          <button mat-raised-button color="warn" routerLinkActive="active" routerLink="/actividad/form">Regresar</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+

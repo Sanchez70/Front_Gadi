@@ -96,6 +96,9 @@ import { CrudAsignaturaComponent } from './views/crud-asignatura/crud-asignatura
 import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
 import { CommonModule } from '@angular/common';
 import { loginRedirectGuardGuard } from './guards/login-redirect-guard.guard';
+import { TipoActividadModalComponent } from './views/tipo-actividad/tipo-actividad-modal.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -132,6 +135,7 @@ const routes: Routes = [
 ];
 @NgModule({
   declarations: [
+    TipoActividadModalComponent,
     AppComponent,
     PersonaComponent,
     UsuarioComponent,
@@ -182,6 +186,8 @@ const routes: Routes = [
   ],
   
   imports: [
+    MatPaginatorModule,
+    MatSortModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
