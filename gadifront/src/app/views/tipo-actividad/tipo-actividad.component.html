@@ -1,43 +1,42 @@
+<div class="container">
+  <div class="container1 {{currentExplan}}">
+    <h1>Tipos de Actividad</h1>
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar...</mat-label>
+        <input matInput (input)="applyFilter($event)" />
+      </mat-form-field>
+      <button mat-button color="primary" (click)="openCreateDialog()">Crear</button>
+    </div>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="nom_tip_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let tipoActividad">{{ tipoActividad.nom_tip_actividad }}</td>
+        </ng-container>
   
-  <div class="container">
-    <div class="container1 {{currentExplan}}">
-      <h1>Tipos de Actividad</h1>
-      <div class="search-bar">
-        <mat-form-field appearance="outline">
-          <mat-label>Buscar...</mat-label>
-          <input matInput (input)="applyFilter($event)" />
-        </mat-form-field>
-        <button mat-button color="primary" (click)="openCreateDialog()">Crear</button>
-      </div>
-      <div class="table-container">
-        <table mat-table [dataSource]="dataSource" matSort>
-          <ng-container matColumnDef="nom_tip_actividad">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-            <td mat-cell *matCellDef="let tipoActividad">{{ tipoActividad.nom_tip_actividad }}</td>
-          </ng-container>
+        <ng-container matColumnDef="borrar">
+          <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+          <td mat-cell *matCellDef="let tipoActividad">
+            <button mat-icon-button color="warn" (click)="deleteTipoActividad(tipoActividad.id_tipo_actividad)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
     
-          <ng-container matColumnDef="borrar">
-            <th mat-header-cell *matHeaderCellDef>Eliminar</th>
-            <td mat-cell *matCellDef="let tipoActividad">
-              <button mat-icon-button color="warn" (click)="deleteTipoActividad(tipoActividad.id_tipo_actividad)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-      
-          <ng-container matColumnDef="actualizar">
-            <th mat-header-cell *matHeaderCellDef>Actualizar</th>
-            <td mat-cell *matCellDef="let tipoActividad">
-              <button mat-icon-button color="primary" (click)="openEditDialog(tipoActividad)">
-                <mat-icon>edit</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-    
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-        <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-      </div>
+        <ng-container matColumnDef="actualizar">
+          <th mat-header-cell *matHeaderCellDef>Actualizar</th>
+          <td mat-cell *matCellDef="let tipoActividad">
+            <button mat-icon-button color="primary" (click)="openEditDialog(tipoActividad)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
+</div>

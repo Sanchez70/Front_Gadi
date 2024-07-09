@@ -32,11 +32,11 @@ export class TituloProfesionalComponent implements OnInit {
   grados: string[] = ['Tercer Nivel', 'Cuarto Nivel'];
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private authService: AuthService,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<TituloProfesionalComponent>,
-    private tituloService: TituloProfesionalService) {}
+    private tituloService: TituloProfesionalService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -52,7 +52,7 @@ export class TituloProfesionalComponent implements OnInit {
 
     //Nombre_titulo' y transformarlo a mayúsculas
     this.tituloForm.get('nombre_titulo')?.valueChanges.subscribe(value => {
-    this.tituloForm.get('nombre_titulo')?.setValue(value.toUpperCase(), { emitEvent: false });
+      this.tituloForm.get('nombre_titulo')?.setValue(value.toUpperCase(), { emitEvent: false });
     });
   }
 
@@ -64,7 +64,7 @@ export class TituloProfesionalComponent implements OnInit {
             icon: "success",
             title: "Titulo registrado con exito",
           });
-          this.dialogRef.close(); 
+          this.dialogRef.close();
           this.router.navigate(['./persona/form']);
         },
         error => {
@@ -77,4 +77,10 @@ export class TituloProfesionalComponent implements OnInit {
     } else {
       console.log('Formulario no válido');
     }
-  }}
+  }
+
+  cancelar(): void {
+    this.dialogRef.close();
+  }
+  
+}

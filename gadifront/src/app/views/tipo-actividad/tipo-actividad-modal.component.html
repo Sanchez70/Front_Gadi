@@ -1,11 +1,18 @@
-<h1 mat-dialog-title>{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }} Tipo de Actividad</h1>
-<div mat-dialog-content>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Nombre de la Actividad</mat-label>
-    <input matInput [(ngModel)]="data.nom_tip_actividad" required>
-  </mat-form-field>
-</div>
-<div mat-dialog-actions>
-  <button mat-button (click)="cancel()">Cancelar</button>
-  <button mat-button color="primary" (click)="save()">{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }}</button>
+
+<div class="container">
+  <h1 mat-dialog-title>{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }} Tipo de Actividad</h1>
+  <div class="search-bar">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre de la Actividad</mat-label>
+      <input matInput [(ngModel)]="data.nom_tip_actividad" required [pattern]="validaciones.patternOnlyLettersValidator()" #nomTipActividad="ngModel">
+      <mat-error *ngIf="nomTipActividad.invalid && (nomTipActividad.dirty || nomTipActividad.touched)">
+        <span *ngIf="nomTipActividad.errors?.['required']">El nombre del tipo de actividad es requerido.</span>
+        <span *ngIf="nomTipActividad.errors?.['pattern']">Ingrese un nombre válido (solo letras, 2-20 caracteres).</span>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="Abrir">
+    <button mat-button (click)="cancel()">Cancelar</button>
+    <button mat-button color="primary" (click)="save()">{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }}</button>
+  </div>
 </div>
