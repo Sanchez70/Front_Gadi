@@ -22,7 +22,7 @@ import { ReportesComponent } from '../../reportes/reportes/reportes.component';
   providers: [ReportesComponent]
 })
 export class DistributivosGeneradosComponent {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'detalle'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'detalle'];
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;

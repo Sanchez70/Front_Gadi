@@ -154,12 +154,6 @@ export class CoordinadorComponent implements OnInit {
     });
   }
 
-
-  // onChangeBuscar(event: any): void {
-  //   this.cedula = event.target.value;
-  // }
-
-
   verDetalle(valor: any): void {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();

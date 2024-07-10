@@ -5,7 +5,7 @@ import { PersonaService } from '../../Services/personaService/persona.service';
 import { Periodo } from '../periodo/periodo';
 import { GradoOcupacional } from '../grado-ocupacional/grado-ocupacional';
 import { TipoContrato } from '../tipo-contrato/tipo-contrato';
-import { TituloProfecional } from '../titulo-profesional/titulo-profecional'; 
+import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import { Subscription, catchError, filter, forkJoin, of, switchMap, tap } from 'rxjs';
 import { DistributivoService } from '../../Services/distributivoService/distributivo.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,11 +17,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Distributivo } from '../../Services/distributivoService/distributivo';
 import { PeriodoService } from '../../Services/periodoService/periodo.service';
 import { ReportesComponent } from '../reportes/reportes/reportes.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
 interface PersonaConDistributivo {
   persona: Persona;
   distributivo: Distributivo;
   periodo?: Periodo;
-  grado?: GradoOcupacional; 
+  grado?: GradoOcupacional;
   contrato?: TipoContrato;
 }
 
@@ -29,10 +30,10 @@ interface PersonaConDistributivo {
   selector: 'app-tabla',
   templateUrl: './tabla.component.html',
   styleUrls: ['./tabla.component.css'],
-  providers:[ReportesComponent]
+  providers: [ReportesComponent]
 })
 export class TablaComponent implements OnInit {
-  displayedColumns: string[] = ['descargar','cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
+  displayedColumns: string[] = ['descargar', 'cedula', 'nombre', 'apellido', 'telefono', 'direccion', 'correo', 'edad', 'fecha_vinculacion', 'contrato', 'grado', 'nombre_periodo', 'inicio_periodo', 'fin_periodo'];
   dataSource!: MatTableDataSource<PersonaConDistributivo>;
   personas: Persona[] = [];
   periodos: { [key: number]: Periodo } = {};
@@ -45,13 +46,16 @@ export class TablaComponent implements OnInit {
   periodoSeleccionado: number = 0;
   idPeriodo: number = 0;
   currentExplan: string = '';
+  miFormulario: FormGroup = this.fb.group({});
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
   private sidebarSubscription!: Subscription;
   personaEncontrada: Persona = new Persona();
-  
-  constructor(private report: ReportesComponent,private personaService: PersonaService, private distributivoService: DistributivoService,private periodoService: PeriodoService,private authService: AuthService, private activatedRoute: ActivatedRoute,private router: Router) { }
+
+  constructor(private report: ReportesComponent, private personaService: PersonaService, private distributivoService: DistributivoService, private periodoService: PeriodoService, private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder) { this.miFormulario = this.fb.group({
+    periodoSelec: [0] // Valor por defecto
+  }); }
 
   ngOnInit(): void {
     this.cargarComboPeriodos();
@@ -75,17 +79,17 @@ export class TablaComponent implements OnInit {
     });
   }
 
-  buscarDistributivos(persona: Persona): void{
+  buscarDistributivos(persona: Persona): void {
     this.distributivoService.getDistributivo().subscribe(data => {
       const distributivos = data;
       const distributivoFiltrado = distributivos.filter(
-        (distributivo) => (distributivo.id_persona === persona.id_persona)
+        (distributivo) => (distributivo.id_persona === persona.id_persona && distributivo.estado === 'Aceptado')
       );
-     
-      
+
+
       this.loadTableData(persona, distributivoFiltrado)
-      
-      
+
+
     });
   }
 
@@ -93,13 +97,15 @@ export class TablaComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       const distributivos = data;
       const distributivosFiltrados = distributivos.filter(distributivo =>
-        distributivo.id_persona === this.authService.id_persona && distributivo.id_periodo === idPeriodo
+        distributivo.id_persona === this.authService.id_persona && distributivo.id_periodo === this.periodoSeleccionado && distributivo.estado === 'Aceptado'
       );
-  
-     
-      this.personaService.getPersonaById(this.authService.id_persona).subscribe(persona => {
-        this.loadTableData(persona, distributivosFiltrados);
-      });
+      if (distributivosFiltrados.length === 0) {
+        this.dataSource.data = [];
+      } else {
+        this.personaService.getPersonaById(this.authService.id_persona).subscribe(persona => {
+          this.loadTableData(persona, distributivosFiltrados);
+        });
+      }
     });
   }
 
@@ -115,7 +121,7 @@ export class TablaComponent implements OnInit {
 
   loadTableData(persona: Persona, distributivos: Distributivo[]): void {
     const dataTabla: PersonaConDistributivo[] = [];
-  
+
     distributivos.forEach(distributivo => {
       const personaConDistributivo: PersonaConDistributivo = {
         persona: persona,
@@ -126,12 +132,12 @@ export class TablaComponent implements OnInit {
       };
       dataTabla.push(personaConDistributivo);
     });
-  
+
     dataTabla.forEach(item => {
       forkJoin([
         this.personaService.getPeriodoById(item.distributivo.id_periodo),
         this.personaService.getGradoById(item.persona.id_grado_ocp ?? 0),
-        this.personaService.getContratoById(item.persona.id_tipo_contrato?? 0)
+        this.personaService.getContratoById(item.persona.id_tipo_contrato ?? 0)
       ]).subscribe(([periodo, grado, contrato]) => {
         item.periodo = periodo || { id_periodo: 0, nombre_periodo: 'No asignado', inicio_periodo: null, fin_periodo: null };
         item.grado = grado || { id_grado_ocp: 0, nombre_grado_ocp: 'No asignado' };
@@ -144,9 +150,9 @@ export class TablaComponent implements OnInit {
   }
 
 
-  
-  
-  
+
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.dataSource.filter = filterValue;
@@ -168,7 +174,7 @@ export class TablaComponent implements OnInit {
     this.periodoSeleccionado = +event.target.value;
     this.idPeriodo = this.periodoSeleccionado;
     this.buscarDistributivosbyId(this.idPeriodo);
-    
+
   }
 
   generarModeloPDF(idPeriodo: number): void {
@@ -176,9 +182,9 @@ export class TablaComponent implements OnInit {
     this.authService.id_periodo = idPeriodo;
     this.authService.saveUserToLocalStorage();
     if (this.authService.id_periodo) {
-      setTimeout(()=>{
-        this.report.captureAndDownloadPdf();
-      },100)
+      setTimeout(() => {
+        this.report.captureAndDownloadPdfbyPeriodo(idPeriodo);
+      }, 100)
 
     } else {
       console.warn('No se encontró id_periodo para esta persona.');
@@ -193,6 +199,6 @@ export class TablaComponent implements OnInit {
         this.buscarDistributivos(usuarioEncontrado)
       }
     });
-    
+    this.miFormulario.patchValue({ periodoSelec: 0 });
   }
 }

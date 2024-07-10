@@ -5,13 +5,15 @@
       <div class="combo-container">
         <label for="periodo" class="label_form font-weight-bold">Periodo</label>
         <div class="custom-select">
-          <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
-            name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
-            formControlName="periodoSelec">
-            <option value=0 disabled selected>Seleccione una opción</option>
-            <option *ngFor="let periodo of periodosTotales" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}
-            </option>
-          </select>
+          <form [formGroup]="miFormulario">
+            <select class="form-control" placeholder="Seleccione el Periodo" (ngModel)="periodoSeleccionado"
+              name="periodo" aria-label="Periodo" aria-describedby="basic-addon1" (change)="onPeriodoChange($event)"
+              formControlName="periodoSelec">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let periodo of periodosTotales" [value]="periodo.id_periodo">{{periodo.nombre_periodo}}
+              </option>
+            </select>
+          </form>
         </div>
       </div>
       <button class="btnRefrescar" (click)="recargarPagina()"><mat-icon>refresh</mat-icon></button>
@@ -20,6 +22,7 @@
 
   <div class="table-container">
     <section class="example-container mat-elevation-z8" tabindex="0">
+      <div *ngIf="dataSource && dataSource.data.length > 0; else noData">
       <table mat-table [dataSource]="dataSource" matSort>
 
         <ng-container matColumnDef="cedula" sticky>
@@ -99,6 +102,12 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      </div>
+      <ng-template #noData>
+        <div class="centered-container">
+          <p class="centered-text">No existen distributivos para este periodo...</p>
+        </div>
+    </ng-template>
     </section>
   </div>
 </div>

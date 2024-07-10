@@ -494,6 +494,242 @@ export class ReportesComponent implements OnInit {
     });
   }
 
+  captureAndDownloadPdfbyPeriodo(PeriodoObtenido:number) {
+    const fechaActual = new Date();
+   this.idPeriodo = PeriodoObtenido;
+    this.fechaDistributivo = this.formatearFecha(fechaActual);
+
+    this.personaService.getPersonas().subscribe(data => {
+      const personaEncontrados = data as Persona[];
+      const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === this.authService.id_persona);
+
+      if (usuarioEncontrado) {
+        this.personaEncontrada = usuarioEncontrado;
+        this.personas.push(this.personaEncontrada);
+        this.cargarPeriodo();
+        this.cargarTitulos(usuarioEncontrado);
+        this.buscarDistributivo(usuarioEncontrado.id_persona);
+        this.cargarRector();
+        this.formatearFecha(new Date);
+        setTimeout(() => {
+
+          const doc = new jsPDF();
+          let yPos = 5;
+          const xPos = 20;
+          const cellWidth = 45;
+          const cellHeight = 9;
+
+          const columnWidths = [135, 45]; // Ajusta los anchos según tus necesidades
+          const columnWidthsAsig = [110, 15, 40, 15];
+          const columnWidthsTitulo = [75, 105];
+          const imgUrl = 'assets/img/logo.png';
+          doc.addImage(imgUrl, 'PNG', xPos + 55, yPos, 75, 13);
+          yPos += 27;
+          doc.setFontSize(9);
+          doc.setTextColor(60, 60, 60);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Docente`, xPos, yPos);
+          doc.text(`${this.fechaDistributivo}`, xPos + 155, yPos);
+          yPos += 6;
+          doc.text(`${usuarioEncontrado.nombre1} ${usuarioEncontrado.apellido1}`, xPos, yPos);
+          yPos += 6;
+          doc.text(`A continuación se detalla su asignación de horas docentes y de gestión para el periodo académico `+`${this.periodoName}`, xPos, yPos);
+          yPos += 10;
+
+          let currentXPosTitulo = xPos;
+
+          this.displayedColumnsTitulo.forEach((header, index) => {
+            if (index === 0) {
+              doc.setFontSize(12);
+              doc.setTextColor(255, 255, 255);  // Texto blanco
+              doc.setFillColor(0, 102, 204);    // Fondo azul
+              const cellWidth = 180;
+              doc.rect(currentXPosTitulo, yPos, cellWidth, cellHeight, 'F');
+              const textWidth = doc.getTextWidth(header);
+              const textX = currentXPosTitulo + (cellWidth - textWidth) / 2;
+              doc.text(header, textX, yPos + 7);
+              currentXPosTitulo += cellWidth;
+            }
+          });
+
+          yPos += cellHeight;
+
+          // Dibujar datos de la tabla
+          doc.setTextColor(0, 0, 0);  // Texto negro
+          doc.setFontSize(8);
+          // Dibujar la primera columna combinada
+          const totalHeight = this.dataSourceTitulos.data.length * cellHeight;
+          doc.setFillColor(240, 240, 240);  // Fondo gris claro para la celda combinada
+          doc.rect(xPos, yPos, columnWidthsTitulo[0], totalHeight, 'D');
+
+          // Texto centrado verticalmente en la celda combinada
+          const textWidthTitulo = doc.getTextWidth(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString());
+          const textXTitulo = xPos + (columnWidthsTitulo[0] - textWidthTitulo) / 2;
+          const textYTitulo = yPos + (totalHeight - cellHeight) / 2 + 7; // Ajuste vertical
+          doc.text(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString(), textXTitulo, textYTitulo);
+
+          // Dibujar las celdas individuales de la segunda columna
+          let currentYPosTitulo = yPos;
+
+          this.dataSourceTitulos.data.forEach(row => {
+            const currentXPosRowTitulo = xPos + columnWidthsTitulo[0]; // La posición X de la segunda columna
+            const cellWidthTitulo = columnWidthsTitulo[1];
+            doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+            doc.rect(currentXPosRowTitulo, currentYPosTitulo, cellWidthTitulo, cellHeight, 'D');
+            if (row[this.displayedColumnsTitulo[1]] !== undefined) {
+              const textWidth = doc.getTextWidth(row[this.displayedColumnsTitulo[1]].toString());
+              const textXTitulo = currentXPosRowTitulo + (cellWidthTitulo - textWidth) / 2;
+              doc.text(row[this.displayedColumnsTitulo[1]].toString(), textXTitulo, currentYPosTitulo + 7);
+            }
+            currentYPosTitulo += cellHeight;
+            yPos += cellHeight;
+          });
+          yPos += 5;
+
+          let currentXPosAsig = xPos;
+
+          // Dibujar encabezados de la tabla
+          this.displayedColumnsAsig.forEach((header, index) => {
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);  // Texto blanco
+            doc.setFillColor(0, 102, 204);    // Fondo azul
+            const cellWidth = columnWidthsAsig[index];
+            doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'F');
+            const textWidth = doc.getTextWidth(header);
+            const textX = currentXPosAsig + (cellWidth - textWidth) / 2;
+            doc.text(header, textX, yPos + 7);
+            currentXPosAsig += cellWidth;
+          });
+
+          yPos += cellHeight;
+
+          // Dibujar datos de la tabla
+          doc.setTextColor(0, 0, 0);  // Texto negro
+          this.dataSourceAsig.data.forEach(row => {
+            currentXPosAsig = xPos;
+            this.displayedColumnsAsig.forEach((column, index) => {
+              const cellWidth = columnWidthsAsig[index];
+              doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+              doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'D');
+              if (row[column] !== undefined) {
+                const textWidth = doc.getTextWidth(row[column].toString());
+                const textX = currentXPosAsig + (cellWidth - textWidth) / 2;
+                doc.text(row[column].toString(), textX, yPos + 7);
+              }
+              currentXPosAsig += cellWidth;
+            });
+            yPos += cellHeight;
+          });
+
+          // Primer cuadro para "total" (combinando 3 celdas)
+          const totalCellWidth = columnWidthsAsig.slice(0, 3).reduce((acc, val) => acc + val, 0);
+          const textWidthTotalAsig = doc.getTextWidth('TOTAL');
+          const textXTotalAsig = xPos + totalCellWidth - textWidthTotalAsig - 5; // 5 es el margen de la derecha
+          doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
+          doc.rect(xPos, yPos, totalCellWidth, cellHeight, 'D');
+          doc.text('TOTAL', textXTotalAsig, yPos + 7);
+
+          // Segunda celda para mostrar las horas totales
+          const lastCellWidth = columnWidthsAsig[3];
+          const textWidthAsig = doc.getTextWidth(`${this.horasTotales}`);
+          const textXAsig = xPos + totalCellWidth + (lastCellWidth - textWidthAsig) / 2;
+          doc.rect(xPos + totalCellWidth, yPos, lastCellWidth, cellHeight, 'D');
+          doc.setFontSize(8);
+          doc.setTextColor(60, 60, 60);
+          doc.text(`${this.horasTotales}`, textXAsig, yPos + 7);
+          yPos += 15;
+
+          // Dibujar los encabezados de la tabla Actividades
+          let currentXPos = xPos;
+          this.displayedColumns.forEach((header, index) => {
+            doc.setFontSize(8);
+            doc.setTextColor(255, 255, 255);  // Texto blanco
+            doc.setFillColor(0, 102, 204);    // Fondo azul
+            const cellWidth = columnWidths[index];
+            doc.rect(currentXPos, yPos, cellWidth, cellHeight, 'F');
+            const textWidth = doc.getTextWidth(header);
+            const textX = currentXPos + (cellWidth - textWidth) / 2;
+            doc.text(header, textX, yPos + 7);
+            currentXPos += cellWidth;
+          });
+
+          yPos += cellHeight;
+
+          // Dibujar datos de la tabla
+          doc.setTextColor(0, 0, 0);  // Texto negro
+          this.dataSource.data.forEach(row => {
+            currentXPos = xPos;
+            this.displayedColumns.forEach((column, index) => {
+              const cellWidth = columnWidths[index];
+              doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+              doc.rect(currentXPos, yPos, cellWidth, cellHeight, 'D');
+              if (row[column] !== undefined) {
+                const textWidth = doc.getTextWidth(row[column].toString());
+                const textX = currentXPos + (cellWidth - textWidth) / 2;
+                doc.text(row[column].toString(), textX, yPos + 7);
+              }
+              currentXPos += cellWidth;
+            });
+            yPos += cellHeight;
+          });
+
+
+
+          const textWidthTotal = doc.getTextWidth('TOTAL');
+          const textXTotal = xPos + cellWidth * 3 - textWidthTotal - 5; // 5 es el margen de la derecha
+
+          // Primer cuadro para "total" (combinando 3 celdas)
+          doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
+          doc.rect(xPos, yPos, cellWidth * 3, cellHeight, 'D');
+          doc.text('TOTAL', textXTotal, yPos + 7);
+
+          const textWidth = doc.getTextWidth(`${this.horasTotalesActividad}`);
+          const textX = xPos + cellWidth * 3 + (cellWidth - textWidth) / 2;
+          doc.rect(xPos + cellWidth * 3, yPos, cellWidth, cellHeight, 'D');
+          doc.setFontSize(8);
+          doc.setTextColor(60, 60, 60);
+          doc.text(`${this.horasTotalesActividad}`, textX, yPos + 7);
+          yPos += cellHeight;
+          yPos += cellHeight;
+          doc.setFontSize(8);
+          doc.setTextColor(60, 60, 60);
+          doc.setFont('helvetica', 'bold');
+          yPos += 6;
+          const pageWidthHora = doc.internal.pageSize.getWidth();
+          const textHoras = `HORAS TOTALES DEL DOCENTE: ${this.horasPorDocente}`;
+          const textWidthHora = doc.getTextWidth(textHoras);
+          const textXHora = (pageWidthHora - textWidthHora) / 2;
+          doc.setFont('helvetica', 'bold');
+          doc.text(textHoras, textXHora, yPos);
+          yPos += 6;
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Agredecidos con su aporte a la institucion, suscribimos de usted`, xPos, yPos);
+          yPos += 6;
+          doc.text(`Atentamente`, xPos, yPos);
+          yPos += 6;
+          yPos += cellHeight;
+          yPos += cellHeight;
+          yPos += cellHeight;
+          const pageWidth = doc.internal.pageSize.getWidth();
+          const text = `Mgtr.${this.nomreRector}`;
+          const textWidthRec = doc.getTextWidth(text);
+          const textXRec = (pageWidth - textWidthRec) / 2;
+          doc.setFont('helvetica', 'bold');
+          doc.text(text, textXRec, yPos);
+          yPos += 6;
+          const pageWidthfinal = doc.internal.pageSize.getWidth();
+          const textFinal = `Rector`;
+          const textWidthRecFinal = doc.getTextWidth(textFinal);
+          const textXRecFinal = (pageWidthfinal - textWidthRecFinal) / 2;
+          doc.setFont('helvetica', 'bold');
+          doc.text(textFinal, textXRecFinal, yPos);
+          // Guardar el documento PDF
+          doc.save(`${usuarioEncontrado.nombre1}_`+`${usuarioEncontrado.apellido1}_`+'Distributivo.pdf');
+        }, 500);
+      }
+    });
+  }
+
   cargarDistributivo(id: any): void {
    
     this.horasTotalesActividad = 0;
