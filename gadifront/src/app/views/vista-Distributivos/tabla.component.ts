@@ -174,8 +174,12 @@ export class TablaComponent implements OnInit {
   generarModeloPDF(idPeriodo: number): void {
     this.authService.clearLocalStoragePeriodo();
     this.authService.id_periodo = idPeriodo;
+    this.authService.saveUserToLocalStorage();
     if (this.authService.id_periodo) {
-      this.report.captureAndDownloadPdf();
+      setTimeout(()=>{
+        this.report.captureAndDownloadPdf();
+      },100)
+
     } else {
       console.warn('No se encontró id_periodo para esta persona.');
     }

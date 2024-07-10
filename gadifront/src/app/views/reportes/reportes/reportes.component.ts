@@ -130,7 +130,7 @@ export class ReportesComponent implements OnInit {
   }
 
   cargarPeriodo(): void {
-    this.periodoService.getPeriodobyId(this.idPeriodo).subscribe(data => {
+    this.periodoService.getPeriodobyId(this.authService.id_periodo).subscribe(data => {
       this.periodo = data;
       this.periodoName = this.periodo.nombre_periodo;
     });
@@ -138,12 +138,13 @@ export class ReportesComponent implements OnInit {
 
   cargarTitulos(personaEncontrada: Persona): void {
     // Llama al servicio para obtener todos los títulos
-    const dataArray: any[] = [];
-    
+
+
     this.tituloService.getTitulo().subscribe(respuest => {
       const titulos = respuest as Titulo_profesional[];
       const filTitllo = titulos.filter(titulo => titulo.id_persona === personaEncontrada.id_persona);
       console.log('titulos', filTitllo)
+      const dataArray: any[] = [];
       filTitllo.forEach(final => {
         dataArray.push({
           TITULOS: final.nombre_titulo || 'N/A',
@@ -174,10 +175,10 @@ export class ReportesComponent implements OnInit {
       console.log('distributivos filtrados', this.distributivoFiltrado)
 
       this.distributivoFiltrado.forEach(distributivo => {
-        
+
         this.buscarAsignatura(distributivo.id_distributivo);
         this.cargarDistributivo(distributivo.id_distributivo);
-     
+
         setTimeout(() => {
           this.calcularHorasTotalesPorDocente(this.horasTotales, this.horasTotalesActividad);
         }, 100);
@@ -189,34 +190,34 @@ export class ReportesComponent implements OnInit {
   }
   buscarAsignatura(idDistributivo: number): void {
     this.horasTotales = 0;
-   
-    const dataArray: any[] = [];
- 
+
+
+
     // Obtener distributivos de asignatura
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(distributivos => {
       this.distributivoAsignaturas = distributivos;
-  
+
       // Filtrar distributivos por idDistributivo
       const asignaturasFiltradas = this.distributivoAsignaturas.filter(
         materiaAs => materiaAs.id_distributivo === idDistributivo
       );
-  
+
       // Contador para manejar las suscripciones secuenciales
       let count = 0;
-  
+      const dataArray: any[] = [];
       // Iterar sobre cada asignatura filtrada
       asignaturasFiltradas.forEach(distAsig => {
         // Obtener la asignatura correspondiente
         this.asignaturaService.getAsignaturabyId(distAsig.id_asignatura).subscribe(asignatura => {
           const resultFinal = asignatura as Asignatura;
-  
+         
           // Calcular las horas totales
           this.calcularHorasTotales(resultFinal.horas_semanales);
-  
+
           // Obtener la carrera correspondiente
           this.carreraService.getCarreraById(resultFinal.id_carrera).subscribe(carrera => {
             const final = carrera as Carrera;
-  
+
             // Agregar datos al arreglo
             dataArray.push({
               CARRERA: final.nombre_carrera || 'N/A',
@@ -224,17 +225,17 @@ export class ReportesComponent implements OnInit {
               ASIGNATURA: resultFinal.nombre_asignatura || 'N/A',
               HORAS: resultFinal.horas_semanales || 'N/A',
             });
-  
+
             // Incrementar el contador
             count++;
-  
+
             // Si hemos procesado todas las asignaturas filtradas, actualizar el dataSourceAsig
-            if (count === asignaturasFiltradas.length) {
-              // Asignar el nuevo dataSourceAsig después de procesar todos los datos
-              this.dataSourceAsig = new MatTableDataSource<any>(dataArray);
-              this.dataSourceAsig.paginator = this.paginator;
-              this.dataSourceAsig.sort = this.sort;
-            }
+
+            // Asignar el nuevo dataSourceAsig después de procesar todos los datos
+            this.dataSourceAsig = new MatTableDataSource<any>(dataArray);
+            this.dataSourceAsig.paginator = this.paginator;
+            this.dataSourceAsig.sort = this.sort;
+
           });
         });
       });
@@ -259,7 +260,7 @@ export class ReportesComponent implements OnInit {
 
   captureAndDownloadPdf() {
     const fechaActual = new Date();
-    this.cargarPeriodo();
+   
     this.fechaDistributivo = this.formatearFecha(fechaActual);
 
     this.personaService.getPersonas().subscribe(data => {
@@ -269,8 +270,9 @@ export class ReportesComponent implements OnInit {
       if (usuarioEncontrado) {
         this.personaEncontrada = usuarioEncontrado;
         this.personas.push(this.personaEncontrada);
-        this.buscarDistributivo(this.authService.id_persona);
+        this.cargarPeriodo();
         this.cargarTitulos(usuarioEncontrado);
+        this.buscarDistributivo(usuarioEncontrado.id_persona);
         this.cargarRector();
         this.formatearFecha(new Date);
         setTimeout(() => {
@@ -487,20 +489,20 @@ export class ReportesComponent implements OnInit {
           doc.text(textFinal, textXRecFinal, yPos);
           // Guardar el documento PDF
           doc.save('reporte.pdf');
-        }, 1000);
+        }, 500);
       }
     });
   }
 
   cargarDistributivo(id: any): void {
-    const dataArray: any[] = [];
+   
     this.horasTotalesActividad = 0;
     this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
       const distributivoActividad = data as DistributivoActividad[];
       const resultaAct = distributivoActividad.filter(resultado => resultado.id_distributivo === id);
 
- // Array para acumular los resultados
-
+      // Array para acumular los resultados
+      const dataArray: any[] = [];
       resultaAct.forEach(actividadEncontrada => {
         this.actividadService.getActividad().subscribe(dataAct => {
           const actividades = dataAct as Actividad[];
@@ -535,35 +537,35 @@ export class ReportesComponent implements OnInit {
     });
 
   }
-  
-  
-  
-  prepararPersonasParaDescarga(id_persona:any): Promise<Blob> {
+
+
+
+  prepararPersonasParaDescarga(id_persona: any): Promise<Blob> {
 
     return new Promise((resolve, reject) => {
-      
+
       const fechaActual = new Date();
       this.cargarPeriodo();
       this.fechaDistributivo = this.formatearFecha(fechaActual);
-  
+
       this.personaService.getPersonas().subscribe(data => {
         const personaEncontrados = data as Persona[];
         const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === id_persona);
-       
+
         if (usuarioEncontrado) {
           this.personaEncontrada = usuarioEncontrado;
           this.descargartitutulos(id_persona);
-          this.buscarDistributivo(id_persona);    
+          this.buscarDistributivo(id_persona);
           this.cargarRector();
           this.formatearFecha(new Date());
           const doc = new jsPDF();
           setTimeout(() => {
-            
+
             let yPos = 5;
             const xPos = 20;
             const cellWidth = 45;
             const cellHeight = 9;
-  
+
             const columnWidths = [135, 45];
             const columnWidthsAsig = [110, 15, 40, 15];
             const columnWidthsTitulo = [75, 105];
@@ -580,9 +582,9 @@ export class ReportesComponent implements OnInit {
             yPos += 6;
             doc.text(`A continuación se detalla su asignación de horas docentes y de gestión para el periodo académico`, xPos, yPos);
             yPos += 10;
-  
+
             let currentXPosTitulo = xPos;
-  
+
             this.displayedColumnsTitulo.forEach((header, index) => {
               if (index === 0) {
                 doc.setFontSize(12);
@@ -596,23 +598,23 @@ export class ReportesComponent implements OnInit {
                 currentXPosTitulo += cellWidth;
               }
             });
-  
+
             yPos += cellHeight;
-  
+
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(8);
-  
+
             const totalHeight = this.dataSourceTitulos.data.length * cellHeight;
             doc.setFillColor(240, 240, 240);
             doc.rect(xPos, yPos, columnWidthsTitulo[0], totalHeight, 'D');
-  
+
             const textWidthTitulo = doc.getTextWidth(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString());
             const textXTitulo = xPos + (columnWidthsTitulo[0] - textWidthTitulo) / 2;
             const textYTitulo = yPos + (totalHeight - cellHeight) / 2 + 7;
             doc.text(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString(), textXTitulo, textYTitulo);
-  
+
             let currentYPosTitulo = yPos;
-  
+
             this.dataSourceTitulos.data.forEach(row => {
               const currentXPosRowTitulo = xPos + columnWidthsTitulo[0];
               const cellWidthTitulo = columnWidthsTitulo[1];
@@ -627,9 +629,9 @@ export class ReportesComponent implements OnInit {
               yPos += cellHeight;
             });
             yPos += 5;
-  
+
             let currentXPosAsig = xPos;
-  
+
             this.displayedColumnsAsig.forEach((header, index) => {
               doc.setFontSize(8);
               doc.setTextColor(255, 255, 255);
@@ -641,9 +643,9 @@ export class ReportesComponent implements OnInit {
               doc.text(header, textX, yPos + 7);
               currentXPosAsig += cellWidth;
             });
-  
+
             yPos += cellHeight;
-  
+
             doc.setTextColor(0, 0, 0);
             this.dataSourceAsig.data.forEach(row => {
               currentXPosAsig = xPos;
@@ -660,14 +662,14 @@ export class ReportesComponent implements OnInit {
               });
               yPos += cellHeight;
             });
-  
+
             const totalCellWidth = columnWidthsAsig.slice(0, 3).reduce((acc, val) => acc + val, 0);
             const textWidthTotalAsig = doc.getTextWidth('TOTAL');
             const textXTotalAsig = xPos + totalCellWidth - textWidthTotalAsig - 5;
             doc.setFillColor(255, 255, 255);
             doc.rect(xPos, yPos, totalCellWidth, cellHeight, 'D');
             doc.text('TOTAL', textXTotalAsig, yPos + 7);
-  
+
             const lastCellWidth = columnWidthsAsig[3];
             const textWidthAsig = doc.getTextWidth(`${this.horasTotales}`);
             const textXAsig = xPos + totalCellWidth + (lastCellWidth - textWidthAsig) / 2;
@@ -676,7 +678,7 @@ export class ReportesComponent implements OnInit {
             doc.setTextColor(60, 60, 60);
             doc.text(`${this.horasTotales}`, textXAsig, yPos + 7);
             yPos += 15;
-  
+
             let currentXPos = xPos;
             this.displayedColumns.forEach((header, index) => {
               doc.setFontSize(8);
@@ -689,9 +691,9 @@ export class ReportesComponent implements OnInit {
               doc.text(header, textX, yPos + 7);
               currentXPos += cellWidth;
             });
-  
+
             yPos += cellHeight;
-  
+
             doc.setTextColor(0, 0, 0);
             this.dataSource.data.forEach(row => {
               currentXPos = xPos;
@@ -708,13 +710,13 @@ export class ReportesComponent implements OnInit {
               });
               yPos += cellHeight;
             });
-  
+
             const textWidthTotal = doc.getTextWidth('TOTAL');
             const textXTotal = xPos + cellWidth * 3 - textWidthTotal - 5;
             doc.setFillColor(255, 255, 255);
             doc.rect(xPos, yPos, cellWidth * 3, cellHeight, 'D');
             doc.text('TOTAL', textXTotal, yPos + 7);
-  
+
             const textWidth = doc.getTextWidth(`${this.horasTotalesActividad}`);
             const textX = xPos + cellWidth * 3 + (cellWidth - textWidth) / 2;
             doc.rect(xPos + cellWidth * 3, yPos, cellWidth, cellHeight, 'D');
@@ -756,8 +758,8 @@ export class ReportesComponent implements OnInit {
             doc.setFont('helvetica', 'bold');
             doc.text(textFinal, textXRecFinal, yPos);
             resolve(doc.output('blob'));
-                      
-          
+
+
           }, 500);
         } else {
           reject('Usuario no encontrado');
@@ -767,11 +769,11 @@ export class ReportesComponent implements OnInit {
       });
     });
   }
-  
+
   createZipWithPdfs(pdfBlob: Blob) {
     const zip = new JSZip();
     zip.file('reporte.pdf', pdfBlob, { binary: true });
-  
+
     zip.generateAsync({ type: 'blob' }).then((zipBlob) => {
       saveAs(zipBlob, 'reportes.zip');
     }).catch((error) => {
@@ -780,9 +782,9 @@ export class ReportesComponent implements OnInit {
   }
 
   generatePdfAndCreateZip(): void {
-   
-    this.personaService.getPersonas().subscribe(respuesta=>{
-      respuesta.forEach(final=>{
+
+    this.personaService.getPersonas().subscribe(respuesta => {
+      respuesta.forEach(final => {
         this.prepararPersonasParaDescarga(final.id_persona).then((pdfBlob): void => {
           this.createZipWithPdfs(pdfBlob);
         }).catch((error) => {
@@ -790,34 +792,34 @@ export class ReportesComponent implements OnInit {
         });
       });
     });
-   
+
   }
 
-  descargartitutulos(id:any):void{
-      // Llama al servicio para obtener todos los títulos
-      const dataArray: any[] = [];
-    
-      this.tituloService.getTitulo().subscribe(respuest => {
-        const titulos = respuest as Titulo_profesional[];
-        const filTitllo = titulos.filter(titulo => titulo.id_persona === id);
-        this.personaService.getPersonaById(id).subscribe(resultado=>{
-          filTitllo.forEach(final => {
-            dataArray.push({
-              TITULOS: final.nombre_titulo || 'N/A',
-              DOCENTE: resultado.nombre1 + ' ' + resultado.nombre2 + ' ' + resultado.apellido1 + ' ' + resultado.apellido2 || 'N/A',
-            });
-            // Después de procesar todas las actividades, asignar el array acumulado a dataSource
-            this.dataSourceTitulos = new MatTableDataSource<any>(dataArray);
-            this.dataSourceTitulos.paginator = this.paginator;
-            this.dataSourceTitulos.sort = this.sort;
-    
+  descargartitutulos(id: any): void {
+    // Llama al servicio para obtener todos los títulos
+    const dataArray: any[] = [];
+
+    this.tituloService.getTitulo().subscribe(respuest => {
+      const titulos = respuest as Titulo_profesional[];
+      const filTitllo = titulos.filter(titulo => titulo.id_persona === id);
+      this.personaService.getPersonaById(id).subscribe(resultado => {
+        filTitllo.forEach(final => {
+          dataArray.push({
+            TITULOS: final.nombre_titulo || 'N/A',
+            DOCENTE: resultado.nombre1 + ' ' + resultado.nombre2 + ' ' + resultado.apellido1 + ' ' + resultado.apellido2 || 'N/A',
           });
+          // Después de procesar todas las actividades, asignar el array acumulado a dataSource
+          this.dataSourceTitulos = new MatTableDataSource<any>(dataArray);
+          this.dataSourceTitulos.paginator = this.paginator;
+          this.dataSourceTitulos.sort = this.sort;
+
         });
-      
-  
       });
+
+
+    });
   }
-  
+
 }
 
 
