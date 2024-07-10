@@ -1,18 +1,38 @@
 <div class="container">
   <div class="container1 {{currentExplan}}">
-    <h1>Tipos de Actividad</h1>
+    <h1>Actividades</h1>
     <div class="search-bar">
       <mat-form-field appearance="outline">
         <mat-label>Buscar...</mat-label>
         <input matInput (input)="applyFilter($event)" />
       </mat-form-field>
-      <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Añadir</button>
+      <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Crear</button>
     </div>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort>
-        <ng-container matColumnDef="nom_tip_actividad">
+        <ng-container matColumnDef="id_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.id_actividad }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre_actividad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-          <td mat-cell *matCellDef="let tipoActividad">{{ tipoActividad.nom_tip_actividad }}</td>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.nombre_actividad }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcion_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripccion</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.descripcion_actividad }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="horas_no_docentes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Horas no Docentes</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.horas_no_docentes }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="id_tipo_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Actividad</th>
+          <td mat-cell *matCellDef="let Actividad">{{ obtenerTipoActividad(Actividad.id_tipo_actividad) }}</td>
         </ng-container>
   
         <ng-container matColumnDef="borrar">

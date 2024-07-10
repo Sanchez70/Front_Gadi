@@ -1,35 +1,36 @@
-/* Estilos del formulario */
+/* Contenedor del formulario */
 .form-container {
-  max-width: 500px;
+  max-width: 9000px;
   margin: auto;
   padding: 20px;
   border-radius: 10px;
-  background-color: #f4f4f4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
+
+/* Filas del formulario */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
 
 /* Estilos de los campos de entrada */
 .form-group {
+  flex: 1;
   margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+/* Etiquetas de los campos */
+mat-label {
   font-weight: bold;
 }
 
-.form-control {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* Estilos del botón de enviar */
-.btn-submit {
+/* Botón de enviar */
+button[type="submit"] {
   display: block;
-  width: 180%;
+  width: 10%;
   padding: 10px;
   background-color: #007bff;
   color: #fff;
@@ -38,18 +39,15 @@ label {
   cursor: pointer;
 }
 
-.btn-submit:hover {
+button[type="submit"]:hover {
   background-color: #0056b3;
 }
 
-.contenedorBoton{
-  margin-top: 2%;
-  margin-top: 1%;
-  margin-left: 43%;
+/* Estilos del contenedor del botón */
+.contenedor-boton {
+  text-align: center;
+  margin-bottom: 20px;
 }
-
-
-
 .Abrir {
   margin-left: 22.5cap;
   display: flex;
@@ -57,21 +55,4 @@ label {
   align-items: stretch;
   width: calc(100% - 22.5cap);
   box-sizing: border-box;
-  
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-.editar-perfil, .mis-titulos {
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }

@@ -11,8 +11,8 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div mat-dialog-actions class="Abrir">
-    <button mat-button (click)="cancel()">Cancelar</button>
-    <button mat-button color="primary" (click)="save()">{{ data.id_tipo_actividad ? 'Actualizar' : 'Crear' }}</button>
+  <div mat-dialog-actions>
+    <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="save()">Guardar</button>
+    <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="cancel()">Cancelar</button>
   </div>
 </div>

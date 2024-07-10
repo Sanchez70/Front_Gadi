@@ -25,6 +25,7 @@ const Toast = Swal.mixin({
   templateUrl: './actividad.component.html',
   styleUrl: './actividad.component.css'
 })
+
 export class ActividadComponent implements OnInit {
   Actividades: Actividad[] = [];
   public actividad: Actividad = new Actividad();
@@ -109,6 +110,5 @@ export class ActividadComponent implements OnInit {
     const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
     return tipoActividad ? tipoActividad.nom_tip_actividad : '';
   }
-
 
 }

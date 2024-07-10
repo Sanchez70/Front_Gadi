@@ -24,6 +24,10 @@ export class ActividadService {
   getActividadbyId(id: any): Observable<Actividad> {
     return this.http.get<Actividad>(`${this.urlEndPoint}/actividad/${id}`);
   }
+  
+  update(actividad: Actividad): Observable<Actividad> {
+    return this.http.put<Actividad>(`${this.urlEndPoint}/actividad/${actividad.id_actividad}`, actividad, { headers: this.httpHeaders });
+  }
 
   deleteid(id: any): Observable<Actividad> {
     return this.http.delete<Actividad>(`${this.urlEndPoint}/actividad/${id}`);
