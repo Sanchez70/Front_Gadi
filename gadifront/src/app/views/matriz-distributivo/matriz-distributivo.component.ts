@@ -106,6 +106,7 @@ export class MatrizDistributivoComponent implements OnInit {
   horasTotalesActividad: number = 0;
   horasTotalesFinal: number = 0;
   id_activida: any;
+  horasActividad:any;
   validador: string = '';
   jornadas: any[] = [];
   titulo: any[] = [];
@@ -468,9 +469,10 @@ export class MatrizDistributivoComponent implements OnInit {
       inputPlaceholder: 'Ingrese un número entre 1 y 24',
       showCancelButton: true,
       inputValidator: (value) => {
+        
         const numberValue = Number(value);
-        if (isNaN(numberValue) || numberValue < 1) {
-          return 'Por favor, ingrese un número mayor a cero';
+        if (isNaN(numberValue) || numberValue < 1 || numberValue > this.horasActividad) {
+          return 'Las horas ingresadas son mayores a la de la actividad o son menores a cero ';
         }
         return null;
       }
@@ -548,6 +550,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   onRowClicked(row: any, index: number) {
     this.id_activida = row.idActividad;
+    this.horasActividad=row.horaActividad;
     console.log('ID of clicked row: ', row.idActividad);
     this.asignarHoras(row.idActividad, index);
   }

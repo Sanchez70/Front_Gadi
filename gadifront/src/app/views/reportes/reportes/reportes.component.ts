@@ -297,7 +297,7 @@ export class ReportesComponent implements OnInit {
           yPos += 6;
           doc.text(`${usuarioEncontrado.nombre1} ${usuarioEncontrado.apellido1}`, xPos, yPos);
           yPos += 6;
-          doc.text(`A continuación se detalla su asignación de horas docentes y de gestión para el periodo académico`, xPos, yPos);
+          doc.text(`A continuación se detalla su asignación de horas docentes y de gestión para el periodo académico `+`${this.periodoName}`, xPos, yPos);
           yPos += 10;
 
           let currentXPosTitulo = xPos;
@@ -488,7 +488,7 @@ export class ReportesComponent implements OnInit {
           doc.setFont('helvetica', 'bold');
           doc.text(textFinal, textXRecFinal, yPos);
           // Guardar el documento PDF
-          doc.save('reporte.pdf');
+          doc.save(`${usuarioEncontrado.nombre1}_`+`${usuarioEncontrado.apellido1}_`+'Distributivo.pdf');
         }, 500);
       }
     });
