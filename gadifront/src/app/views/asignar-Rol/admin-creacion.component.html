@@ -1,17 +1,19 @@
 <div class="container {{currentExplan}}">
-  <h1>ADMINISTRACIÓN DE CREACIÓN</h1>
+  <div class="ContenedorHeader">
+  <h1>Asignacion de Roles</h1>
+</div>
   <div class="contenedorBoton">
     <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" matTooltip="Ingrese una cedula"  [matTooltipPosition]="'before'">
         <mat-label>Cédula</mat-label>
         <input matInput formControlName="cedula" />
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('required')">Ingrese una cédula</mat-error>
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('minlength')">Ingrese una cédula válida de 10 dígitos</mat-error>
       </mat-form-field>
-      <button mat-button style="color: #fff; background-color: #1E90FF;"type="submit">
+      <button mat-button style="color: #fff; background-color: #1E90FF;"type="submit" matTooltip="Buscar datos"  [matTooltipPosition]="'below'">
         Buscar <mat-icon>search</mat-icon>
       </button>
-      <button mat-button style="color: #fff; background-color: #727272;" type="button" (click)="openModal()">
+      <button mat-button style="color: #fff; background-color: #727272;" type="button" (click)="openModal()" matTooltip="Abrir listado de Personas"  [matTooltipPosition]="'below'">
         Lista de personas <mat-icon>list</mat-icon>
       </button>
     </form>
@@ -89,7 +91,7 @@
         <mat-error *ngIf="personaForm.get('carrera')?.hasError('required') && personaForm.get('rol')?.value === 'Director'">Seleccione una carrera para el Director</mat-error>
       </mat-form-field>
     </div>
-    <button mat-button style="color: #fff; background-color: #1E90FF;"  (click)="guardarUsuario()">
+    <button mat-button style="color: #fff; background-color: #1E90FF;"  (click)="guardarUsuario()"  matTooltip="Asignar rol"  [matTooltipPosition]="'after'">
       Guardar <mat-icon>save</mat-icon>
     </button>
   </form>

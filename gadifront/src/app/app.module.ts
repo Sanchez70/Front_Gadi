@@ -58,6 +58,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatCardModule} from '@angular/material/card';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
 import { FormComponent as PersonaFormComponent } from './views/persona/form.component'; // Renombramos como PersonaFormComponent
@@ -219,7 +220,8 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatMenuModule,
     MatAccordion,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 

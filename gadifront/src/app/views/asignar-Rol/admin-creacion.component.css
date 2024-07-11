@@ -27,14 +27,13 @@
     margin-top: 5%;
   }
 
-  h1 {
+  .ContenedorHeader{
     position: absolute;
     top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 2%;
   }
-  
 
   .Abrir {
     margin-left: 25%;

@@ -6,7 +6,7 @@
             <img src="assets/img/logo.png" alt="GADI" class="logo">
             <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" matTooltip="Ingrese su cedula"  [matTooltipPosition]="'after'">
                         <mat-label>Usuario</mat-label>
                         <mat-icon matSuffix>account_circle</mat-icon>
                         <input matInput type="text" formControlName="usuario" placeholder="Ingrese su cédula">
@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="form-group">
-                    <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline" matTooltip="Ingrese su contraseña"  [matTooltipPosition]="'after'">
                         <mat-label>Contraseña</mat-label>
                         <mat-icon matSuffix>lock</mat-icon>
                         <input matInput type="password" formControlName="contraneusu"
@@ -28,7 +28,7 @@
                         </mat-error>
                     </mat-form-field>
                 </div>
-                <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+                <button mat-raised-button color="primary" type="submit" [disabled]="isLoading" matTooltip="Clic para iniciar sesion"  [matTooltipPosition]="'after'">
                     <ng-container *ngIf="!isLoading">INICIAR SESION</ng-container>
                     <ng-container *ngIf="isLoading">
                         <mat-spinner diameter="24"></mat-spinner>
