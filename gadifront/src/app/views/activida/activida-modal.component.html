@@ -28,6 +28,7 @@
           <input matInput type="number" formControlName="horas_no_docentes" placeholder="Ingrese las horas no docentes" required min="0">
           <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('required')">Las horas no docentes son requeridas.</mat-error>
           <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('min')">El valor debe ser mayor o igual a 0.</mat-error>
+          <mat-error *ngIf="actividadForm.get('horas_no_docentes')?.hasError('max')">El valor debe ser maximo 40 horas.</mat-error>
         </mat-form-field>
       </div>
 

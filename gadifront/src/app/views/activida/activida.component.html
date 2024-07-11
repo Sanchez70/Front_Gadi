@@ -37,8 +37,8 @@
   
         <ng-container matColumnDef="borrar">
           <th mat-header-cell *matHeaderCellDef>Eliminar</th>
-          <td mat-cell *matCellDef="let tipoActividad">
-            <button mat-icon-button color="warn" (click)="deleteTipoActividad(tipoActividad.id_tipo_actividad)">
+          <td mat-cell *matCellDef="let Actividad">
+            <button mat-icon-button color="warn" (click)="deleteTipoActividad(Actividad.id_actividad)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -46,8 +46,8 @@
     
         <ng-container matColumnDef="actualizar">
           <th mat-header-cell *matHeaderCellDef>Actualizar</th>
-          <td mat-cell *matCellDef="let tipoActividad">
-            <button mat-icon-button color="primary" (click)="openEditDialog(tipoActividad)">
+          <td mat-cell *matCellDef="let Actividad">
+            <button mat-icon-button color="primary" (click)="openEditDialog(Actividad)">
               <mat-icon>edit</mat-icon>
             </button>
           </td>

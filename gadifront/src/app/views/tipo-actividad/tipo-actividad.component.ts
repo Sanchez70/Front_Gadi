@@ -98,7 +98,7 @@ export class TipoActividadComponent implements OnInit {
   deleteTipoActividad(id: number): void {
     Swal.fire({
       title: '¿Está seguro?',
-      text: '¡No podrás revertir esto!',
+      text: 'Se eliminaran tambien todas las Actividades asociadas con este tipo de Actividad',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',

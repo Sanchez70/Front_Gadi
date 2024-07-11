@@ -125,6 +125,7 @@ export class ActividaComponent implements OnInit {
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
+      console.log(id)
       if (result.isConfirmed) {
         this.actividadService.deleteid(id).subscribe(() => {
           this.loadActividades();

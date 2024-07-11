@@ -61,7 +61,7 @@ export class ActividaModalComponent implements OnInit {
     this.actividadForm = this.fb.group({
       nombre_actividad: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyNames())]],
       descripcion_actividad: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternDescripValidator())]],
-      horas_no_docentes: ['', [Validators.required, Validators.min(0)]],
+      horas_no_docentes: ['', [Validators.required, Validators.min(0), Validators.max(40)]],
       id_tipo_actividad: ['', Validators.required]
     });
   }
