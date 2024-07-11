@@ -6,6 +6,7 @@
             <input matInput (input)="applyFilter($event)" />
         </mat-form-field>
         <section class="example-container mat-elevation-z8" tabindex="0">
+            <div *ngIf="dataSource && dataSource.data.length > 0; else noData">
             <table mat-table [dataSource]="dataSource" matSort>
 
                 <ng-container matColumnDef="cedula" sticky>
@@ -79,6 +80,12 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+        </div>
+        <ng-template #noData>
+            <div class="centered-container">
+              <p class="centered-text">No se ha asignado ninguna propuesta aún...</p>
+            </div>
+        </ng-template>
         </section>
     </div>
 </div>
