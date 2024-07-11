@@ -20,7 +20,7 @@ import { Periodo } from '../../Services/periodoService/periodo';
   styleUrl: './director-reporte.component.css'
 })
 export class DirectorReporteComponent {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo','detalle'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato','detalle'];
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
