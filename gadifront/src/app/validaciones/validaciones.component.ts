@@ -43,5 +43,8 @@ export class ValidacionesComponent {
         return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9;.,\-]{5,255}$/;
     }
     
+    static patterntitleValidator(): RegExp {
+        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ]*(?:\s[a-zA-ZñÑáéíóúÁÉÍÓÚ]+)*$/;
+    } 
     
 }
