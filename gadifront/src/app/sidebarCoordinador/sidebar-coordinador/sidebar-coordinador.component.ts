@@ -45,6 +45,7 @@ export class SidebarCoordinadorComponent {
         this.authService.tiporol='';
         this.authService.clearLocalStorage();
         this.authService.limpieza();
+        localStorage.clear();
       }
     });
   }
