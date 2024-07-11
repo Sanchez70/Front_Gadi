@@ -458,15 +458,15 @@ export class MatrizDistributivoComponent implements OnInit {
 
   asignarHoras(idActividad: number, index: number): void {
     const swalOptions: SweetAlertOptions = {
-      title: 'Ingrese el número de horas asignadas',
+      title: 'Ingrese el número de horas',
       input: 'number',
       inputAttributes: {
         min: '1',
-        max: '24',
+        max: this.horasActividad,
         step: '1'
       },
       inputLabel: 'Horas',
-      inputPlaceholder: 'Ingrese un número entre 1 y 24',
+      inputPlaceholder: 'Ingrese un número entre 1 y '+ `${this.horasActividad}`,
       showCancelButton: true,
       inputValidator: (value) => {
         
