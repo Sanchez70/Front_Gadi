@@ -17,6 +17,11 @@
       <mat-error *ngIf="tituloForm.get('nombre_titulo')?.hasError('required')">El nombre del título es requerido.</mat-error>
       <mat-error *ngIf="tituloForm.get('nombre_titulo')?.hasError('pattern')">Ingrese un nombre de título válido (letras, espacios, Ejm: Ingeniero en Sistemas).</mat-error>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" class="btn-submit">Guardar Título</button>
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" class="btn-submit primary">Guardar Título</button>
+      <button mat-raised-button color="warn" type="button" class="btn-submit warn" (click)="cancelar()">Cancelar</button>
+    </div>       
   </form>
 </div>
+
+  

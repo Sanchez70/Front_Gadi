@@ -1,0 +1,67 @@
+mat-form-field {
+    margin-bottom: 1%;
+    margin-top: 5%;
+}
+
+table {
+    width: 100%;
+    overflow: auto;
+    display: block;
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+}
+.contrato-Cerrar{
+    width: 25cap;
+  }
+th {
+    color: #fff;
+}
+
+h1 {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2%;
+}
+
+.mat-button{
+    border-radius: 0.5rem;
+    width: 70px;
+    height: 2.5rem;
+    background-color: #1E90FF;
+    border: none;
+    color: #fff;
+   text-align: center;
+}
+.Abrir {
+    padding: 0.3rem;
+    margin-left: 24cap;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+  
+  }
+  
+  .Cerrar {   
+    padding: 0.3rem;
+    margin-left: 0cap;
+  }
+
+  .centered-container {
+    display: grid;
+    place-items: center;
+    height: 100px;
+  }
+  
+  .centered-text {
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+  }

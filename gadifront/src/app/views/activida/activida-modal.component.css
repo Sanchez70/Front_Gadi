@@ -1,0 +1,15 @@
+mat-form-field {
+  width: 100%;
+}
+
+.btnContenedor {
+  display: flex;
+  gap: 10px; /* Añade un espacio entre los botones */
+}
+
+textarea[matInput] {
+  min-height: 150px; /* Puedes ajustar la altura según tus necesidades */
+  max-height: 300px; /* Ajusta la altura máxima si es necesario */
+  width: 100%; /* Asegura que el textarea ocupe todo el ancho disponible */
+  resize: vertical; /* Permite al usuario ajustar la altura, pero no el ancho */
+}

@@ -91,7 +91,6 @@ export class CoordinadorComponent implements OnInit {
       this.personaService.getPersonas().subscribe(data => {
         this.personas = data.filter(persona => idsPersonasPendiente.has(persona.id_persona));
         this.loadAdditionalDataForPersonas();
-        console.log(this.dataSource);
       })
     });
   }
@@ -103,18 +102,16 @@ export class CoordinadorComponent implements OnInit {
         (periodo) => (periodo.estado === 'Activo')
       );
       this.idPeriodo = this.periodoEncontrado.id_periodo
-      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
-  buscarPersona(): void {
-    this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
-      this.personaEncontrada = data;
-      console.log('id_persona', this.personaEncontrada.id_persona);
-      this.loadAdditionalDataForPersonas();
-    });
+  // buscarPersona(): void {
+  //   this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
+  //     this.personaEncontrada = data;
+  //     this.loadAdditionalDataForPersonas();
+  //   });
 
-  }
+  // }
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
       this.personaService.getPeriodoById(persona.id_persona).pipe(
@@ -157,30 +154,18 @@ export class CoordinadorComponent implements OnInit {
     });
   }
 
-
-  onChangeBuscar(event: any): void {
-    this.cedula = event.target.value;
-    console.log('cedula ingresada', this.cedula)
-  }
-
-  // onPeriodoChange(event: any): void {
-  //   this.periodoSeleccionado = +event.target.value;
-  //   this.idPeriodo = this.periodoSeleccionado;
-  //   console.log('idPeriodo', this.idPeriodo)
-  // }
-
   verDetalle(valor: any): void {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
       console.log(valor)
       this.authService.id_periodo = this.idPeriodo;
-      this.authService.saveUserToLocalStorage();
-      console.log('idPeriodo enviado', this.idPeriodo);
+      //this.authService.saveUserToLocalStorage();
       this.personaService.getPersonas().subscribe(data => {
         const personaEncontrados = data as Persona[];
         const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
         if (usuarioEncontrado) {
           this.authService.id_persona = usuarioEncontrado.id_persona;
+          this.authService.saveUserToLocalStorage();
           this.router.navigate(['/matriz-distributivo']);
         }
       });

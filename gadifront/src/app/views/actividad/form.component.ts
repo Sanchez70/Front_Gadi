@@ -12,6 +12,8 @@ import { response } from 'express';
 import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
 import { AuthService } from '../../auth.service';
 import { Observable } from 'rxjs';
+import { ActividaModalComponent } from '../activida/activida-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 const Toast = Swal.mixin({
@@ -45,7 +47,7 @@ export class FormComponent {
   idTipo: number = 0;
   horasTotales: number = 0;
   myForm: FormGroup = this.fb.group({});
-  constructor(private distributivoService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
+  constructor(private distributivoService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder, private dialog: MatDialog,) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
@@ -136,6 +138,20 @@ export class FormComponent {
   obtenerNombreTipo(id_tipo:number):void{
     const tipo = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo);
     return tipo ? tipo.nom_tip_actividad :'';
+  }
+
+  openCreateDialogActividad(): void {
+    const dialogRef = this.dialog.open(ActividaModalComponent, {
+      width: '60%',
+      height: '80%',
+      data: new Actividad()
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dialog.closeAll();
+      }
+    });
   }
 
 

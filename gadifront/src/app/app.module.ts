@@ -98,8 +98,11 @@ import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
 import { CommonModule } from '@angular/common';
 import { loginRedirectGuardGuard } from './guards/login-redirect-guard.guard';
 import { TipoActividadModalComponent } from './views/tipo-actividad/tipo-actividad-modal.component';
+import { ActividaComponent } from './views/activida/activida.component';
+import { ActividaModalComponent } from './views/activida/activida-modal.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { DistributivosGeneradosComponent } from './views/coordinador/distributivos-generados/distributivos-generados.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -111,6 +114,7 @@ const routes: Routes = [
   { path: 'main-admin', component:  MainAdminComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'asignatura', component: AsignaturaComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'actividad', component: ActividadComponent,canActivate: [loginRedirectGuardGuard] },
+  { path: 'activida', component: ActividaComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'mi-distribitivo', component: TablaComponent,canActivate: [loginRedirectGuardGuard]},
   { path: 'persona', component: PersonaComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'actividad/form', component: ActividadFormComponert,canActivate: [loginRedirectGuardGuard] }, 
@@ -131,11 +135,14 @@ const routes: Routes = [
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent,canActivate: [loginRedirectGuardGuard]},
   { path: 'crud-asignatura', component: CrudAsignaturaComponent,canActivate: [loginRedirectGuardGuard]},
   { path: 'periodo', component: PeriodoComponent,canActivate: [loginRedirectGuardGuard]} ,
-  { path: 'titulo', component: TituloProfesionalComponent,canActivate: [loginRedirectGuardGuard]} 
+  { path: 'titulo', component: TituloProfesionalComponent,canActivate: [loginRedirectGuardGuard]},
+  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [loginRedirectGuardGuard]}  
   
 ];
 @NgModule({
   declarations: [
+    ActividaComponent,
+    ActividaModalComponent,
     TipoActividadModalComponent,
     AppComponent,
     PersonaComponent,
@@ -184,6 +191,7 @@ const routes: Routes = [
     PersonaFormComponent,
     RolSelectorComponent,
     PeriodoModalComponent,
+    DistributivosGeneradosComponent,
   ],
   
   imports: [

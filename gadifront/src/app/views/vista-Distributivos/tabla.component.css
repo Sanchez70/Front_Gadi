@@ -142,3 +142,15 @@ clip-path: polygon(8% 17%, 0% 25%, 50% 84%, 100% 25%, 92% 17%, 50% 65%);
   background-color: #17497a;
 }
 
+.centered-container {
+  display: grid;
+  place-items: center;
+  height: 100px;
+}
+
+.centered-text {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+}
+

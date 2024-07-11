@@ -40,9 +40,17 @@ export class PersonaService {
   getTitulosProfecionales(): Observable<TituloProfecional[]> {
     return this.http.get<TituloProfecional[]>(`${this.urlEndPoint}/titulo_profesional`);
   }
+  
   getPersonaById(id: number): Observable<Persona> {
-    return this.http.get<Persona>(`${this.urlEndPoint}/persona/${id}`);
-  }
+    return this.http.get<Persona>(`${this.urlEndPoint}/persona/${id}`).pipe(
+        map(persona => {
+            //La fecha se convierte a un objeto Date
+            persona.fecha_vinculacion = new Date(persona.fecha_vinculacion);
+            return persona;
+        })
+    );
+}
+
   getPersonaByCedula(cedula: string): Observable<Persona> {
     return this.http.get<Persona>(`${this.urlEndPoint}/persona/cedula/${cedula}`);
   }

@@ -4,10 +4,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import Swal from 'sweetalert2';
+import { ActividadService } from '../../Services/actividadService/actividad.service';
+import { Actividad } from '../../Services/actividadService/actividad';
+import { ActividaModalComponent } from './activida-modal.component';
+import { AuthService } from '../../auth.service';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
-import { TipoActividadModalComponent } from './tipo-actividad-modal.component';
-import { AuthService } from '../../auth.service';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -23,33 +25,51 @@ const Toast = Swal.mixin({
 });
 
 @Component({
-  selector: 'app-tipo-actividad',
-  templateUrl: './tipo-actividad.component.html',
-  styleUrls: ['./tipo-actividad.component.css']
+  selector: 'app-activida',
+  templateUrl: './activida.component.html',
+  styleUrls: ['./activida.component.css']
 })
-export class TipoActividadComponent implements OnInit {
-  displayedColumns: string[] = ['nom_tip_actividad', 'borrar', 'actualizar'];
-  dataSource!: MatTableDataSource<tipo_actividad>;
+export class ActividaComponent implements OnInit {
+  displayedColumns: string[] = ['id_actividad','nombre_actividad','descripcion_actividad','horas_no_docentes','id_tipo_actividad', 'borrar', 'actualizar'];
+  dataSource!: MatTableDataSource<Actividad>;
   currentExplan: string = '';
+  public tipo: tipo_actividad = new tipo_actividad();
+  public Tipos: tipo_actividad[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private tipoActividadService: tipo_actividadService, private dialog: MatDialog, private authService: AuthService,) { }
+  constructor(
+    private tipoActividadService: tipo_actividadService,
+    private actividadService: ActividadService, 
+    private dialog: MatDialog, 
+    private authService: AuthService,) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-    this.loadTipoActividades();
+    this.loadActividades();
+    this.loadTiposActividad();
   }
 
-  loadTipoActividades(): void {
-    this.tipoActividadService.gettipoActividad().subscribe(data => {
+  loadActividades(): void {
+    this.actividadService.getActividad().subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     });
+  }
+
+  loadTiposActividad(): void {
+    this.tipoActividadService.gettipoActividad().subscribe(data => {
+      this.Tipos = data;
+    });
+  }
+
+  obtenerTipoActividad(id_tipo_actividad: number): string {
+    const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
+    return tipoActividad ? tipoActividad.nom_tip_actividad : '';
   }
 
   applyFilter(event: Event): void {
@@ -62,14 +82,15 @@ export class TipoActividadComponent implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(TipoActividadModalComponent, {
-      width: '400px',
-      data: new tipo_actividad()
+    const dialogRef = this.dialog.open(ActividaModalComponent, {
+      width: '60%',
+      height: '80%',
+      data: new Actividad()
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadTipoActividades();
+        this.loadActividades();
         Toast.fire({
           icon: "success",
           title: "El tipo de actividad ha sido creado correctamente",
@@ -78,15 +99,15 @@ export class TipoActividadComponent implements OnInit {
     });
   }
 
-  openEditDialog(tipoActividad: tipo_actividad): void {
-    const dialogRef = this.dialog.open(TipoActividadModalComponent, {
-      width: '400px',
+  openEditDialog(tipoActividad: Actividad): void {
+    const dialogRef = this.dialog.open(ActividaModalComponent, {
+      width: '900px',
       data: tipoActividad
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadTipoActividades();
+        this.loadActividades();
         Toast.fire({
           icon: "success",
           title: "El tipo de actividad ha sido actualizado correctamente",
@@ -98,15 +119,16 @@ export class TipoActividadComponent implements OnInit {
   deleteTipoActividad(id: number): void {
     Swal.fire({
       title: '¿Está seguro?',
-      text: 'Se eliminaran tambien todas las Actividades asociadas con este tipo de Actividad',
+      text: '¡No podrás revertir esto!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
+      console.log(id)
       if (result.isConfirmed) {
-        this.tipoActividadService.deleteid(id).subscribe(() => {
-          this.loadTipoActividades();
+        this.actividadService.deleteid(id).subscribe(() => {
+          this.loadActividades();
           Toast.fire({
             icon: "success",
             title: "El tipo de actividad ha sido eliminado correctamente",

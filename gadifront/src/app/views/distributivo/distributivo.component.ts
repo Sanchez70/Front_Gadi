@@ -35,6 +35,7 @@ import { DistributivoAsignatura } from '../../Services/distributivoAsignaturaSer
 import { DistributivoAsignaturaService } from '../../Services/distributivoAsignaturaService/distributivo-asignatura.service';
 import { DistributivoActividad } from '../../Services/distributivoActividadService/distributivo_actividad';
 import { DistributivoActividadService } from '../../Services/distributivoActividadService/distributivo_actividad.service';
+import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 interface PersonaExtendida extends Persona {
   nombre_contrato?: string;
   nombre_titulo?: string;
@@ -86,6 +87,7 @@ export class DistributivoComponent implements OnInit {
   public Tipos: tipo_actividad[] = [];
   public ciclos: any[] = [];
   public carreras: any[] = [];
+  titulos: any[] = [];
   public asignaturas: any[] = [];
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad()
@@ -133,6 +135,7 @@ export class DistributivoComponent implements OnInit {
       this.loadPersonaData(this.authService.id_persona);
     }
 
+    this.cargarComboTitulos();
     this.cargarTipoActividad();
     this.cargarCarreras();
     this.cargarCiclos();
@@ -215,6 +218,17 @@ export class DistributivoComponent implements OnInit {
   cargarComboJornada(): void {
     this.jornadaService.getJornada().subscribe(data => {
       this.jornadas = data;
+    });
+  }
+
+  cargarComboTitulos(): void {
+    this.titulo_profesional.getTitulo().subscribe(data => {
+      const titulosEncontrados = data as unknown as TituloProfecional[];
+      const titulosFitrados = titulosEncontrados.filter(respuest => respuest.id_persona === this.authService.id_persona);
+      if (titulosFitrados) {
+        this.titulos = titulosFitrados;
+      }
+
     });
   }
 

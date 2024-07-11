@@ -1,75 +1,93 @@
-<br>
 <div class="container {{currentExplan}}">
-  <div class="grid-container">
-    <!-- Columna para Editar Perfil -->
-    <div class="editar-perfil">
-      <div class="contenedorBoton">
-        <h1>EDITAR PERFIL</h1>
-      </div>
-      <form [formGroup]="personaForm" (ngSubmit)="guardarCambios()" class="form-container">
-        <mat-form-field class="form-group" appearance="fill">
+  <div class="editar-perfil">
+    <div class="contenedor-boton">
+      <h1>Mi Perfil</h1>
+    </div>
+    <form [formGroup]="personaForm" (ngSubmit)="guardarCambios()" class="form-container">
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Cédula</mat-label>
           <input matInput formControlName="cedula" readonly>
+          <mat-error *ngIf="personaForm.get('cedula')?.hasError('pattern')">Cédula no válida</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Primer Nombre</mat-label>
           <input matInput formControlName="nombre1" required>
+          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('required')">Campo obligatorio. Por favor ingrese su primer nombre.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y debe empezar con mayúscula.</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+      </div>
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Segundo Nombre</mat-label>
-          <input matInput formControlName="nombre2">
+          <input matInput formControlName="nombre2" required>
+          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('required')">Campo obligatorio. Por favor ingrese su segundo nombre.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y debe empezar con mayúscula.</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Primer Apellido</mat-label>
           <input matInput formControlName="apellido1" required>
+          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('required')">Campo obligatorio. Por favor ingrese su primer apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su primer apellido.</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+      </div>
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Segundo Apellido</mat-label>
-          <input matInput formControlName="apellido2">
+          <input matInput formControlName="apellido2" required>
+          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('required')">Campo obligatorio. Por favor ingrese su segundo apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su segundo apellido.</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Edad</mat-label>
           <input matInput type="number" formControlName="edad" readonly>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+      </div>
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Correo</mat-label>
           <input matInput formControlName="correo" required>
+          <mat-error *ngIf="personaForm.get('correo')?.hasError('required')">Campo obligatorio. Por favor ingrese su correo electrónico.</mat-error>
+          <mat-error *ngIf="personaForm.get('correo')?.hasError('pattern')">Correo no válido. Debe tener el formato correcto (ej. ejemplo&#64;dominio.com).</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Dirección</mat-label>
-          <input matInput formControlName="direccion">
+          <input matInput formControlName="direccion" required>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+      </div>
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Teléfono</mat-label>
-          <input matInput #postalCode maxlength="10" formControlName="telefono">
+          <input matInput #postalCode maxlength="10" formControlName="telefono" required>
           <mat-hint align="end">{{postalCode.value.length}} / 10</mat-hint>
+          <mat-error *ngIf="personaForm.get('telefono')?.hasError('required')">Campo obligatorio. Ingrese su número de teléfono.</mat-error>
+          <mat-error *ngIf="personaForm.get('telefono')?.hasError('pattern')">Teléfono no válido. Debe contener solo números y tener 10 dígitos.</mat-error>
         </mat-form-field>
-        <mat-form-field class="form-group" appearance="fill">
+        <mat-form-field class="form-group" appearance="outline">
           <mat-label>Fecha de Vinculación</mat-label>
           <input matInput formControlName="fecha_vinculacion" readonly>
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Guardar cambios</button>
-      </form>
-    </div>
-
-    <!-- Columna para Mis Títulos -->
-    <div class="mis-titulos">
-      <h1>MIS TÍTULOS</h1>
-      <button mat-raised-button color="primary" (click)="openModal()">Añadir</button>
-      <br> <br>
-      <!-- Mini tabla para mostrar los títulos -->
-      <table mat-table [dataSource]="titulos" class="mat-elevation-z8">
-        <ng-container matColumnDef="grado">
-          <th mat-header-cell *matHeaderCellDef> Nombre del Titulo </th>
-          <td mat-cell *matCellDef="let element"> {{element.nombre_titulo}} </td>
-        </ng-container>
-        <ng-container matColumnDef="nombre_titulo">
-          <th mat-header-cell *matHeaderCellDef> Grado del Título </th>
-          <td mat-cell *matCellDef="let element"> {{element.grado}} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </div>
+      </div>
+      <button mat-raised-button color="primary" type="submit">Actualizar</button>
+    </form>
   </div>
+ <br>
+  <div class="mis-titulos">
+    <h1>Mis Títulos</h1>
+    <button mat-raised-button color="primary" (click)="openModal()">Añadir</button>
+    <br> <br>
+    <table mat-table [dataSource]="titulos" class="mat-elevation-z8">
+      <ng-container matColumnDef="grado">
+        <th mat-header-cell *matHeaderCellDef> Nombre del Título </th>
+        <td mat-cell *matCellDef="let element"> {{element.nombre_titulo}} </td>
+      </ng-container>
+      <ng-container matColumnDef="nombre_titulo">
+        <th mat-header-cell *matHeaderCellDef> Grado del Título </th>
+        <td mat-cell *matCellDef="let element"> {{element.grado}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <br>
 </div>

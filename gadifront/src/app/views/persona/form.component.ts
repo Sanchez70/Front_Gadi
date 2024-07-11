@@ -7,10 +7,13 @@ import { TituloProfecional } from '../titulo-profesional/titulo-profecional';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { TituloProfesionalComponent } from '../titulo-profesional/titulo-profesional.component';
+import { ValidacionesComponent } from '../../validaciones/validaciones.component';
+import { DatePipe } from '@angular/common';
+
 
 const Toast = Swal.mixin({
   toast: true,
@@ -28,7 +31,9 @@ const Toast = Swal.mixin({
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  styleUrls: ['./form.component.css'],
+  providers: [DatePipe]
+
 })
 export class FormComponent implements OnInit {
   displayedColumns: string[] = ['grado', 'nombre_titulo'];
@@ -41,24 +46,25 @@ export class FormComponent implements OnInit {
   private sidebarSubscription!: Subscription;
 
   constructor(
-    private dialog: MatDialog, 
+    private dialog: MatDialog,
     private router: Router,
     private personaService: PersonaService,
     private authService: AuthService,
     private fb: FormBuilder,
+    private datePipe: DatePipe
   ) {
     this.persona.fecha_vinculacion = new Date();
     this.personaForm = this.fb.group({
-      cedula: [{ value: '' }],
-      nombre1: [{ value: '' }],
-      nombre2: [{ value: '' }],
-      apellido1: [{ value: '' }],
-      apellido2: [{ value: '' }],
-      telefono: [{ value: '' }],
-      direccion: [{ value: '' }],
-      correo: [{ value: '' }],
-      edad: [{ value: '' }],
-      fecha_vinculacion: [{ value: '' }],
+      cedula: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(ValidacionesComponent.patternRucValidator())]],
+      nombre1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyNames())]],
+      nombre2: ['', [Validators.pattern(ValidacionesComponent.patternOnlyNames())]],
+      apellido1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyNames())]],
+      apellido2: ['', [Validators.pattern(ValidacionesComponent.patternOnlyNames())]],
+      telefono: ['', [Validators.pattern(ValidacionesComponent.patterOnlyNumbersValidator())]],
+      direccion: [''],
+      correo: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternEmailValidator())]],
+      edad: [{ value: '', disabled: true }, [Validators.required, Validators.min(1), Validators.max(120)]],
+      fecha_vinculacion: [{ value: '', disabled: true }]
     });
   }
 
@@ -80,12 +86,14 @@ export class FormComponent implements OnInit {
       this.personaService.getPersonaById(idPersona).subscribe(
         (persona) => {
           this.persona = persona;
-          this.personaForm.patchValue(persona);
+          // Formatear la fecha de vinculación
+          const formattedDate = this.datePipe.transform(persona.fecha_vinculacion, 'd/M/yyyy');
+          this.personaForm.patchValue({ ...persona, fecha_vinculacion: formattedDate });
           this.mostrarTitulos(idPersona);
         },
         (error) => {
           console.error('Error al cargar los datos de la persona:', error);
-        } 
+        }
       );
     } else {
       console.error('ID de persona no disponible');
@@ -100,7 +108,6 @@ export class FormComponent implements OnInit {
     this.personaService.getTitulosProfecionalesByPersonaId(idPersona).subscribe(
       (titulos: TituloProfecional[]) => {
         this.titulos = titulos;
-        console.log('Títulos de la persona:', titulos);
       },
       (error) => {
         console.error('Error al obtener los títulos de la persona:', error);
@@ -111,7 +118,7 @@ export class FormComponent implements OnInit {
   guardarCambios(): void {
     if (this.personaForm.valid) {
       Swal.fire({
-        title: '¿Está seguro de actualizar los datos de esta perosna?',
+        title: '¿Está seguro de actualizar los datos de esta persona?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, guardar',
@@ -119,19 +126,19 @@ export class FormComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.mostrarCarga = true;
-          const updatedPersona: Persona = { ...this.persona, ...this.personaForm.getRawValue() };
+          const formValue = this.personaForm.getRawValue();
+          const formattedDate = this.datePipe.transform(formValue.fecha_vinculacion, 'yyyy-MM-dd');
+          const updatedPersona: Persona = { ...this.persona, ...formValue, fecha_vinculacion: formattedDate };
           this.personaService.updatePersona(updatedPersona).subscribe(
             (response) => {
-              console.log('Persona actualizada exitosamente:', response);
               this.mostrarCarga = false;
               Toast.fire({
                 icon: "success",
-                title: "Datos actualizados con exito",
+                title: "Datos actualizados con éxito",
               });
               this.router.navigate(['/mainDocente']);
             },
             (error) => {
-              console.error('Error al actualizar datos:', error);
               this.mostrarCarga = false;
               Toast.fire({
                 icon: "error",
@@ -143,5 +150,4 @@ export class FormComponent implements OnInit {
       });
     }
   }
-
 }
