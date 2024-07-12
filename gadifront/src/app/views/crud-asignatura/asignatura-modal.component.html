@@ -6,15 +6,16 @@
         <mat-form-field appearance="outline">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre_asignatura" />
-            <mat-error *ngIf="asignaturaForm.get('nombre_asignatura')?.hasError('required')">Nombre es requerido</mat-error>
+            <mat-error *ngIf="asignaturaForm.get('nombre_asignatura')?.hasError('required')">Nombre de la asignatura es requerido</mat-error>
+            <mat-error *ngIf="asignaturaForm.get('nombre_actividad')?.hasError('pattern')">Ingrese un nombre válido la primera letra debe ser mayúscula ademas (solo letras entre 2-50 caracteres)</mat-error>
+
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Horas Semanales</mat-label>
             <input matInput formControlName="horas_semanales" type="number" />
-            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('required')">Horas semanales son
-                requeridas</mat-error>
-            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('min')">Horas semanales deben ser mayores a
-                0</mat-error>
+            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('required')">Horas semanales son requeridas</mat-error>
+            <mat-error *ngIf="asignaturaForm.get('horas_semanales')?.hasError('min')">Horas semanales deben ser mayores a 0</mat-error>
+          <mat-error *ngIf="asignaturaForm.get('horas_no_docentes')?.hasError('max')">El valor debe ser menor o igual a 40.</mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Carrera</mat-label>
