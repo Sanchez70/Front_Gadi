@@ -512,7 +512,7 @@ export class ReportesComponent implements OnInit {
         this.cargarRector();
         this.formatearFecha(new Date);
         setTimeout(() => {
-
+          this.horasPorDocente = this.horasTotales + this.horasTotalesActividad;
           const doc = new jsPDF();
           let yPos = 5;
           const xPos = 20;
