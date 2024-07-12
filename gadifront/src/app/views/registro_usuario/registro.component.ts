@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, signal } from '@angular/core';
 import { Persona } from '../../Services/docenteService/persona';
 import { Titulo_profesional } from '../../Services/titulo/titulo_profesional';
 import { TipoContratoService } from '../../Services/tipo_contrato/tipo-contrato.service';
@@ -18,7 +18,8 @@ import { AuthService } from '../../auth.service';
 @Component({
   selector: 'app-registro',
   templateUrl: './form_registro.component.html',
-  styleUrls: ['./registro.component.css']
+  styleUrls: ['./registro.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class RegistroComponent implements OnInit {
@@ -38,6 +39,12 @@ export class RegistroComponent implements OnInit {
 
   showFinalForm: boolean = false;
   public isTiempoParcial: boolean = false;
+
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   constructor(
     private router: Router,
@@ -251,24 +258,19 @@ export class RegistroComponent implements OnInit {
                   this.titulo.id_persona = personaRegistrada.id_persona;
 
                   this.service.createTitulo(this.titulo).subscribe(
-                    () => {
-                      console.log('Título guardado correctamente');
-                    },
+                    () => { },
                     (error) => {
-                      console.error('Error al crear título:', error);
                       Swal.fire('Error', 'Hubo un problema al crear el título.', 'error');
                     }
                   );
                 });
                 Swal.fire('Registro exitoso', '', 'success');
-                this.router.navigate(['./login']);
+                this.resetForm();
               });
             }, error => {
-              console.error('Error al crear usuario:', error);
               Swal.fire('Error', 'Hubo un problema al crear el usuario.', 'error');
             });
           }, error => {
-            console.error('Error al crear persona:', error);
             Swal.fire('Error', 'Hubo un problema al crear la persona.', 'error');
           });
         },200)
@@ -291,6 +293,34 @@ export class RegistroComponent implements OnInit {
       }
 
     }
+  }
+
+  resetForm(): void {
+    this.registroForm1.reset({
+      name1: '',
+      name2: '',
+      lastname1: '',
+      lastname2: '',
+      user: '',
+      password: '',
+      telefono: '',
+      direccion: '',
+      correo: '',
+      fecha_nacimiento: '',
+      edad: '',
+      fecha_vinculacion: '',
+      nombre_grado_ocp: '',
+      nombre_contrato: '',
+      hora_contrato: ''
+    });
+    // Vaciar el FormArray titulos
+    while (this.titulos.length !== 0) {
+      this.titulos.removeAt(0);
+    }
+    // Reiniciar las variables del componente si es necesario
+    this.edad = 0;
+    this.id_Contrato = null;
+    this.habilitar = "true";
   }
 
 }

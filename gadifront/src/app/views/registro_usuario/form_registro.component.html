@@ -50,7 +50,11 @@
 
       <mat-form-field appearance="outline">
         <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" type="password">
+        <input matInput formControlName="password" type="hide() 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()">
+          <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
         <mat-error *ngIf="registroForm1.get('password')?.hasError('required')">La contraseña es
           obligatoria</mat-error>
         <mat-error *ngIf="registroForm1.get('password')?.hasError('pattern')">La contraseña debe tener al menos 8
@@ -156,7 +160,7 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Horas de Contrato</mat-label>
-      <input  matInput formControlName="hora_contrato" type="number" readonly="{{habilitar}}">
+      <input matInput formControlName="hora_contrato" type="number" readonly="{{habilitar}}">
     </mat-form-field>
 
     <button mat-button style="color: #fff; background-color: #1E90FF;" type="submit">Registrar</button>
