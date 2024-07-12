@@ -106,7 +106,7 @@ tbody tr:hover {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-left: 100px;
+  margin-left: 40px;
   gap: 80px;
 }
 
@@ -205,7 +205,7 @@ hr.dashed {
   border-bottom: none;
   margin-top: 4px;
   size: 90cap;
-  width: 1320px;
+  width: 1200px;
   margin-left: 30px;
   margin-right: 50px;
 }

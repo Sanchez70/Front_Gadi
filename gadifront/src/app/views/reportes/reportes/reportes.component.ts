@@ -169,7 +169,7 @@ export class ReportesComponent implements OnInit {
     this.distributivoService.getDistributivo().subscribe(data => {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
-        (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.idPeriodo && distributivo.estado === 'Aceptado'
+        (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.authService.id_periodo && distributivo.estado === 'Aceptado'
         )
       );
       console.log('distributivos filtrados', this.distributivoFiltrado)

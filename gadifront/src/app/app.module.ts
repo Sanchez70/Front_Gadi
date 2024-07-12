@@ -105,6 +105,10 @@ import { MatSortModule } from '@angular/material/sort';
 import { GalleriaModule } from 'primeng/galleria';
 import { DistributivosGeneradosComponent } from './views/coordinador/distributivos-generados/distributivos-generados.component';
 import { DashboardBienvenidaComponent } from './views/dashboard-bienvenida/dashboard-bienvenida.component';
+import { docenteGuardGuard } from './guards/docente-guard.guard';
+import { directorGuardGuard } from './guards/director-guard.guard';
+import { coordinadorGuardGuard } from './guards/coordinador-guard.guard';
+import { adminGuardGuard } from './guards/admin-guard.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -114,31 +118,28 @@ const routes: Routes = [
   { path: 'mainCoordinador', component: MainCoordiandorComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'main', component: MainComponent,canActivate: [loginRedirectGuardGuard] },
   { path: 'main-admin', component:  MainAdminComponent,canActivate: [loginRedirectGuardGuard] },
-  { path: 'asignatura', component: AsignaturaComponent,canActivate: [loginRedirectGuardGuard] },
-  { path: 'actividad', component: ActividadComponent,canActivate: [loginRedirectGuardGuard] },
-  { path: 'activida', component: ActividaComponent,canActivate: [loginRedirectGuardGuard] },
-  { path: 'mi-distribitivo', component: TablaComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'persona', component: PersonaComponent,canActivate: [loginRedirectGuardGuard] },
-  { path: 'actividad/form', component: ActividadFormComponert,canActivate: [loginRedirectGuardGuard] }, 
+  { path: 'asignatura', component: AsignaturaComponent,canActivate: [directorGuardGuard] },
+  { path: 'actividad', component: ActividadComponent,canActivate: [directorGuardGuard] },
+  { path: 'activida', component: ActividaComponent,canActivate: [adminGuardGuard] },
+  { path: 'mi-distribitivo', component: TablaComponent,canActivate: [docenteGuardGuard]},
+  { path: 'persona', component: PersonaComponent,canActivate: [directorGuardGuard ] },
+  { path: 'actividad/form', component: ActividadFormComponert,canActivate: [directorGuardGuard] }, 
   { path: 'actividad/form/:id', component: ActividadFormComponert,canActivate: [loginRedirectGuardGuard] },
-  { path: 'persona/form', component: PersonaFormComponent ,canActivate: [loginRedirectGuardGuard]},
+  { path: 'persona/form', component: PersonaFormComponent ,canActivate: [docenteGuardGuard]},
   { path: 'persona/form/:id', component: PersonaFormComponent ,canActivate: [loginRedirectGuardGuard]}, 
-  { path: 'registro', component: RegistroComponent ,canActivate: [loginRedirectGuardGuard]},
-  { path: 'matriz-propuesta', component: MatrizPropuestaComponent ,canActivate: [loginRedirectGuardGuard]},
-  { path: 'tipo_actividad', component: TipoActividadComponent ,canActivate: [loginRedirectGuardGuard]},
-  { path: 'editar-asignatura', component: EditarAsignaturaComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'admin_Creacion', component: AdminCreacionComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'distributivo', component: DistributivoComponent,canActivate: [loginRedirectGuardGuard]},
+  { path: 'registro', component: RegistroComponent ,canActivate: [coordinadorGuardGuard]},
+  { path: 'matriz-propuesta', component: MatrizPropuestaComponent ,canActivate: [directorGuardGuard]},
+  { path: 'tipo_actividad', component: TipoActividadComponent ,canActivate: [adminGuardGuard]},
+  { path: 'admin_Creacion', component: AdminCreacionComponent,canActivate: [coordinadorGuardGuard]},
+  { path: 'distributivo', component: DistributivoComponent,canActivate: [directorGuardGuard]},
   { path: 'main-admin', component: MainAdminComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'reportes', component: ReportesComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'coordinador', component: CoordinadorComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'director-reporte', component: DirectorReporteComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'carrera', component: CarreraComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'matriz-distributivo', component: MatrizDistributivoComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'crud-asignatura', component: CrudAsignaturaComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'periodo', component: PeriodoComponent,canActivate: [loginRedirectGuardGuard]} ,
-  { path: 'titulo', component: TituloProfesionalComponent,canActivate: [loginRedirectGuardGuard]},
-  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [loginRedirectGuardGuard]}  
+  { path: 'coordinador', component: CoordinadorComponent,canActivate: [coordinadorGuardGuard]},
+  { path: 'director-reporte', component: DirectorReporteComponent,canActivate: [directorGuardGuard]},
+  { path: 'carrera', component: CarreraComponent,canActivate: [adminGuardGuard]},
+  { path: 'matriz-distributivo', component: MatrizDistributivoComponent,canActivate: [coordinadorGuardGuard]},
+  { path: 'crud-asignatura', component: CrudAsignaturaComponent,canActivate: [adminGuardGuard]},
+  { path: 'periodo', component: PeriodoComponent,canActivate: [coordinadorGuardGuard]} ,
+  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [coordinadorGuardGuard]}  
   
 ];
 @NgModule({
