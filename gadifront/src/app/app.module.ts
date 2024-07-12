@@ -102,7 +102,9 @@ import { ActividaComponent } from './views/activida/activida.component';
 import { ActividaModalComponent } from './views/activida/activida-modal.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { GalleriaModule } from 'primeng/galleria';
 import { DistributivosGeneradosComponent } from './views/coordinador/distributivos-generados/distributivos-generados.component';
+import { DashboardBienvenidaComponent } from './views/dashboard-bienvenida/dashboard-bienvenida.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -192,6 +194,7 @@ const routes: Routes = [
     RolSelectorComponent,
     PeriodoModalComponent,
     DistributivosGeneradosComponent,
+    DashboardBienvenidaComponent,
   ],
   
   imports: [
@@ -229,7 +232,8 @@ const routes: Routes = [
     MatMenuModule,
     MatAccordion,
     MatExpansionModule,
-    MatTooltipModule
+    MatTooltipModule,
+    GalleriaModule
   ],
   
   providers: [LoginService, provideAnimationsAsync(), 

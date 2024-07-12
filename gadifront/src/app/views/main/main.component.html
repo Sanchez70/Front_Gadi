@@ -1,4 +1,4 @@
-<div class="contenedorPrincipal {{currentExplan}}">
+<!-- <div class="contenedorPrincipal {{currentExplan}}">
   <hr class="separator-horizontal">
   
   <mat-card class="bienvenida-card">
@@ -24,10 +24,10 @@
           <p><strong>Correo:</strong> {{ additionalPersonaData.correo }}</p>
           <p><strong>Teléfono:</strong> {{ additionalPersonaData.telefono }}</p>
           <p><strong>Fecha de Vinculacion:</strong> {{ additionalPersonaData.fecha_vinculacion }}</p>
-          <p><strong>Tipo de contrato:</strong> {{ additionalPersonaData.tipo_contrato }}</p> <!-- Cambiado a tipo_contrato -->
+          <p><strong>Tipo de contrato:</strong> {{ additionalPersonaData.tipo_contrato }}</p>
           <p><strong>Títulos:</strong></p>
           <ul>
-            <li *ngFor="let titulo of titulos">{{ titulo.nombre_titulo }}</li> <!-- Asegúrate de que 'nombre_titulo' es la propiedad correcta -->
+            <li *ngFor="let titulo of titulos">{{ titulo.nombre_titulo }}</li> 
           </ul>
         </mat-card-content>
       </mat-card>
@@ -55,4 +55,5 @@
     </div>
   </div>
   
-  </div>
+  </div> -->
+  <app-dashboard-bienvenida></app-dashboard-bienvenida>

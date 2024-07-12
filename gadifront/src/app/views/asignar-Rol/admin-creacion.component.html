@@ -4,13 +4,14 @@
 </div>
   <div class="contenedorBoton">
     <form [formGroup]="searchForm" (ngSubmit)="buscarPersona()">
-      <mat-form-field appearance="outline" matTooltip="Ingrese una cedula"  [matTooltipPosition]="'before'">
+      <mat-form-field appearance="outline" matTooltip="Ingrese una cedula valida"  [matTooltipPosition]="'above'">
         <mat-label>Cédula</mat-label>
-        <input matInput formControlName="cedula" />
+        <input matInput formControlName="cedula" maxlength="10" #cedulaN/>
+        <mat-hint align="end">{{cedulaN.value.length}}/10</mat-hint>
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('required')">Ingrese una cédula</mat-error>
         <mat-error *ngIf="searchForm.get('cedula')?.hasError('minlength')">Ingrese una cédula válida de 10 dígitos</mat-error>
       </mat-form-field>
-      <button mat-button style="color: #fff; background-color: #1E90FF;"type="submit" matTooltip="Buscar datos"  [matTooltipPosition]="'below'">
+      <button mat-button style="color: #fff; background-color: #1E90FF;"type="submit" matTooltip="Buscar persona"  [matTooltipPosition]="'below'">
         Buscar <mat-icon>search</mat-icon>
       </button>
       <button mat-button style="color: #fff; background-color: #727272;" type="button" (click)="openModal()" matTooltip="Abrir listado de Personas"  [matTooltipPosition]="'below'">

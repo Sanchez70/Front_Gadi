@@ -29,6 +29,7 @@
     "jspdf-autotable": "^3.8.2",
     "jszip": "^3.10.1",
     "ngx-ui-loader": "^13.0.0",
+    "primeng": "^17.18.4",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.11.0",
     "tslib": "^2.3.0",
