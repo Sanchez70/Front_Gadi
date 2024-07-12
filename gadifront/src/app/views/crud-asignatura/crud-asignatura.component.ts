@@ -36,6 +36,7 @@ export class CrudAsignaturaComponent implements OnInit {
   dataSource!: MatTableDataSource<Asignatura>;
   color = '#1E90FF';
   currentExplan: string = '';
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
