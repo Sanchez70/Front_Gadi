@@ -8,7 +8,8 @@
       <div class="contenedor1">
         <mat-form-field appearance="outline">
           <mat-label>Primer Nombre</mat-label>
-          <input matInput formControlName="name1">
+          <input matInput #nom1 maxlength="30" formControlName="name1">
+          <mat-hint align="end">{{nom1.value.length}} / 30</mat-hint>
           <mat-error *ngIf="registroForm1.get('name1')?.hasError('required')">El primer nombre es
             obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('name1')?.hasError('pattern')">Ingrese un nombre válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
@@ -16,7 +17,8 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Segundo Nombre</mat-label>
-          <input matInput formControlName="name2">
+          <input matInput #nom2 maxlength="30" formControlName="name2">
+          <mat-hint align="end">{{nom2.value.length}} / 30</mat-hint>
           <mat-error *ngIf="registroForm1.get('name2')?.hasError('required')">El segundo nombre es
             obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('name2')?.hasError('pattern')">Ingrese un nombre válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
@@ -24,7 +26,8 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Primer Apellido</mat-label>
-          <input matInput formControlName="lastname1">
+          <input matInput #ape1 maxlength="30" formControlName="lastname1">
+          <mat-hint align="end">{{ape1.value.length}} / 30</mat-hint>
           <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('required')">El primer apellido es
             obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('pattern')">Ingrese un apellido válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
@@ -32,7 +35,8 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Segundo Apellido</mat-label>
-          <input matInput formControlName="lastname2">
+          <input matInput #ape2 maxlength="30" formControlName="lastname2">
+          <mat-hint align="end">{{ape2.value.length}} / 30</mat-hint>
           <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('required')">El segundo apellido es
             obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('pattern')">Ingrese un apellido válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
@@ -40,18 +44,20 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Cédula</mat-label>
-          <input matInput formControlName="user">
+          <input matInput #tamCedula maxlength="10" formControlName="user">
+          <mat-hint align="end">{{tamCedula.value.length}} / 10</mat-hint>
           <mat-error *ngIf="registroForm1.get('user')?.hasError('required')">La cédula es obligatoria</mat-error>
           <mat-error *ngIf="registroForm1.get('user')?.hasError('invalidCedula')">La cédula es invalida</mat-error>
         </mat-form-field>
         
         <mat-form-field appearance="outline">
           <mat-label>Contraseña</mat-label>
-          <input matInput formControlName="password" [type]="hide() ? 'password' : 'text'">
+          <input matInput #tamContra maxlength="20" formControlName="password" [type]="hide() ? 'password' : 'text'">
           <button class="btncon" matSuffix (click)="clickEvent($event)" [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hide()">
             <mat-icon >{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
+          <mat-hint align="end">{{tamContra.value.length}} / 20</mat-hint>
           <mat-error *ngIf="registroForm1.get('password')?.hasError('required')">La contraseña es
             obligatoria</mat-error>
           <mat-error *ngIf="registroForm1.get('password')?.hasError('pattern')">La contraseña debe tener al menos 8
@@ -60,7 +66,8 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Teléfono</mat-label>
-          <input matInput formControlName="telefono">
+          <input matInput #tamTel maxlength="10" formControlName="telefono" required>
+          <mat-hint align="end">{{tamTel.value.length}} / 10</mat-hint>
           <mat-error *ngIf="registroForm1.get('telefono')?.hasError('required')">El teléfono es obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('telefono')?.hasError('pattern')">El teléfono debe tener 10
             dígitos y empezar por 09</mat-error>
@@ -68,14 +75,16 @@
   
         <mat-form-field appearance="outline">
           <mat-label>Dirección</mat-label>
-          <input matInput formControlName="direccion">
+          <input matInput #tamDir maxlength="150" formControlName="direccion">
+          <mat-hint align="end">{{tamDir.value.length}} / 150</mat-hint>
           <mat-error *ngIf="registroForm1.get('direccion')?.hasError('required')">La dirección es
             obligatoria</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">
           <mat-label>Correo</mat-label>
-          <input matInput formControlName="correo" type="email">
+          <input matInput #tamEmail maxlength="100" formControlName="correo" type="email">
+          <mat-hint align="end">{{tamEmail.value.length}} / 100</mat-hint>
           <mat-error *ngIf="registroForm1.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
           <mat-error *ngIf="registroForm1.get('correo')?.hasError('email')">El correo es inválido</mat-error>
         </mat-form-field>
@@ -113,7 +122,8 @@
           <div *ngFor="let titulo of titulos.controls; let i = index" [formGroupName]="i">
             <mat-form-field appearance="outline">
               <mat-label>Nombre del Título</mat-label>
-              <input matInput formControlName="nombre_titulo">
+              <input matInput #tamTit maxlength="100" formControlName="nombre_titulo">
+              <mat-hint align="end">{{tamTit.value.length}} / 100</mat-hint>
               <mat-error *ngIf="titulo.get('nombre_titulo')?.hasError('required')">El nombre del título es
                 obligatorio</mat-error>
             </mat-form-field>
