@@ -32,7 +32,7 @@ const Toast = Swal.mixin({
 })
 export class CrudAsignaturaComponent implements OnInit {
 
-  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'actualizar'];
   dataSource!: MatTableDataSource<Asignatura>;
   color = '#1E90FF';
   currentExplan: string = '';
@@ -94,7 +94,7 @@ export class CrudAsignaturaComponent implements OnInit {
         this.loadAsignaturas();
         Toast.fire({
           icon: "success",
-          title: "La carrera ha sido creada correctamente",
+          title: "Asignatura creada correctamente",
         });
       }
     });
@@ -111,7 +111,7 @@ export class CrudAsignaturaComponent implements OnInit {
         this.loadAsignaturas();
         Toast.fire({
           icon: "success",
-          title: "La asignatura ha sido actualizada correctamente",
+          title: "Asignatura actualizada correctamente",
         });
       }
     });
@@ -131,7 +131,7 @@ export class CrudAsignaturaComponent implements OnInit {
           this.loadAsignaturas();
           Toast.fire({
             icon: "success",
-            title: "La asignatura ha sido eliminada correctamente",
+            title: "Asignatura eliminada correctamente",
           });
         });
       }

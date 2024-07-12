@@ -30,7 +30,7 @@ const Toast = Swal.mixin({
   styleUrl: './carrera.component.css',
 })
 export class CarreraComponent implements OnInit {
-  displayedColumns: string[] = ['nombre_carrera', 'fecha_inicio', 'horas_semanales', 'codigo', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['nombre_carrera', 'fecha_inicio', 'horas_semanales', 'codigo', 'actualizar'];
   dataSource!: MatTableDataSource<Carrera>;
   color = '#1E90FF';
   currentExplan: string = '';

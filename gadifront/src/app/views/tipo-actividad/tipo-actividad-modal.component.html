@@ -4,10 +4,10 @@
   <div class="search-bar">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nombre de la Actividad</mat-label>
-      <input matInput [(ngModel)]="data.nom_tip_actividad" required [pattern]="validaciones.patternOnlyLettersValidator()" #nomTipActividad="ngModel">
+      <input matInput [(ngModel)]="data.nom_tip_actividad" required [pattern]="validaciones.patternTipoActiValidator()" #nomTipActividad="ngModel">
       <mat-error *ngIf="nomTipActividad.invalid && (nomTipActividad.dirty || nomTipActividad.touched)">
         <span *ngIf="nomTipActividad.errors?.['required']">El nombre del tipo de actividad es requerido.</span>
-        <span *ngIf="nomTipActividad.errors?.['pattern']">Ingrese un nombre válido (solo letras, 2-20 caracteres).</span>
+        <span *ngIf="nomTipActividad.errors?.['pattern']">Ingrese un nombre válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</span>
       </mat-error>
     </mat-form-field>
   </div>

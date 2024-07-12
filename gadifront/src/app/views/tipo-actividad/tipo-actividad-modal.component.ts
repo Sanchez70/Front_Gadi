@@ -25,8 +25,7 @@ export class TipoActividadModalComponent {
       return;
     }
 
-    if (!this.validaciones.patternOnlyLettersValidator().test(this.data.nom_tip_actividad)) {
-      Swal.fire('Error', 'Ingrese un nombre válido (solo letras, 2-20 caracteres)', 'error');
+    if (!this.validaciones.patternTipoActiValidator().test(this.data.nom_tip_actividad)) {
       return;
     }
 
