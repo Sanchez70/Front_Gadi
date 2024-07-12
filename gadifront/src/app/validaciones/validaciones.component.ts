@@ -3,10 +3,9 @@ import { Component } from '@angular/core';
 export class ValidacionesComponent {
 
     static patternOnlyNames(): RegExp {
-        return /^[A-ZÑÁÉÍÓÚ][a-zñáéíóú]{1,29}$/;
+        return /^[A-ZÑÁÉÍÓÚ][a-zñáéíóú]{1,30}$/;
     }
     
-
     static patternOnlyLettersValidator(): RegExp {
         return /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]{2,20}$/;
     } 
@@ -40,8 +39,19 @@ export class ValidacionesComponent {
     }
 
     static patternDescripValidator(): RegExp {
-        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9;.,\-]{5,255}$/;
+        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9;.,'"-]{5,255}$/;
     }
     
+    static patterntitleValidator(): RegExp {
+        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ]*(?:\s[a-zA-ZñÑáéíóúÁÉÍÓÚ]+)*$/;
+    } 
+    
+    static patternActividaValidator(): RegExp {
+        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{4,49}$/;
+    }
+
+    static patternTipoActiValidator(): RegExp {
+        return /^[A-ZÑÁÉÍÓÚ][a-zñáéíóú\s]{1,30}$/;
+    }
     
 }

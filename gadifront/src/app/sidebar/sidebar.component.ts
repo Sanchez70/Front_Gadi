@@ -43,6 +43,8 @@ export class SidebarComponent {
         this.authService.logout();
         this.authService.tiporol='';
         this.authService.clearLocalStorage();
+        localStorage.clear();
+        
       }
     });
   }

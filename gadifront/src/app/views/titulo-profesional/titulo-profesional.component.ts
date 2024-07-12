@@ -47,7 +47,7 @@ export class TituloProfesionalComponent implements OnInit {
     this.tituloForm = this.fb.group({
       id_persona: [idPersona, Validators.required],
       grado: ['', Validators.required],
-      nombre_titulo: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]]
+      nombre_titulo: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patterntitleValidator())]]
     });
 
     //Nombre_titulo' y transformarlo a mayúsculas

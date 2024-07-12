@@ -30,7 +30,7 @@ const Toast = Swal.mixin({
   styleUrls: ['./activida.component.css']
 })
 export class ActividaComponent implements OnInit {
-  displayedColumns: string[] = ['id_actividad','nombre_actividad','descripcion_actividad','horas_no_docentes','id_tipo_actividad', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['id_actividad','nombre_actividad','descripcion_actividad','horas_no_docentes','id_tipo_actividad', 'actualizar'];
   dataSource!: MatTableDataSource<Actividad>;
   currentExplan: string = '';
   public tipo: tipo_actividad = new tipo_actividad();
@@ -93,7 +93,7 @@ export class ActividaComponent implements OnInit {
         this.loadActividades();
         Toast.fire({
           icon: "success",
-          title: "El tipo de actividad ha sido creado correctamente",
+          title: "La Actividad ha sido creado correctamente",
         });
       }
     });
@@ -101,7 +101,8 @@ export class ActividaComponent implements OnInit {
 
   openEditDialog(tipoActividad: Actividad): void {
     const dialogRef = this.dialog.open(ActividaModalComponent, {
-      width: '900px',
+      width: '60%',
+      height: '80%',
       data: tipoActividad
     });
 
@@ -110,7 +111,7 @@ export class ActividaComponent implements OnInit {
         this.loadActividades();
         Toast.fire({
           icon: "success",
-          title: "El tipo de actividad ha sido actualizado correctamente",
+          title: "Actividad actualizada correctamente",
         });
       }
     });
@@ -131,7 +132,7 @@ export class ActividaComponent implements OnInit {
           this.loadActividades();
           Toast.fire({
             icon: "success",
-            title: "El tipo de actividad ha sido eliminado correctamente",
+            title: "Actividad eliminada correctamente",
           });
         });
       }

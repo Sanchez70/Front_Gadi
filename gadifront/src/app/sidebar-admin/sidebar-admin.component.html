@@ -14,48 +14,43 @@
   </div>
 </nav>
 <mat-menu #userMenu="matMenu">
-  
+
   <button mat-menu-item (click)="cerrar()">
     <mat-icon>logout</mat-icon>
     <span>Cerrar Sesión</span>
   </button>
 </mat-menu>
 
-  <mat-sidenav-container class="main"></mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
-      <mat-toolbar color="primary">
-        <img class="logo" src="assets/img/logo.png" alt="Logo">
-      </mat-toolbar>
+<mat-sidenav-container class="main"></mat-sidenav-container>
+<mat-sidenav #sidenav mode="side" [(opened)]="isExpanded" class="sidebar">
+  <mat-toolbar color="primary">
+    <img class="logo" src="assets/img/logo.png" alt="Logo">
+  </mat-toolbar>
   <div class="main">
     <div class="sidebar">
-      <mat-nav-list >
-      <img class="logo" src="assets/img/logo.png">
-  
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/main-admin"><i class="bi bi-house-fill"></i> Inicio</a>
-  
-    </li>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/asignatura"><i class=" bi-book-fill"></i> Asignatura</a>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/actividad"><i class="bi bi-person-workspace"></i> Actividad</a>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/tipo_actividad"><i class="bi bi-book"></i> Tipo Actividad</a>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/carrera"><i class="bi bi-book"></i> Carreras</a>
-      <hr class="separator">
-      <li class="nav-item active" routerLinkActive="active">
-      <a routerLink="/activida"><i class="bi bi-book"></i>Actividad Prueba</a>
-    </li>
-      <hr class="separator">
-      <a routerLink="/persona"><i class="bi bi-mortarboard-fill"></i> Docente</a>
-      <hr class="separator">
-      <a href="#contact"><i class="bi bi-headset"></i> Contacto</a>
-      <hr class="separator"> 
-    </mat-nav-list>
+      <mat-nav-list>
+        <img class="logo" src="assets/img/logo.png">
+
+        <hr class="separator">
+        <li class="nav-item active" routerLinkActive="active">
+          <a routerLink="/main-admin"><i class="bi bi-house-fill"></i> Inicio</a>
+        </li>
+        <hr class="separator">
+        <li class="nav-item active" routerLinkActive="active">
+          <a routerLink="/crud-asignatura"><i class=" bi-book-fill"></i> Asignatura</a>
+          <hr class="separator">
+        <li class="nav-item active" routerLinkActive="active">
+          <a routerLink="/activida"><i class="bi bi-person-workspace"></i> Actividad</a>
+          <hr class="separator">
+        <li class="nav-item active" routerLinkActive="active">
+          <a routerLink="/tipo_actividad"><i class="bi bi-book"></i> Tipo Actividad</a>
+          <hr class="separator">
+        <li class="nav-item active" routerLinkActive="active">
+          <a routerLink="/carrera"><i class="bi bi-book"></i> Carreras</a>
+        <hr class="separator">
+        <a routerLink="/persona"><i class="bi bi-mortarboard-fill"></i> Docente</a>
+        <hr class="separator">
+        <a href="#contact"><i class="bi bi-headset"></i> Contacto</a>
+        <hr class="separator">
+      </mat-nav-list>
     </div>

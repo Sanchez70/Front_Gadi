@@ -1,3 +1,4 @@
+<br>
 <div class="container">
   <div class="container1 {{currentExplan}}">
     <h1>Tipos de Actividad</h1>
@@ -6,7 +7,7 @@
         <mat-label>Buscar...</mat-label>
         <input matInput (input)="applyFilter($event)" />
       </mat-form-field>
-      <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Añadir</button>
+      <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Crear</button>
     </div>
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" matSort>

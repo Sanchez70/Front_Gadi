@@ -28,7 +28,7 @@ const Toast = Swal.mixin({
   styleUrls: ['./tipo-actividad.component.css']
 })
 export class TipoActividadComponent implements OnInit {
-  displayedColumns: string[] = ['nom_tip_actividad', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['nom_tip_actividad', 'actualizar'];
   dataSource!: MatTableDataSource<tipo_actividad>;
   currentExplan: string = '';
 

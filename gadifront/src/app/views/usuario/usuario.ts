@@ -5,5 +5,5 @@ export interface Usuario{
 	usuario: String;
 	contrasena: String;
 	id_persona: number;
-    carrera: Carrera;
+    id_carrera: Carrera;
 }

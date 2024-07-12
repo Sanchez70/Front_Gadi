@@ -3,7 +3,7 @@
     <h1>INGRESO DE TÍTULOS</h1>
   </div>
   <form [formGroup]="tituloForm" (ngSubmit)="guardarTitulo()" class="form-container">
-    <mat-form-field class="form-group" appearance="fill">
+    <mat-form-field class="form-group" appearance="outline">
       <mat-label>Grado</mat-label>
       <mat-select formControlName="grado" required>
         <mat-option *ngFor="let grado of grados" [value]="grado">{{ grado }}</mat-option>
@@ -11,7 +11,7 @@
       <mat-error *ngIf="tituloForm.get('grado')?.hasError('required')">El grado es requerido.</mat-error>
     </mat-form-field>
     
-    <mat-form-field class="form-group" appearance="fill">
+    <mat-form-field class="form-group" appearance="outline">
       <mat-label>Nombre del Título</mat-label>
       <input matInput formControlName="nombre_titulo" required>
       <mat-error *ngIf="tituloForm.get('nombre_titulo')?.hasError('required')">El nombre del título es requerido.</mat-error>

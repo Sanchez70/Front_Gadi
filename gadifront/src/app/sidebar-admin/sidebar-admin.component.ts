@@ -43,6 +43,7 @@ export class SidebarAdminComponent {
         this.authService.logout();
         this.authService.tiporol = '';
         this.authService.clearLocalStorage();
+        localStorage.clear();
       }
     });
   }

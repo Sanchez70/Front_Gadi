@@ -31,7 +31,7 @@ const Toast = Swal.mixin({
 export class PeriodoComponent implements OnInit{
 
 
-  displayedColumns: string[] = ['nombre_periodo', 'inicio_periodo', 'fin_periodo', 'estado', 'borrar', 'actualizar'];
+  displayedColumns: string[] = ['nombre_periodo', 'inicio_periodo', 'fin_periodo', 'estado',  'actualizar'];
   dataSource!: MatTableDataSource<Periodo>;
   color = '#1E90FF';
   currentExplan: string = '';

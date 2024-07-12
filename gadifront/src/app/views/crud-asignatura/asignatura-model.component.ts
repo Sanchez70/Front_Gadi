@@ -5,6 +5,7 @@ import { Asignatura } from '../../Services/asignaturaService/asignatura';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
 import { CarreraService } from '../../Services/carreraService/carrera.service';
 import { CicloService } from '../../Services/cicloService/ciclo.service';
+import { ValidacionesComponent } from '../../validaciones/validaciones.component';
 
 @Component({
     selector: 'app-asignatura-modal',
@@ -31,8 +32,8 @@ export class AsignaturaModalComponent implements OnInit {
         private cicloService: CicloService
     ) {
         this.asignaturaForm = this.fb.group({
-            nombre_asignatura: [data?.nombre_asignatura || '', Validators.required],
-            horas_semanales: [data?.horas_semanales || "", [Validators.required, Validators.min(1)]],
+            nombre_asignatura: [data?.nombre_asignatura || '', [Validators.required, Validators.pattern(ValidacionesComponent.patternActividaValidator())]],
+            horas_semanales: [data?.horas_semanales || "", [Validators.required, Validators.min(1), Validators.max(20)]],
             id_carrera: [data?.id_carrera || 0, Validators.required],
         id_ciclo: [data?.id_ciclo || 0, Validators.required]
         });

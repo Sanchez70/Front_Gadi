@@ -53,4 +53,16 @@ h1 {
     padding: 0.3rem;
     margin-left: 0cap;
   }
+
+  .centered-container {
+    display: grid;
+    place-items: center;
+    height: 100px;
+  }
+  
+  .centered-text {
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+  }
   

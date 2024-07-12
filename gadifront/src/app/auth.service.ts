@@ -59,8 +59,22 @@ export class AuthService {
 
   clearLocalStorage() {
     localStorage.removeItem('user');
-    this.id_persona = '';
-    this.id_asignaturas=[];
+    this.asignaturasSeleccionadaAuth = [];
+ 
+  this.tiporol= '';
+  this.cedula='';
+  this.id_persona= '';
+ this.id_asignaturas= [];
+  this.id_actividades= [];
+  this.id_jornada='';
+  this.id_carrera='';
+  this.paralelo='';
+  this.id_periodo='';
+  this.id_distributivo='';
+  this.distributivos = [];
+  this.id_distributivoActividad=[];
+  this.id_distributivoAsignatura='';
+    
   }
 
   clearLocalStorageAsignatura() {

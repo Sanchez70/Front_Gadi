@@ -17,19 +17,19 @@
       <table mat-table [dataSource]="dataSource" matSort>
         <ng-container matColumnDef="cedula">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Cédula</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.cedula }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.cedula || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="nombre">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.nombre1 }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre1|| 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="apellido">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Apellido</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.apellido1 }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.apellido1|| 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="nombre_contrato">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Contrato</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.nombre_contrato }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre_contrato || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="nombre_titulo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">TÍTULO PROFESIONAL
@@ -41,7 +41,7 @@
                   <select class="form-control"
                     name="titulo" aria-label="Jornada" aria-describedby="basic-addon1"
                     formControlName="carreraSelec">
-                    <option *ngFor="let titulo of titulos" disabled selected>{{titulo.nombre_titulo}}</option>
+                    <option *ngFor="let titulo of titulos" disabled selected>{{titulo.nombre_titulo|| 'no asignado'}}</option>
                   </select>
                 </div>
               </div>
@@ -51,12 +51,12 @@
         </ng-container>
         <ng-container matColumnDef="nombre_grado_ocp">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Grado Ocupacional</th>
-          <td mat-cell *matCellDef="let persona">{{ persona.nombre_grado_ocp }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.nombre_grado_ocp || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="fecha_vinculacion">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Fecha de Vinculación
           </th>
-          <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date: 'dd/MM/yyyy' }}</td>
+          <td mat-cell *matCellDef="let persona">{{ persona.fecha_vinculacion | date: 'dd/MM/yyyy' || 'no asignado'}}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -72,19 +72,19 @@
       <table mat-table [dataSource]="dataSource2" matSort>
         <ng-container matColumnDef="nombre_asignatura">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Asignatura</th>
-          <td mat-cell *matCellDef="let asignatura">{{ asignatura.nombre_asignatura }}</td>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.nombre_asignatura || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="horas_semanales">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas Semanales</th>
-          <td mat-cell *matCellDef="let asignatura">{{ asignatura.horas_semanales }}</td>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.horas_semanales|| 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="id_carrera">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera</th>
-          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCarrera(asignatura.id_carrera) }}</td>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCarrera(asignatura.id_carrera) || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="id_ciclo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Ciclo</th>
-          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCiclo(asignatura.id_ciclo) }}</td>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCiclo(asignatura.id_ciclo) || 'no asignado'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="jornada" sticky>
@@ -94,7 +94,7 @@
             <select class="form-control" (ngModel)="generateKey(asignatura.id_asignatura,i)"
                     name="jornada" aria-label="Jornada" aria-describedby="basic-addon1" (change)="onJornadaChange($event,asignatura.id_asignatura,i)">
               <option value=0 disabled selected>Seleccione una opción</option>
-              <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
+              <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada  || 'no asignado'}}</option>
             </select>
           </div>
           </td>
@@ -113,23 +113,23 @@
       <table mat-table [dataSource]="dataSource3" matSort>
         <ng-container matColumnDef="id_actividad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Id Actividad</th>
-          <td mat-cell *matCellDef="let actividad">{{ actividad.id_actividad }}</td>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.id_actividad || 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="nombre_actividad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombre Actividad</th>
-          <td mat-cell *matCellDef="let actividad">{{ actividad.nombre_actividad }}</td>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.nombre_actividad || 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="descripcion_actividad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Descripción</th>
-          <td mat-cell *matCellDef="let actividad">{{ actividad.descripcion_actividad }}</td>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.descripcion_actividad || 'no asignado'}}</td>
         </ng-container>
         <ng-container matColumnDef="horas_no_docentes">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Horas no Docentes</th>
-          <td mat-cell *matCellDef="let actividad">{{ actividad.horas_no_docentes }}</td>
+          <td mat-cell *matCellDef="let actividad">{{ actividad.horas_no_docentes|| 'no asignado' }}</td>
         </ng-container>
         <ng-container matColumnDef="id_tipo_actividad">
           <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Tipo Actividad</th>
-          <td mat-cell *matCellDef="let actividad">{{ obtenerTipoActividad(actividad.id_tipo_actividad) }}</td>
+          <td mat-cell *matCellDef="let actividad">{{ obtenerTipoActividad(actividad.id_tipo_actividad) || 'no asignado'}}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns3"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns3;"></tr>
