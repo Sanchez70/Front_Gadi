@@ -1,55 +1,56 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    max-height: 85vh;
-    max-width: 60%;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-top: 2%;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 200%;
+  max-width: 65%;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 2%;
+}
 
-  .contenedorHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .titulo {
-    font-size: 2rem;
-    color: #3f51b5;
-  }
-  
-  .logo {
-    width: 50%;
-    height: auto;
-  }
-.contenedor1{
-    
-    gap: 1rem;
+.contenedorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
-.contenedor2{
-    gap: 1rem;
-    margin-top: 5%;
+
+.titulo {
+  font-size: 2rem;
+  color: #3f51b5;
 }
+
+.logo {
+  width: 50%;
+  height: auto;
+}
+
 
 mat-form-field {
-width: 25%;
-margin: 2%;
+  width: 25%;
+  margin: 2%;
 }
 
 button {
-    margin-top: 20px;
-    margin: 20px 20px;
+  margin-top: 20px;
+  margin: 20px 20px;
 }
 
 .mat-form-field {
-    width: 100%;
-    margin-bottom: 16px;
+  width: 100%;
+
+  margin-bottom: 16px;
+}
+
+.btncon {
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border: 0cap;
+  background-color: white;
 }
 
 .Abrir {
@@ -59,7 +60,7 @@ button {
   align-items: stretch;
   width: calc(100% - 22.5cap);
   box-sizing: border-box;
-  
+
 }
 
 .Abrir .table-container {
@@ -67,17 +68,16 @@ button {
   overflow: auto;
   max-height: 70vh;
   max-width: 167vh;
-  
+
 }
 
 .Cerrar .table-container {
   flex-grow: 1;
   overflow: auto;
   max-height: 70vh;
-  
+
 }
 
 .Abrir table {
   width: 100%;
 }
-
