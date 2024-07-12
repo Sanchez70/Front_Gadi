@@ -34,14 +34,7 @@
                 </td>
             </ng-container>
 
-            <ng-container matColumnDef="borrar">
-                <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Eliminar</th>
-                <td mat-cell *matCellDef="let periodo">
-                    <button mat-icon-button color="warn" (click)="deletePeriodo(periodo.id_periodo)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </td>
-            </ng-container>ç
+        
             <ng-container matColumnDef="actualizar">
                 <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Actualizar</th>
                 <td mat-cell *matCellDef="let periodo">

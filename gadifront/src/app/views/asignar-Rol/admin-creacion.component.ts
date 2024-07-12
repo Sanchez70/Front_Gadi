@@ -262,7 +262,7 @@ export class AdminCreacionComponent implements OnInit {
                 this.usuario.carrera = carrera;
                 this.personaService.updateUsuario(this.usuario).subscribe(() => {
                   Toast.fire({
-                    icon: "success",
+                    icon: "success",  
                     title: "Carrera asignada correctamente",
                   });
                   this.limpiarCampos();

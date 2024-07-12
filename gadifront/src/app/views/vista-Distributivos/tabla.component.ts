@@ -182,9 +182,9 @@ export class TablaComponent implements OnInit {
     this.authService.id_periodo = idPeriodo;
     this.authService.saveUserToLocalStorage();
     if (this.authService.id_periodo) {
-      setTimeout(() => {
+    
         this.report.captureAndDownloadPdfbyPeriodo(idPeriodo);
-      }, 100)
+    
 
     } else {
       console.warn('No se encontró id_periodo para esta persona.');
