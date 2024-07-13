@@ -11,8 +11,7 @@
           <input matInput formControlName="name1">
           <mat-error *ngIf="registroForm1.get('name1')?.hasError('required')">El primer nombre es
             obligatorio</mat-error>
-          <mat-error *ngIf="registroForm1.get('name1')?.hasError('pattern')">El primer nombre solo puede contener
-            letras</mat-error>
+          <mat-error *ngIf="registroForm1.get('name1')?.hasError('pattern')">Ingrese un nombre válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">
@@ -20,8 +19,7 @@
           <input matInput formControlName="name2">
           <mat-error *ngIf="registroForm1.get('name2')?.hasError('required')">El segundo nombre es
             obligatorio</mat-error>
-          <mat-error *ngIf="registroForm1.get('name2')?.hasError('pattern')">El segundo nombre solo puede contener
-            letras</mat-error>
+          <mat-error *ngIf="registroForm1.get('name2')?.hasError('pattern')">Ingrese un nombre válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">
@@ -29,8 +27,7 @@
           <input matInput formControlName="lastname1">
           <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('required')">El primer apellido es
             obligatorio</mat-error>
-          <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('pattern')">El primer apellido solo puede contener
-            letras</mat-error>
+          <mat-error *ngIf="registroForm1.get('lastname1')?.hasError('pattern')">Ingrese un apellido válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">
@@ -38,8 +35,7 @@
           <input matInput formControlName="lastname2">
           <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('required')">El segundo apellido es
             obligatorio</mat-error>
-          <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('pattern')">El segundo apellido solo puede contener
-            letras</mat-error>
+          <mat-error *ngIf="registroForm1.get('lastname2')?.hasError('pattern')">Ingrese un apellido válido con la primera letra mayuscula,(solo letras, 2-30 caracteres).</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">
@@ -66,10 +62,8 @@
           <mat-label>Teléfono</mat-label>
           <input matInput formControlName="telefono">
           <mat-error *ngIf="registroForm1.get('telefono')?.hasError('required')">El teléfono es obligatorio</mat-error>
-          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidLength')">El teléfono debe tener 10
-            dígitos</mat-error>
-          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('invalidFormat')">El teléfono debe empezar con
-            09</mat-error>
+          <mat-error *ngIf="registroForm1.get('telefono')?.hasError('pattern')">El teléfono debe tener 10
+            dígitos y empezar por 09</mat-error>
         </mat-form-field>
   
         <mat-form-field appearance="outline">

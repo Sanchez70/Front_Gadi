@@ -11,7 +11,11 @@ export class ValidacionesComponent {
     } 
 
     static patterOnlyNumbersValidator(): RegExp {
-        return /^[0-9]{10}$/;
+        return /^[09][0-9]{9}$/;
+    }
+
+    static patterNumbersCounterValidator(): RegExp {
+        return /^[0-9]{1,10}$/;
     }
 
     static patternOnlyLettersAndNumbersValidator(): RegExp {
@@ -47,7 +51,7 @@ export class ValidacionesComponent {
     } 
     
     static patternActividaValidator(): RegExp {
-        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{4,49}$/;
+        return /^[A-ZÑÁÉÍÓÚ][a-zA-ZñÑáéíóúÁÉÍÓÚ\s]{2,30}$/;
     }
 
     static patternTipoActiValidator(): RegExp {

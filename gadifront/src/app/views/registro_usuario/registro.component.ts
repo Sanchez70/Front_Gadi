@@ -56,13 +56,13 @@ export class RegistroComponent implements OnInit {
     private authService: AuthService,
   ) {
     this.registroForm1 = this.fb.group({
-      name1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
-      name2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
-      lastname1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
-      lastname2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternOnlyLettersValidator())]],
+      name1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternActividaValidator())]],
+      name2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternActividaValidator())]],
+      lastname1: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternActividaValidator())]],
+      lastname2: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternActividaValidator())]],
       user: ['', [Validators.required, this.validateCedulaEcuatoriana]],
       password: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternPasswordValidator())]],
-      telefono: ['', [Validators.required, this.validateTelefono]],
+      telefono: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patterOnlyNumbersValidator())]],
       direccion: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
       fecha_nacimiento: ['', [Validators.required, this.validarEdadMinima(18)]],
@@ -71,7 +71,7 @@ export class RegistroComponent implements OnInit {
       titulos: this.fb.array([]),
       nombre_grado_ocp: ['', Validators.required],
       nombre_contrato: ['', Validators.required],
-      hora_contrato: ['', [Validators.required, Validators.min(0),Validators.max(40)]]
+      hora_contrato: ['', Validators.required]
     });
   }
 
@@ -194,17 +194,6 @@ export class RegistroComponent implements OnInit {
     } else {
       this.registroForm1.get('edad')?.setValue(edad);
     }
-  }
-
-  validateTelefono(control: AbstractControl): ValidationErrors | null {
-    const telefono = control.value;
-    if (!/^\d{10}$/.test(telefono)) {
-      return { invalidLength: true };
-    }
-    if (!/^09\d{8}$/.test(telefono)) {
-      return { invalidFormat: true };
-    }
-    return null;
   }
 
   onSubmit(): void {
