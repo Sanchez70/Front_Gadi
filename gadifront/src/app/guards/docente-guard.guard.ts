@@ -13,7 +13,7 @@ export class docenteGuardGuard implements CanActivate  {
 
   canActivate(): boolean {
     if (this.authService.tiporol==='Docente') {
-   
+      
       return true;
     } else {
         return false;

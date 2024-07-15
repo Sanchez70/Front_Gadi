@@ -16,15 +16,17 @@ export class AuthService {
   id_asignaturas: any[] = [];
   id_actividades: any[] = [];
   id_jornada: any;
-  id_carrera:any;
+  id_carrera: any;
   paralelo: any;
   id_periodo: any;
-  id_distributivo:any;
+  id_distributivo: any;
   distributivos: Distributivo[] = [];
-  id_distributivoActividad:any[]=[];
+  id_distributivoActividad: any[] = [];
   id_distributivoAsignatura: any;
+  iniciales: any;
   private explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
+
 
 
   constructor() {
@@ -51,35 +53,36 @@ export class AuthService {
     this.paralelo = user.paralelo || null;
     this.id_carrera = user.id_carrera || null;
     this.id_actividades = user.id_actividades || null;
-    this.asignaturasSeleccionadaAuth=user.asignaturasSeleccionadaAuth||null;
+    this.asignaturasSeleccionadaAuth = user.asignaturasSeleccionadaAuth || null;
     this.id_periodo = user.id_periodo || null;
-    this.id_distributivo=user.id_distributivo||null;
+    this.id_distributivo = user.id_distributivo || null;
+    this.iniciales = user.iniciales || null;
 
   }
 
   clearLocalStorage() {
     localStorage.removeItem('user');
     this.asignaturasSeleccionadaAuth = [];
- 
-  this.tiporol= '';
-  this.cedula='';
-  this.id_persona= '';
- this.id_asignaturas= [];
-  this.id_actividades= [];
-  this.id_jornada='';
-  this.id_carrera='';
-  this.paralelo='';
-  this.id_periodo='';
-  this.id_distributivo='';
-  this.distributivos = [];
-  this.id_distributivoActividad=[];
-  this.id_distributivoAsignatura='';
-    
+
+    this.tiporol = '';
+    this.cedula = '';
+    this.id_persona = '';
+    this.id_asignaturas = [];
+    this.id_actividades = [];
+    this.id_jornada = '';
+    this.id_carrera = '';
+    this.paralelo = '';
+    this.id_periodo = '';
+    this.id_distributivo = '';
+    this.distributivos = [];
+    this.id_distributivoActividad = [];
+    this.id_distributivoAsignatura = '';
+
   }
 
   clearLocalStorageAsignatura() {
     this.id_asignaturas = [];
-    this.asignaturasSeleccionadaAuth=[];
+    this.asignaturasSeleccionadaAuth = [];
   }
 
   isAuthenticated(): boolean {
@@ -95,11 +98,11 @@ export class AuthService {
   }
 
   clearLocalStoragePeriodo() {
-    this.id_periodo =  '';
+    this.id_periodo = '';
   }
 
   clearLocalStorageDistributivos() {
-    this.distributivos =  [];
+    this.distributivos = [];
   }
 
 
@@ -115,15 +118,16 @@ export class AuthService {
       paralelo: this.paralelo,
       id_carrera: this.id_carrera,
       id_actividades: this.id_actividades,
-      asignaturasSeleccionadaAuth:this.asignaturasSeleccionadaAuth,
+      asignaturasSeleccionadaAuth: this.asignaturasSeleccionadaAuth,
       id_periodo: this.id_periodo,
       id_distributivo: this.id_distributivo,
+      iniciales: this.iniciales,
 
     }));
   }
-limpieza(){
-  localStorage.clear();
-}
+  limpieza() {
+    localStorage.clear();
+  }
   login() {
     this.isLogeado = true;
     this.saveUserToLocalStorage();
@@ -139,11 +143,11 @@ limpieza(){
     this.cedula = cedula;
     this.saveUserToLocalStorage();
   }
-  
- setIdPersona(id_persona:any){
-  this.id_persona=id_persona;
-  this.saveUserToLocalStorage();
-}
+
+  setIdPersona(id_persona: any) {
+    this.id_persona = id_persona;
+    this.saveUserToLocalStorage();
+  }
 
 
   navbar() {

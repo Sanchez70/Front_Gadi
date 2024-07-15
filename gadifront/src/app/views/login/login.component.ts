@@ -36,7 +36,7 @@ export class LoginComponent {
   roles: Rol[] = [];
   public searchForm: FormGroup;
   isLoading = false;
-  constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService,  public dialog: MatDialog) {
+  constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService, public dialog: MatDialog) {
     this.searchForm = this.fb.group({
       usuario: ['', Validators.required],
       contraneusu: ['', Validators.required]
@@ -44,7 +44,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    this.isLoading = true; 
+    this.isLoading = true;
     this.validar();
   }
 
@@ -82,7 +82,8 @@ export class LoginComponent {
                   return;
                 }
                 if (res) {
-                  this.authService.setIdPersona(usuarioEncontrado.id_persona); // Guardar el id_persona
+                  this.authService.setIdPersona(usuarioEncontrado.id_persona);
+                  this.authService.iniciales = usuarioEncontrado.id_persona; // Guardar el id_persona
                   this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
                   this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
                 } else {

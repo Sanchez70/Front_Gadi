@@ -18,14 +18,14 @@ export class SidebarComponent {
   isExpanded = true;
   explan: string = 'Abrir';
   inicialesUsuario: string = '';
-  constructor(private authService: AuthService, private router: Router,  private personaService: PersonaService) { }
+  constructor(private authService: AuthService, private router: Router, private personaService: PersonaService) { }
 
   toggleSidenav() {
     this.isExpanded = !this.isExpanded;
     this.sidenav.toggle();
   }
-  ngOnInit(): void { 
-    this.fetchUserDetails(); 
+  ngOnInit(): void {
+    this.fetchUserDetails();
   }
 
   cerrar(): void {
@@ -41,10 +41,10 @@ export class SidebarComponent {
         Swal.fire(`Hasta pronto`, 'Sesion cerrada correctamente', 'success');
         this.router.navigate(['./login']);
         this.authService.logout();
-        this.authService.tiporol='';
+        this.authService.tiporol = '';
         this.authService.clearLocalStorage();
         localStorage.clear();
-        
+
       }
     });
   }
@@ -59,30 +59,26 @@ export class SidebarComponent {
       this.authService.navbar();
       this.toggleSidenav();
     }
-  
+
   }
 
-  limpiar():void{
-    this.authService.id_persona='';
-    this.authService.id_asignaturas=[];
+  limpiar(): void {
+    this.authService.id_persona = '';
+    this.authService.id_asignaturas = [];
   }
 
   fetchUserDetails(): void {
-    console.log('Fetching user details');
-    const user = this.authService.getUser();
-    console.log('User from localStorage:', user);
-
-    const id_persona = user.id_persona;
+    const id_persona = this.authService.iniciales;
 
     if (id_persona) {
-      console.log('id_persona found:', id_persona);
+
       this.personaService.getPersonaById(id_persona).subscribe(
         (persona) => {
-          console.log('Persona details fetched:', persona);
+
           const nombre = persona.nombre1 || '';
           const apellido = persona.apellido1 || '';
           this.inicialesUsuario = this.getInitials(nombre, apellido);
-          console.log('User initials set to:', this.inicialesUsuario);
+
         },
         (error) => {
           console.error('Error fetching persona details:', error);
@@ -94,9 +90,8 @@ export class SidebarComponent {
   }
 
   getInitials(nombre: string, apellido: string): string {
-    if (!nombre || !apellido) return 'U'; 
+    if (!nombre || !apellido) return 'U';
     const initials = `${nombre.charAt(0)}${apellido.charAt(0)}`;
-    console.log('Initials generated:', initials);
     return initials.toUpperCase();
   }
 }
