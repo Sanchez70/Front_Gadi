@@ -275,6 +275,7 @@ export class RegistroComponent implements OnInit {
       if (contratoSeleccionado.nombre_contrato === 'TIEMPO PARCIAL') {
         this.registroForm1.get('hora_contrato')?.setValue('');
         this.habilitar = "false";
+        this.id_Contrato = 0;
         this.id_Contrato = 3;
       } else {
         this.habilitar = "true";
