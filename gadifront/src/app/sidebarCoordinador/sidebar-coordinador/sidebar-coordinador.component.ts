@@ -73,7 +73,6 @@ export class SidebarCoordinadorComponent {
      
       this.personaService.getPersonaById(id_persona).subscribe(
         (persona) => {
-          console.log('Persona details fetched:', persona);
           const nombre = persona.nombre1 || '';
           const apellido = persona.apellido1 || '';
           this.inicialesUsuario = this.getInitials(nombre, apellido);

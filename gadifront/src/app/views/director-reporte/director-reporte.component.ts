@@ -58,7 +58,6 @@ export class DirectorReporteComponent {
         (periodo) => (periodo.estado === 'Activo')
       );
       this.idPeriodo = this.periodoEncontrado.id_periodo
-      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
@@ -114,7 +113,6 @@ export class DirectorReporteComponent {
   }
 
   distributivo(valor: any):void{
-    console.log(valor)  
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona===valor );

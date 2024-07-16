@@ -48,7 +48,6 @@ export class LoginComponent {
     this.validar();
   }
 
-
   validar(): void {
     const usuariol = this.searchForm.value.usuario;
     const contraneusu = this.searchForm.value.contraneusu;
@@ -104,49 +103,6 @@ export class LoginComponent {
     }
   }
 
-  // validar(): void {
-  //   const usuariol = this.searchForm.value.usuario;
-  //   const contraneusu = this.searchForm.value.contraneusu;
-
-  //   if (usuariol === '') {
-  //     Toast.fire({
-  //       icon: "error",
-  //       title: "Campo Usuario Vacio",
-  //       footer: "Por favor, verifique si ha completado todo lo necesario"
-  //     });
-
-  //   } else if (contraneusu === '') {
-  //     Toast.fire({
-  //       icon: "error",
-  //       title: "Campo Contraseña Vacio",
-  //       footer: "Por favor, verifique si ha completado todo lo necesario"
-  //     });
-
-  //   } else {
-  //     this.loginService.getUsuario().subscribe(
-  //       (result) => {
-  //         if (Array.isArray(result) && result.length > 0) {
-  //           const usuarioEncontrados = result as Usuario[];
-  //           const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.contrasena === contraneusu && usuario.usuario === usuariol);
-  //           console.log('Usuario encontrado:', usuarioEncontrado);
-  //           console.log('ID de carrera del usuario encontrado:', usuarioEncontrado?.carrera?.id_carrera);
-  //           if (usuarioEncontrado) {
-  //             this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
-  //             this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
-  //             console.log(this.authService.id_carrera)
-
-  //           } else {
-  //             Swal.fire('Usuario o contraseña erronea', 'Intente nuevamente', 'error');
-
-  //           }
-  //         }
-
-  //       }, (error) => {
-  //         Swal.fire('Campos Vacios', 'Intente nuevamente', 'error');
-  //       });
-  //   }
-  // }
-
   selectedRole: string | undefined;
   cargarRol(id_rol: any, usuario: any): void {
     this.usuarioRol.getusuarioRol().subscribe(
@@ -167,7 +123,6 @@ export class LoginComponent {
         }
       });
   }
-
 
   showDialog(usuario: any) {
     const dialogRef = this.dialog.open(RolSelectorComponent, {

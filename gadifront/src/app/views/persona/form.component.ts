@@ -77,7 +77,6 @@ export class FormComponent implements OnInit {
       data: null
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.mostrarTitulos(idPersona);
     });
   }
@@ -91,11 +90,9 @@ export class FormComponent implements OnInit {
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.mostrarTitulos(idPersona);
     });
   }
-  
 
   ngOnInit(): void {
     const idPersona = this.authService.id_persona;

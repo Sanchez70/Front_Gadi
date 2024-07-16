@@ -81,7 +81,6 @@ export class FormComponent {
         (actividad) => 
           (this.tipoActividadSeleccionado===null || actividad.id_tipo_actividad === this.idTipo)
       );
-      console.log('actividad filtrada por tipo',this.actividadesFiltrada);
     }); 
   }
 
@@ -130,7 +129,6 @@ export class FormComponent {
   onTipoChange(event:any): void{
     this.tipoActividadSeleccionado = +event.target.value;
     this.idTipo = this.tipoActividadSeleccionado;
-    console.log('paralelo',this.tipoActividadSeleccionado);
     this.filtrarActividadabyTipo();
     this.myForm.get('tipoActividadSeleccionado')?.setValue(event.target.value);
   }

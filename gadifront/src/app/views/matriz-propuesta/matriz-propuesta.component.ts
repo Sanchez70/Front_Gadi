@@ -142,7 +142,6 @@ export class MatrizPropuestaComponent implements OnInit {
       this.distributivos = data;
       this.distributivoFiltrado = this.distributivos.filter(
         distributivo => distributivo.id_persona === idPersona && distributivo.estado === 'Pendiente' && distributivo.id_periodo === this.authService.id_periodo);
-      console.log('distributivo encontrado', this.distributivoFiltrado);
       this.distributivoFiltrado.forEach(distributivo => {
         this.id_distributivo = distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
@@ -173,7 +172,6 @@ export class MatrizPropuestaComponent implements OnInit {
   }
 
   combinarDatos(distributivos: Distributivo[]): void {
-    console.log('llegué inicio');
     forkJoin({
       asignaturas: this.asignaturaService.getAsignatura(),
       carreras: this.carreraService.getCarrera(),
@@ -211,14 +209,11 @@ export class MatrizPropuestaComponent implements OnInit {
 
 
         this.asignaturas = asignaturaFiltradas;
-        console.log('respuesta asignaturas', this.asignaturas)
         return data;
       })
     ).subscribe(data => {
       this.dataSourceAsig.data = data;
-      console.log('data source', this.dataSourceAsig.data);
     });
-    console.log('llegué final');
   }
 
 
@@ -232,7 +227,6 @@ export class MatrizPropuestaComponent implements OnInit {
           distributivoActividad.id_distributivo === idDistributivo);
 
       const idActividades = actividadesFiltradas.map(distributivoActividadEncontrados => distributivoActividadEncontrados.id_actividad);
-      console.log('id_actividad', idActividades);
 
       this.actividadService.getActividad().subscribe(activ => {
         const activEncontrados = activ as Actividad[];
@@ -241,7 +235,6 @@ export class MatrizPropuestaComponent implements OnInit {
         );
         this.actividades = this.actividades.concat(actividadCargadas);
         this.cargarTipo();
-        console.log('Actividades cargadas:', this.actividades);
       });
     });
 

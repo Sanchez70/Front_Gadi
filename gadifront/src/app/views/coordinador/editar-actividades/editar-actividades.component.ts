@@ -77,7 +77,6 @@ export class EditarActividadesComponent {
         (actividad) =>
           (this.tipoActividadSeleccionado === null || actividad.id_tipo_actividad === this.idTipo)
       );
-      console.log('actividad filtrada por tipo', this.actividadesFiltrada);
     });
   }
 
@@ -133,7 +132,6 @@ export class EditarActividadesComponent {
 
       forkJoin(allDeleteObservables).subscribe({
         next: () => {
-          console.log('holaa despues de eliminar');
           if (this.authService.distributivos.length > 0) {
             const primaryDistributivo = this.authService.distributivos[0]; // Utiliza solo el primer distributivo
             const createObservables = this.actividadesSeleccionadas.map(data => {
@@ -158,13 +156,9 @@ export class EditarActividadesComponent {
 
   }
 
-
-
-
   onTipoChange(event: any): void {
     this.tipoActividadSeleccionado = +event.target.value;
     this.idTipo = this.tipoActividadSeleccionado;
-    console.log('paralelo', this.tipoActividadSeleccionado);
     this.filtrarActividadabyTipo();
     this.myForm.get('tipoActividadSeleccionado')?.setValue(event.target.value);
   }

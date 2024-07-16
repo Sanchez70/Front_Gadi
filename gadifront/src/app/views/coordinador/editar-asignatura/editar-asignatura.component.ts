@@ -136,7 +136,6 @@ export class EditarAsignaturaComponent {
 
   onParaleloChange(event: any): void {
     this.paraleloSeleccionado = event.target.value;
-    console.log('paralelo', this.paraleloSeleccionado);
     this.myForm.get('paraleloSeleccionado')?.setValue(event.target.value);
   }
 
@@ -190,7 +189,6 @@ export class EditarAsignaturaComponent {
             const deleteObservables = distributivosFinales.map(distributivoFinal =>
               this.distributivoAsignaturaService.delete(distributivoFinal.id_distributivo_asig)
             );
-            console.log('eliminado')
             return forkJoin(deleteObservables);
           } else {
       
@@ -234,7 +232,6 @@ export class EditarAsignaturaComponent {
         this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
         this.authService.saveUserToLocalStorage();
         this.dialog.closeAll();
-        console.log('Asignaturas creadas correctamente');
       },
       error: (error) => {
         console.error('Error al crear asignaturas:', error);

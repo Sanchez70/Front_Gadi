@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PersonaService } from '../../Services/personaService/persona.service';
 import { AuthService } from '../../auth.service';
 import { TituloProfesionalService } from '../../Services/titulo/titulo-profesional.service';
 import { Router } from '@angular/router';
@@ -122,8 +121,6 @@ export class TituloProfesionalComponent implements OnInit {
           }
         );
       }
-    } else {
-      console.log('Formulario no válido');
     }
   }
 

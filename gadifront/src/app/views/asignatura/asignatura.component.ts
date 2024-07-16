@@ -112,18 +112,9 @@ export class AsignaturaComponent implements OnInit {
     });
 }
 
-
-  // onCarreraChange(event:any): void{
-  //   this.carreraSeleccionada = +event.target.value;
-  //   this.idCarrera = this.carreraSeleccionada;
-  //   console.log('id carrera',this.idCarrera)
-  //   this.filtrarAsignaturaCarrerabyCiclo();
-  // }
-
   onCicloChange(event:any): void{
     this.cicloSeleccionado = +event.target.value;
     this.idCiclo = this.cicloSeleccionado;
-    console.log('id ciclo',this.idCiclo)
     this.filtrarAsignaturaCarrerabyCiclo();
     this.myForm.get('cicloSeleccionado')?.setValue(event.target.value);
   }
@@ -131,33 +122,12 @@ export class AsignaturaComponent implements OnInit {
   onJornadaChange(event:any): void{
     this.jornadaSeleccionada = +event.target.value;
     this.idJornada = this.jornadaSeleccionada;
-    console.log('id_jornada',this.idJornada);
   }
 
   onParaleloChange(event:any): void{
     this.paraleloSeleccionado = event.target.value;
-    console.log('paralelo',this.paraleloSeleccionado);
     this.myForm.get('paraleloSeleccionado')?.setValue(event.target.value);
   }
-
-  // createAsignaturaDistributivo(): void {
-  //   this.asignaturasSeleccionadas.forEach(asignatura => {
-  //     const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-  //       id_jornada: this.idJornada,
-  //       paralelo: this.paraleloSeleccionado,
-  //       id_distributivo: this.id_distributivo,
-  //       id_asignatura: asignatura.id_asignatura
-  //     };
-  
-  //     this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-  //       Swal.fire('Asignatura guardada', `guardado con éxito`, 'success')
-  //       console.log('Asignatura Distributivo generado');
-  //     }, error => {
-  //       Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning')
-  //       console.log('Error al crear', error);
-  //     });
-  //   });
-  // }
   
   filtrarAsignaturaCarrerabyCiclo(): void{
     this.cargarAsignaturas().subscribe(()=>{
@@ -166,7 +136,6 @@ export class AsignaturaComponent implements OnInit {
           (asignatura.id_carrera === this.idCarrera) && 
           (this.cicloSeleccionado===null || asignatura.id_ciclo === this.idCiclo)
       );
-      console.log('asignatura filtrada por ciclo',this.asignaturaFiltrada)
     }); 
   }
 
@@ -177,12 +146,6 @@ export class AsignaturaComponent implements OnInit {
    
       this.asignaturasSeleccionadas.push(asignatura);
       this.calcularHorasTotales();
-    //else{
-    //   Toast.fire({
-    //     icon: "warning",
-    //     title: "La asignatura se encuentra seleccionada",
-    //   });
-    // }
   }
 
   eliminarAsignatura(fila:number): void{

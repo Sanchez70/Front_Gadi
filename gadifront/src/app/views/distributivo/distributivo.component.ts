@@ -172,15 +172,6 @@ export class DistributivoComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  // cargarActividades(): void {
-  //   this.actividadService.getActividad().subscribe((actividades) => {
-  //     this.Actividades = actividades;
-  //     this.dataSource3 = new MatTableDataSource(this.Actividades);
-  //     this.dataSource3.paginator = this.paginator;
-  //     this.dataSource3.sort = this.sort;
-  //   });
-  // }
-
   cargarTipoActividad(): void {
     this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
       this.Tipos = Tipos;
@@ -206,14 +197,8 @@ export class DistributivoComponent implements OnInit {
         (periodo) => (periodo.estado === 'Activo')
       );
       this.idPeriodo = this.periodoEncontrado.id_periodo
-      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
-
-  // onPeriodoChange(event: any): void {
-  //   this.periodoSeleccionado = +event.target.value;
-  //   this.idPeriodo = this.periodoSeleccionado;
-  // }
 
   cargarComboJornada(): void {
     this.jornadaService.getJornada().subscribe(data => {
@@ -259,7 +244,6 @@ export class DistributivoComponent implements OnInit {
           this.dataSource2.sort = this.sort;
           this.calcularHorasTotales();
         }, error => {
-          console.log('Error al crear', error);
         });
       });
     }
@@ -308,8 +292,7 @@ export class DistributivoComponent implements OnInit {
       this.distributivoService.create(this.distributivo)
         .subscribe(
           (distributivo) => {
-            console.log("valor", distributivo);
-            this.createAsignaturaDistributivo(distributivo.id_distributivo); // Pasa el id_distributivo al segundo método
+            this.createAsignaturaDistributivo(distributivo.id_distributivo); 
             this.createdistributivoacti(distributivo.id_distributivo);
 
             this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
@@ -357,14 +340,8 @@ export class DistributivoComponent implements OnInit {
             id_distributivo_asig: 0
           };
           this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => {
-            //Swal.fire('Asignatura guardada', `guardado con éxito`, 'success');
-            console.log('Asignatura Distributivo generado');
-          }, error => {
-            //Swal.fire('ERROR', `no se ha podido guardar correctamente`, 'warning');
-            console.log('Error al crear', error);
-          });
+          }, error => {});
         } else {
-          console.log('No se ha seleccionado una jornada para la asignatura con id', asignatura.id_asignatura);
         }
       });
     });
@@ -382,23 +359,15 @@ export class DistributivoComponent implements OnInit {
       this.distributivoActividadService.create(distributivoacti2)
         .subscribe(
           (distributivo) => {
-            console.log("valorREVISAR", distributivo);
-            //Swal.fire('Distributivo guardado', `Actividad ${distributivo.id_distributivo_actividad} Guardado con éxito`, 'success');
           },
           (error) => {
             console.error('Error al guardar la actividad:', error);
-            // Toast.fire({
-            //   icon: "error",
-            //   title: "Hubo un error al guardar la actividad",
-            //   footer: "Por favor, verifique"
-            // });
           }
         );
     });
   }
 
   crearAcronimo(jornadaNombre: string, paralelo: string, id_ciclo: number): string {
-    console.log('acronimo ', jornadaNombre + id_ciclo + paralelo);
     return jornadaNombre + id_ciclo + paralelo;
   }
 

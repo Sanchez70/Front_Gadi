@@ -60,7 +60,6 @@ export class DistributivosGeneradosComponent {
         (periodo) => (periodo.estado === 'Activo')
       );
       this.idPeriodo = this.periodoEncontrado.id_periodo
-      console.log('periodo cargado', this.periodoEncontrado.id_periodo);
     });
   }
 
@@ -116,14 +115,12 @@ export class DistributivosGeneradosComponent {
   }
 
   generarModeloPDF(valor: any): void {
-    console.log(valor)
     this.personaService.getPersonas().subscribe(data => {
       const personaEncontrados = data as Persona[];
       const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);
       if (usuarioEncontrado) {
         this.authService.id_persona = usuarioEncontrado.id_persona;
         this.authService.id_periodo = this.idPeriodo;
-        console.log('periodo enviado',this.authService.id_periodo);
         if (this.authService.id_periodo) {
           this.report.captureAndDownloadPdf();
         } else {

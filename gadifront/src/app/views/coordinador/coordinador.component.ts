@@ -157,7 +157,6 @@ export class CoordinadorComponent implements OnInit {
   verDetalle(valor: any): void {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
-      console.log(valor)
       this.authService.id_periodo = this.idPeriodo;
       //this.authService.saveUserToLocalStorage();
       this.personaService.getPersonas().subscribe(data => {

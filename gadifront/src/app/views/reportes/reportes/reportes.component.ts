@@ -125,7 +125,6 @@ export class ReportesComponent implements OnInit {
     private rector: RectorService
   ) { }
 
-
   ngOnInit(): void {
   }
 
@@ -137,13 +136,10 @@ export class ReportesComponent implements OnInit {
   }
 
   cargarTitulos(personaEncontrada: Persona): void {
-    // Llama al servicio para obtener todos los títulos
-
 
     this.tituloService.getTitulo().subscribe(respuest => {
       const titulos = respuest as Titulo_profesional[];
       const filTitllo = titulos.filter(titulo => titulo.id_persona === personaEncontrada.id_persona);
-      console.log('titulos', filTitllo)
       const dataArray: any[] = [];
       filTitllo.forEach(final => {
         dataArray.push({
@@ -154,15 +150,9 @@ export class ReportesComponent implements OnInit {
         this.dataSourceTitulos = new MatTableDataSource<any>(dataArray);
         this.dataSourceTitulos.paginator = this.paginator;
         this.dataSourceTitulos.sort = this.sort;
-
       });
-
     });
-
-
   }
-
-
 
   buscarDistributivo(idPersona: number): void {
     //idPersona = this.authService.id_persona;
@@ -172,7 +162,6 @@ export class ReportesComponent implements OnInit {
         (distributivo) => (distributivo.id_persona === idPersona && distributivo.id_periodo === this.authService.id_periodo && distributivo.estado === 'Aceptado'
         )
       );
-      console.log('distributivos filtrados', this.distributivoFiltrado)
 
       this.distributivoFiltrado.forEach(distributivo => {
 
@@ -185,13 +174,13 @@ export class ReportesComponent implements OnInit {
       });
     });
   }
+
   calcularHorasTotalesPorDocente(horasAsignatura: number, horasActividades: number): void {
     this.horasPorDocente = horasAsignatura + horasActividades;
   }
+
   buscarAsignatura(idDistributivo: number): void {
     this.horasTotales = 0;
-
-
 
     // Obtener distributivos de asignatura
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(distributivos => {
@@ -255,9 +244,6 @@ export class ReportesComponent implements OnInit {
     return new Intl.DateTimeFormat('es-ES', opciones).format(fecha);
   }
 
-
-
-
   captureAndDownloadPdf() {
     const fechaActual = new Date();
    
@@ -319,17 +305,17 @@ export class ReportesComponent implements OnInit {
           yPos += cellHeight;
 
           // Dibujar datos de la tabla
-          doc.setTextColor(0, 0, 0);  // Texto negro
+          doc.setTextColor(0, 0, 0);  
           doc.setFontSize(8);
           // Dibujar la primera columna combinada
           const totalHeight = this.dataSourceTitulos.data.length * cellHeight;
-          doc.setFillColor(240, 240, 240);  // Fondo gris claro para la celda combinada
+          doc.setFillColor(240, 240, 240); 
           doc.rect(xPos, yPos, columnWidthsTitulo[0], totalHeight, 'D');
 
           // Texto centrado verticalmente en la celda combinada
           const textWidthTitulo = doc.getTextWidth(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString());
           const textXTitulo = xPos + (columnWidthsTitulo[0] - textWidthTitulo) / 2;
-          const textYTitulo = yPos + (totalHeight - cellHeight) / 2 + 7; // Ajuste vertical
+          const textYTitulo = yPos + (totalHeight - cellHeight) / 2 + 7; 
           doc.text(this.dataSourceTitulos.data[0][this.displayedColumnsTitulo[0]].toString(), textXTitulo, textYTitulo);
 
           // Dibujar las celdas individuales de la segunda columna
@@ -355,8 +341,8 @@ export class ReportesComponent implements OnInit {
           // Dibujar encabezados de la tabla
           this.displayedColumnsAsig.forEach((header, index) => {
             doc.setFontSize(8);
-            doc.setTextColor(255, 255, 255);  // Texto blanco
-            doc.setFillColor(0, 102, 204);    // Fondo azul
+            doc.setTextColor(255, 255, 255);  
+            doc.setFillColor(0, 102, 204);    
             const cellWidth = columnWidthsAsig[index];
             doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'F');
             const textWidth = doc.getTextWidth(header);
@@ -368,12 +354,12 @@ export class ReportesComponent implements OnInit {
           yPos += cellHeight;
 
           // Dibujar datos de la tabla
-          doc.setTextColor(0, 0, 0);  // Texto negro
+          doc.setTextColor(0, 0, 0); 
           this.dataSourceAsig.data.forEach(row => {
             currentXPosAsig = xPos;
             this.displayedColumnsAsig.forEach((column, index) => {
               const cellWidth = columnWidthsAsig[index];
-              doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+              doc.setFillColor(240, 240, 240);  
               doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'D');
               if (row[column] !== undefined) {
                 const textWidth = doc.getTextWidth(row[column].toString());
@@ -389,7 +375,7 @@ export class ReportesComponent implements OnInit {
           const totalCellWidth = columnWidthsAsig.slice(0, 3).reduce((acc, val) => acc + val, 0);
           const textWidthTotalAsig = doc.getTextWidth('TOTAL');
           const textXTotalAsig = xPos + totalCellWidth - textWidthTotalAsig - 5; // 5 es el margen de la derecha
-          doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
+          doc.setFillColor(255, 255, 255);  
           doc.rect(xPos, yPos, totalCellWidth, cellHeight, 'D');
           doc.text('TOTAL', textXTotalAsig, yPos + 7);
 
@@ -407,8 +393,8 @@ export class ReportesComponent implements OnInit {
           let currentXPos = xPos;
           this.displayedColumns.forEach((header, index) => {
             doc.setFontSize(8);
-            doc.setTextColor(255, 255, 255);  // Texto blanco
-            doc.setFillColor(0, 102, 204);    // Fondo azul
+            doc.setTextColor(255, 255, 255);  
+            doc.setFillColor(0, 102, 204);    
             const cellWidth = columnWidths[index];
             doc.rect(currentXPos, yPos, cellWidth, cellHeight, 'F');
             const textWidth = doc.getTextWidth(header);
@@ -437,10 +423,8 @@ export class ReportesComponent implements OnInit {
             yPos += cellHeight;
           });
 
-
-
           const textWidthTotal = doc.getTextWidth('TOTAL');
-          const textXTotal = xPos + cellWidth * 3 - textWidthTotal - 5; // 5 es el margen de la derecha
+          const textXTotal = xPos + cellWidth * 3 - textWidthTotal - 5; 
 
           // Primer cuadro para "total" (combinando 3 celdas)
           doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
@@ -595,8 +579,8 @@ export class ReportesComponent implements OnInit {
           // Dibujar encabezados de la tabla
           this.displayedColumnsAsig.forEach((header, index) => {
             doc.setFontSize(8);
-            doc.setTextColor(255, 255, 255);  // Texto blanco
-            doc.setFillColor(0, 102, 204);    // Fondo azul
+            doc.setTextColor(255, 255, 255);  
+            doc.setFillColor(0, 102, 204);    
             const cellWidth = columnWidthsAsig[index];
             doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'F');
             const textWidth = doc.getTextWidth(header);
@@ -618,8 +602,8 @@ export class ReportesComponent implements OnInit {
             this.displayedColumnsAsig.forEach((column, index) => {
               if (row[column] !== undefined) {
                 const text = row[column].toString();
-                const lines = doc.splitTextToSize(text, columnWidthsAsig[index] - 2);  // Deja un pequeño margen
-                const cellLineHeight = lines.length * 7;  // Ajusta el 7 a la altura de línea que desees
+                const lines = doc.splitTextToSize(text, columnWidthsAsig[index] - 2);  
+                const cellLineHeight = lines.length * 7;  
                 if (cellLineHeight > maxCellHeight) {
                   maxCellHeight = cellLineHeight;
                 }
@@ -629,33 +613,31 @@ export class ReportesComponent implements OnInit {
             // Ahora dibuja las celdas con la altura calculada
             this.displayedColumnsAsig.forEach((column, index) => {
               const cellWidth = columnWidthsAsig[index];
-              doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+              doc.setFillColor(240, 240, 240);  
               doc.rect(currentXPosAsig, yPos, cellWidth, maxCellHeight, 'D');
           
               if (row[column] !== undefined) {
                 const text = row[column].toString();
-                const lines = doc.splitTextToSize(text, cellWidth - 2);  // Dividir el texto en líneas que se ajusten al ancho de la celda
+                const lines = doc.splitTextToSize(text, cellWidth - 2);  
                 let lineYPos = yPos + 7;
           
                 lines.forEach((line:any, lineIndex:any) => {
-                  if (lineIndex > 0) lineYPos += 5;  // Ajustar la posición vertical para cada línea adicional
+                  if (lineIndex > 0) lineYPos += 5;  
                   const textWidth = doc.getTextWidth(line);
                   const textX = currentXPosAsig + (cellWidth - textWidth) / 2;
                   doc.text(line, textX, lineYPos);
                 });
               }
-          
               currentXPosAsig += cellWidth;
             });
-          
-            yPos += maxCellHeight;  // Ajustar la posición vertical para la siguiente fila
+            yPos += maxCellHeight;  
           });
 
           // Primer cuadro para "total" (combinando 3 celdas)
           const totalCellWidth = columnWidthsAsig.slice(0, 3).reduce((acc, val) => acc + val, 0);
           const textWidthTotalAsig = doc.getTextWidth('TOTAL');
-          const textXTotalAsig = xPos + totalCellWidth - textWidthTotalAsig - 5; // 5 es el margen de la derecha
-          doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
+          const textXTotalAsig = xPos + totalCellWidth - textWidthTotalAsig - 5; 
+          doc.setFillColor(255, 255, 255);  
           doc.rect(xPos, yPos, totalCellWidth, cellHeight, 'D');
           doc.text('TOTAL', textXTotalAsig, yPos + 7);
 
@@ -677,8 +659,8 @@ export class ReportesComponent implements OnInit {
           let currentXPos = xPos;
           this.displayedColumns.forEach((header, index) => {
             doc.setFontSize(8);
-            doc.setTextColor(255, 255, 255);  // Texto blanco
-            doc.setFillColor(0, 102, 204);    // Fondo azul
+            doc.setTextColor(255, 255, 255);  
+            doc.setFillColor(0, 102, 204);    
             const cellWidth = columnWidths[index];
             doc.rect(currentXPos, yPos, cellWidth, cellHeight, 'F');
             const textWidth = doc.getTextWidth(header);
@@ -690,12 +672,12 @@ export class ReportesComponent implements OnInit {
           yPos += cellHeight;
 
           // Dibujar datos de la tabla
-          doc.setTextColor(0, 0, 0);  // Texto negro
+          doc.setTextColor(0, 0, 0);  
           this.dataSource.data.forEach(row => {
             currentXPos = xPos;
             this.displayedColumns.forEach((column, index) => {
               const cellWidth = columnWidths[index];
-              doc.setFillColor(240, 240, 240);  // Fondo gris claro para las celdas
+              doc.setFillColor(240, 240, 240);  
               doc.rect(currentXPos, yPos, cellWidth, cellHeight, 'D');
               if (row[column] !== undefined) {
                 const textWidth = doc.getTextWidth(row[column].toString());
@@ -707,13 +689,11 @@ export class ReportesComponent implements OnInit {
             yPos += cellHeight;
           });
 
-
-
           const textWidthTotal = doc.getTextWidth('TOTAL');
           const textXTotal = xPos + cellWidth * 3 - textWidthTotal - 5; // 5 es el margen de la derecha
 
           // Primer cuadro para "total" (combinando 3 celdas)
-          doc.setFillColor(255, 255, 255);  // Fondo blanco para la nueva fila
+          doc.setFillColor(255, 255, 255);  
           doc.rect(xPos, yPos, cellWidth * 3, cellHeight, 'D');
           doc.text('TOTAL', textXTotal, yPos + 7);
 
@@ -790,11 +770,9 @@ export class ReportesComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         });
-
       });
     });
   }
-
 
   cargarRector(): void {
     this.rector.getRector().subscribe(respuesta => {
@@ -803,12 +781,8 @@ export class ReportesComponent implements OnInit {
           this.nomreRector = persona.nombre1 + ' ' + persona.nombre2 + ' ' + persona.apellido1 + ' ' + persona.apellido2;
         });
       });
-
     });
-
   }
-
-
 
   prepararPersonasParaDescarga(id_persona: any): Promise<Blob> {
 
@@ -1028,8 +1002,6 @@ export class ReportesComponent implements OnInit {
             doc.setFont('helvetica', 'bold');
             doc.text(textFinal, textXRecFinal, yPos);
             resolve(doc.output('blob'));
-
-
           }, 500);
         } else {
           reject('Usuario no encontrado');
@@ -1085,14 +1057,6 @@ export class ReportesComponent implements OnInit {
 
         });
       });
-
-
     });
   }
-
 }
-
-
-
-
-
