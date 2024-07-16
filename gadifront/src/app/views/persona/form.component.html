@@ -13,30 +13,38 @@
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Primer Nombre</mat-label>
           <input matInput formControlName="nombre1" required>
-          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('required')">Campo obligatorio. Por favor ingrese su primer nombre.</mat-error>
-          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y debe empezar con mayúscula.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('required')">Campo obligatorio. Por favor ingrese su
+            primer nombre.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre1')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y
+            debe empezar con mayúscula.</mat-error>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Segundo Nombre</mat-label>
           <input matInput formControlName="nombre2" required>
-          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('required')">Campo obligatorio. Por favor ingrese su segundo nombre.</mat-error>
-          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y debe empezar con mayúscula.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('required')">Campo obligatorio. Por favor ingrese su
+            segundo nombre.</mat-error>
+          <mat-error *ngIf="personaForm.get('nombre2')?.hasError('pattern')">Nombre no válido. Solo se permiten letras y
+            debe empezar con mayúscula.</mat-error>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Primer Apellido</mat-label>
           <input matInput formControlName="apellido1" required>
-          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('required')">Campo obligatorio. Por favor ingrese su primer apellido.</mat-error>
-          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su primer apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('required')">Campo obligatorio. Por favor ingrese su
+            primer apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido1')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su
+            primer apellido.</mat-error>
         </mat-form-field>
       </div>
       <div class="form-row">
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Segundo Apellido</mat-label>
           <input matInput formControlName="apellido2" required>
-          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('required')">Campo obligatorio. Por favor ingrese su segundo apellido.</mat-error>
-          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su segundo apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('required')">Campo obligatorio. Por favor ingrese su
+            segundo apellido.</mat-error>
+          <mat-error *ngIf="personaForm.get('apellido2')?.hasError('pattern')">Campo obligatorio. Por favor ingrese su
+            segundo apellido.</mat-error>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Edad</mat-label>
@@ -47,8 +55,10 @@
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Correo</mat-label>
           <input matInput formControlName="correo" required>
-          <mat-error *ngIf="personaForm.get('correo')?.hasError('required')">Campo obligatorio. Por favor ingrese su correo electrónico.</mat-error>
-          <mat-error *ngIf="personaForm.get('correo')?.hasError('pattern')">Correo no válido. Debe tener el formato correcto (ej. ejemplo&#64;dominio.com).</mat-error>
+          <mat-error *ngIf="personaForm.get('correo')?.hasError('required')">Campo obligatorio. Por favor ingrese su
+            correo electrónico.</mat-error>
+          <mat-error *ngIf="personaForm.get('correo')?.hasError('pattern')">Correo no válido. Debe tener el formato
+            correcto (ej. ejemplo&#64;dominio.com).</mat-error>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Dirección</mat-label>
@@ -60,8 +70,10 @@
           <mat-label>Teléfono</mat-label>
           <input matInput #postalCode maxlength="10" formControlName="telefono" required>
           <mat-hint align="end">{{postalCode.value.length}} / 10</mat-hint>
-          <mat-error *ngIf="personaForm.get('telefono')?.hasError('required')">Campo obligatorio. Ingrese su número de teléfono.</mat-error>
-          <mat-error *ngIf="personaForm.get('telefono')?.hasError('pattern')">Teléfono no válido. Debe contener solo números y tener 10 dígitos.</mat-error>
+          <mat-error *ngIf="personaForm.get('telefono')?.hasError('required')">Campo obligatorio. Ingrese su número de
+            teléfono.</mat-error>
+          <mat-error *ngIf="personaForm.get('telefono')?.hasError('pattern')">Teléfono no válido. Debe contener solo
+            números y tener 10 dígitos.</mat-error>
         </mat-form-field>
         <mat-form-field class="form-group" appearance="outline">
           <mat-label>Fecha de Vinculación</mat-label>
@@ -71,20 +83,37 @@
       <button mat-raised-button color="primary" type="submit">Actualizar</button>
     </form>
   </div>
- <br>
+  <br>
   <div class="mis-titulos">
     <h1>Mis Títulos</h1>
-    <button mat-raised-button style="background-color: #007bff; color: white;" (click)="openModal()">Añadir</button>
+    <button mat-raised-button style="background-color: #1E90FF; color: white;" (click)="openModalAdd()">Añadir</button>
     <br> <br>
     <table mat-table [dataSource]="titulos" class="mat-elevation-z8">
-      <ng-container matColumnDef="grado">
-        <th mat-header-cell *matHeaderCellDef> Nombre del Título </th>
+
+      <ng-container matColumnDef="id_titulo_profesional">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Id título</th>
+        <td mat-cell *matCellDef="let element"> {{element.id_titulo_profesional}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre_titulo">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Nombre del Título</th>
         <td mat-cell *matCellDef="let element"> {{element.nombre_titulo}} </td>
       </ng-container>
-      <ng-container matColumnDef="nombre_titulo">
-        <th mat-header-cell *matHeaderCellDef> Grado del Título </th>
+
+      <ng-container matColumnDef="grado">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Grado del Título</th>
         <td mat-cell *matCellDef="let element"> {{element.grado}} </td>
       </ng-container>
+
+      <ng-container matColumnDef="actualizar">
+        <th mat-header-cell *matHeaderCellDef class="table-header">Actualizar</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="openModalEdit(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>

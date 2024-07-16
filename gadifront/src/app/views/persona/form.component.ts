@@ -36,7 +36,8 @@ const Toast = Swal.mixin({
 
 })
 export class FormComponent implements OnInit {
-  displayedColumns: string[] = ['grado', 'nombre_titulo'];
+  displayedColumns: string[] = ['grado', 'nombre_titulo', 'actualizar'];
+
   persona: Persona = new Persona();
   usuario: Usuario = new Usuario();
   mostrarCarga: boolean = false;
@@ -68,17 +69,33 @@ export class FormComponent implements OnInit {
     });
   }
 
-  openModal(): void {
+  openModalAdd(): void {
     const idPersona = this.authService.id_persona;
     const dialogRef = this.dialog.open(TituloProfesionalComponent, {
       width: '30%',
       height: '60%',
+      data: null
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.mostrarTitulos(idPersona);
     });
   }
+
+  openModalEdit(titulo: TituloProfecional): void {
+    const idPersona = this.authService.id_persona;
+    const dialogRef = this.dialog.open(TituloProfesionalComponent, {
+      width: '30%',
+      height: '60%',
+      data: titulo 
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.mostrarTitulos(idPersona);
+    });
+  }
+  
 
   ngOnInit(): void {
     const idPersona = this.authService.id_persona;

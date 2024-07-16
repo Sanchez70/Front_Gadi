@@ -20,6 +20,11 @@ export class TituloProfesionalService {
     return this.http.post<Titulo_profesional>(`${this.urlBase}/titulo_profesional`, titulo_profesional, { headers: this.httpHeaders})
   }
 
+  update(titulo_profesional: Titulo_profesional): Observable<Titulo_profesional> {
+    const url = `${this.urlBase}/titulo_profesional/${titulo_profesional.id_titulo_profesional}`;
+    return this.http.put<Titulo_profesional>(url, titulo_profesional);
+  }
+
   getTitulobyId(id: any): Observable<Titulo_profesional> {
     return this.http.get<Titulo_profesional>(`${this.urlBase}/titulo_profesional/${id}`);
   }
