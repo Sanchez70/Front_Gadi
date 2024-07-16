@@ -18,12 +18,12 @@ export class DashboardBienvenidaComponent implements OnInit{
       thumbnailImageSrc: 'assets/img/fondopantalla.jpg'
     },
     {
-      itemImageSrc: 'assets/img/fondopantalla.jpg',
-      thumbnailImageSrc: 'assets/img/fondopantalla.jpg'
+      itemImageSrc: 'assets/img/docentes.jpg',
+      thumbnailImageSrc: 'assets/img/docentes.jpg'
     },
     {
-      itemImageSrc: 'assets/img/fondopantalla.jpg',
-      thumbnailImageSrc: 'assets/img/fondopantalla.jpg'
+      itemImageSrc: 'assets/img/teclogo.jpg',
+      thumbnailImageSrc: 'assets/img/teclogo.jpg'
     },
   ];
 
