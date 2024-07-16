@@ -44,7 +44,6 @@ export class PersonaService {
   getPersonaById(id: number): Observable<Persona> {
     return this.http.get<Persona>(`${this.urlEndPoint}/persona/${id}`).pipe(
         map(persona => {
-            //La fecha se convierte a un objeto Date
             persona.fecha_vinculacion = new Date(persona.fecha_vinculacion);
             return persona;
         })

@@ -44,7 +44,7 @@ export class TituloProfesionalComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.isEditMode = !!this.data; // Si hay data, está en modo edición
+    this.isEditMode = !!this.data; 
 
     if (this.isEditMode) {
       this.loadTituloData(this.data);
@@ -60,7 +60,6 @@ export class TituloProfesionalComponent implements OnInit {
       nombre_titulo: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patterntitleValidator())]]
     });
 
-    // Transformar 'nombre_titulo' a mayúsculas
     this.tituloForm.get('nombre_titulo')?.valueChanges.subscribe(value => {
       this.tituloForm.get('nombre_titulo')?.setValue(value.toUpperCase(), { emitEvent: false });
     });
@@ -83,7 +82,6 @@ export class TituloProfesionalComponent implements OnInit {
   
     if (this.tituloForm.valid) {
       if (this.isEditMode) {
-        // Editar título existente
         this.titulo.nombre_titulo = tituloData.nombre_titulo;
         this.titulo.grado = tituloData.grado;
         this.tituloService.update(this.titulo).subscribe(
@@ -103,7 +101,6 @@ export class TituloProfesionalComponent implements OnInit {
           }
         );
       } else {
-        // Crear nuevo título
         this.tituloService.create(tituloData).subscribe(
           response => {
             Toast.fire({

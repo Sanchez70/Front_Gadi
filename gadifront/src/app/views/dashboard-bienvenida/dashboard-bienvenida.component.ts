@@ -25,7 +25,6 @@ export class DashboardBienvenidaComponent implements OnInit{
       itemImageSrc: 'assets/img/fondopantalla.jpg',
       thumbnailImageSrc: 'assets/img/fondopantalla.jpg'
     },
-    // más imágenes
   ];
 
 
@@ -44,7 +43,6 @@ export class DashboardBienvenidaComponent implements OnInit{
       this.currentExplan = explan;
     });
     this.fetchUserDetails();
-    // this.cambiarImagen();
   }
 
   responsiveOptions: any[] = [

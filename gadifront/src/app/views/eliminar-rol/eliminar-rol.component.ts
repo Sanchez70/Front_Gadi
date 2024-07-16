@@ -90,14 +90,12 @@ export class EliminarRolComponent implements OnInit {
       map(({ usuarioRoles, roles, usuarios, personas }) => {
         const data: any[] = [];
 
-        // Filtrar usuarios que tienen carrera no nula
         const usuariosFiltrados = usuarios.filter(usuario => usuario.carrera != null);
 
         usuariosFiltrados.forEach(usuario => {
-          // Encontrar el rol del usuario
           const usuarioRolEncontrado = usuarioRoles.find(ur => ur.id_usuario === usuario.id_usuario && ur.id_rol === 2);
 
-          if (usuarioRolEncontrado) {  // Solo procesar si se encontró el rol de Director
+          if (usuarioRolEncontrado) {  
             const personaEncontrada = personas.find(persona => persona.id_persona === usuario.id_persona);
 
             const usuarioData = {

@@ -9,8 +9,7 @@ export class Persona{
     direccion: string='';
     correo: string='';
     edad: number=0;
-    //fecha_vinculacion: Date | undefined;
-    fecha_vinculacion: Date = new Date(); // Inicializar fecha_vinculacion como Date
+    fecha_vinculacion: Date = new Date(); 
     id_tipo_contrato: number=0;
     id_titulo_profesional: number=0;
     id_grado_ocp: number=0;

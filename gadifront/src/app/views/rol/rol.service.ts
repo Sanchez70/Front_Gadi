@@ -14,7 +14,6 @@ import { appConfig } from '../../environment/appConfig';
   providedIn: 'root'
 })
 export class RolService {
-    // private baseUrl = 'http://localhost:8081/api';
 
     private urlEndPoint: string = appConfig.baseUrl;
 

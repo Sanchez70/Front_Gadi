@@ -126,11 +126,6 @@ export class AdminCreacionComponent implements OnInit {
                   this.personaForm.patchValue({ grado_ocupacional: grado.nombre_grado_ocp });
                 })
               ),
-              // this.personaService.getTituloById(persona.id_titulo_profesional).pipe(
-              //   tap(titulo => {
-              //     this.personaForm.patchValue({ titulo_profesional: titulo.nombre_titulo });
-              //   })
-              // ),
               this.personaService.getContratoById(persona.id_tipo_contrato).pipe(
                 tap(contrato => {
                   this.personaForm.patchValue({ tipo_contrato: contrato.nombre_contrato });

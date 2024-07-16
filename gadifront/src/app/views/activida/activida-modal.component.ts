@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import Swal from 'sweetalert2';
-import { ValidacionesComponent } from '../../validaciones/validaciones.component'; // Asegúrate de ajustar la ruta de importación según la estructura de tu proyecto
+import { ValidacionesComponent } from '../../validaciones/validaciones.component'; 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import { Actividad } from '../../Services/actividadService/actividad';
@@ -27,7 +27,7 @@ export class ActividaModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ActividaModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Actividad, // Cambiado a Actividad para aceptar datos existentes
+    @Inject(MAT_DIALOG_DATA) public data: Actividad, 
     private tipoActividadService: tipo_actividadService,
     private authService: AuthService,
     private fb: FormBuilder,
@@ -41,8 +41,8 @@ export class ActividaModalComponent implements OnInit {
     this.cargarTipoActividad();
     this.initForm();
     if (this.data) {
-      this.actividad = this.data; // Asignar datos existentes a actividad
-      this.actividadForm.patchValue(this.data); // Cargar los datos en el formulario
+      this.actividad = this.data; 
+      this.actividadForm.patchValue(this.data); 
     }
   }
 
@@ -78,7 +78,6 @@ export class ActividaModalComponent implements OnInit {
     };
 
     if (this.actividad.id_actividad) {
-      // Actualizar actividad existente
       this.actividadService.update(this.actividad).subscribe(
         () => {
           Swal.fire('Éxito', 'La actividad ha sido actualizada', 'success');
@@ -90,7 +89,6 @@ export class ActividaModalComponent implements OnInit {
         }
       );
     } else {
-      // Crear nueva actividad
       this.actividadService.create(this.actividad).subscribe(
         (actividad) => {
           this.actividad.id_actividad = actividad.id_actividad;

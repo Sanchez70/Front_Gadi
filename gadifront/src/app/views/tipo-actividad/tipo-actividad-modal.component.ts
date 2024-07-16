@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { tipo_actividad } from '../../Services/tipo_actividadService/tipo_actividad';
 import { tipo_actividadService } from '../../Services/tipo_actividadService/tipo_actividad.service';
 import Swal from 'sweetalert2';
-import { ValidacionesComponent } from '../../validaciones/validaciones.component'; // Asegúrate de ajustar la ruta de importación según la estructura de tu proyecto
+import { ValidacionesComponent } from '../../validaciones/validaciones.component';
 
 @Component({
   selector: 'app-tipo-actividad-modal',

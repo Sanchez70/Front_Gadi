@@ -13,14 +13,6 @@ export class CarreraService {
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }
 
-  // create(carrera: Carrera): Observable<Carrera> {
-  //   return this.http.post<Carrera>(`${this.urlEndPoint}/carrera`, carrera, { headers: this.httpHeaders })
-  // }
-
-  // getCarrerabyId(id: any): Observable<Carrera> {
-  //   return this.http.get<Carrera>(`${this.urlEndPoint}/carrera/${id}`);
-  // }
-
   getCarrera(): Observable<Carrera[]> {
     return this.http.get<Carrera[]>(`${this.urlEndPoint}/carrera`);
   }

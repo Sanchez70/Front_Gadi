@@ -61,7 +61,7 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { DistributivoService } from './Services/distributivoService/distributivo.service'; 
 import { FormComponent as ActividadFormComponert } from './views/actividad/form.component';
-import { FormComponent as PersonaFormComponent } from './views/persona/form.component'; // Renombramos como PersonaFormComponent
+import { FormComponent as PersonaFormComponent } from './views/persona/form.component'; 
 import { DocenteService } from './Services/docenteService/docente.service';
 import { FormComponent } from './views/actividad/form.component';
 import { FormComponent as PersonsaFormComponent } from './views/persona/form.component';
@@ -161,7 +161,6 @@ const routes: Routes = [
     RolComponent,
     GradoOcupacionalComponent,
     TipoActividadComponent,
-    //DistributivoComponent,
     TituloProfesionalComponent,
     TipoContratoComponent,
     DistributivoActividadComponent,
@@ -170,7 +169,6 @@ const routes: Routes = [
     LoginComponent,
     SidebarComponent,
     MainComponent,
-    //TablaComponent,
     RegistroComponent,
     MatrizPropuestaComponent,
     FormComponent,

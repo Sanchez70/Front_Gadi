@@ -359,7 +359,7 @@ export class MatrizDistributivoComponent implements OnInit {
           distributivosFiltrados.forEach(da => {
             const asignatura = asignaturas.find(a => a.id_asignatura === da.id_asignatura);
             if (asignatura) {
-              asignaturaFiltradas.push(asignatura); // Guardar la actividad filtrada en el array
+              asignaturaFiltradas.push(asignatura); 
 
               const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
               const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
@@ -623,7 +623,6 @@ export class MatrizDistributivoComponent implements OnInit {
             );
             return forkJoin(deleteObservables);
           } else {
-            // No hay actividades asociadas, retornar un observable vacío
             return of(null);
           }
         });
@@ -654,7 +653,6 @@ export class MatrizDistributivoComponent implements OnInit {
           );
           return forkJoin(deleteObservables);
         } else {
-          // No hay actividades asociadas, retornar un observable vacío
           return of(null);
         }
       });

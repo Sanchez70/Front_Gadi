@@ -73,7 +73,6 @@ export class LoginComponent {
             const usuarioEncontrados = result as Usuario[];
             const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.usuario === usuariol);
             if (usuarioEncontrado) {
-              // Encriptar la contraseña ingresada por el usuario
               bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err: any, res: any) => {
                 this.isLoading = false;
                 if (err) {
@@ -82,7 +81,7 @@ export class LoginComponent {
                 }
                 if (res) {
                   this.authService.setIdPersona(usuarioEncontrado.id_persona);
-                  this.authService.iniciales = usuarioEncontrado.id_persona; // Guardar el id_persona
+                  this.authService.iniciales = usuarioEncontrado.id_persona; 
                   this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
                   this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
                 } else {

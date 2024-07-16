@@ -8,7 +8,6 @@ import { Distributivo } from './distributivo';
   providedIn: 'root'
 })
 export class DistributivoService {
-  // private baseUrl = 'http://localhost:8081/api';
   private urlEndPoint: string = appConfig.baseUrl;
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' })
   constructor(private http:HttpClient) { }

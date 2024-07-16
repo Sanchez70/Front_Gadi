@@ -109,7 +109,6 @@ export class EditarActividadesComponent {
   enviarActividades(): void {
 
     this.authService.id_actividades = this.actividadesSeleccionadas;
-    // this.distributivoActividad.id_distributivo = this.authService.id_distributivo;
 
     this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
       const distributivoEncontrado = data as DistributivoActividad[];
@@ -125,7 +124,6 @@ export class EditarActividadesComponent {
           );
           return forkJoin(deleteObservables);
         } else {
-          // No hay actividades asociadas, retornar un observable vacío
           return of(null);
         }
       });
@@ -133,7 +131,7 @@ export class EditarActividadesComponent {
       forkJoin(allDeleteObservables).subscribe({
         next: () => {
           if (this.authService.distributivos.length > 0) {
-            const primaryDistributivo = this.authService.distributivos[0]; // Utiliza solo el primer distributivo
+            const primaryDistributivo = this.authService.distributivos[0]; 
             const createObservables = this.actividadesSeleccionadas.map(data => {
               const newDistributivoActividad = { 
                 ...this.distributivoActividad, 

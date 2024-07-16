@@ -176,11 +176,9 @@ export class EditarAsignaturaComponent {
   enviarAsignaturas(): void {
     this.authService.id_asignaturas = this.asignaturasSeleccionadas;
   
-    // Obtener todas las distributivoAsignaturas
     this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(
       data => {
         const distributivoEncontrado = data as DistributivoAsignatura[];
-        // Filtrar las asignaturas relacionadas a cada distributivo cargado
         const allDeleteObservables = this.authService.distributivos.map(distributivoId => {
           const distributivosFinales = distributivoEncontrado.filter(
             resul => resul.id_distributivo === distributivoId.id_distributivo
@@ -211,7 +209,6 @@ export class EditarAsignaturaComponent {
     );
   }
   
-  // Método para crear nuevas asignaturas
   crearNuevasAsignaturas(): void {
     const createObservables = this.asignaturasSeleccionadas.map(data => {
       const newDistributivoAsignatura = {
@@ -224,10 +221,8 @@ export class EditarAsignaturaComponent {
       return this.distributivoAsignaturaService.create(newDistributivoAsignatura);
     });
   
-    // Ejecutar la creación de nuevas asignaturas
     forkJoin(createObservables).subscribe({
       next: (responses) => {
-        // Guardar todos los IDs de las distribuciones creadas
         const idsDistributivoAsignatura = responses.map(respuest => respuest.id_distributivo_asig);
         this.authService.id_distributivoAsignatura = idsDistributivoAsignatura;
         this.authService.saveUserToLocalStorage();

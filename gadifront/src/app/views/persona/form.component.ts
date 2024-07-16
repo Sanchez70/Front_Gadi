@@ -100,7 +100,6 @@ export class FormComponent implements OnInit {
       this.personaService.getPersonaById(idPersona).subscribe(
         (persona) => {
           this.persona = persona;
-          // Formatear la fecha de vinculación
           const formattedDate = this.datePipe.transform(persona.fecha_vinculacion, 'd/M/yyyy');
           this.personaForm.patchValue({ ...persona, fecha_vinculacion: formattedDate });
           this.mostrarTitulos(idPersona);

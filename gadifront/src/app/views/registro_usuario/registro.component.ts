@@ -85,7 +85,6 @@ export class RegistroComponent implements OnInit {
 
   loadContratos() {
     this.tipoContratoService.getContrato().subscribe(data => {
-      // Utiliza un conjunto para filtrar elementos duplicados
       const uniqueContratos = Array.from(new Set(data.map(item => item.nombre_contrato)))
         .map(nombre_contrato => {
           return data.find(item => item.nombre_contrato === nombre_contrato);

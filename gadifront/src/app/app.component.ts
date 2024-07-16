@@ -14,10 +14,8 @@ export class AppComponent {
       if (typeof localStorage !== 'undefined') {
         this.authService.loadUserFromLocalStorage();
       } else {
-        //console.error('localStorage no está disponible en este entorno.');
       }
     } catch (error) {
-      //console.error('Ocurrió un error:', error);
       throw new Error('Ocurrió un error inesperado. Por favor, inténtalo de nuevo.');
     }
   }

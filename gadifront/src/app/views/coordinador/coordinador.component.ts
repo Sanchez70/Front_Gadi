@@ -105,13 +105,6 @@ export class CoordinadorComponent implements OnInit {
     });
   }
 
-  // buscarPersona(): void {
-  //   this.personaService.getPersonaByCedula(this.cedula).subscribe(data => {
-  //     this.personaEncontrada = data;
-  //     this.loadAdditionalDataForPersonas();
-  //   });
-
-  // }
   loadAdditionalDataForPersonas(): void {
     const requests = this.personas.map(persona =>
       this.personaService.getPeriodoById(persona.id_persona).pipe(
@@ -158,7 +151,6 @@ export class CoordinadorComponent implements OnInit {
       this.authService.clearLocalStorageAsignatura();
       this.authService.clearLocalStorageActividad();
       this.authService.id_periodo = this.idPeriodo;
-      //this.authService.saveUserToLocalStorage();
       this.personaService.getPersonas().subscribe(data => {
         const personaEncontrados = data as Persona[];
         const usuarioEncontrado = personaEncontrados.find(persona => persona.id_persona === valor);

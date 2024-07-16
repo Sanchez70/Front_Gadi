@@ -54,7 +54,7 @@ export class TablaComponent implements OnInit {
   personaEncontrada: Persona = new Persona();
 
   constructor(private report: ReportesComponent, private personaService: PersonaService, private distributivoService: DistributivoService, private periodoService: PeriodoService, private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private fb: FormBuilder) { this.miFormulario = this.fb.group({
-    periodoSelec: [0] // Valor por defecto
+    periodoSelec: [0] 
   }); }
 
   ngOnInit(): void {
