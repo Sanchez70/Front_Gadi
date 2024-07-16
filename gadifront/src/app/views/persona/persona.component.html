@@ -1,7 +1,13 @@
 <div class="{{currentExplan}}">
   <h1 class="h1">DOCENTES</h1>
-  <div class="buscador">
+  <!-- <div class="buscador">
     <input type="text" placeholder="Buscar por cedula" [(ngModel)]="searchTerm">
+  </div> -->
+  <div class="search-bar">
+    <mat-form-field appearance="outline">
+      <mat-label >Buscar por cedula...</mat-label>
+      <input matInput (input)="onInput($event)"  matTooltip="Ingrese la cedula de la persona a buscar" [matTooltipPosition]="'below'" />
+    </mat-form-field>
   </div>
   <form class="formulario" ngNativeValidate style="width: 45%;">
     <div class="tables-container">

@@ -46,6 +46,9 @@ export class PersonaComponent implements OnInit {
       persona.cedula.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
+  onInput(event: any): void {
+    this.searchTerm = event.target.value;
+  }
 
   escogerPersona(persona: Persona): void {
     const personaExistente = this.personasSeleccionada.some(
