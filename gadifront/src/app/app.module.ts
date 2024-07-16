@@ -109,6 +109,7 @@ import { docenteGuardGuard } from './guards/docente-guard.guard';
 import { directorGuardGuard } from './guards/director-guard.guard';
 import { coordinadorGuardGuard } from './guards/coordinador-guard.guard';
 import { adminGuardGuard } from './guards/admin-guard.guard';
+import { EliminarRolComponent } from './views/eliminar-rol/eliminar-rol.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -139,7 +140,8 @@ const routes: Routes = [
   { path: 'matriz-distributivo', component: MatrizDistributivoComponent,canActivate: [coordinadorGuardGuard]},
   { path: 'crud-asignatura', component: CrudAsignaturaComponent,canActivate: [adminGuardGuard]},
   { path: 'periodo', component: PeriodoComponent,canActivate: [coordinadorGuardGuard]} ,
-  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [coordinadorGuardGuard]}  
+  { path: 'distributivos-generados', component: DistributivosGeneradosComponent,canActivate: [coordinadorGuardGuard]},
+  { path: 'eliminar-roles', component: EliminarRolComponent,canActivate: [coordinadorGuardGuard]}  
   
 ];
 @NgModule({
@@ -196,6 +198,7 @@ const routes: Routes = [
     PeriodoModalComponent,
     DistributivosGeneradosComponent,
     DashboardBienvenidaComponent,
+    EliminarRolComponent,
   ],
   
   imports: [

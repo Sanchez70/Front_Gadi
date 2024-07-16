@@ -63,17 +63,17 @@ export class DashboardBienvenidaComponent implements OnInit{
 ];
 
   fetchUserDetails(): void {
-    console.log('Fetching user details');
+    
     const user = this.authService.getUser();
-    console.log('User from localStorage:', user);
+    
 
     const id_persona = user.id_persona;
 
     if (id_persona) {
-      console.log('id_persona found:', id_persona);
+      
       this.personaService.getPersonaById(id_persona).subscribe(
         (persona) => {
-          console.log('Persona details fetched:', persona);
+          
           const nombre = persona.nombre1 || '';
           const apellido = persona.apellido1 || '';
           this.usuario = user.username;
@@ -82,8 +82,7 @@ export class DashboardBienvenidaComponent implements OnInit{
           this.getTitulos(persona.id_persona);
           this.getTipoContrato(persona.id_tipo_contrato); 
           this.mensajeBienvenida = `Bienvenido ${nombre} ${apellido}`;
-          console.log('Welcome message set to:', this.mensajeBienvenida);
-          console.log('Persona data:', this.additionalPersonaData);
+          
         },
         (error) => {
           console.error('Error fetching persona details:', error);
@@ -103,7 +102,7 @@ export class DashboardBienvenidaComponent implements OnInit{
               this.rolService.getRolbyId(usuarioRol.id_rol).subscribe(
                 (rol) => {
                   this.rol = rol.nombre_rol;
-                  console.log('Rol fetched:', this.rol);
+                  
                 },
                 (error) => {
                   console.error('Error fetching rol details:', error);
@@ -126,7 +125,7 @@ export class DashboardBienvenidaComponent implements OnInit{
     this.personaService.getTitulosProfecionalesByPersonaId(id_persona).subscribe(
       (titulos) => {
         this.titulos = titulos;
-        console.log('Titulos fetched:', this.titulos);
+        
       },
       (error) => {
         console.error('Error fetching titulos:', error);
@@ -138,7 +137,7 @@ export class DashboardBienvenidaComponent implements OnInit{
     this.personaService.getContratoById(id_contrato).subscribe(
       (contrato) => {
         this.additionalPersonaData.tipo_contrato = contrato.nombre_contrato;
-        console.log('Tipo de contrato fetched:', this.additionalPersonaData.tipo_contrato);
+        
       },
       (error) => {
         console.error('Error fetching tipo de contrato:', error);

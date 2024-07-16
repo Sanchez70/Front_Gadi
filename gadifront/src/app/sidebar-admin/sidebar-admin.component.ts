@@ -61,21 +61,21 @@ export class SidebarAdminComponent {
 
   }
   fetchUserDetails(): void {
-    console.log('Fetching user details');
+    
     const user = this.authService.getUser();
-    console.log('User from localStorage:', user);
+   
 
     const id_persona = user.id_persona;
 
     if (id_persona) {
-      console.log('id_persona found:', id_persona);
+      
       this.personaService.getPersonaById(id_persona).subscribe(
         (persona) => {
-          console.log('Persona details fetched:', persona);
+          
           const nombre = persona.nombre1 || '';
           const apellido = persona.apellido1 || '';
           this.inicialesUsuario = this.getInitials(nombre, apellido);
-          console.log('User initials set to:', this.inicialesUsuario);
+          
         },
         (error) => {
           console.error('Error fetching persona details:', error);
@@ -89,7 +89,7 @@ export class SidebarAdminComponent {
   getInitials(nombre: string, apellido: string): string {
     if (!nombre || !apellido) return 'U'; 
     const initials = `${nombre.charAt(0)}${apellido.charAt(0)}`;
-    console.log('Initials generated:', initials);
+    
     return initials.toUpperCase();
   }
 }
