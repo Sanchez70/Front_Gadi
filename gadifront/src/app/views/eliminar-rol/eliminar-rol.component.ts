@@ -153,6 +153,7 @@ export class EliminarRolComponent implements OnInit {
               const resultadoFinal = usuarioRolesFiltrados.find(rol => rol.id_rol === 2);
               if (resultadoFinal) {
                 this.usuarioRol.deleteid(resultadoFinal.id_usuario_rol).subscribe(respuesta => {
+                  this.loadRoles();
                   Toast.fire({
                     icon: "success",
                     title: "Director eliminado correctamente",
