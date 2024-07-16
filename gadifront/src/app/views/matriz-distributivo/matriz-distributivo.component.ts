@@ -278,7 +278,6 @@ export class MatrizDistributivoComponent implements OnInit {
         distributivos.forEach(dist => {
           const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === dist.id_distributivo);
           this.distributivoActividades.concat(distributivosFiltrados);
-          console.log('distributivos:', this.distributivoActividades);
           distributivosFiltrados.forEach(da => {
             const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
             if (actividad) {
@@ -298,30 +297,22 @@ export class MatrizDistributivoComponent implements OnInit {
               const existingActividad = actividadesMap.get(da.id_actividad);
               existingActividad.horasTotales += da.hora_no_docente;
             }
-
           });
-
-
         });
-
         actividadesMap.forEach(value => {
           data.push(value);
         });
-
         this.actividades = actividadesFiltradas;
-        console.log('respuesta Actividades', this.actividades)
         return data;
       })
     ).subscribe(data => {
       this.dataSourceAct.data = data;
       this.horasTotalesActividad = 0;
       data.forEach(respuesta => {
-
         this.horasTotalesActividad += respuesta.horasTotales;
       });
       this.calcularTotales();
     });
-
   }
   buscarDistributivo(idPersona: number): void {
     idPersona = this.authService.id_persona;

@@ -1,0 +1,51 @@
+<br>
+<div class="container">
+    <div class="container {{currentExplan}}">
+        <h1>Asignaturas</h1>
+        <div class="search-bar">
+            <mat-form-field appearance="outline">
+                <mat-label>Buscar...</mat-label>
+                <input matInput (input)="applyFilter($event)" />
+            </mat-form-field>
+           
+        </div>
+        <div class="table-container">
+            <table mat-table [dataSource]="dataSource" matSort>
+    
+                <ng-container matColumnDef="usuario">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Usuario</th>
+                    <td mat-cell *matCellDef="let usuario">{{ usuario.usuario }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="nombre_persona">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Nombres
+                    </th>
+                    <td mat-cell *matCellDef="let usuario">{{ usuario.nombres }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="carrera">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Carrera
+                    </th>
+                    <td mat-cell *matCellDef="let usuario">{{ usuario.carrera }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="rol">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Rol
+                    </th>
+                    <td mat-cell *matCellDef="let usuario">{{ usuario.rol }}</td>
+                </ng-container>
+                <ng-container matColumnDef="borrar">
+                    <th mat-header-cell *matHeaderCellDef [style.background-color]="color">Eliminar</th>
+                    <td mat-cell *matCellDef="let usuario">
+                        <button mat-icon-button color="warn" (click)="deleteAsignatura(usuario.id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 15, 20, 10]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div> 
+</div>
