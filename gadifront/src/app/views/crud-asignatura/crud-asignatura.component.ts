@@ -9,8 +9,6 @@ import { AuthService } from '../../auth.service';
 import { Asignatura } from '../../Services/asignaturaService/asignatura';
 import { AsignaturaService } from '../../Services/asignaturaService/asignatura.service';
 import { AsignaturaModalComponent } from './asignatura-model.component';
-import { CicloService } from '../../Services/cicloService/ciclo.service';
-import { Ciclo } from '../../Services/cicloService/ciclo';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -28,15 +26,15 @@ const Toast = Swal.mixin({
 @Component({
   selector: 'app-crud-asignatura',
   templateUrl: './crud-asignatura.component.html',
-  styleUrl: './crud-asignatura.component.css'
+  styleUrls: ['./crud-asignatura.component.css'] // Corregido el nombre de la propiedad
 })
 export class CrudAsignaturaComponent implements OnInit {
-
-  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'actualizar'];
+  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'actualizar', 'borrar'];
   dataSource!: MatTableDataSource<Asignatura>;
   color = '#1E90FF';
   currentExplan: string = '';
-  
+  filterValue: string = '';
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -44,9 +42,7 @@ export class CrudAsignaturaComponent implements OnInit {
 
   constructor(private asignaturaService: AsignaturaService,
     private dialog: MatDialog,
-    private authService: AuthService,
-    private cicloService: CicloService
-  ) { }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadAsignaturas();
@@ -67,17 +63,20 @@ export class CrudAsignaturaComponent implements OnInit {
     }
   }
 
-  loadAsignaturas(): void {
+  loadAsignaturas(callback?: () => void): void {
     this.asignaturaService.getAsignaturasCrud().subscribe(data => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      if (callback) {
+        callback();
+      }
     });
   }
 
   applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.dataSource.filter = filterValue;
+    this.filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = this.filterValue;
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
@@ -92,10 +91,12 @@ export class CrudAsignaturaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadAsignaturas();
-        Toast.fire({
-          icon: "success",
-          title: "Asignatura creada correctamente",
+        this.loadAsignaturas(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Asignatura creada correctamente",
+          });
+          this.applyStoredFilter();
         });
       }
     });
@@ -109,10 +110,12 @@ export class CrudAsignaturaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadAsignaturas();
-        Toast.fire({
-          icon: "success",
-          title: "Asignatura actualizada correctamente",
+        this.loadAsignaturas(() => {
+          Toast.fire({
+            icon: "success",
+            title: "Asignatura actualizada correctamente",
+          });
+          this.applyStoredFilter();
         });
       }
     });
@@ -129,10 +132,12 @@ export class CrudAsignaturaComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.asignaturaService.delete(id).subscribe(() => {
-          this.loadAsignaturas();
-          Toast.fire({
-            icon: "success",
-            title: "Asignatura eliminada correctamente",
+          this.loadAsignaturas(() => {
+            Toast.fire({
+              icon: "success",
+              title: "Asignatura eliminada correctamente",
+            });
+            this.applyStoredFilter();
           });
         });
       }
@@ -144,6 +149,13 @@ export class CrudAsignaturaComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       window.dispatchEvent(new Event('resize'));
+    }
+  }
+
+  applyStoredFilter(): void {
+    this.dataSource.filter = this.filterValue;
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 }

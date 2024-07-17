@@ -36,15 +36,10 @@ export class RegistroComponent implements OnInit {
   id_Contrato: any;
 
   currentExplan: string = '';
+  hide = signal(true);
 
   showFinalForm: boolean = false;
   public isTiempoParcial: boolean = false;
-
-  hide = signal(true);
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
-    event.stopPropagation();
-  }
 
   constructor(
     private router: Router,
@@ -81,6 +76,11 @@ export class RegistroComponent implements OnInit {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
+  }
+
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
   }
 
   loadContratos() {
