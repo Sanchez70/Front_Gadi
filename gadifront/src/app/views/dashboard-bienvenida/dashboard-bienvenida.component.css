@@ -122,8 +122,9 @@
 }
 
 .gallery-item {
-    width: 100%;
-    height: auto;
+    width: 600px;
+    height: 500px;
+    object-fit: cover;
 }
 
 .gallery-thumb {
