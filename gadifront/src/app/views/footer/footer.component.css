@@ -1,0 +1,24 @@
+.main-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  /* Estilos para el contenido principal */
+  .content {
+    flex-grow: 1;
+  }
+  
+  /* Estilos para el footer */
+  footer{
+    margin-top: 17.3cap;
+    position: sticky;
+    height: 60px;
+    
+}
+ 
+   
+  .Abrir {
+    margin-left: 22.5cap;
+  }
+  

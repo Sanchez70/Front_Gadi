@@ -110,6 +110,7 @@ import { directorGuardGuard } from './guards/director-guard.guard';
 import { coordinadorGuardGuard } from './guards/coordinador-guard.guard';
 import { adminGuardGuard } from './guards/admin-guard.guard';
 import { EliminarRolComponent } from './views/eliminar-rol/eliminar-rol.component';
+import { FooterComponent } from './views/footer/footer.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -197,6 +198,7 @@ const routes: Routes = [
     DistributivosGeneradosComponent,
     DashboardBienvenidaComponent,
     EliminarRolComponent,
+    FooterComponent,
   ],
   
   imports: [
