@@ -24,7 +24,7 @@ export class AuthService {
   id_distributivoActividad: any[] = [];
   id_distributivoAsignatura: any;
   iniciales: any;
-  private explanSubject = new BehaviorSubject<string>('Abrir');
+  explanSubject = new BehaviorSubject<string>('Abrir');
   explan$ = this.explanSubject.asObservable();
 
 

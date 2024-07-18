@@ -44,6 +44,7 @@ export class SidebarDocenteComponent {
         this.authService.logout();
         this.authService.tiporol = '';
         this.authService.clearLocalStorage();
+        this.authService.explanSubject.next('Abrir');
         localStorage.clear();
       }
     });

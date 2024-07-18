@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActividadService } from '../../../Services/actividadService/actividad.service';
 import { tipo_actividadService } from '../../../Services/tipo_actividadService/tipo_actividad.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,11 @@ import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { DistributivoActividad } from '../../../Services/distributivoActividadService/distributivo_actividad';
 import { DistributivoActividadService } from '../../../Services/distributivoActividadService/distributivo_actividad.service';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { tipo_actividad } from '../../../Services/tipo_actividadService/tipo_actividad';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { ActividaModalComponent } from '../../activida/activida-modal.component';
 const Toast = Swal.mixin({
   toast: true,
   position: "bottom-end",
@@ -26,148 +31,111 @@ const Toast = Swal.mixin({
   templateUrl: './editar-actividades.component.html',
   styleUrl: './editar-actividades.component.css'
 })
-export class EditarActividadesComponent {
+export class EditarActividadesComponent implements OnInit {
+  displayedColumns: string[] = ['id_actividad', 'nombre_actividad', 'descripcion_actividad', 'horas_no_docentes', 'id_tipo_actividad', 'actualizar'];
+  dataSource!: MatTableDataSource<Actividad>;
   currentExplan: string = '';
-  myForm: FormGroup = this.fb.group({});
-  public Actividades: Actividad[] = [];
-  public Tipos: any[] = [];
-  actividadesFiltrada: any[] = [];
-  actividadesSeleccionadas: Actividad[] = [];
-  tipoActividadSeleccionado: number = 0;
-  idTipo: number = 0;
-  distributivoActividad: DistributivoActividad = new DistributivoActividad();
-  horasTotales: number = 0;
-  constructor(private dialog: MatDialog, private distributivoActividadService: DistributivoActividadService, private actividadService: ActividadService, private tipo_actividadService: tipo_actividadService, private router: Router, private activatedRoute: ActivatedRoute, private authService: AuthService, private fb: FormBuilder) { }
+  public tipo: tipo_actividad = new tipo_actividad();
+  public distributivoAct: DistributivoActividad = new DistributivoActividad();
+  public Tipos: tipo_actividad[] = [];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  constructor(
+    private tipoActividadService: tipo_actividadService,
+    private actividadService: ActividadService,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private distributivoActividad: DistributivoActividadService) { }
 
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
-
-    this.myForm = this.fb.group({
-      tipoActividadSeleccionado: [null, Validators.required]
-    })
-    this.cargarActividadObtenida();
-    this.cargartipo();
+    this.loadActividades();
+    this.loadTiposActividad();
   }
 
-  cargarActividadObtenida(): void {
-    this.actividadesSeleccionadas = this.authService.id_actividades;
-  }
-
-  cargarACti(): Observable<void> {
-    return new Observable(observer => {
-      this.actividadService.getActividad().subscribe(data => {
-        this.Actividades = data;
-        observer.next();
-        observer.complete();
-      });
+  loadActividades(): void {
+    this.actividadService.getActividad().subscribe(data => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
   }
 
-  cargartipo(): void {
-    this.tipo_actividadService.gettipoActividad().subscribe((Tipos) => {
-      this.Tipos = Tipos;
+  loadTiposActividad(): void {
+    this.tipoActividadService.gettipoActividad().subscribe(data => {
+      this.Tipos = data;
     });
   }
 
-  filtrarActividadabyTipo(): void {
-    this.cargarACti().subscribe(() => {
-      this.actividadesFiltrada = this.Actividades.filter(
-        (actividad) =>
-          (this.tipoActividadSeleccionado === null || actividad.id_tipo_actividad === this.idTipo)
-      );
-    });
+  obtenerTipoActividad(id_tipo_actividad: number): string {
+    const tipoActividad = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo_actividad);
+    return tipoActividad ? tipoActividad.nom_tip_actividad : '';
   }
 
-  escogerActividad(actividad: Actividad): void {
-    const actividadExistente = this.actividadesSeleccionadas.some(
-      (id) => id.id_actividad === actividad.id_actividad
-    );
-    if (!actividadExistente) {
-      this.actividadesSeleccionadas.push(actividad);
-      this.calcularHorasTotales();
-    } else {
-      Toast.fire({
-        icon: "warning",
-        title: "La actividad se encuentra seleccionada",
-      });
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 
-  eliminarActividad(fila: number): void {
-    this.actividadesSeleccionadas.splice(fila, 1);
-    this.calcularHorasTotales()
-  }
-
-  calcularHorasTotales(): void {
-    this.horasTotales = this.actividadesSeleccionadas.reduce(
-      (sum, actividad) => sum + actividad.horas_no_docentes, 0
-    );
-  }
-
-  enviarActividades(): void {
-
-    this.authService.id_actividades = this.actividadesSeleccionadas;
-
-    this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
-      const distributivoEncontrado = data as DistributivoActividad[];
-
-      const allDeleteObservables = this.authService.distributivos.map(distributivoId => {
-        const distributivosFinales = distributivoEncontrado.filter(
-          resul => resul.id_distributivo === distributivoId.id_distributivo
-        );
-        
-        if (distributivosFinales.length > 0) {
-          const deleteObservables = distributivosFinales.map(distributivoFinal =>
-            this.distributivoActividadService.delete(distributivoFinal.id_distributivo_actividad)
-          );
-          return forkJoin(deleteObservables);
-        } else {
-          return of(null);
-        }
-      });
-
-      forkJoin(allDeleteObservables).subscribe({
-        next: () => {
-          if (this.authService.distributivos.length > 0) {
-            const primaryDistributivo = this.authService.distributivos[0]; 
-            const createObservables = this.actividadesSeleccionadas.map(data => {
-              const newDistributivoActividad = { 
-                ...this.distributivoActividad, 
-                id_actividad: data.id_actividad,
-                id_distributivo: primaryDistributivo.id_distributivo 
-              };
-              return this.distributivoActividadService.create(newDistributivoActividad);
-            });
-
-            forkJoin(createObservables).subscribe(responses => {
-              const idsDistributivoActividad = responses.map(respuest => respuest.id_distributivo_actividad);
-              this.authService.id_distributivoActividad = idsDistributivoActividad;
-              this.authService.saveUserToLocalStorage();
-              this.dialog.closeAll();
-            });
-          }
-        }
-      });
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(ActividaModalComponent, {
+      width: '60%',
+      height: '80%',
+      data: new Actividad()
     });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadActividades();
+        Toast.fire({
+          icon: "success",
+          title: "La Actividad ha sido creado correctamente",
+        });
+      }
+    });
   }
 
-  onTipoChange(event: any): void {
-    this.tipoActividadSeleccionado = +event.target.value;
-    this.idTipo = this.tipoActividadSeleccionado;
-    this.filtrarActividadabyTipo();
-    this.myForm.get('tipoActividadSeleccionado')?.setValue(event.target.value);
+  openEditDialog(tipoActividad: Actividad): void {
+    console.log('entra')
+
+    this.distributivoAct.id_actividad = tipoActividad.id_actividad;
+    this.authService.distributivos.forEach(recorrido=>{
+      if(this.authService.distributivos.length ===1){
+        this.distributivoAct.id_distributivo=recorrido.id_distributivo;
+      }
+    });
+    this.distributivoActividad.create(this.distributivoAct).subscribe(respuesta=>{
+      console.log('entra2')
+    });
   }
 
-  obtenerNombreTipo(id_tipo: number): void {
-    const tipo = this.Tipos.find(tipo => tipo.id_tipo_actividad === id_tipo);
-    return tipo ? tipo.nom_tip_actividad : '';
-  }
-
-  crearDistributivoActividad(): void {
-
+  deleteTipoActividad(id: number): void {
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.actividadService.deleteid(id).subscribe(() => {
+          this.loadActividades();
+          Toast.fire({
+            icon: "success",
+            title: "Actividad eliminada correctamente",
+          });
+        });
+      }
+    });
   }
 
 }

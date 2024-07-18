@@ -12,6 +12,7 @@ import { UsuarioRol } from '../../Services/UsuarioRol/usuarioRol';
 import * as bcrypt from 'bcryptjs';
 import { RolSelectorComponent } from './rol-selector.component';
 import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject } from 'rxjs';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -84,6 +85,7 @@ export class LoginComponent {
                   this.authService.iniciales = usuarioEncontrado.id_persona; 
                   this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
                   this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
+               
                 } else {
                   Swal.fire('Usuario o contraseña incorrecta', 'Intente nuevamente', 'error');
                 }

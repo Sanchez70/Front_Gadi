@@ -1,95 +1,63 @@
+<br>
+<div class="container">
+  <div class="container1 {{currentExplan}}">
+    <h1>Actividades</h1>
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar...</mat-label>
+        <input matInput (input)="applyFilter($event)" />
+      </mat-form-field>
+      <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="openCreateDialog()">Crear</button>
+    </div>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="id_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.id_actividad }}</td>
+        </ng-container>
 
-<div class="main">
+        <ng-container matColumnDef="nombre_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.nombre_actividad }}</td>
+        </ng-container>
 
-    <form ngNativeValidate aria-label="Formulario de Actividades" style="width: 45%;" [formGroup]="myForm">
-    <h1 class="h1">ACTIVIDADES</h1>
-      <div class="combos-container">
-        <div class="input-group mb-3">
-          <div class="combo-container">
-            <label for="paralelo" class="label_form font-weight-bold">Tipo de Actividad</label>
-            <div class="custom-select">
-              <select class="form-control" placeholder="Actividad" (ngModel)="tipoActividadSeleccionado"
-                name="actividad" aria-label="Actividad" aria-describedby="basic-addon1"
-                (change)="onTipoChange($event)" formControlName="actividad">
-                <option value=0 disabled selected>Seleccione una opción</option>
-                <option *ngFor="let tipo of Tipos" [value]="tipo.id_tipo_actividad">{{tipo.nom_tip_actividad}}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr class="dashed">
-      <!-- <div class="btnAceptCrear">
-        <button routerLinkActive="active" routerLink="/actividad" class="btnCrear" >Crear Actividad</button>
-      </div> -->
-      <div class="tables-container">
-        <div class="table-container">
-          <table class="table table-condensed table-bordered table-striped">
-            <thead>
-              <tr>
-                <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173); margin-top: 1cap;">Actividades</th>
-              </tr>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Horas</th>
-                <th scope="col">Descripcion</th>
-                <th scope="col">Seleccionar</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let actividad of actividadesFiltrada">
-                <td>{{actividad.nombre_actividad}}</td>
-                <td>{{obtenerNombreTipo(actividad.id_tipo_actividad)}}</td>
-                <td>{{actividad.horas_no_docentes}}</td>
-                <td>{{actividad.descripcion_actividad}}</td>
-                <td>
-                  <div class="btnContenedor" routerLinkActive="active">
-                    <button type="button" class="btnSeleccionar" (click)="escogerActividad(actividad)"><i
-                        class="bi bi-check-circle-fill"></i></button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <ng-container matColumnDef="descripcion_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descripccion</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.descripcion_actividad }}</td>
+        </ng-container>
 
-        </div>
-        <div class="table-container">
-          <table class="table table-condensed table-bordered table-striped" style="margin-top: 3cap;">
-            <thead>
-              <tr>
-                <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">Actividades Seleccionadas</th>
-              </tr>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Tipo</th>
-                <th colspan="3">Horas No Docentes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let actividades of actividadesSeleccionadas; let i=index">
-                <td>{{actividades.nombre_actividad}}</td>
-                <td>{{obtenerNombreTipo(actividades.id_tipo_actividad)}}</td>
-                <td>{{actividades.horas_no_docentes}}</td>
-                <td>
-                  <div class="" routerLinkActive="active">
-                    <button type="button" class="btnEliminar" (click)="eliminarActividad(i)"><i class="bi bi-trash3-fill"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th colspan="3" style="text-align: left;">Horas totales:</th>
-                <td>{{horasTotales}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="d-flex justify-content-center">
-        <div class="btnAcept">
-          <button type="submit" class="btnAceptar" (click)="enviarActividades()">Aceptar</button>
-        </div>
-      </div>
-    </form>
+        <ng-container matColumnDef="horas_no_docentes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Horas no Docentes</th>
+          <td mat-cell *matCellDef="let Actividad">{{ Actividad.horas_no_docentes }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="id_tipo_actividad">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Actividad</th>
+          <td mat-cell *matCellDef="let Actividad">{{ obtenerTipoActividad(Actividad.id_tipo_actividad) }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="borrar">
+          <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+          <td mat-cell *matCellDef="let Actividad">
+            <button mat-icon-button color="warn" (click)="deleteTipoActividad(Actividad.id_actividad)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="actualizar">
+          <th mat-header-cell *matHeaderCellDef>Actualizar</th>
+          <td mat-cell *matCellDef="let Actividad">
+            <button mat-icon-button color="primary" (click)="openEditDialog(Actividad)">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    </div>
   </div>
-
+</div>
