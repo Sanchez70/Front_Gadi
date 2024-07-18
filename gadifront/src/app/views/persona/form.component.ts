@@ -40,11 +40,13 @@ export class FormComponent implements OnInit {
 
   persona: Persona = new Persona();
   usuario: Usuario = new Usuario();
+  usuariocontra: Usuario = new Usuario();
   mostrarCarga: boolean = false;
   personaForm: FormGroup;
   currentExplan: string = '';
   titulos: TituloProfecional[] = [];
   private sidebarSubscription!: Subscription;
+  hide = true;
 
   constructor(
     private dialog: MatDialog,
@@ -65,8 +67,14 @@ export class FormComponent implements OnInit {
       direccion: [''],
       correo: ['', [Validators.required, Validators.pattern(ValidacionesComponent.patternEmailValidator())]],
       edad: [{ value: '', disabled: true }, [Validators.required, Validators.min(1), Validators.max(120)]],
-      fecha_vinculacion: [{ value: '', disabled: true }]
+      fecha_vinculacion: [{ value: '', disabled: true }],
+      usuario: ['', [Validators.required]],
+      contrasena: ['', [Validators.pattern(ValidacionesComponent.patternPasswordValidator())]],
     });
+  }
+
+  togglePasswordVisibility(): void {
+    this.hide = !this.hide;
   }
 
   openModalAdd(): void {
@@ -78,6 +86,7 @@ export class FormComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       this.mostrarTitulos(idPersona);
+      this.mostrarUsuario(idPersona);
     });
   }
 
@@ -86,11 +95,12 @@ export class FormComponent implements OnInit {
     const dialogRef = this.dialog.open(TituloProfesionalComponent, {
       width: '30%',
       height: '60%',
-      data: titulo 
+      data: titulo
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       this.mostrarTitulos(idPersona);
+      this.mostrarUsuario(idPersona);
     });
   }
 
@@ -103,6 +113,7 @@ export class FormComponent implements OnInit {
           const formattedDate = this.datePipe.transform(persona.fecha_vinculacion, 'd/M/yyyy');
           this.personaForm.patchValue({ ...persona, fecha_vinculacion: formattedDate });
           this.mostrarTitulos(idPersona);
+          this.mostrarUsuario(idPersona);
         },
         (error) => {
           console.error('Error al cargar los datos de la persona:', error);
@@ -121,6 +132,22 @@ export class FormComponent implements OnInit {
     this.personaService.getTitulosProfecionalesByPersonaId(idPersona).subscribe(
       (titulos: TituloProfecional[]) => {
         this.titulos = titulos;
+      },
+      (error) => {
+        console.error('Error al obtener los títulos de la persona:', error);
+      }
+    );
+  }
+
+  mostrarUsuario(idPersona: number): void {
+    this.personaService.getUsuarioByPersonaId(idPersona).subscribe(
+      (usuariocontra: Usuario) => {
+        this.usuariocontra = usuariocontra;
+        console.log('usuario traido', usuariocontra)
+        // Actualizar los valores del formulario con los datos del usuario
+        this.personaForm.patchValue({
+          usuario: this.usuariocontra.usuario,
+        });
       },
       (error) => {
         console.error('Error al obtener los títulos de la persona:', error);

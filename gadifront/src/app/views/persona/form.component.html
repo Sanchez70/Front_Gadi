@@ -80,6 +80,24 @@
           <input matInput formControlName="fecha_vinculacion" readonly>
         </mat-form-field>
       </div>
+      <div>
+        <h4>EN CASO DE QUE DESEE MODIFICAR LA CONTRASEÑA </h4>
+      </div>
+      <div class="form-row">
+        <mat-form-field class="form-group" appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <input matInput formControlName="usuario" readonly>
+        </mat-form-field>
+        <mat-form-field class="form-group" appearance="outline">
+          <mat-label>Nueva Contraseña</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="contrasena" >
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
+            <mat-icon>{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="personaForm.get('contrasena')?.hasError('pattern')">La contraseña debe tener al menos 8
+            caracteres y contener letras, números y caracteres especiales</mat-error>
+        </mat-form-field>
+      </div>
       <button mat-raised-button color="primary" type="submit">Actualizar</button>
     </form>
   </div>
