@@ -1,4 +1,4 @@
-<div class="main">
+<div class="container">
   <div class="dialog-header">
     <button mat-icon-button  class="close-button" (click)="cerrarDialogo()">
       <i class="bi bi-x"></i>
@@ -8,33 +8,48 @@
   <form class="formulario" ngNativeValidate style="width: 45%;" [formGroup]="myForm">
 
     <div class="combos-container">
+      <div class="input-group mb-3" >
+        <div class="combo-container">
+          <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
+          <div class="custom-select" > <select class="form-control" placeholder="Paralelo"
+            [(ngModel)]="paraleloSeleccionado" name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
+              (change)="onParaleloChange($event)" formControlName="paraleloSeleccionado">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option *ngFor="let paralelo of paralelos" [value]="paralelo">{{paralelo}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
       <div class="input-group mb-3">
-        <div class="combo-container-carrera">
+        <div class="combo-container">
+          <label for="jornadas" class="label_form font-weight-bold">Jornada</label>
+          <div class="custom-select"> <select class="form-control" placeholder="Jornada"
+            [(ngModel)]="jornadaSeleccionada" name="jornadas" aria-label="Jornada" aria-describedby="basic-addon1"
+              (change)="onJornadaChange($event)" formControlName="jornadaSeleccionado">
+              <option value=0 disabled selected>Seleccione una opción</option>
+              <option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">{{jornada.descrip_jornada}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="combos-container">
+      <div class="input-group mb-3">
+        <div class="combo-container">
           <label for="carreras" class="label_form font-weight-bold">Carrera</label>
           <div class="custom-select"> <select class="form-control" placeholder="Carrera"
-              (ngModel)="carreraSeleccionada" name="carreras" aria-label="Carrera" aria-describedby="basic-addon1"
-              (change)="onCarreraChange($event)">
+              [(ngModel)]="carreraSeleccionada" name="carreras" aria-label="Carrera" aria-describedby="basic-addon1"
+              (change)="onCarreraChange($event)" formControlName="carreraSeleccionado">
               <option value=0 disabled selected>Seleccione una opción</option>
               <option *ngFor="let carreras of carreras" [value]="carreras.id_carrera">{{carreras.nombre_carrera}}</option>
             </select>
           </div>
         </div>
       </div>
-      <!-- <div class="input-group mb-3" >
-        <div class="combo-container-paralelo">
-          <label for="paralelo" class="label_form font-weight-bold">Paralelo</label>
-          <div class="custom-select" > <select class="form-control" placeholder="Paralelo"
-              (ngModel)="paraleloSeleccionado" name="paralelo" aria-label="Paralelo" aria-describedby="basic-addon1"
-              (change)="onParaleloChange($event)" formControlName="numeroPer">
-              <option value=0 disabled selected>Seleccione una opción</option>
-              <option *ngFor="let paralelo of paralelos" [value]="paralelo">{{paralelo}}</option>
-            </select>
-          </div>
-        </div>
-      </div> -->
       
       <div class="input-group mb-3">
-        <div class="combo-container-ciclo">
+        <div class="combo-container">
           <label for="ciclos" class="label_form font-weight-bold">Ciclos</label>
           <div class="custom-select">
             <select class="form-control" placeholder="Seleccione el ciclo" [(ngModel)]="cicloSeleccionado" name="ciclo"
@@ -49,74 +64,42 @@
     </div>
     <h2 style="font-size: 10px; color: red; text-align: center; margin-left: 50px;">Al elegir o quitar asignaturas, deberá seleccionar nuevamente su jornada y paralelo*</h2>
     <hr class="dashed">
-    <div class="tables-container">
-      <div class="table-container">
-        <table class="table table-condensed table-bordered table-striped">
-          <thead>
-            <tr>
-              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173); margin-top: 1cap;">
-                Asignaturas</th>
-            </tr>
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col">Horas Semanales</th>
-              <th scope="col">Ciclo</th>
-              <th scope="col">Seleccionar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let asignatura of asignaturaFiltrada">
-              <td>{{asignatura.nombre_asignatura}}</td>
-              <td>{{asignatura.horas_semanales}}</td>
-              <td>{{obtenerNombreCiclo(asignatura.id_ciclo)}}</td>
-              <td>
-                <div class="btnContenedor" routerLinkActive="active">
-                  <button type="button" class="btnSeleccionar" (click)="escogerAsignatura(asignatura)"><i
-                      class="bi bi-check-circle-fill"></i></button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-container">
-        <table class="table table-condensed table-bordered table-striped" style="margin-top: 3cap;">
-          <thead>
-            <tr>
-              <th colspan="6" style="text-align: center; background-color: rgb(33, 59, 173);">Asignaturas Seleccionadas
-              </th>
-            </tr>
-            <tr>
-              <th scope="col">Nombre</th>
-              <th scope="col">Ciclo</th>
-              <th colspan="3">Horas Semanales</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let asignaturas of asignaturasSeleccionadas; let i=index">
-              <td>{{asignaturas.nombre_asignatura}}</td>
-              <td>{{obtenerNombreCiclo(asignaturas.id_ciclo)}}</td>
-              <td>{{asignaturas.horas_semanales}}</td>
-              <td>
-                <div class="" routerLinkActive="active">
-                  <button type="button" class="btnEliminar" (click)="eliminarAsignatura(i)"><i
-                      class="bi bi-trash3-fill"></i></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th colspan="3" style="text-align: left;">Horas totales:</th>
-              <td>{{horasTotales}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="carrera">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Carrera</th>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCarrera(asignatura.id_carrera) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre_asignatura">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.nombre_asignatura }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="horas_semanales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Horas Semanales</th>
+          <td mat-cell *matCellDef="let asignatura">{{ asignatura.horas_semanales }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ciclo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ciclo</th>
+          <td mat-cell *matCellDef="let asignatura">{{ obtenerNombreCiclo(asignatura.id_ciclo) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="seleccionar">
+          <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+          <td mat-cell *matCellDef="let asignatura">
+            <button mat-icon-button color="warn" (click)="enviarAsignaturas(asignatura)">
+              <i class="bi bi-check-circle-fill"></i>
+            </button>
+          </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
     </div>
 
-    <div class="d-flex justify-content-center">
-      <div class="btnContenedor">
-        <button type="submit" class="btnAceptar" (click)="enviarAsignaturas()">Aceptar</button>
-      </div>
-    </div>
   </form>
 </div>

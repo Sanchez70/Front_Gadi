@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Seleccione Jornadas o Paralelo</h1>
+<div mat-dialog-content>
+  <form [formGroup]="dialogForm">
+    <mat-form-field appearance="outline">
+      <mat-label>Paralelo</mat-label>
+      <mat-select formControlName="paralelo">
+        <mat-option value="" disabled>Seleccione una opción</mat-option>
+        <mat-option *ngFor="let paralelo of paralelos" [value]="paralelo">
+          {{ paralelo }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Jornada</mat-label>
+      <mat-select formControlName="jornada">
+        <mat-option value="" disabled>Seleccione una opción</mat-option>
+        <mat-option *ngFor="let jornada of jornadas" [value]="jornada.id_jornada">
+          {{ jornada.descrip_jornada }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button style="color: #fff; background-color: #1E90FF;" (click)="onConfirm()" cdkFocusInitial>Confirmar</button>
+  <button mat-button style="color: #fff; background-color: #ff3a3a;" (click)="onCancel()">Cancelar</button>
+</div>

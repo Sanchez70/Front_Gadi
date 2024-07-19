@@ -34,6 +34,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditarActividadesComponent } from '../coordinador/editar-actividades/editar-actividades.component';
 import { EditarAsignaturaComponent } from '../coordinador/editar-asignatura/editar-asignatura.component';
 import { Router } from '@angular/router';
+import { EditarDialogComponent } from './editar-dialog/editar-dialog.component';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -104,6 +105,7 @@ export class MatrizDistributivoComponent implements OnInit {
   horasTotalesActividad: number = 0;
   horasTotalesFinal: number = 0;
   id_activida: any;
+  id_asignatura: any;
   horasActividad: any;
   validador: string = '';
   jornadas: any[] = [];
@@ -316,6 +318,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
       this.authService.distributivos = this.distributivoFiltrado;
       this.distributivoFiltrado.forEach(distributivo => {
+        this.authService.id_distributivo = distributivo.id_distributivo;
         this.id_distributivo = distributivo.id_distributivo;
         this.buscarAsignatura(distributivo.id_distributivo);
         this.buscarActividad(distributivo.id_distributivo);
@@ -375,6 +378,8 @@ export class MatrizDistributivoComponent implements OnInit {
                 jornada: jornada ? jornada.descrip_jornada : '',
                 paralelo: da.paralelo,
                 periodo: periodos ? periodos.nombre_periodo : '',
+                id_distributivo_asig: da.id_distributivo_asig,
+                id_ciclo: asignatura ? asignatura.id_ciclo : ''
               });
             }
           });
@@ -586,6 +591,76 @@ export class MatrizDistributivoComponent implements OnInit {
     this.id_activida = row.idActividad;
     this.horasActividad = row.horaActividad;
     this.asignarHoras(row.idActividad, index);
+  }
+
+  abrirEditarAsignatura(idAsignaturaDistributivo: number, idCiclo: number): void {
+    const dialogRef = this.dialog.open(EditarDialogComponent, {
+      width: '400px',
+      data: { paralelos: this.paralelos, jornadas: this.jornadas, id_distributivo_asig: idAsignaturaDistributivo }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('id distributivo', idAsignaturaDistributivo);
+      if (result) {
+        this.jornadaService.getJornadabyId(result.jornada).subscribe(response => {
+          const jornadaNombre = response.descrip_jornada.charAt(0);
+          const acronimo = this.crearAcronimo(jornadaNombre, result.paralelo, idCiclo);
+
+          this.distributivoAsignaturaService.getDistributivobyId(idAsignaturaDistributivo).subscribe(response => {
+            const actualizarAsignaturaDistributivo: DistributivoAsignatura = {
+              id_jornada: result.jornada,
+              paralelo: result.paralelo,
+              id_distributivo: response.id_distributivo,
+              id_asignatura: response.id_asignatura,
+              acronimo: acronimo,
+              id_distributivo_asig: response.id_distributivo_asig
+            };
+
+            this.distributivoAsignaturaService.updateDistributivo(actualizarAsignaturaDistributivo).subscribe(response => {
+              this.combinarDatosAsignatura(this.distributivoFiltrado);
+              this.calcularTotales();
+              Toast.fire({
+                icon: "success",
+                title: "Asignatura actualizada correctamente",
+              });
+            })
+          })
+        })
+
+      }
+    });
+  }
+
+  editarAsignatura(row: any): void {
+    this.id_asignatura = row.id_distributivo_asig;
+    this.abrirEditarAsignatura(this.id_asignatura, row.id_ciclo);
+  }
+
+  eliminarAsignatura(row: any): void {
+    const id_asignatura_distributivo = row.id_distributivo_asig;
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.distributivoAsignaturaService.getDistributivobyId(id_asignatura_distributivo).subscribe(response => {
+          if (response) {
+            this.distributivoAsignaturaService.delete(response.id_distributivo_asig).subscribe(response => {
+              this.combinarDatosAsignatura(this.distributivoFiltrado);
+              this.calcularTotales();
+              Toast.fire({
+                icon: "success",
+                title: "Asignatura eliminada correctamente",
+              });
+            })
+          }
+        })
+      }
+    });
   }
 
   calcularTotales(): void {

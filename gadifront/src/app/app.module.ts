@@ -111,6 +111,7 @@ import { coordinadorGuardGuard } from './guards/coordinador-guard.guard';
 import { adminGuardGuard } from './guards/admin-guard.guard';
 import { EliminarRolComponent } from './views/eliminar-rol/eliminar-rol.component';
 import { FooterComponent } from './views/footer/footer.component';
+import { EditarDialogComponent } from './views/matriz-distributivo/editar-dialog/editar-dialog.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -199,6 +200,7 @@ const routes: Routes = [
     DashboardBienvenidaComponent,
     EliminarRolComponent,
     FooterComponent,
+    EditarDialogComponent,
   ],
   
   imports: [

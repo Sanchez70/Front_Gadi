@@ -39,10 +39,11 @@ export class DirectorReporteComponent {
       this.currentExplan = explan;
     });
     this.cargarComboPeriodos();
+    
     this.distributivoService.getDistributivo().subscribe(distributivos => {
         const distributivosPendientes = distributivos.filter(distributivo => distributivo.estado === 'Pendiente' && distributivo.id_periodo === this.idPeriodo);
         const idsPersonasPendiente = new Set(distributivosPendientes.map(distributivo => distributivo.id_persona));
-  
+
         this.personaService.getPersonas().subscribe(data => {
           this.personas = data.filter(persona => idsPersonasPendiente.has(persona.id_persona));
           this.loadAdditionalDataForPersonas();
