@@ -64,7 +64,7 @@ interface AsignaturaConDistributivo {
 export class MatrizDistributivoComponent implements OnInit {
   displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'titulo', 'grado'];
   displayedColumnsAsig: string[] = ['carrera', 'asignatura', 'paralelo', 'nro_horas', 'jornada', 'periodo', 'asig_jornada', 'eliminar'];
-  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar'];
+  displayedColumnsAct: string[] = ['nro_horas', 'total_horas', 'descripcion', 'tipo_actividad', 'editar', 'eliminar'];
   dataSourceAsig!: MatTableDataSource<any>;
   dataSourceAct!: MatTableDataSource<any>;
 
@@ -118,6 +118,7 @@ export class MatrizDistributivoComponent implements OnInit {
   public distributivo: Distributivo = new Distributivo();
   public distributivoacti: DistributivoActividad = new DistributivoActividad();
   public persona: Persona = new Persona();
+  center: any;
 
   constructor(
     private asignaturaService: AsignaturaService,
@@ -140,6 +141,7 @@ export class MatrizDistributivoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('dsad');
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
     });
@@ -359,7 +361,7 @@ export class MatrizDistributivoComponent implements OnInit {
           distributivosFiltrados.forEach(da => {
             const asignatura = asignaturas.find(a => a.id_asignatura === da.id_asignatura);
             if (asignatura) {
-              asignaturaFiltradas.push(asignatura); 
+              asignaturaFiltradas.push(asignatura);
 
               const carrera = carreras.find(ca => ca.id_carrera === asignatura?.id_carrera);
               const jornada = jornadas.find(jo => jo.id_jornada === da?.id_jornada);
@@ -449,29 +451,119 @@ export class MatrizDistributivoComponent implements OnInit {
       if (result.isConfirmed) {
         const horasAsignadas = result.value;
         const key = `${idActividad}-${index}`;
+        console.log(key, idActividad);
         this.horasAsignadasMap[key] = horasAsignadas;
-
+        let contador = 0;
+        let contadorEliinar = 0;
+        console.log('contador', contador, this.distributivoFiltrado)
         this.distributivoFiltrado.forEach(distributivo => {
+          console.log('contador', contador, this.distributivoFiltrado)
           const distributivoActividad: DistributivoActividad = {
-            id_distributivo_actividad: 0, 
+            id_distributivo_actividad: 0,
             id_distributivo: distributivo.id_distributivo,
             id_actividad: this.id_activida,
             hora_no_docente: horasAsignadas
           };
 
           this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+            contador += 1;
+            console.log('contador', contador)
             const resultado = data as DistributivoActividad[];
 
             const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
             if (resultFinal) {
-              resultFinal.hora_no_docente = horasAsignadas;
-              this.distributivoActividadService.updateDistributivo(resultFinal).subscribe(
+              if (contador === 1) {
+                resultFinal.hora_no_docente = horasAsignadas;
+                this.distributivoActividadService.updateDistributivo(resultFinal).subscribe(
+                  () => {
+                    this.combinarDatos(this.distributivoFiltrado);
+                    this.calcularTotales();
+                    Toast.fire({
+                      icon: "success",
+                      title: "Horas asignadas con éxito",
+                    });
+                  },
+                  (error) => {
+                    console.error('Error al actualizar DistributivoActividad:', error);
+                    Toast.fire({
+                      icon: "error",
+                      title: "Error al actualizar horas",
+                    });
+                  }
+                );
+              } else {
+                if (contador === this.distributivoFiltrado.length) {
+                  this.distributivoFiltrado.forEach(distributivo => {
+                    contadorEliinar += 1;
+                    if (contadorEliinar > 1) {
+                      console.log('cunta de entradas', contadorEliinar)
+                      this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+                        const resultado = data as DistributivoActividad[];
+
+                        const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
+                        if (resultFinal) {
+
+
+                          this.distributivoActividadService.delete(resultFinal.id_distributivo_actividad).subscribe(
+                            () => {
+                              this.combinarDatos(this.distributivoFiltrado);
+                              this.calcularTotales();
+                              Toast.fire({
+                                icon: "success",
+                                title: "Horas asignadas con éxito",
+                              });
+                            },
+                            (error) => {
+                              console.error('Error al actualizar DistributivoActividad:', error);
+                              Toast.fire({
+                                icon: "error",
+                                title: "Error al actualizar horas",
+                              });
+                            }
+                          );
+
+                        }
+                      });
+                    } else {
+                      console.log('saltando el primero ')
+                    }
+                  });
+                }
+
+              }
+            }
+          });
+
+        });
+      }
+
+    });
+  }
+
+  eliminarActividad(idActividad: number): void {
+    console.log(idActividad);
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.distributivoFiltrado.forEach(distributivo => {
+          this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
+            const resultado = data as DistributivoActividad[];
+
+            const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === idActividad);
+            if (resultFinal) {
+              this.distributivoActividadService.delete(resultFinal.id_distributivo_actividad).subscribe(
                 () => {
                   this.combinarDatos(this.distributivoFiltrado);
                   this.calcularTotales();
                   Toast.fire({
                     icon: "success",
-                    title: "Horas asignadas con éxito",
+                    title: "Actividad eliminada con éxito",
                   });
                 },
                 (error) => {
@@ -487,6 +579,7 @@ export class MatrizDistributivoComponent implements OnInit {
         });
       }
     });
+
   }
 
   onRowClicked(row: any, index: number) {
@@ -526,7 +619,7 @@ export class MatrizDistributivoComponent implements OnInit {
       this.distributivoService.create(this.distributivo)
         .subscribe(
           (distributivo) => {
-            this.createAsignaturaDistributivo(distributivo.id_distributivo); 
+            this.createAsignaturaDistributivo(distributivo.id_distributivo);
             this.createdistributivoacti(distributivo.id_distributivo);
             this.eliminarDistributivos();
           },
@@ -579,7 +672,7 @@ export class MatrizDistributivoComponent implements OnInit {
       };
       this.distributivoActividadService.create(distributivoacti2)
         .subscribe(
-          (distributivo) => {},
+          (distributivo) => { },
           (error) => {
             console.error('Error al guardar la actividad:', error);
             Toast.fire({
@@ -597,7 +690,7 @@ export class MatrizDistributivoComponent implements OnInit {
     this.eliminarActividadDistributivo();
     this.eliminarAsignaturaDistributivo();
     this.distributivoFiltrado.forEach(distributivo => {
-      this.distributivoService.delete(distributivo.id_distributivo).subscribe(response => {})
+      this.distributivoService.delete(distributivo.id_distributivo).subscribe(response => { })
     });
     Toast.fire({
       icon: "success",
@@ -657,7 +750,7 @@ export class MatrizDistributivoComponent implements OnInit {
         }
       });
 
-      forkJoin(allDeleteObservables).subscribe({next: () => { } });
+      forkJoin(allDeleteObservables).subscribe({ next: () => { } });
     });
 
   }

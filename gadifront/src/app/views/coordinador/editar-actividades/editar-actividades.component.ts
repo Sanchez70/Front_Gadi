@@ -104,18 +104,41 @@ export class EditarActividadesComponent implements OnInit {
   }
 
   openEditDialog(tipoActividad: Actividad): void {
-    console.log('entra')
+    this.distributivoActividad.getDistributivoActividad().subscribe(filtar => {
+      const almacena = filtar;
+      const duplicados = [];
 
-    this.distributivoAct.id_actividad = tipoActividad.id_actividad;
-    this.authService.distributivos.forEach(recorrido=>{
-      if(this.authService.distributivos.length ===1){
-        this.distributivoAct.id_distributivo=recorrido.id_distributivo;
+      this.authService.distributivos.forEach(recorrido => {
+        const filtrarActividades = almacena.find(duplicado => duplicado.id_actividad === tipoActividad.id_actividad && recorrido.id_distributivo === duplicado.id_distributivo);
+
+        if (filtrarActividades) {
+          duplicados.push(recorrido.id_distributivo);
+        }
+      });
+
+      if (duplicados.length > 0) {
+        Toast.fire({
+          icon: "error",
+          title: "Actividad ya seleccionada",
+        });
+      } else if (this.authService.distributivos.length > 0) {
+        // Asigna id_actividad y id_distributivo del primer elemento no duplicado
+        this.distributivoAct.id_actividad = tipoActividad.id_actividad;
+        this.distributivoAct.id_distributivo = this.authService.distributivos[0].id_distributivo;
+
+        // Crea el registro en distributivoActividad
+        this.distributivoActividad.create(this.distributivoAct).subscribe(respuesta => {
+          Toast.fire({
+            icon: "success",
+            title: "Actividad seleccionada",
+          });
+        });
+      } else {
+        console.error('No hay distributivos disponibles.');
       }
     });
-    this.distributivoActividad.create(this.distributivoAct).subscribe(respuesta=>{
-      console.log('entra2')
-    });
   }
+
 
   deleteTipoActividad(id: number): void {
     Swal.fire({
