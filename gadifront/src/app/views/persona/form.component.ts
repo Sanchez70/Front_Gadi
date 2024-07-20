@@ -169,14 +169,41 @@ export class FormComponent implements OnInit {
           const formValue = this.personaForm.getRawValue();
           const formattedDate = this.datePipe.transform(formValue.fecha_vinculacion, 'yyyy-MM-dd');
           const updatedPersona: Persona = { ...this.persona, ...formValue, fecha_vinculacion: formattedDate };
+  
+          const updatedUsuario: Usuario = { ...this.usuariocontra };
+          
+          if (formValue.contrasena && formValue.contrasena.trim() !== '') {
+            updatedUsuario.contrasena = formValue.contrasena;
+          }
+  
           this.personaService.updatePersona(updatedPersona).subscribe(
             (response) => {
-              this.mostrarCarga = false;
-              Toast.fire({
-                icon: "success",
-                title: "Datos actualizados con éxito",
-              });
-              this.router.navigate(['/mainDocente']);
+              if (formValue.contrasena && formValue.contrasena.trim() !== '') {
+                this.personaService.updateUsuario(updatedUsuario).subscribe(
+                  (responseUsuario) => {
+                    this.mostrarCarga = false;
+                    Toast.fire({
+                      icon: "success",
+                      title: "Datos y contraseña actualizados con éxito",
+                    });
+                    this.router.navigate(['/mainDocente']);
+                  },
+                  (errorUsuario) => {
+                    this.mostrarCarga = false;
+                    Toast.fire({
+                      icon: "error",
+                      title: "Error al actualizar la contraseña",
+                    });
+                  }
+                );
+              } else {
+                this.mostrarCarga = false;
+                Toast.fire({
+                  icon: "success",
+                  title: "Datos actualizados con éxito",
+                });
+                this.router.navigate(['/mainDocente']);
+              }
             },
             (error) => {
               this.mostrarCarga = false;
@@ -189,5 +216,5 @@ export class FormComponent implements OnInit {
         }
       });
     }
-  }
+  } 
 }

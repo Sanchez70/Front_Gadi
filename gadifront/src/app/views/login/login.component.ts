@@ -49,60 +49,108 @@ export class LoginComponent {
     this.validar();
   }
 
+  // validar(): void {
+  //   const usuariol = this.searchForm.value.usuario;
+  //   const contraneusu = this.searchForm.value.contraneusu;
+
+  //   if (usuariol === '') {
+  //     this.isLoading = false;
+  //     Toast.fire({
+  //       icon: "error",
+  //       title: "Campo Usuario Vacio",
+  //       footer: "Por favor, verifique si ha completado todo lo necesario"
+  //     });
+  //   } else if (contraneusu === '') {
+  //     this.isLoading = false;
+  //     Toast.fire({
+  //       icon: "error",
+  //       title: "Campo Contraseña Vacio",
+  //       footer: "Por favor, verifique si ha completado todo lo necesario"
+  //     });
+  //   } else {
+  //     this.loginService.getUsuario().subscribe(
+  //       (result) => {
+  //         if (Array.isArray(result) && result.length > 0) {
+  //           const usuarioEncontrados = result as Usuario[];
+  //           const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.usuario === usuariol);
+  //           if (usuarioEncontrado) {
+  //             bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err: any, res: any) => {
+  //               this.isLoading = false;
+  //               if (err) {
+  //                 console.error('Error al comparar contraseñas:', err);
+  //                 return;
+  //               }
+  //               if (res) {
+  //                 this.authService.setIdPersona(usuarioEncontrado.id_persona);
+  //                 this.authService.iniciales = usuarioEncontrado.id_persona;
+  //                 this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
+  //                 this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
+  //               } else {
+  //                 Swal.fire('Usuario o contraseña incorrecta', 'Intente nuevamente', 'error');
+  //               }
+  //             });
+  //           } else {
+  //             this.isLoading = false;
+  //             Swal.fire('Usuario no encontrado', 'Intente nuevamente', 'error');
+  //           }
+  //         }
+  //       },
+  //       (error) => {
+  //         this.isLoading = false;
+  //         Swal.fire('Error al obtener los datos del usuario', 'Intente nuevamente', 'error');
+  //       }
+  //     );
+  //   }
+  // }
+
   validar(): void {
     const usuariol = this.searchForm.value.usuario;
     const contraneusu = this.searchForm.value.contraneusu;
 
-    if (usuariol === '') {
+    if (usuariol === '' || contraneusu === '') {
       this.isLoading = false;
       Toast.fire({
         icon: "error",
-        title: "Campo Usuario Vacio",
-        footer: "Por favor, verifique si ha completado todo lo necesario"
+        title: "Usuario o Contraseña Vacíos",
+        footer: "Por favor, complete ambos campos"
       });
-    } else if (contraneusu === '') {
-      this.isLoading = false;
-      Toast.fire({
-        icon: "error",
-        title: "Campo Contraseña Vacio",
-        footer: "Por favor, verifique si ha completado todo lo necesario"
-      });
-    } else {
-      this.loginService.getUsuario().subscribe(
-        (result) => {
-          if (Array.isArray(result) && result.length > 0) {
-            const usuarioEncontrados = result as Usuario[];
-            const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.usuario === usuariol);
-            if (usuarioEncontrado) {
-              bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err: any, res: any) => {
-                this.isLoading = false;
-                if (err) {
-                  console.error('Error al comparar contraseñas:', err);
-                  return;
-                }
-                if (res) {
-                  this.authService.setIdPersona(usuarioEncontrado.id_persona);
-                  this.authService.iniciales = usuarioEncontrado.id_persona; 
-                  this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
-                  this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
-               
-                } else {
-                  Swal.fire('Usuario o contraseña incorrecta', 'Intente nuevamente', 'error');
-                }
-              });
-            } else {
-              this.isLoading = false;
-              Swal.fire('Usuario no encontrado', 'Intente nuevamente', 'error');
-            }
-          }
-        },
-        (error) => {
-          this.isLoading = false;
-          Swal.fire('Error al obtener los datos del usuario', 'Intente nuevamente', 'error');
-        }
-      );
+      return;
     }
+
+    this.loginService.getUsuario().subscribe(
+      (result) => {
+        if (Array.isArray(result) && result.length > 0) {
+          const usuarioEncontrados = result as Usuario[];
+          const usuarioEncontrado = usuarioEncontrados.find(usuario => usuario.usuario === usuariol);
+          if (usuarioEncontrado) {
+            bcrypt.compare(contraneusu, usuarioEncontrado.contrasena, (err, res) => {
+              this.isLoading = false;
+              if (err) {
+                console.error('Error al comparar contraseñas:', err);
+                return;
+              }
+              if (res) {
+                this.authService.setIdPersona(usuarioEncontrado.id_persona);
+                this.authService.iniciales = usuarioEncontrado.id_persona;
+                this.cargarRol(usuarioEncontrado.id_usuario, usuariol);
+                this.authService.id_carrera = usuarioEncontrado.carrera?.id_carrera;
+              } else {
+                Swal.fire('Usuario o contraseña incorrecta', 'Intente nuevamente', 'error');
+              }
+            });
+          } else {
+            this.isLoading = false;
+            Swal.fire('Usuario no encontrado', 'Intente nuevamente', 'error');
+          }
+        }
+      },
+      (error) => {
+        this.isLoading = false;
+        Swal.fire('Error al obtener los datos del usuario', 'Intente nuevamente', 'error');
+      }
+    );
   }
+
 
   selectedRole: string | undefined;
   cargarRol(id_rol: any, usuario: any): void {
