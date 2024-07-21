@@ -37,6 +37,7 @@ export class LoginComponent {
   roles: Rol[] = [];
   public searchForm: FormGroup;
   isLoading = false;
+  hide = true;
   constructor(private authService: AuthService, public loginService: LoginService, private fb: FormBuilder, private router: Router, private rolService: SrolService, private usuarioRol: UsuarioRolService, public dialog: MatDialog) {
     this.searchForm = this.fb.group({
       usuario: ['', Validators.required],
@@ -102,6 +103,10 @@ export class LoginComponent {
   //     );
   //   }
   // }
+
+  togglePasswordVisibility(): void {
+    this.hide = !this.hide;
+  }
 
   validar(): void {
     const usuariol = this.searchForm.value.usuario;

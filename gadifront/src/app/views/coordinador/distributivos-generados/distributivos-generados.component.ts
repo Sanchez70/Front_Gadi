@@ -14,6 +14,21 @@ import { DistributivoService } from '../../../Services/distributivoService/distr
 import { PeriodoService } from '../../../Services/periodoService/periodo.service';
 import { catchError, forkJoin, of, switchMap, tap } from 'rxjs';
 import { ReportesComponent } from '../../reportes/reportes/reportes.component';
+import { Distributivo } from '../../../Services/distributivoService/distributivo';
+import Swal from 'sweetalert2';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "bottom-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  }
+});
+
 
 @Component({
   selector: 'app-distributivos-generados',
@@ -21,8 +36,10 @@ import { ReportesComponent } from '../../reportes/reportes/reportes.component';
   styleUrl: './distributivos-generados.component.css',
   providers: [ReportesComponent]
 })
+
+
 export class DistributivosGeneradosComponent {
-  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'detalle'];
+  displayedColumns: string[] = ['cedula', 'nombre', 'apellido', 'telefono', 'correo', 'fecha_vinculacion', 'contrato', 'detalle','editar'];
   dataSource!: MatTableDataSource<Persona>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -31,11 +48,12 @@ export class DistributivosGeneradosComponent {
   contratos: { [key: number]: TipoContrato } = {};
   color = '#1E90FF';
   personas: Persona[] = [];
+  distributivo: Distributivo = new Distributivo();
   currentExplan: string = '';
   periodos: any[] = [];
   idPeriodo: number = 0;
   public periodoEncontrado: Periodo = new Periodo();
-  constructor(private authService: AuthService, private personaService: PersonaService, private roter: Router, private distributivoService: DistributivoService, private periodoService: PeriodoService, private report: ReportesComponent) { }
+  constructor(private authService: AuthService, private personaService: PersonaService, private roter: Router, private distributivoService: DistributivoService, private periodoService: PeriodoService, private report: ReportesComponent, private router: Router) { }
   ngOnInit(): void {
     this.authService.explan$.subscribe(explan => {
       this.currentExplan = explan;
@@ -129,6 +147,32 @@ export class DistributivosGeneradosComponent {
       }
     });
 
+  }
+
+  cambiarEstadoDistributivo(personaId:number):void{
+    Swal.fire({
+      title: '¿Deseas editar el presente distributivo?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Editar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      this.distributivoService.getDistributivo().subscribe(data =>{
+        const distributivoEncontrados = data as Distributivo[];
+        const distributivoFinal = distributivoEncontrados.find(distributivo => distributivo.estado === 'Aceptado' && distributivo.id_periodo === this.idPeriodo && distributivo.id_persona === personaId);
+        this.distributivoService.getDistributivobyId(distributivoFinal?.id_distributivo).subscribe(response =>{
+          this.distributivo = response;
+          this.distributivo.estado = 'Pendiente';
+          this.distributivoService.updateDistributivo(this.distributivo).subscribe(res =>{
+            Toast.fire({
+              icon: "success",
+              title: "Distributivo actualizado correctamente",
+            });
+            this.router.navigate(['/coordinador']);
+          })
+        })
+      })
+    });
   }
 
 

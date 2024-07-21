@@ -23,13 +23,12 @@
                         <p><strong>Cedula:</strong> {{ additionalPersonaData.cedula }}</p>
                         <p><strong>Correo:</strong> {{ additionalPersonaData.correo }}</p>
                         <p><strong>Teléfono:</strong> {{ additionalPersonaData.telefono }}</p>
-                        <p><strong>Fecha de Vinculacion:</strong> {{ additionalPersonaData.fecha_vinculacion }}</p>
+                        <p><strong>Fecha de Vinculacion:</strong> {{ additionalPersonaData.fecha_vinculacion | date }}</p>
                         <p><strong>Tipo de contrato:</strong> {{ additionalPersonaData.tipo_contrato }}</p>
                         <!-- Cambiado a tipo_contrato -->
                         <p><strong>Títulos:</strong></p>
                         <ul>
                             <li *ngFor="let titulo of titulos">{{ titulo.nombre_titulo }}</li>
-                            <!-- Asegúrate de que 'nombre_titulo' es la propiedad correcta -->
                         </ul>
                     </mat-card-content>
                 </mat-card>
@@ -60,7 +59,7 @@
                     <mat-card-title>¿Qué es GADI?</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <p>GADI es una plataforma para gestionar distributivos institucionales. Provee funcionalidades para administrar eficientemente las horas docentes y no docentes de cada uno de los miembros docentes del Instituto Superior Universitario Tecnológico del Azuay de una manera intuitiva y sencilla.</p>
+                    <p>GADI es una plataforma para gestionar distributivos institucionales. Provee funcionalidades para administrar eficientemente las horas docentes y no docentes de cada uno de los funcionarios del Instituto Superior Universitario Tecnológico del Azuay de una manera intuitiva y sencilla.</p>
                 </mat-card-content>
             </mat-card>
         </div>

@@ -81,6 +81,14 @@
                                 (click)="generarModeloPDF(persona.id_persona)"><mat-icon>download</mat-icon></button>
                         </td>
                     </ng-container>
+                    <ng-container matColumnDef="editar" sticky>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color">Editar</th>
+                        <td mat-cell *matCellDef="let persona; let i=index" class="editar">
+                          <button class="mat-button" (click)="cambiarEstadoDistributivo(persona.id_persona)">
+                            <mat-icon>edit_square</mat-icon>
+                          </button>
+                        </td>
+                      </ng-container>
 
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -89,7 +97,7 @@
             </div>
             <ng-template #noData>
                 <div class="centered-container">
-                  <p class="centered-text">No se ha asignado ninguna propuesta aún...</p>
+                  <p class="centered-text">No se ha asignado ningún distributivo...</p>
                 </div>
             </ng-template>
         </section>
