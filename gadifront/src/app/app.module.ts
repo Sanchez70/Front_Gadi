@@ -98,6 +98,8 @@ import { PeriodoModalComponent } from './views/periodo/periodo-modal.component';
 import { CommonModule } from '@angular/common';
 import { loginRedirectGuardGuard } from './guards/login-redirect-guard.guard';
 import { TipoActividadModalComponent } from './views/tipo-actividad/tipo-actividad-modal.component';
+import { DocenteContraComponentModalComponent } from './views/docentecontrasena/docentecontra-modal.component';
+import { DocenteContraComponent } from './views/docentecontrasena/docentecontra.component';
 import { ActividaComponent } from './views/activida/activida.component';
 import { ActividaModalComponent } from './views/activida/activida-modal.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -133,6 +135,7 @@ const routes: Routes = [
   { path: 'registro', component: RegistroComponent ,canActivate: [coordinadorGuardGuard]},
   { path: 'matriz-propuesta', component: MatrizPropuestaComponent ,canActivate: [directorGuardGuard]},
   { path: 'tipo_actividad', component: TipoActividadComponent ,canActivate: [adminGuardGuard]},
+  { path: 'docentecontra', component: DocenteContraComponent,canActivate: [adminGuardGuard]},
   { path: 'admin_Creacion', component: AdminCreacionComponent,canActivate: [coordinadorGuardGuard]},
   { path: 'distributivo', component: DistributivoComponent,canActivate: [directorGuardGuard]},
   { path: 'main-admin', component: MainAdminComponent,canActivate: [loginRedirectGuardGuard]},
@@ -151,6 +154,8 @@ const routes: Routes = [
     ActividaComponent,
     ActividaModalComponent,
     TipoActividadModalComponent,
+    DocenteContraComponentModalComponent,
+    DocenteContraComponent,
     AppComponent,
     PersonaComponent,
     UsuarioComponent,

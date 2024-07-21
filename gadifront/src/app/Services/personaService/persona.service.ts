@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Persona } from './persona';
 import { Periodo } from '../../views/periodo/periodo';
 import { GradoOcupacional } from '../../views/grado-ocupacional/grado-ocupacional';
@@ -11,7 +11,7 @@ import { Rol } from '../../views/rol/rol';
 import { UsuarioRol } from '../../views/usuario-rol/UsuarioRol';
 import { Usuario } from '../loginService/usuario';
 import { appConfig } from '../../environment/appConfig';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -100,5 +100,21 @@ export class PersonaService {
 
   updatePersona(persona: Persona): Observable<Persona> {
     return this.http.put<Persona>(`${this.urlEndPoint}/persona/${persona.id_persona}`, persona);
+  }
+
+  getPersonasConUsuarios(): Observable<any[]> {
+    return this.http.get<Persona[]>(`${this.urlEndPoint}/persona`).pipe(
+      switchMap(persona => {
+        const observables = persona.map(persona =>
+          this.http.get<Usuario>(`${this.urlEndPoint}/usuario/persona/${persona.id_persona}`).pipe(
+            map(usuario => ({
+              ...persona,
+              usuario: usuario.usuario,
+            }))
+          )
+        );
+        return forkJoin(observables);
+      })
+    );
   }
 }

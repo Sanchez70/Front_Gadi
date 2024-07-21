@@ -1,0 +1,26 @@
+<div class="container">
+  <h1 mat-dialog-title>Editar Contraseña</h1>
+  <div mat-dialog-content>
+    <p>Usuario: {{data.usuario.usuario}}</p>
+    <form [formGroup]="passwordForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Nueva Contraseña</mat-label>
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="newPassword">
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('required')">
+          La contraseña es requerida.
+        </mat-error>
+        <mat-error *ngIf="passwordForm.get('newPassword')?.hasError('pattern')">
+          La contraseña debe contener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un
+          carácter especial.
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="cancel()">Cancelar</button>
+    <button mat-button color="primary" (click)="save()">Guardar</button>
+  </div>
+</div>

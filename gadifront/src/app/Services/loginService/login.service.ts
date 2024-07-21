@@ -18,14 +18,17 @@ export class LoginService {
   getUsuario(): Observable<Usuario[]>{
     return this.http.get<Usuario[]>(`${this.urlBase}/usuario`);
   }  
+  
   getUsuariobyId(id: any): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.urlBase}/usuario/${id}`);
   }
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.urlBase}/usuario/${id}`, { headers: this.httpHeaders });
   } 
+  
   updateUsuario(usuario: Usuario): Observable<Usuario> {
     const url = `${this.urlEndPoint}/usuario/${usuario.id_usuario}`;
     return this.http.put<Usuario>(url, usuario, { headers: this.httpHeaders })
   }
+
 }

@@ -143,8 +143,6 @@ export class FormComponent implements OnInit {
     this.personaService.getUsuarioByPersonaId(idPersona).subscribe(
       (usuariocontra: Usuario) => {
         this.usuariocontra = usuariocontra;
-        console.log('usuario traido', usuariocontra)
-        // Actualizar los valores del formulario con los datos del usuario
         this.personaForm.patchValue({
           usuario: this.usuariocontra.usuario,
         });

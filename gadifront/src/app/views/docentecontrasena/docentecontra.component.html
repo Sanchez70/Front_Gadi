@@ -1,0 +1,59 @@
+<br>
+<div class="container">
+  <div class="container1 {{currentExplan}}">
+    <h1>Listado de Usuarios del Sistema</h1>
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Buscar...</mat-label>
+        <input matInput (input)="applyFilter($event)" />
+      </mat-form-field>
+    </div>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="usuario">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+          <td mat-cell *matCellDef="let Usucontra">{{ Usucontra.usuario }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Primer Nombre</th>
+          <td mat-cell *matCellDef="let Usucontra">{{ Usucontra.nombre1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="nombre2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Segundo Nombre</th>
+          <td mat-cell *matCellDef="let Usucontra">{{ Usucontra.nombre2 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="apellido1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido Paterno</th>
+          <td mat-cell *matCellDef="let Usucontra">{{ Usucontra.apellido1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="apellido2">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Apellido Materno</th>
+          <td mat-cell *matCellDef="let Usucontra">{{ Usucontra.apellido2 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="contra">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Contraseña</th>
+          <td mat-cell *matCellDef="let Usucontra">********</td>
+        </ng-container>
+    
+        <ng-container matColumnDef="actualizar">
+          <th mat-header-cell *matHeaderCellDef>Modificar Contraseña</th>
+          <td mat-cell *matCellDef="let tipoActividad">
+            <button mat-icon-button color="primary" (click)="openEditDialog(tipoActividad)">
+              <mat-icon>key</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

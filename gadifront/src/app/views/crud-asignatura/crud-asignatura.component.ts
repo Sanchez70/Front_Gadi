@@ -29,7 +29,7 @@ const Toast = Swal.mixin({
   styleUrls: ['./crud-asignatura.component.css'] // Corregido el nombre de la propiedad
 })
 export class CrudAsignaturaComponent implements OnInit {
-  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'actualizar', 'borrar'];
+  displayedColumns: string[] = ['nombre_asignatura', 'horas_semanales', 'carrera', 'ciclo', 'actualizar'];
   dataSource!: MatTableDataSource<Asignatura>;
   color = '#1E90FF';
   currentExplan: string = '';
