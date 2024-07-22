@@ -138,6 +138,9 @@ export class EditarActividadesComponent implements OnInit {
       }
     });
   }
+  cerrarDialogo(): void {
+    this.dialog.closeAll();
+  }
 
 
   deleteTipoActividad(id: number): void {

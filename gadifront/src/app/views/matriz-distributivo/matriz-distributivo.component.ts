@@ -433,7 +433,7 @@ export class MatrizDistributivoComponent implements OnInit {
 
   asignarHoras(idActividad: number, index: number): void {
     const swalOptions: SweetAlertOptions = {
-      title: 'Ingrese el número de horas',
+      title: 'Ingrese el número de horas asignadas',
       input: 'number',
       inputAttributes: {
         min: '1',
@@ -446,7 +446,7 @@ export class MatrizDistributivoComponent implements OnInit {
       inputValidator: (value) => {
         const numberValue = Number(value);
         if (isNaN(numberValue) || numberValue < 1 || numberValue > this.horasActividad) {
-          return 'Las horas ingresadas son mayores a la de la actividad o son menores a cero ';
+          return 'Las horas ingresadas son mayores a la actividad o son menores a cero ';
         }
         return null;
       }
@@ -456,92 +456,69 @@ export class MatrizDistributivoComponent implements OnInit {
       if (result.isConfirmed) {
         const horasAsignadas = result.value;
         const key = `${idActividad}-${index}`;
-        console.log(key, idActividad);
         this.horasAsignadasMap[key] = horasAsignadas;
-        let contador = 0;
-        let contadorEliinar = 0;
-        console.log('contador', contador, this.distributivoFiltrado)
+        console.log(`Actividad ID: ${idActividad}, Index: ${index}, Horas asignadas: ${horasAsignadas}`);
+
+        // Iterar sobre los distributivos y actualizar DistributivoActividad si existe
         this.distributivoFiltrado.forEach(distributivo => {
-          console.log('contador', contador, this.distributivoFiltrado)
           const distributivoActividad: DistributivoActividad = {
-            id_distributivo_actividad: 0,
+            id_distributivo_actividad: 0, // Asegúrate de ajustar esto al campo correcto de tu modelo
             id_distributivo: distributivo.id_distributivo,
             id_actividad: this.id_activida,
             hora_no_docente: horasAsignadas
           };
 
+          // Buscar el DistributivoActividad correspondiente
           this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
-            contador += 1;
-            console.log('contador', contador)
             const resultado = data as DistributivoActividad[];
 
             const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
             if (resultFinal) {
-              if (contador === 1) {
-                resultFinal.hora_no_docente = horasAsignadas;
-                this.distributivoActividadService.updateDistributivo(resultFinal).subscribe(
-                  () => {
-                    this.combinarDatos(this.distributivoFiltrado);
-                    this.calcularTotales();
-                    Toast.fire({
-                      icon: "success",
-                      title: "Horas asignadas con éxito",
-                    });
-                  },
-                  (error) => {
-                    console.error('Error al actualizar DistributivoActividad:', error);
-                    Toast.fire({
-                      icon: "error",
-                      title: "Error al actualizar horas",
-                    });
-                  }
-                );
-              } else {
-                if (contador === this.distributivoFiltrado.length) {
-                  this.distributivoFiltrado.forEach(distributivo => {
-                    contadorEliinar += 1;
-                    if (contadorEliinar > 1) {
-                      console.log('cunta de entradas', contadorEliinar)
-                      this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
-                        const resultado = data as DistributivoActividad[];
-
-                        const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === this.id_activida);
-                        if (resultFinal) {
-
-
-                          this.distributivoActividadService.delete(resultFinal.id_distributivo_actividad).subscribe(
-                            () => {
-                              this.combinarDatos(this.distributivoFiltrado);
-                              this.calcularTotales();
-                              Toast.fire({
-                                icon: "success",
-                                title: "Horas asignadas con éxito",
-                              });
-                            },
-                            (error) => {
-                              console.error('Error al actualizar DistributivoActividad:', error);
-                              Toast.fire({
-                                icon: "error",
-                                title: "Error al actualizar horas",
-                              });
-                            }
-                          );
-
-                        }
-                      });
-                    } else {
-                      console.log('saltando el primero ')
-                    }
+              // Actualizar horas si existe
+              resultFinal.hora_no_docente = horasAsignadas;
+              this.distributivoActividadService.updateDistributivo(resultFinal).subscribe(
+                () => {
+                  this.combinarDatos(this.distributivoFiltrado);
+                  this.calcularTotales();
+                  Toast.fire({
+                    icon: "success",
+                    title: "Horas asignadas con éxito",
+                  });
+                  console.log('primer create');
+                },
+                (error) => {
+                  console.error('Error al actualizar DistributivoActividad:', error);
+                  Toast.fire({
+                    icon: "error",
+                    title: "Error al actualizar horas",
                   });
                 }
-
-              }
+              );
             }
+            //   // Si no existe, crear un nuevo DistributivoActividad
+            //   this.distributivoActividadService.create(distributivoActividad).subscribe(
+            //     () => {
+            //       this.combinarDatos(this.distributivoFiltrado);
+            //       Toast.fire({
+            //         icon: "success",
+            //         title: "Horas asignadas con éxito",
+            //       });
+            //       console.log('segundo create');
+            //     },
+            //     (error) => {
+            //       console.error('Error al crear DistributivoActividad:', error);
+            //       Toast.fire({
+            //         icon: "error",
+            //         title: "Error al asignar horas",
+            //       });
+            //     }
+            //   );
+            // }
           });
-
         });
-      }
 
+
+      }
     });
   }
 
@@ -837,7 +814,7 @@ export class MatrizDistributivoComponent implements OnInit {
       height: '90%',
     });
     dialogRef.afterClosed().subscribe(result => {
-      window.location.reload();
+      this.buscarDistributivo(this.authService.id_persona);
     });
   }
 
@@ -848,7 +825,7 @@ export class MatrizDistributivoComponent implements OnInit {
       height: '90%',
     });
     dialogRef.afterClosed().subscribe(result => {
-      window.location.reload();
+      this.buscarDistributivo(this.authService.id_persona);
     });
   }
 
@@ -863,4 +840,138 @@ export class MatrizDistributivoComponent implements OnInit {
   validarParaleloSeleccionado(): boolean {
     return Object.keys(this.paraleloSeleccionado).length === this.asignaturas.length;
   }
+
+  updateAsigantura(): void {
+    this.distributivoFiltrado.forEach(recorrido => {
+      console.log(this.distributivoFiltrado);
+
+      this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(obtenerAsignaturas => {
+        const filtroAsignatura = obtenerAsignaturas as DistributivoAsignatura[];
+
+        const asignaturasFiltradas = filtroAsignatura.filter(respueste => respueste.id_distributivo === recorrido.id_distributivo);
+        console.log(asignaturasFiltradas);
+
+        let processedCountAsig = 0;
+        const totalAsignaturas = asignaturasFiltradas.length;
+
+        if (totalAsignaturas === 0) {
+          console.log('No se encontraron asignaturas para actualizar.');
+          return;
+        }
+
+        asignaturasFiltradas.forEach(filtro => {
+          this.asignaturaDistributivo = { ...filtro, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
+
+          this.distributivoAsignaturaService.updateDistributivo(this.asignaturaDistributivo).subscribe(
+            () => {
+              processedCountAsig++;
+              console.log(`Asignatura actualizada: ${this.asignaturaDistributivo.id_distributivo}`);
+
+              if (processedCountAsig === totalAsignaturas) {
+                console.log('Todas las asignaturas se han actualizado.');
+              }
+            },
+            error => {
+              console.error('Error al actualizar asignatura:', error);
+            }
+          );
+        });
+      }, error => {
+        console.error('Error al obtener asignaturas:', error);
+      });
+    });
+  }
+
+
+
+// Método principal
+estadoDistributivo(): void {
+  this.distributivoFiltrado.forEach(recorrido => {
+    this.actualizarActividades(recorrido);
+  });
+}
+
+// Método para actualizar actividades
+actualizarActividades(recorrido: any): void {
+  this.distributivoActividadService.getDistributivoActividad().subscribe(inicio => {
+    const distributivosActALL = inicio as DistributivoActividad[];
+    const filtroDistributivoActividad = distributivosActALL.filter(validacion => validacion.id_distributivo === recorrido.id_distributivo);
+    let processedCount = 0;
+
+    if (filtroDistributivoActividad.length === 0) {
+      console.log('No se encontraron actividades para actualizar.');
+      return;
+    }
+
+    filtroDistributivoActividad.forEach(mandarActualizacion => {
+      this.distribdistributivoActividadesEn = { ...mandarActualizacion, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
+      this.distributivoActividadService.updateDistributivo(this.distribdistributivoActividadesEn).subscribe(() => {
+        processedCount++;
+        if (processedCount === filtroDistributivoActividad.length) {
+          this.actualizarAsignaturas(recorrido);
+        }
+      });
+    });
+  });
+}
+
+// Método para actualizar asignaturas
+actualizarAsignaturas(recorrido: any): void {
+  this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(obtenerAsignaturas => {
+    const filtroAsignatura = obtenerAsignaturas as DistributivoAsignatura[];
+    const asignaturasFiltradas = filtroAsignatura.filter(respueste => respueste.id_distributivo === recorrido.id_distributivo);
+    let processedCountAsig = 0;
+
+    if (asignaturasFiltradas.length === 0) {
+      console.log('No se encontraron asignaturas para actualizar.');
+      return;
+    }
+
+    asignaturasFiltradas.forEach(filtro => {
+      this.asignaturaDistributivo = { ...filtro, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
+      this.distributivoAsignaturaService.updateDistributivo(this.asignaturaDistributivo).subscribe(() => {
+        processedCountAsig++;
+        if (processedCountAsig === asignaturasFiltradas.length) {
+          this.actualizarEstadoYEliminarDistributivos();
+        }
+      });
+    });
+  });
+}
+
+// Método para actualizar el estado y eliminar distributivos sobrantes
+actualizarEstadoYEliminarDistributivos(): void {
+  let processedCountDistributivo = 0;
+  const idsDistributivosParaEliminar = this.distributivoFiltrado.slice(1).map(recorrer => recorrer.id_distributivo);
+
+  this.distributivoFiltrado.forEach((recorrer, index) => {
+    if (index === 0) {
+      this.distributivo = { ...recorrer, estado: 'Aceptado' };
+      this.distributivoService.updateDistributivo(this.distributivo).subscribe(() => {
+        processedCountDistributivo++;
+        if (processedCountDistributivo === this.distributivoFiltrado.length) {
+          Toast.fire({
+            icon: "success",
+            title: "Distributivo guardado correctamente",
+          });
+        }
+      });
+    }
+  });
+
+  idsDistributivosParaEliminar.forEach(idDistributivo => {
+    this.distributivoService.delete(idDistributivo).subscribe(() => {
+      processedCountDistributivo++;
+      if (processedCountDistributivo === this.distributivoFiltrado.length) {
+        Toast.fire({
+          icon: "success",
+          title: "Distributivo guardado correctamente",
+        });
+        this.router.navigate(['/coordinador']);
+      }
+    });
+  });
+}
+
+
 }

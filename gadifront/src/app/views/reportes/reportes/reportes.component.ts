@@ -269,7 +269,7 @@ export class ReportesComponent implements OnInit {
           yPos += 6;
           doc.text(`${usuarioEncontrado.nombre1} ${usuarioEncontrado.apellido1}`, xPos, yPos);
           yPos += 6;
-          doc.text(`A continuación se detasasssalla su asignación de horas docentes y de gestión para el periodo académico `+`${this.periodoName}`, xPos, yPos);
+          doc.text(`A continuación se detalla su asignación de horas docentes y de gestión para el periodo académico `+`${this.periodoName}`, xPos, yPos);
           yPos += 10;
 
           let currentXPosTitulo = xPos;
@@ -316,8 +316,12 @@ export class ReportesComponent implements OnInit {
             currentYPosTitulo += cellHeight;
             yPos += cellHeight;
           });
+          yPos += 6;
+          doc.setFontSize(9);
+          doc.setTextColor(60, 60, 60);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Horas docentes`, xPos, yPos);
           yPos += 5;
-
           let currentXPosAsig = xPos;
 
           this.displayedColumnsAsig.forEach((header, index) => {
@@ -334,21 +338,43 @@ export class ReportesComponent implements OnInit {
 
           yPos += cellHeight;
 
-          doc.setTextColor(0, 0, 0); 
+          doc.setTextColor(0, 0, 0);  
+
           this.dataSourceAsig.data.forEach(row => {
             currentXPosAsig = xPos;
+            let maxCellHeight = cellHeight;
+          
+            this.displayedColumnsAsig.forEach((column, index) => {
+              if (row[column] !== undefined) {
+                const text = row[column].toString();
+                const lines = doc.splitTextToSize(text, columnWidthsAsig[index] - 2);  
+                const cellLineHeight = lines.length * 7;  
+                if (cellLineHeight > maxCellHeight) {
+                  maxCellHeight = cellLineHeight;
+                }
+              }
+            });
+          
             this.displayedColumnsAsig.forEach((column, index) => {
               const cellWidth = columnWidthsAsig[index];
               doc.setFillColor(240, 240, 240);  
-              doc.rect(currentXPosAsig, yPos, cellWidth, cellHeight, 'D');
+              doc.rect(currentXPosAsig, yPos, cellWidth, maxCellHeight, 'D');
+          
               if (row[column] !== undefined) {
-                const textWidth = doc.getTextWidth(row[column].toString());
-                const textX = currentXPosAsig + (cellWidth - textWidth) / 2;
-                doc.text(row[column].toString(), textX, yPos + 7);
+                const text = row[column].toString();
+                const lines = doc.splitTextToSize(text, cellWidth - 2);  
+                let lineYPos = yPos + 7;
+          
+                lines.forEach((line:any, lineIndex:any) => {
+                  if (lineIndex > 0) lineYPos += 5;  
+                  const textWidth = doc.getTextWidth(line);
+                  const textX = currentXPosAsig + (cellWidth - textWidth) / 2;
+                  doc.text(line, textX, lineYPos);
+                });
               }
               currentXPosAsig += cellWidth;
             });
-            yPos += cellHeight;
+            yPos += maxCellHeight;  
           });
 
           const totalCellWidth = columnWidthsAsig.slice(0, 3).reduce((acc, val) => acc + val, 0);
@@ -366,7 +392,11 @@ export class ReportesComponent implements OnInit {
           doc.setTextColor(60, 60, 60);
           doc.text(`${this.horasTotales}`, textXAsig, yPos + 7);
           yPos += 15;
-
+          doc.setFontSize(9);
+          doc.setTextColor(60, 60, 60);
+          doc.setFont('helvetica', 'normal');
+          doc.text(`Horas no docentes`, xPos, yPos);
+          yPos += 5;
           let currentXPos = xPos;
           this.displayedColumns.forEach((header, index) => {
             doc.setFontSize(8);
