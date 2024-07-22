@@ -254,7 +254,6 @@ export class MatrizDistributivoComponent implements OnInit {
       this.dataSource.sort = this.sort;
     });
   }
-
   combinarDatos(distributivos: Distributivo[]): void {
     forkJoin({
       actividades: this.actividadService.getActividad(),
@@ -263,37 +262,40 @@ export class MatrizDistributivoComponent implements OnInit {
     }).pipe(
       map(({ actividades, tiposActividad, distributivosActividades }) => {
         const data: any[] = [];
-        const actividadesMap = new Map<number, any>();
-        const actividadesFiltradas: Actividad[] = [];
+        const actividadCountMap = new Map<number, number>();
 
         distributivos.forEach(dist => {
           const distributivosFiltrados = distributivosActividades.filter(da => da.id_distributivo === dist.id_distributivo);
-          this.distributivoActividades.concat(distributivosFiltrados);
+          this.distributivoActividades = this.distributivoActividades.concat(distributivosFiltrados);
+
           distributivosFiltrados.forEach(da => {
             const actividad = actividades.find(a => a.id_actividad === da.id_actividad);
             if (actividad) {
-              actividadesFiltradas.push(actividad);
-            }
-            const tipoActividad = tiposActividad.find(ta => ta.id_tipo_actividad === actividad?.id_tipo_actividad);
-            if (!actividadesMap.has(da.id_actividad)) {
-              actividadesMap.set(da.id_actividad, {
-                descripcionActividad: actividad ? actividad.descripcion_actividad : '',
-                tiposActividad: tipoActividad ? tipoActividad.nom_tip_actividad : '',
-                horaActividad: actividad ? actividad.horas_no_docentes : '',
-                horasTotales: da.hora_no_docente,
-                idActividad: actividad ? actividad.id_actividad : '',
-              });
+              const tipoActividad = tiposActividad.find(ta => ta.id_tipo_actividad === actividad.id_tipo_actividad);
+              const actividadData = {
+                descripcionActividad: actividad.descripcion_actividad ?? '',
+                tiposActividad: tipoActividad?.nom_tip_actividad ?? 'No asignado',
+                horaActividad: actividad.horas_no_docentes ?? 0,
+                horasTotales: da.hora_no_docente ?? 0,
+                idActividad: actividad.id_actividad,
+                idDistibutivoActividad: da.id_distributivo_actividad,
+                repetida: false,
 
-            } else {
-              const existingActividad = actividadesMap.get(da.id_actividad);
-              existingActividad.horasTotales += da.hora_no_docente;
+              };
+
+              if (actividadCountMap.has(actividad.id_actividad)) {
+                actividadData.repetida = true;
+                actividadCountMap.set(actividad.id_actividad, (actividadCountMap.get(actividad.id_actividad) ?? 0) + 1);
+              } else {
+                actividadCountMap.set(actividad.id_actividad, 1);
+              }
+
+              data.push(actividadData);
             }
           });
         });
-        actividadesMap.forEach(value => {
-          data.push(value);
-        });
-        this.actividades = actividadesFiltradas;
+
+        this.actividades = data;
         return data;
       })
     ).subscribe(data => {
@@ -305,6 +307,8 @@ export class MatrizDistributivoComponent implements OnInit {
       this.calcularTotales();
     });
   }
+
+
 
   buscarDistributivo(idPersona: number): void {
     idPersona = this.authService.id_persona;
@@ -391,7 +395,7 @@ export class MatrizDistributivoComponent implements OnInit {
       })
     ).subscribe(data => {
       this.dataSourceAsig.data = data;
-
+      this.calcularTotales();
     });
   }
 
@@ -522,8 +526,7 @@ export class MatrizDistributivoComponent implements OnInit {
     });
   }
 
-  eliminarActividad(idActividad: number): void {
-    console.log(idActividad);
+  eliminarActividad(idActividad: number, idDistAct: number): void {
     Swal.fire({
       title: '¿Está seguro?',
       text: '¡No podrás revertir esto!',
@@ -537,7 +540,7 @@ export class MatrizDistributivoComponent implements OnInit {
           this.distributivoActividadService.getDistributivoActividad().subscribe(data => {
             const resultado = data as DistributivoActividad[];
 
-            const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === idActividad);
+            const resultFinal = resultado.find(d => d.id_distributivo === distributivo.id_distributivo && d.id_actividad === idActividad && d.id_distributivo_actividad === idDistAct);
             if (resultFinal) {
               this.distributivoActividadService.delete(resultFinal.id_distributivo_actividad).subscribe(
                 () => {
@@ -633,7 +636,9 @@ export class MatrizDistributivoComponent implements OnInit {
                 icon: "success",
                 title: "Asignatura eliminada correctamente",
               });
+
             })
+        
           }
         })
       }
@@ -884,94 +889,96 @@ export class MatrizDistributivoComponent implements OnInit {
 
 
 
-// Método principal
-estadoDistributivo(): void {
-  this.distributivoFiltrado.forEach(recorrido => {
-    this.actualizarActividades(recorrido);
-  });
-}
 
-// Método para actualizar actividades
-actualizarActividades(recorrido: any): void {
-  this.distributivoActividadService.getDistributivoActividad().subscribe(inicio => {
-    const distributivosActALL = inicio as DistributivoActividad[];
-    const filtroDistributivoActividad = distributivosActALL.filter(validacion => validacion.id_distributivo === recorrido.id_distributivo);
-    let processedCount = 0;
+  estadoDistributivo(): void {
+    this.distributivoFiltrado.forEach(recorrido => {
+      this.actualizarActividades(recorrido);
+    });
+  }
 
-    if (filtroDistributivoActividad.length === 0) {
-      console.log('No se encontraron actividades para actualizar.');
-      return;
-    }
 
-    filtroDistributivoActividad.forEach(mandarActualizacion => {
-      this.distribdistributivoActividadesEn = { ...mandarActualizacion, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
-      this.distributivoActividadService.updateDistributivo(this.distribdistributivoActividadesEn).subscribe(() => {
-        processedCount++;
-        if (processedCount === filtroDistributivoActividad.length) {
-          this.actualizarAsignaturas(recorrido);
-        }
+  actualizarActividades(recorrido: any): void {
+    this.distributivoActividadService.getDistributivoActividad().subscribe(inicio => {
+      const distributivosActALL = inicio as DistributivoActividad[];
+      const filtroDistributivoActividad = distributivosActALL.filter(validacion => validacion.id_distributivo === recorrido.id_distributivo);
+      let processedCount = 0;
+
+      if (filtroDistributivoActividad.length === 0) {
+        console.log('No se encontraron actividades para actualizar.');
+        return;
+      }
+
+      filtroDistributivoActividad.forEach(mandarActualizacion => {
+        this.distribdistributivoActividadesEn = { ...mandarActualizacion, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
+        this.distributivoActividadService.updateDistributivo(this.distribdistributivoActividadesEn).subscribe(() => {
+          processedCount++;
+          if (processedCount === filtroDistributivoActividad.length) {
+            this.actualizarAsignaturas(recorrido);
+          }
+        });
       });
     });
-  });
-}
+  }
 
-// Método para actualizar asignaturas
-actualizarAsignaturas(recorrido: any): void {
-  this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(obtenerAsignaturas => {
-    const filtroAsignatura = obtenerAsignaturas as DistributivoAsignatura[];
-    const asignaturasFiltradas = filtroAsignatura.filter(respueste => respueste.id_distributivo === recorrido.id_distributivo);
-    let processedCountAsig = 0;
 
-    if (asignaturasFiltradas.length === 0) {
-      console.log('No se encontraron asignaturas para actualizar.');
-      return;
-    }
+  actualizarAsignaturas(recorrido: any): void {
+    this.distributivoAsignaturaService.getDistributivoAsignatura().subscribe(obtenerAsignaturas => {
+      const filtroAsignatura = obtenerAsignaturas as DistributivoAsignatura[];
+      const asignaturasFiltradas = filtroAsignatura.filter(respueste => respueste.id_distributivo === recorrido.id_distributivo);
+      let processedCountAsig = 0;
 
-    asignaturasFiltradas.forEach(filtro => {
-      this.asignaturaDistributivo = { ...filtro, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
-      this.distributivoAsignaturaService.updateDistributivo(this.asignaturaDistributivo).subscribe(() => {
-        processedCountAsig++;
-        if (processedCountAsig === asignaturasFiltradas.length) {
-          this.actualizarEstadoYEliminarDistributivos();
-        }
+      if (asignaturasFiltradas.length === 0) {
+        console.log('No se encontraron asignaturas para actualizar.');
+        return;
+      }
+
+      asignaturasFiltradas.forEach(filtro => {
+        this.asignaturaDistributivo = { ...filtro, id_distributivo: this.distributivoFiltrado[0].id_distributivo };
+        this.distributivoAsignaturaService.updateDistributivo(this.asignaturaDistributivo).subscribe(() => {
+          processedCountAsig++;
+          if (processedCountAsig === asignaturasFiltradas.length) {
+            this.actualizarEstadoYEliminarDistributivos();
+          }
+        });
       });
     });
-  });
-}
+  }
 
-// Método para actualizar el estado y eliminar distributivos sobrantes
-actualizarEstadoYEliminarDistributivos(): void {
-  let processedCountDistributivo = 0;
-  const idsDistributivosParaEliminar = this.distributivoFiltrado.slice(1).map(recorrer => recorrer.id_distributivo);
 
-  this.distributivoFiltrado.forEach((recorrer, index) => {
-    if (index === 0) {
-      this.distributivo = { ...recorrer, estado: 'Aceptado' };
-      this.distributivoService.updateDistributivo(this.distributivo).subscribe(() => {
+  actualizarEstadoYEliminarDistributivos(): void {
+    let processedCountDistributivo = 0;
+    const idsDistributivosParaEliminar = this.distributivoFiltrado.slice(1).map(recorrer => recorrer.id_distributivo);
+
+    this.distributivoFiltrado.forEach((recorrer, index) => {
+      if (index === 0) {
+        this.distributivo = { ...recorrer, estado: 'Aceptado' };
+        this.distributivoService.updateDistributivo(this.distributivo).subscribe(() => {
+          processedCountDistributivo++;
+          if (processedCountDistributivo === this.distributivoFiltrado.length) {
+            Toast.fire({
+              icon: "success",
+              title: "Distributivo guardado correctamente",
+
+            });
+            this.router.navigate(['/coordinador']);
+          }
+        });
+      }
+    });
+
+    idsDistributivosParaEliminar.forEach(idDistributivo => {
+      this.distributivoService.delete(idDistributivo).subscribe(() => {
         processedCountDistributivo++;
         if (processedCountDistributivo === this.distributivoFiltrado.length) {
           Toast.fire({
             icon: "success",
             title: "Distributivo guardado correctamente",
           });
+          this.router.navigate(['/coordinador']);
         }
       });
-    }
-  });
-
-  idsDistributivosParaEliminar.forEach(idDistributivo => {
-    this.distributivoService.delete(idDistributivo).subscribe(() => {
-      processedCountDistributivo++;
-      if (processedCountDistributivo === this.distributivoFiltrado.length) {
-        Toast.fire({
-          icon: "success",
-          title: "Distributivo guardado correctamente",
-        });
-        this.router.navigate(['/coordinador']);
-      }
     });
-  });
-}
+  }
 
 
 }

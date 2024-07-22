@@ -169,22 +169,22 @@
           <table mat-table [dataSource]="dataSourceAct" matSort>
             <ng-container matColumnDef="nro_horas" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color" [style.text-align]="'center'">Hora Actividad</th>
-              <td mat-cell *matCellDef="let actividad" class="horasActividad">{{actividad.horaActividad}}</td>
+              <td mat-cell *matCellDef="let actividad" class="horasActividad" [ngClass]="{'repetida': actividad.repetida}">{{actividad.horaActividad}}</td>
             </ng-container>
     
             <ng-container matColumnDef="total_horas" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color" [style.text-align]="'center'">Horas Asignadas</th>
-              <td mat-cell *matCellDef="let actividad" class="horasTotales">{{actividad.horasTotales}}</td>
+              <td mat-cell *matCellDef="let actividad" class="horasTotales" [ngClass]="{'repetida': actividad.repetida}">{{actividad.horasTotales}}</td>
             </ng-container>
     
             <ng-container matColumnDef="descripcion" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color" [style.text-align]="'center'">Actividad</th>
-              <td mat-cell *matCellDef="let actividad" class="descripcion-{{currentExplan}}">{{actividad.descripcionActividad}}</td>
+              <td mat-cell *matCellDef="let actividad" class="descripcion-{{currentExplan}}" [ngClass]="{'repetida': actividad.repetida}">{{actividad.descripcionActividad}}</td>
             </ng-container>
     
             <ng-container matColumnDef="tipo_actividad" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color" [style.text-align]="'center'">Tipo de Actividad</th>
-              <td mat-cell *matCellDef="let actividad" class="tipo">{{actividad.tiposActividad || 'No asignado'}}</td>
+              <td mat-cell *matCellDef="let actividad" class="tipo" [ngClass]="{'repetida': actividad.repetida}">{{actividad.tiposActividad || 'No asignado'}}</td>
             </ng-container>
     
             <ng-container matColumnDef="editar" sticky>
@@ -199,7 +199,7 @@
             <ng-container matColumnDef="eliminar" sticky>
               <th mat-header-cell *matHeaderCellDef mat-sort-header [style.background-color]="color" class="eliminar">Eliminar</th>
               <td mat-cell *matCellDef="let actividad; let i = index" class="eliminar">
-                <button mat-icon-button color="warn" (click)="eliminarActividad(actividad.idActividad)">
+                <button mat-icon-button color="warn" (click)="eliminarActividad(actividad.idActividad,actividad.idDistibutivoActividad)">
                   <mat-icon>delete</mat-icon>
                 </button>
               </td>
@@ -217,6 +217,7 @@
         </ng-template>
       </section>
     </div>
+    
     
   </div>
   <br>

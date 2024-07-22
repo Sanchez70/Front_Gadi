@@ -352,7 +352,7 @@ export class DistributivoComponent implements OnInit {
     this.Actividades.forEach(actividad => {
       const distributivoacti2: DistributivoActividad = {
         id_actividad: actividad.id_actividad,
-        hora_no_docente: 0,
+        hora_no_docente: actividad.horas_no_docentes,
         id_distributivo: id_distributivo,
         id_distributivo_actividad: 0
       };
