@@ -477,7 +477,7 @@ export class ReportesComponent implements OnInit {
           doc.setFont('helvetica', 'bold');
           doc.text(textFinal, textXRecFinal, yPos);
           doc.save(`${usuarioEncontrado.nombre1}_`+`${usuarioEncontrado.apellido1}_`+'Distributivo.pdf');
-        }, 500);
+        }, 600);
       }
     });
   }
@@ -729,7 +729,7 @@ export class ReportesComponent implements OnInit {
           doc.setFont('helvetica', 'bold');
           doc.text(textFinal, textXRecFinal, yPos);
           doc.save(`${usuarioEncontrado.nombre1}_`+`${usuarioEncontrado.apellido1}_`+'Distributivo.pdf');
-        }, 500);
+        }, 600);
       }
     });
   }

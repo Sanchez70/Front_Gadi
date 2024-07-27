@@ -286,38 +286,42 @@ export class DistributivoComponent implements OnInit {
         title: "Por favor, seleccione una jornada para todas las asignaturas",
       });
     } else {
-      this.distributivo.id_persona = this.persona.id_persona;
-      this.distributivo.id_periodo = this.idPeriodo;
-      this.distributivo.estado = 'Pendiente';
-      this.distributivoService.create(this.distributivo)
-        .subscribe(
-          (distributivo) => {
-            this.createAsignaturaDistributivo(distributivo.id_distributivo); 
-            this.createdistributivoacti(distributivo.id_distributivo);
+      setTimeout(()=>{
+        this.distributivo.id_persona = this.persona.id_persona;
+        this.distributivo.id_periodo = this.idPeriodo;
+        this.distributivo.estado = 'Pendiente';
+        this.distributivoService.create(this.distributivo)
+          .subscribe(
+            (distributivo) => {
+              
+              this.createAsignaturaDistributivo(distributivo.id_distributivo); 
+            setTimeout(()=>{
+              this.createdistributivoacti(distributivo.id_distributivo);
+            },400);
+              this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
+              this.dataSource2 = new MatTableDataSource<Asignatura>([]);
+              this.dataSource3 = new MatTableDataSource<Actividad>([]);
+              this.authService.clearLocalStorageAsignatura();
+              this.authService.clearLocalStorageActividad();
+              this.authService.clearLocalStoragePersona();
+              this.authService.saveUserToLocalStorage();
+              Toast.fire({
+                icon: "success",
+                title: "Distributivo Generado con éxito",
+              });
 
-            this.dataSource = new MatTableDataSource<PersonaExtendida>([]);
-            this.dataSource2 = new MatTableDataSource<Asignatura>([]);
-            this.dataSource3 = new MatTableDataSource<Actividad>([]);
-            this.authService.clearLocalStorageAsignatura();
-            this.authService.clearLocalStorageActividad();
-            this.authService.clearLocalStoragePersona();
-            this.authService.saveUserToLocalStorage();
-            Toast.fire({
-              icon: "success",
-              title: "Distributivo Generado con éxito",
-            });
 
-
-          },
-          (error) => {
-            console.error('Error al guardar:', error);
-            Toast.fire({
-              icon: "error",
-              title: "Hubo un error al guardar",
-              footer: "Por favor, verifique si ha completado todo lo necesario"
-            });
-          }
-        );
+            },
+            (error) => {
+              console.error('Error al guardar:', error);
+              Toast.fire({
+                icon: "error",
+                title: "Hubo un error al guardar",
+                footer: "Por favor, verifique si ha completado todo lo necesario"
+              });
+            }
+          );
+      },400);
     }
   }
 

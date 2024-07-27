@@ -816,7 +816,9 @@ export class MatrizDistributivoComponent implements OnInit {
         this.distributivoActividadService.updateDistributivo(this.distribdistributivoActividadesEn).subscribe(() => {
           processedCount++;
           if (processedCount === filtroDistributivoActividad.length) {
-            this.actualizarAsignaturas(recorrido);
+              setTimeout(()=>{
+              this.actualizarAsignaturas(recorrido);
+            },400);
           }
         });
       });
@@ -840,7 +842,9 @@ export class MatrizDistributivoComponent implements OnInit {
         this.distributivoAsignaturaService.updateDistributivo(this.asignaturaDistributivo).subscribe(() => {
           processedCountAsig++;
           if (processedCountAsig === asignaturasFiltradas.length) {
+            setTimeout(()=>{
             this.actualizarEstadoYEliminarDistributivos();
+          },400);
           }
         });
       });
