@@ -156,7 +156,7 @@ export class FormComponent implements OnInit {
   guardarCambios(): void {
     if (this.personaForm.valid) {
       Swal.fire({
-        title: '¿Está seguro de actualizar los datos de esta persona?',
+        title: '¿Está seguro de actualizar sus Datos?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sí, guardar',
@@ -182,7 +182,7 @@ export class FormComponent implements OnInit {
                     this.mostrarCarga = false;
                     Toast.fire({
                       icon: "success",
-                      title: "Datos y contraseña actualizados con éxito",
+                      title: " Sus Datos y contraseña actualizados con éxito",
                     });
                     this.router.navigate(['/mainDocente']);
                   },

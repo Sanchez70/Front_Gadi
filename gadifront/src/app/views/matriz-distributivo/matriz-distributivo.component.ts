@@ -499,25 +499,7 @@ export class MatrizDistributivoComponent implements OnInit {
                 }
               );
             }
-            //   // Si no existe, crear un nuevo DistributivoActividad
-            //   this.distributivoActividadService.create(distributivoActividad).subscribe(
-            //     () => {
-            //       this.combinarDatos(this.distributivoFiltrado);
-            //       Toast.fire({
-            //         icon: "success",
-            //         title: "Horas asignadas con éxito",
-            //       });
-            //       console.log('segundo create');
-            //     },
-            //     (error) => {
-            //       console.error('Error al crear DistributivoActividad:', error);
-            //       Toast.fire({
-            //         icon: "error",
-            //         title: "Error al asignar horas",
-            //       });
-            //     }
-            //   );
-            // }
+         
           });
         });
 
@@ -661,85 +643,6 @@ export class MatrizDistributivoComponent implements OnInit {
           }
         });
       });
-  }
-
-  public createdistributivo(): void {
-    if (!this.validarJornadasSeleccionadas() || !this.validarParaleloSeleccionado()) {
-      Toast.fire({
-        icon: "warning",
-        title: "Por favor, seleccione alguna opción en Jornada o Paralelo",
-      });
-    } else {
-      this.distributivo.id_persona = this.authService.id_persona;
-      this.distributivo.id_periodo = this.idPeriodo;
-      this.distributivo.estado = 'Aceptado';
-      this.distributivoService.create(this.distributivo)
-        .subscribe(
-          (distributivo) => {
-            this.createAsignaturaDistributivo(distributivo.id_distributivo);
-            this.createdistributivoacti(distributivo.id_distributivo);
-            this.eliminarDistributivos();
-          },
-          (error) => {
-            console.error('Error al guardar:', error);
-            Toast.fire({
-              icon: "error",
-              title: "Hubo un error al guardar",
-              footer: "Por favor, verifique si ha completado todo lo necesario"
-            });
-          }
-        );
-    }
-  }
-
-  createAsignaturaDistributivo(id_distributivo: number): void {
-    this.asignaturas.forEach((asignatura, index) => {
-      const key = `${asignatura.id_asignatura}-${index}`;
-      const id_jornada = this.jornadaSeleccionada[key];
-      const paralelo = this.paraleloSeleccionado[key];
-      this.jornadaService.getJornadabyId(id_jornada).subscribe(data => {
-        const jornadaNombre = data.descrip_jornada.charAt(0);
-        const acronimo = this.crearAcronimo(jornadaNombre, paralelo, asignatura.id_ciclo);
-
-        if (id_jornada) {
-          const nuevoAsignaturaDistributivo: DistributivoAsignatura = {
-            id_jornada: id_jornada,
-            paralelo: paralelo,
-            id_distributivo: id_distributivo,
-            id_asignatura: asignatura.id_asignatura,
-            acronimo: acronimo,
-            id_distributivo_asig: 0
-          };
-          this.distributivoAsignaturaService.create(nuevoAsignaturaDistributivo).subscribe(response => { }, error => { });
-        }
-      });
-    });
-  }
-
-  createdistributivoacti(id_distributivo: number): void {
-    this.actividades.forEach((actividad, index) => {
-      const key = `${actividad.id_actividad}-${index}`;
-      const horasNoDocentes = this.horasAsignadasMap[key];
-      this.distributivoActividades
-      const distributivoacti2: DistributivoActividad = {
-        id_actividad: actividad.id_actividad,
-        hora_no_docente: horasNoDocentes,
-        id_distributivo: id_distributivo,
-        id_distributivo_actividad: 0
-      };
-      this.distributivoActividadService.create(distributivoacti2)
-        .subscribe(
-          (distributivo) => { },
-          (error) => {
-            console.error('Error al guardar la actividad:', error);
-            Toast.fire({
-              icon: "error",
-              title: "Hubo un error al guardar la actividad",
-              footer: "Por favor, verifique"
-            });
-          }
-        );
-    });
   }
 
   eliminarDistributivos(): void {
