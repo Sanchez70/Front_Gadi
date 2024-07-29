@@ -147,7 +147,7 @@ export class AdminCreacionComponent implements OnInit {
           } else {
             Toast.fire({
               icon: "error",
-              title: "No se pudo encontrar a la persona con esa cedula",
+              title: "No se pudo encontrar a la persona con esa cédula",
             });
           }
         },
